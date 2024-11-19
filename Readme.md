@@ -118,7 +118,7 @@ Desenvolver uma plataforma digital que conecte pequenos negócios e serviços lo
 - **Designer UX/UI**: Para criar interfaces intuitivas.
 
 ## Cronograma
-![alt text](CronogramaEconomiaSolidaria.png)
+![alt text](Diagramas/CronogramaEconomiaSolidaria.png)
 
 ### Análise de Riscos do Projeto
 
@@ -169,4 +169,15 @@ Desenvolver uma plataforma digital que conecte pequenos negócios e serviços lo
 - **Fortalecimento de negócios pequenos**: Dá visibilidade e acesso a ferramentas tecnológicas.
 - **Inclusão digital**: Apoia empreendedores em situação de vulnerabilidade.
 
-Essa ideia cria um impacto social significativo, alinhando-se com tendências de sustentabilidade e apoio
+Essa ideia cria um impacto social significativo, alinhando-se com tendências de sustentabilidade e apoio. Conclusão
+Este projeto visa criar um ambiente virtual favorável à economia solidária, promovendo negócios locais, e ao mesmo tempo oferecendo aos consumidores uma alternativa de consumo consciente.  
+
+## Diagrama de Classe
+![alt text](Diagramas/DiagramaClasseEconomia.png)
+
+## Diagrama de Uso
+
+![alt text](Diagramas/DiagramaUsoEconomia.png)
+
+## Diagrama de Fluxo
+![alt text](Diagramas/DiagramaFluxoEconomia.png)
