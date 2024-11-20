@@ -1,0 +1,28 @@
+1. Instalar o Laravel
+Certifique-se de ter o Composer instalado. Crie um novo projeto Laravel:
+
+bash
+Copiar código
+composer create-project --prefer-dist laravel/laravel limeira-app
+Acesse o diretório do projeto:
+
+bash
+Copiar código
+cd limeira-app
+2. Configurar o Banco de Dados
+Atualize o arquivo .env com as credenciais do seu banco de dados. Por exemplo, se estiver usando MySQL:
+
+env
+Copiar código
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=limeira_app
+DB_USERNAME=root
+DB_PASSWORD=senha_do_banco
+Em seguida, crie o banco de dados no seu servidor MySQL:sql
+
+Copiar código
+CREATE DATABASE limeira_app;
+
+npm install react react-dom
