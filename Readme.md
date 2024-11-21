@@ -8,14 +8,14 @@ O app será uma plataforma de conexão entre pequenos negócios e consumidores l
 ### 1. Identificação do Problema
 **Problema**: Pequenos negócios têm dificuldade em se destacar online, alcançar consumidores locais e gerenciar seus produtos/serviços digitalmente.  
 **Impacto**: Baixa visibilidade afeta a sustentabilidade desses negócios e reduz o consumo local.  
-**Solução**: Criar uma plataforma que centralize produtos/serviços de negócios locais, facilite o pagamento e promova a confiança entre consumidores e empreendedores.
+**Solução**: Criar uma plataforma que centralize produtos/serviços de negócios locais e promova a confiança entre consumidores e empreendedores. Ela permitirá que os consumidores descubram, avaliem e adquiram produtos ou serviços de maneira prática e segura, ao mesmo tempo em que fortalece o relacionamento com os empreendedores locais. A confiança será construída por meio de avaliações, feedbacks e garantias de qualidade, incentivando a fidelização e a colaboração entre as partes.
 
 ### 2. Planejamento e Definição de Requisitos
 
 #### Funcionalidades principais do app:
 - **Página Inicial (Home)**: Apresenta negócios e promoções em destaque. Inclui campo de busca por categoria, nome ou localização.
 - **Catálogo de Produtos/Serviços**: Permite filtrar por localização, categorias e faixa de preços. Oferece páginas detalhadas para cada produto/serviço, com descrição e avaliações.
-- **Cadastro de Negócios**: Formulário para registrar informações do negócio, como descrição, localização e horário de funcionamento. Opção de upload de fotos e painel para gerenciar anúncios.
+- **Cadastro de Negócios**: Formulário para registrar informações do negócio, como descrição, localização e horário de funcionamento. Opção de upload de fotos.
 - **Perfil do Negócio**: Página personalizada com informações do negócio. Exibição de produtos/serviços cadastrados. Mapa interativo mostrando a localização.
 - **Sistema de Avaliação**: Avaliações por estrelas e comentários dos clientes. Filtros para visualizar avaliações.
 - **Página Institucional (Sobre)**: Explica o conceito de economia solidária e os benefícios da plataforma.
