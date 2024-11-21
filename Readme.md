@@ -15,7 +15,7 @@ O app será uma plataforma de conexão entre pequenos negócios e consumidores l
 #### Funcionalidades principais do app:
 - **Página Inicial (Home)**: Apresenta negócios e promoções em destaque. Inclui campo de busca por categoria, nome ou localização.
 - **Catálogo de Produtos/Serviços**: Permite filtrar por localização, categorias e faixa de preços. Oferece páginas detalhadas para cada produto/serviço, com descrição e avaliações.
-- **Cadastro de Negócios**: Formulário para registrar informações do negócio, como descrição, localização e horário de funcionamento. Opção de upload de fotos e painel para gerenciar anúncios.
+- **Cadastro de Negócios**: Formulário para registrar informações do negócio, como descrição, localização e horário de funcionamento. Opção de upload de fotos.
 - **Perfil do Negócio**: Página personalizada com informações do negócio. Exibição de produtos/serviços cadastrados. Mapa interativo mostrando a localização.
 - **Sistema de Avaliação**: Avaliações por estrelas e comentários dos clientes. Filtros para visualizar avaliações.
 - **Página Institucional (Sobre)**: Explica o conceito de economia solidária e os benefícios da plataforma.
