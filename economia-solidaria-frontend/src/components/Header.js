@@ -5,7 +5,7 @@ import "../styles/header.css";
 const Header = () => {
   return (
     <header className="header">
-      <div className="logo">EconomiaSolidaria</div>
+    <Link to="/" className="nav-link">  <div className="logo">EconomiaSolidaria</div></Link>
       <nav className="nav">
         <Link to="/register" className="nav-link">
           Cadastro
