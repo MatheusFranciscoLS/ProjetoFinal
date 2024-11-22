@@ -19,6 +19,9 @@ const Header = () => {
         <Link to="/contato" className="nav-link">
         Contato
         </Link>
+        <Link to="/avaliacao" className="nav-link">
+        avaliacao
+        </Link>
         
       </nav>
     </header>
