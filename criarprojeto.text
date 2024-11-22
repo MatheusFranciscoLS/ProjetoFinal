@@ -26,3 +26,22 @@ Copiar código
 CREATE DATABASE limeira_app;
 
 npm install react react-dom
+
+2. Configurar Firebase no Front-End (React)
+2.1. Criar o Projeto React
+No terminal, crie o projeto:
+
+bash
+
+npx create-react-app economia-solidaria-frontend
+cd economia-solidaria-frontend
+npm install firebase
+
+cd limeira-app
+composer require kreait/laravel-firebase
+
+
+
+No arquivo .env, configure o Firebase:
+
+FIREBASE_CREDENTIALS=/caminho/para/seu/arquivo/firebase.json
