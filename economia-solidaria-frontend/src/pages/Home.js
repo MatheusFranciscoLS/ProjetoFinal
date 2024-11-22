@@ -2,7 +2,7 @@
 import React from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import "./auth.css";
+import "../styles/auth.css";
 
 const Home = () => {
   const handleLogout = async () => {
