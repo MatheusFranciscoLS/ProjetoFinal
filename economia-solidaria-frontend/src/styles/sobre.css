@@ -1,44 +1,135 @@
+/* Container principal que engloba o conteúdo e o quadrado da lateral */
+.main-container {
+  display: flex;
+  justify-content: center;
+  /* Centra o conteúdo horizontalmente */
+  align-items: flex-start;
+  margin-top: 50px;
+  padding: 20px;
+  flex-wrap: wrap;
+  /* Permite que o conteúdo se ajuste em telas menores */
+  gap: 30px;
+  /* Adiciona espaço entre os dois quadrados */
+}
+
+/* Estilo do quadrado lateral para Dúvidas Frequentes */
+.faq-box-container {
+  width: 250px;
+  /* Aumenta o tamanho para dar mais espaço ao conteúdo */
+  padding: 20px;
+  background-color: #007bff;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* Sombra mais suave */
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.faq-box {
+  font-size: 40px;
+  text-align: center;
+}
+
+.faq-title {
+  font-size: 18px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Estilo do quadrado central para "Sobre Nós" */
 .about-container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    background: #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-  }
-  
-  .about-container h1 {
-    font-size: 28px;
-    color: #007bff;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .about-container h2 {
-    font-size: 22px;
-    color: #333;
-    margin-top: 20px;
-  }
-  
-  .about-container p {
-    font-size: 16px;
-    color: #555;
-    text-align: justify;
-  }
-  
-  .about-container ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .about-container ul li {
-    font-size: 16px;
-    color: #555;
-    background: #f0f0f0;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 5px;
-  }
-  
+  max-width: 800px;
+  padding: 30px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* Sombra mais suave */
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  flex-grow: 1;
+  /* Permite que ocupe mais espaço quando necessário */
+  min-width: 320px;
+  /* Garante que o quadrado central tenha largura mínima */
+}
+
+/* Estilo do título principal */
+.about-container h1 {
+  font-size: 28px;
+  color: #007bff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Estilo do título secundário */
+.about-container h2 {
+  font-size: 22px;
+  color: #333;
+  margin-top: 20px;
+}
+
+.about-container p {
+  font-size: 16px;
+  color: #555;
+  text-align: justify;
+  margin-bottom: 15px;
+}
+
+.about-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.about-container ul li {
+  font-size: 16px;
+  color: #555;
+  background: #f0f0f0;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Estilo do acordeão */
+.accordion {
+  margin-top: 20px;
+}
+
+.accordion-item {
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.accordion-header {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border: none;
+  text-align: left;
+  border-radius: 5px;
+}
+
+.accordion-content {
+  padding: 10px;
+  background-color: #f4f4f4;
+  color: #555;
+  font-size: 16px;
+  border-top: 1px solid #ddd;
+  border-radius: 0 0 5px 5px;
+}
+
+/* Ícone da seta */
+.accordion-icon {
+  float: right;
+  transition: transform 0.3s ease;
+}
+
+.accordion-icon.rotate {
+  transform: rotate(180deg);
+}
