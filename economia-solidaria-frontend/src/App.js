@@ -8,8 +8,6 @@ import Home from "./pages/Home";
 import Sobre from "./pages/Sobre";
 import Contato from "./pages/Contato";
 import Avaliacao from "./pages/Avaliacao";
-import LojaPage from  "./pages/LojaPage";
-import CadastrarLoja from  "./pages/RegisterSeller";
 
 const App = () => {
   return (
@@ -23,8 +21,7 @@ const App = () => {
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/contato" element={<Contato />} />
         <Route path="/avaliacao" element={<Avaliacao />} />
-        <Route path="/loja/:lojaId" element={<LojaPage />} />
-        <Route path="/cadastrar-loja" element={<CadastrarLoja />} />
+        
       </Routes>
       <Footer />
     </Router>
