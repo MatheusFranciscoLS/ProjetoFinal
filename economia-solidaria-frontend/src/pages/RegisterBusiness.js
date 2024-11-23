@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, addDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../firebase"; // Certifique-se de importar o 'storage'
+import { db } from "../firebase"; // Apenas Firestore
+import { getAuth } from "firebase/auth"; // Importando o Firebase Auth
 import "../styles/registerbusiness.css";
 
 const RegisterBusiness = () => {
@@ -22,13 +22,11 @@ const RegisterBusiness = () => {
   const navigate = useNavigate();
   const auth = getAuth(); // Obter a autenticação do Firebase
 
-  // Upload de imagens
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     if (files.length + images.length > 5) {
       setError("Você pode enviar no máximo 5 imagens do seu negócio.");
     } else {
-      // Verifique o tamanho de cada imagem e se excede o limite (por exemplo, 5 MB por imagem)
       const invalidFiles = files.filter(file => file.size > 5 * 1024 * 1024); // Limite de 5MB por imagem
       if (invalidFiles.length > 0) {
         setError("Cada imagem deve ter no máximo 5 MB.");
@@ -39,25 +37,24 @@ const RegisterBusiness = () => {
   };
 
   const removeImage = (index) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
+    setImages(images.filter((_, i) => i !== index));
   };
 
-  // Submissão do formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
     let errorMessage = "";
 
     // Validação
     if (!businessName || !businessDescription || !category || !address || !phone || !email) {
-      errorMessage += "Preencha todos os campos obrigatórios.\n";
+      errorMessage += "Por favor, preencha todos os campos obrigatórios.\n";
     }
 
     if (images.length === 0 || !cnDoc) {
-      errorMessage += "Adicione ao menos uma imagem e o comprovante do Simples Nacional.\n";
+      errorMessage += "Por favor, carregue imagens do seu negócio e o comprovante do Simples Nacional.\n";
     }
 
     if (!termsAccepted) {
-      errorMessage += "Aceite os Termos e Condições para continuar.\n";
+      errorMessage += "É necessário aceitar os Termos e Condições.\n";
     }
 
     // Verificando se o documento carregado é um PDF
@@ -159,7 +156,7 @@ const RegisterBusiness = () => {
 
         <div className="upload-instructions">
           <label htmlFor="businessImages">
-            Imagens do negócio (máximo de 5, até 5MB cada)
+            Carregue imagens do seu negócio (máximo de 5 imagens, máximo de 5 MB cada)
           </label>
           <input
             type="file"
@@ -173,11 +170,7 @@ const RegisterBusiness = () => {
               {images.map((image, index) => (
                 <div key={index} className="image-wrapper">
                   <img src={URL.createObjectURL(image)} alt={`preview ${index}`} />
-                  <button
-                    type="button"
-                    className="remove-image"
-                    onClick={() => removeImage(index)}
-                  >
+                  <button className="remove-image" onClick={() => removeImage(index)}>
                     X
                   </button>
                 </div>
