@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { collection, addDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, storage } from "../firebase"; // Certifique-se de importar o 'storage'
 import "../styles/registerbusiness.css";
 
 const RegisterBusiness = () => {
-  // Estado do formulário
   const [businessName, setBusinessName] = useState("");
   const [businessDescription, setBusinessDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -15,26 +17,41 @@ const RegisterBusiness = () => {
   const [cnDoc, setCnDoc] = useState(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  // Função de envio do formulário
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length + images.length > 5) {
+      setError("Você pode enviar no máximo 5 imagens do seu negócio.");
+    } else {
+      // Verifique o tamanho de cada imagem e se excede o limite (por exemplo, 5 MB por imagem)
+      const invalidFiles = files.filter(file => file.size > 5 * 1024 * 1024); // Limite de 5MB por imagem
+      if (invalidFiles.length > 0) {
+        setError("Cada imagem deve ter no máximo 5 MB.");
+      } else {
+        setImages((prevImages) => [...prevImages, ...files]);
+      }
+    }
+  };
 
+  const removeImage = (index) => {
+    setImages(images.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     let errorMessage = "";
-    
-    // Validação dos campos obrigatórios
+
     if (!businessName || !businessDescription || !category || !address || !phone || !email) {
       errorMessage += "Por favor, preencha todos os campos obrigatórios.\n";
     }
 
-    // Validação das imagens e do comprovante
     if (images.length === 0 || !cnDoc) {
       errorMessage += "Por favor, carregue imagens do seu negócio e o comprovante do Simples Nacional.\n";
     }
 
-    // Validação do aceite dos termos
     if (!termsAccepted) {
       errorMessage += "É necessário aceitar os Termos e Condições.\n";
     }
@@ -44,32 +61,52 @@ const RegisterBusiness = () => {
       return;
     }
 
-    alert("Cadastro de negócio realizado com sucesso!");
-    navigate("/home");
-  };
+    setLoading(true);
+    setError("");
 
-  // Função de upload de imagens
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length + images.length > 5) {
-      setError("Você pode enviar no máximo 5 imagens do seu negócio.");
-    } else {
-      setImages((prevImages) => [...prevImages, ...files]);
+    try {
+      // Upload das imagens
+      const uploadedImages = await Promise.all(
+        images.map(async (image) => {
+          const imageRef = ref(storage, `lojas/${businessName}/${image.name}`);
+          await uploadBytes(imageRef, image);
+          return getDownloadURL(imageRef);
+        })
+      );
+
+      // Upload do comprovante
+      const cnDocRef = ref(storage, `lojas/${businessName}/comprovante_${cnDoc.name}`);
+      await uploadBytes(cnDocRef, cnDoc);
+      const cnDocURL = await getDownloadURL(cnDocRef);
+
+      // Salvar no Firestore
+      const docRef = await addDoc(collection(db, "lojas"), {
+        nome: businessName,
+        descricao: businessDescription,
+        categoria: category,
+        endereco: address,
+        telefone: phone,
+        email,
+        horarioDeFuncionamento: workingHours,
+        imagens: uploadedImages,
+        comprovante: cnDocURL,
+      });
+
+      alert("Cadastro de negócio realizado com sucesso!");
+      navigate(`/loja/${docRef.id}`);
+    } catch (err) {
+      console.error("Erro ao cadastrar negócio:", err);
+      setError("Erro ao cadastrar o negócio. Tente novamente.");
+    } finally {
+      setLoading(false);
     }
-  };
-
-  // Função para remover imagem
-  const removeImage = (index) => {
-    setImages(images.filter((_, i) => i !== index));
   };
 
   return (
     <div className="register-business-page">
       <form className="register-business-form" onSubmit={handleSubmit}>
-        {/* Título do formulário */}
         <h2>Cadastro de Negócio</h2>
 
-        {/* Campos do formulário */}
         <input
           type="text"
           placeholder="Nome do Negócio"
@@ -83,11 +120,7 @@ const RegisterBusiness = () => {
           onChange={(e) => setBusinessDescription(e.target.value)}
           required
         />
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          required
-        >
+        <select value={category} onChange={(e) => setCategory(e.target.value)} required>
           <option value="">Selecione a Categoria</option>
           <option value="restaurante">Restaurante</option>
           <option value="loja">Loja</option>
@@ -122,10 +155,9 @@ const RegisterBusiness = () => {
           onChange={(e) => setWorkingHours(e.target.value)}
         />
 
-        {/* Upload de imagens */}
         <div className="upload-instructions">
           <label htmlFor="businessImages">
-            Carregue imagens do seu negócio (ex.: fachada, interior, ambiente, etc.)
+            Carregue imagens do seu negócio (máximo de 5 imagens, máximo de 5 MB cada)
           </label>
           <input
             type="file"
@@ -134,23 +166,20 @@ const RegisterBusiness = () => {
             multiple
             onChange={handleImageUpload}
           />
-          <p className="upload-info">Você pode enviar até 5 imagens. Formatos aceitos: PNG, JPG ou JPEG.</p>
           {images.length > 0 && (
             <div className="image-preview">
               {images.map((image, index) => (
-                <div className="image-wrapper" key={index}>
-                  <img
-                    src={URL.createObjectURL(image)}
-                    alt={`preview ${index}`}
-                  />
-                  <button className="remove-image" onClick={() => removeImage(index)}>X</button>
+                <div key={index} className="image-wrapper">
+                  <img src={URL.createObjectURL(image)} alt={`preview ${index}`} />
+                  <button className="remove-image" onClick={() => removeImage(index)}>
+                    X
+                  </button>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* Upload do comprovante do Simples Nacional */}
         <div className="upload-instructions">
           <label htmlFor="cnDoc">Comprovante do Simples Nacional</label>
           <input
@@ -162,28 +191,27 @@ const RegisterBusiness = () => {
           />
         </div>
 
-        {/* Exibição de erros */}
         {error && <div className="error">{error}</div>}
+        {loading && <div className="loading">Carregando...</div>}
 
-        {/* Termos e condições */}
         <div className="terms-container">
           <input
             type="checkbox"
             id="terms"
             checked={termsAccepted}
             onChange={(e) => setTermsAccepted(e.target.checked)}
-            aria-label="Aceitar os termos e condições"
           />
           <label htmlFor="terms">
             Aceito os{' '}
-            <a href="/terms" target="_blank" rel="noopener noreferrer" className="terms-link">
+            <a href="/terms" target="_blank" rel="noopener noreferrer">
               Termos e Condições
             </a>
           </label>
         </div>
 
-        {/* Botão de envio */}
-        <button type="submit" disabled={!termsAccepted}>Cadastrar Negócio</button>
+        <button type="submit" disabled={loading || !termsAccepted}>
+          {loading ? "Cadastrando..." : "Cadastrar Negócio"}
+        </button>
       </form>
     </div>
   );

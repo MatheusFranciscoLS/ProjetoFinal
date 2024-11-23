@@ -4,12 +4,14 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Register from "./pages/Register";
 import BusinessQuestion from "./pages/BusinessQuestion";
-import RegisterBusiness from './pages/RegisterBusiness';
+import RegisterBusiness from "./pages/RegisterBusiness";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Sobre from "./pages/Sobre";
 import Contato from "./pages/Contato";
 import Avaliacao from "./pages/Avaliacao";
+import LojasList from "./pages/LojaList"; // Importação de LojasList
+import LojaDetails from "./pages/LojaDetails"; // Importação de LojaDetails
 
 const App = () => {
   return (
@@ -25,7 +27,8 @@ const App = () => {
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/contato" element={<Contato />} />
         <Route path="/avaliacao" element={<Avaliacao />} />
-        
+        <Route path="/lojas" element={<LojasList />} /> {/* Rota para a lista de lojas */}
+        <Route path="/loja/:id" element={<LojaDetails />} /> {/* Rota para os detalhes de uma loja */}
       </Routes>
       <Footer />
     </Router>

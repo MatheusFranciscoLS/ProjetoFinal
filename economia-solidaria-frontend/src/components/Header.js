@@ -25,10 +25,10 @@ const Header = () => {
         <Link to="/produto" className="nav-link">
         Produto
         </Link>
-        <Link to="/cadastrar-loja" className="nav-link">
+        <Link to="/register-business" className="nav-link">
         Cadastrar Loja
         </Link>
-        <Link to="/loja-page" className="nav-link">
+        <Link to="/lojas" className="nav-link">
         Página da Loja
         </Link>
       </nav>
