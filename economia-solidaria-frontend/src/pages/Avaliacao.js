@@ -1,16 +1,30 @@
 import React, { useState } from "react";
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 import "../styles/avaliacao.css";
 
 const Review = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSuccessMessage("Obrigado pela sua avaliação!");
-    setRating(0);
-    setComment("");
+    try {
+      const docRef = await addDoc(collection(db, "avaliacoes"), {
+        rating,
+        comment,
+        createdAt: new Date(), // Adiciona a data/hora atual
+      });
+      console.log("Documento salvo com ID:", docRef.id);
+      setSuccessMessage("Obrigado pela sua avaliação!");
+      setRating(0);
+      setComment("");
+    } catch (error) {
+      console.error("Erro ao salvar avaliação:", error);
+      setErrorMessage("Ocorreu um erro ao salvar sua avaliação. Tente novamente.");
+    }
   };
 
   return (
@@ -18,6 +32,7 @@ const Review = () => {
       <h1>Avaliação</h1>
       <p>Nos conte como foi sua experiência com nossa plataforma.</p>
       {successMessage && <p className="success-message">{successMessage}</p>}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <div className="rating">
           <label>Avaliação:</label>
