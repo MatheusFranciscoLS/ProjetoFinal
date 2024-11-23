@@ -20,7 +20,7 @@ const Header = () => {
         Contato
         </Link>
         <Link to="/avaliacao" className="nav-link">
-        avaliacao
+        Avaliacao
         </Link>
         <Link to="/produto" className="nav-link">
         Produto
