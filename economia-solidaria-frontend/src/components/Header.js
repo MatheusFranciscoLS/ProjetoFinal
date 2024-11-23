@@ -5,7 +5,7 @@ import "../styles/header.css";
 const Header = () => {
   return (
     <header className="header">
-      <Link to="/" className="nav-link"> <div className="logo">Eco-Link</div></Link>
+    <Link to="/" className="nav-link">  <div className="logo">EconomiaSolidaria</div></Link>
       <nav className="nav">
         <Link to="/register" className="nav-link">
           Cadastro
@@ -13,9 +13,16 @@ const Header = () => {
         <Link to="/login" className="nav-link">
           Login
         </Link>
-        <Link to="/cadastrar-loja" className="nav-link">
-          CadastroLoja
+        <Link to="/sobre" className="nav-link">
+        Sobre
         </Link>
+        <Link to="/contato" className="nav-link">
+        Contato
+        </Link>
+        <Link to="/avaliacao" className="nav-link">
+        avaliacao
+        </Link>
+        
       </nav>
     </header>
   );
