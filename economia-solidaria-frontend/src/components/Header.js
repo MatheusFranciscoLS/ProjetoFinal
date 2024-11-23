@@ -13,6 +13,9 @@ const Header = () => {
         <Link to="/login" className="nav-link">
           Login
         </Link>
+        <Link to="/cadastrar-loja" className="nav-link">
+          CadastroLoja
+        </Link>
       </nav>
     </header>
   );

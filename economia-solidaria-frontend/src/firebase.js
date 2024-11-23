@@ -1,9 +1,10 @@
-// Import the functions you need from the SDKs you need
+// Importa as funções necessárias do SDK
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth"; // Importa a autenticação
-import { getAnalytics } from "firebase/analytics"; // Importa o analytics
+import { getAuth } from "firebase/auth"; // Serviço de autenticação
+import { getAnalytics } from "firebase/analytics"; // Analytics (opcional)
+import { getFirestore } from "firebase/firestore"; // Firestore para o banco de dados
 
-// Your web app's Firebase configuration
+// Configuração do Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDBzrhVY41HFA88U78g8uD7MChbt4eJn2U",
   authDomain: "economiasolidaria-2db35.firebaseapp.com",
@@ -14,12 +15,11 @@ const firebaseConfig = {
   measurementId: "G-5BGG1TGQYW",
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig); // Inicializa o Firebase
-const analytics = getAnalytics(app); // Inicializa o analytics (opcional)
+// Inicializa o Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app); // Inicializa o Analytics (opcional)
+const auth = getAuth(app); // Inicializa a autenticação
+const db = getFirestore(app); // Inicializa o Firestore
 
-// Obtenha o serviço de autenticação
-const auth = getAuth(app); 
-
-// Exporte os serviços que você deseja usar
-export { app, auth, analytics };
+// Exporta os serviços
+export { app, auth, analytics, db };
