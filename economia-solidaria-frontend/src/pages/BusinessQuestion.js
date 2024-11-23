@@ -1,30 +1,28 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Para navegação
-import "../styles/businessquestion.css"; // Importando o novo arquivo de estilos específico
+import { useNavigate } from "react-router-dom";
+import "../styles/businessquestion.css";
 
 const BusinessQuestion = () => {
-  const navigate = useNavigate(); // Hook de navegação
+  const navigate = useNavigate();
 
-  const handleYes = () => {
-    // Lógica para quando o usuário clicar em "Sim"
-    alert("Você será redirecionado para o cadastro de negócio.");
-    // Navega para a página de cadastro do negócio
-    navigate("/register-business");
-  };
-
-  const handleNo = () => {
-    // Lógica para quando o usuário clicar em "Não"
-    alert("Você pode continuar sem cadastrar seu negócio.");
-    // Navega de volta para a página principal ou para onde preferir
-    navigate("/");
-  };
+  const handleYes = () => navigate("/register-business");
+  const handleNo = () => navigate("/login");
 
   return (
     <div className="business-question-container">
-      <h2>Você é proprietário de um negócio?</h2>
-      <p>Clique abaixo para cadastrar seu negócio, ou siga sem cadastrar.</p>
-      <button onClick={handleYes}>Sim</button>
-      <button onClick={handleNo}>Não</button>
+      <h2>Você possui um negócio?</h2>
+      <p>
+        Cadastre-o agora e alcance mais clientes. Não quer cadastrar? Sem
+        problemas, continue navegando normalmente.
+      </p>
+      <div className="button-container">
+        <button onClick={handleYes} className="yes-button" aria-label="Cadastrar meu negócio">
+          Sim
+        </button>
+        <button onClick={handleNo} className="no-button" aria-label="Continuar sem cadastrar">
+          Não
+        </button>
+      </div>
     </div>
   );
 };
