@@ -22,6 +22,9 @@ const Header = () => {
         <Link to="/avaliacao" className="nav-link">
         avaliacao
         </Link>
+        <Link to="/produto" className="nav-link">
+        Produto
+        </Link>
         
       </nav>
     </header>
