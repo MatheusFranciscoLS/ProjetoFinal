@@ -64,4 +64,12 @@
     background-color: #0056b3;
   }
 
+    form select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
   

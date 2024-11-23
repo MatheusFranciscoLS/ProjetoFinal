@@ -5,6 +5,7 @@ const Contact = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [subject, setSubject] = useState(""); // Novo estado para o campo de seleção
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleSubmit = (e) => {
@@ -13,6 +14,7 @@ const Contact = () => {
     setName("");
     setEmail("");
     setMessage("");
+    setSubject(""); // Limpar o campo de assunto após o envio
   };
 
   return (
@@ -41,6 +43,20 @@ const Contact = () => {
           onChange={(e) => setMessage(e.target.value)}
           required
         ></textarea>
+
+        {/* Campo de seleção para o motivo do contato */}
+        <select
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)} // Atualiza o estado do assunto
+          required
+        >
+          <option value="">Selecione o motivo do contato</option>
+          <option value="duvida">Dúvida</option>
+          <option value="patrocinio">Patrocínio</option>
+          <option value="parceria">Parceria</option>
+          <option value="outro">Outro</option>
+        </select>
+
         <button type="submit">Enviar</button>
       </form>
     </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";  // Importa o hook useNavigate para navegação
 import "../styles/auth.css";
 
 const Register = () => {
@@ -10,6 +11,7 @@ const Register = () => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();  // Hook de navegação
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -20,11 +22,8 @@ const Register = () => {
       // Usuário cadastrado com sucesso
       alert("Cadastro realizado com sucesso!");
 
-      // Exemplo: Salvar informações adicionais no Firestore
-      const user = userCredential.user;
-      console.log("Usuário cadastrado:", { uid: user.uid, name, email, phone, address });
-
-      // Aqui você pode chamar uma função para salvar os dados adicionais no Firestore.
+      // Após o cadastro, redireciona para a nova página
+      navigate("/business-question");  // Redireciona para a página de perguntas
     } catch (err) {
       setError(err.message);
     }

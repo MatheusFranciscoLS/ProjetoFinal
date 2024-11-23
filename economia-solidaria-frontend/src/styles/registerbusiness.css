@@ -1,0 +1,198 @@
+/* Estilo geral da página */
+.register-business-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #74b9ff, #0984e3);
+    font-family: 'Roboto', sans-serif;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+/* Formulário */
+.register-business-form {
+    background: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Título */
+.register-business-form h2 {
+    color: #0984e3;
+    font-size: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Campos do formulário */
+.register-business-form input,
+.register-business-form textarea,
+.register-business-form select {
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s ease;
+}
+
+/* Foco nos campos */
+.register-business-form input:focus,
+.register-business-form textarea:focus,
+.register-business-form select:focus {
+    outline: none;
+    border-color: #0984e3;
+    box-shadow: 0 0 6px rgba(9, 132, 227, 0.5);
+}
+
+/* Upload de imagens */
+.image-preview {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Container de cada imagem */
+.image-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* Estilo das imagens */
+.image-preview img {
+    max-width: 150px;
+    /* Limita a largura máxima */
+    max-height: 150px;
+    /* Limita a altura máxima */
+    object-fit: cover;
+    /* Garante que a imagem não distorça */
+    margin: 5px;
+    /* Espaçamento entre as imagens */
+    border-radius: 8px;
+}
+
+/* Estilo do botão de remoção (X vermelho) */
+.remove-image {
+    position: absolute;
+    /* Posiciona o "X" dentro da imagem */
+    top: -10px;
+    /* Distância do topo da imagem */
+    right: 5px;
+    /* Distância da lateral direita da imagem */
+    background-color: rgba(255, 0, 0, 0.7);
+    /* Cor de fundo vermelha com transparência */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover no "X" */
+.remove-image:hover {
+    background-color: rgba(255, 0, 0, 1);
+    /* Torna o "X" mais vermelho quando passa o mouse */
+}
+
+/* Container para termos e condições (horizontal) */
+.terms-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Estilo do checkbox */
+.terms-container input {
+    margin-top: 15px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+/* Estilo do texto dos termos */
+.terms-container label {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Estilo do link dos termos */
+.terms-link {
+    color: #0984e3;
+    text-decoration: none;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+/* Estilo do botão */
+button {
+    background: #0984e3;
+    color: #fff;
+    font-size: 18px;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    width: auto;
+    margin-top: 20px;
+}
+
+/* Hover no botão */
+button:hover {
+    background: #74b9ff;
+    transform: scale(1.05);
+}
+
+/* Botão desabilitado */
+button:disabled {
+    background: #b2bec3;
+    cursor: not-allowed;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .register-business-page {
+        padding: 10px;
+    }
+
+    .register-business-form {
+        padding: 20px;
+    }
+
+    .register-business-form input,
+    .register-business-form textarea,
+    .register-business-form select {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    button {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .image-preview img {
+        max-width: 80px;
+        max-height: 80px;
+    }
+}

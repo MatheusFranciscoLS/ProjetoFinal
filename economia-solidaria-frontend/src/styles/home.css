@@ -1,3 +1,18 @@
+/* Impede rolagem horizontal */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  /* Impede a rolagem horizontal */
+}
+
+/* Adiciona box-sizing para todos os elementos */
+* {
+  box-sizing: border-box;
+}
+
 .home-container {
     text-align: center;
     padding: 20px;

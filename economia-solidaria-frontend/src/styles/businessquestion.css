@@ -1,0 +1,67 @@
+.register-business-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.register-business-container h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.upload-instructions {
+    margin-bottom: 20px;
+}
+
+.upload-instructions label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.upload-instructions p.upload-info {
+    font-size: 12px;
+    color: #555;
+    margin-top: 5px;
+}
+
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
+.upload-instructions ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.upload-instructions li {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.terms-container {
+    margin-top: 10px;
+}
+
+button {
+    background-color: #0984e3;
+    color: #fff;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #74b9ff;
+}
