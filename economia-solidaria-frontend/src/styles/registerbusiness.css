@@ -21,7 +21,7 @@
     max-width: 600px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 30px; /* Aumentei o gap entre as seções para melhorar a separação */
 }
 
 /* Título */
@@ -55,22 +55,50 @@
     box-shadow: 0 0 6px rgba(9, 132, 227, 0.5);
 }
 
-/* Upload de imagens */
+/* Seção de Upload de Imagens */
+.upload-section {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 25px; /* Aumentei o padding para deixar mais espaçoso */
+    border-radius: 8px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Maior espaçamento entre os elementos */
+}
+
+/* Título da seção de Upload */
+.upload-section label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Container de imagens */
 .image-preview {
     display: flex;
-    gap: 10px;
+    gap: 15px;
     flex-wrap: wrap;
     margin-top: 10px;
+    justify-content: center; /* Alinha as imagens no centro */
+    align-items: center; /* Alinha as imagens verticalmente no centro */
 }
 
 /* Container de cada imagem */
 .image-wrapper {
     position: relative;
-    width: 100px;
-    height: 100px;
+    width: 120px; /* Largura ajustada */
+    height: 120px; /* Altura ajustada */
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+/* Hover nas imagens */
+.image-wrapper:hover {
+    transform: scale(1.05); /* Aumento sutil das imagens */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra leve para dar destaque */
 }
 
 /* Estilo das imagens */
@@ -83,15 +111,15 @@
 /* Estilo do botão de remoção (X vermelho) */
 .remove-image {
     position: absolute;
-    top: -15px;
+    top: -10px;
     right: 5px;
     background-color: rgba(255, 0, 0, 0.8);
     color: #fff;
     border: none;
     border-radius: 50%;
     font-size: 14px;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -102,6 +130,19 @@
 /* Hover no "X" */
 .remove-image:hover {
     background-color: #ff0000;
+}
+
+
+/* Seção de Comprovante do Simples Nacional */
+.upload-section-cndoc {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 25px;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Aumentei o espaçamento */
 }
 
 /* Container para termos e condições */
@@ -186,7 +227,7 @@ button:disabled {
     }
 
     .image-wrapper {
-        width: 80px;
-        height: 80px;
+        width: 90px;
+        height: 90px;
     }
 }

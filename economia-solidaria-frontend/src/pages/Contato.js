@@ -5,7 +5,7 @@ const Contact = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [subject, setSubject] = useState(""); // Novo estado para o campo de seleção
+  const [subject, setSubject] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleSubmit = (e) => {
@@ -14,14 +14,12 @@ const Contact = () => {
     setName("");
     setEmail("");
     setMessage("");
-    setSubject(""); // Limpar o campo de assunto após o envio
+    setSubject("");
   };
 
   return (
     <div className="contact-container">
-      <h1>Contato</h1>
-      <p>Entre em contato conosco preenchendo o formulário abaixo.</p>
-      {successMessage && <p className="success-message">{successMessage}</p>}
+      <h2>Contato</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -43,20 +41,19 @@ const Contact = () => {
           onChange={(e) => setMessage(e.target.value)}
           required
         ></textarea>
-
-        {/* Campo de seleção para o motivo do contato */}
         <select
           value={subject}
-          onChange={(e) => setSubject(e.target.value)} // Atualiza o estado do assunto
+          onChange={(e) => setSubject(e.target.value)}
           required
         >
           <option value="">Selecione o motivo do contato</option>
-          <option value="duvida">Dúvida</option>
-          <option value="patrocinio">Patrocínio</option>
-          <option value="parceria">Parceria</option>
-          <option value="outro">Outro</option>
+          <option value="duvida">Dúvidas gerais sobre a plataforma</option>
+          <option value="feedback">Feedback para melhoria do site</option>
+          <option value="parceria">Interesse em parcerias ou colaborações</option>
+          <option value="problema">Relatar um problema ou erro técnico</option>
+          <option value="outro">Outras questões</option>
         </select>
-
+        {successMessage && <p className="success-message">{successMessage}</p>}
         <button type="submit">Enviar</button>
       </form>
     </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../firebase";
+import { db, storage } from "../firebase"; // Certifique-se de importar o 'storage'
 import "../styles/registerbusiness.css";
 
 const RegisterBusiness = () => {
@@ -21,40 +21,40 @@ const RegisterBusiness = () => {
 
   const navigate = useNavigate();
 
-  // Upload de imagens
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    if (files.length + images.length > 5) {
-      setError("Você pode enviar no máximo 5 imagens do seu negócio.");
+    if (files.length + images.length > 6) {
+      setError("Você pode enviar no máximo 6 imagens do seu negócio.");
     } else {
-      const validFiles = files.filter((file) => file.size <= 5 * 1024 * 1024); // Máximo de 5MB por imagem
-      if (validFiles.length < files.length) {
-        setError("Algumas imagens excederam o limite de 5MB e não foram adicionadas.");
+      // Verifique o tamanho de cada imagem e se excede o limite (por exemplo, 5 MB por imagem)
+      const invalidFiles = files.filter(file => file.size > 5 * 1024 * 1024); // Limite de 5MB por imagem
+      if (invalidFiles.length > 0) {
+        setError("Cada imagem deve ter no máximo 5 MB.");
+      } else {
+        setImages((prevImages) => [...prevImages, ...files]);
+        setError(""); // Limpa o erro ao adicionar novas imagens
       }
-      setImages((prev) => [...prev, ...validFiles]);
     }
   };
 
-  // Remover imagem
   const removeImage = (index) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
+    setImages(images.filter((_, i) => i !== index));
   };
 
-  // Submissão do formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
     let errorMessage = "";
 
     if (!businessName || !businessDescription || !category || !address || !phone || !email) {
-      errorMessage += "Preencha todos os campos obrigatórios.\n";
+      errorMessage += "Por favor, preencha todos os campos obrigatórios.\n";
     }
 
     if (images.length === 0 || !cnDoc) {
-      errorMessage += "Adicione ao menos uma imagem e o comprovante do Simples Nacional.\n";
+      errorMessage += "Por favor, carregue imagens do seu negócio e o comprovante do Simples Nacional.\n";
     }
 
     if (!termsAccepted) {
-      errorMessage += "Aceite os Termos e Condições para continuar.\n";
+      errorMessage += "É necessário aceitar os Termos e Condições.\n";
     }
 
     if (errorMessage) {
@@ -63,7 +63,7 @@ const RegisterBusiness = () => {
     }
 
     setLoading(true);
-    setError("");
+    setError(""); // Limpa a mensagem de erro antes de tentar enviar
 
     try {
       // Upload das imagens
@@ -125,7 +125,12 @@ const RegisterBusiness = () => {
           <option value="">Selecione a Categoria</option>
           <option value="restaurante">Restaurante</option>
           <option value="loja">Loja</option>
-          <option value="serviço">Serviço</option>
+          <option value="servicos">Serviços</option>
+          <option value="artesanato">Artesanato</option>
+          <option value="beleza">Beleza e Estética</option>
+          <option value="educacao">Educação e Cursos</option>
+          <option value="saude">Saúde e Bem-estar</option>
+          <option value="esportes">Esportes e Lazer</option>
           <option value="outro">Outro</option>
         </select>
         <input
@@ -158,7 +163,7 @@ const RegisterBusiness = () => {
 
         <div className="upload-instructions">
           <label htmlFor="businessImages">
-            Imagens do negócio (máximo de 5, até 5MB cada)
+            Carregue imagens do seu negócio (máximo de 6 imagens, máximo de 5 MB cada)
           </label>
           <input
             type="file"
@@ -172,11 +177,7 @@ const RegisterBusiness = () => {
               {images.map((image, index) => (
                 <div key={index} className="image-wrapper">
                   <img src={URL.createObjectURL(image)} alt={`preview ${index}`} />
-                  <button
-                    type="button"
-                    className="remove-image"
-                    onClick={() => removeImage(index)}
-                  >
+                  <button className="remove-image" onClick={() => removeImage(index)}>
                     X
                   </button>
                 </div>
@@ -184,6 +185,11 @@ const RegisterBusiness = () => {
             </div>
           )}
         </div>
+
+        {/* Exibe a mensagem de erro sobre o número de imagens, se necessário */}
+        {error && error.includes("Você pode enviar no máximo 6 imagens") && (
+          <div className="error">{error}</div>
+        )}
 
         <div className="upload-instructions">
           <label htmlFor="cnDoc">Comprovante do Simples Nacional</label>
@@ -196,7 +202,11 @@ const RegisterBusiness = () => {
           />
         </div>
 
-        {error && <div className="error">{error}</div>}
+        {/* Exibe erro geral se houver */}
+        {error && !error.includes("Você pode enviar no máximo 6 imagens") && (
+          <div className="error">{error}</div>
+        )}
+
         {loading && <div className="loading">Carregando...</div>}
 
         <div className="terms-container">
