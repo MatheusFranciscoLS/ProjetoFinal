@@ -9,3 +9,10 @@ Route::get('/', function () {
 
 
 Route::get('/usuarios', [FirebaseController::class, 'listarUsuarios']);
+
+use App\Models\Loja;
+
+
+Route::get('/lojas', function () {
+    return Loja::all(['nome', 'latitude', 'longitude', 'descricao']);
+});
