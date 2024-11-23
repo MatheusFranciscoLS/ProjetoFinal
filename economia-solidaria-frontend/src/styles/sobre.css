@@ -1,21 +1,20 @@
 /* Container principal que engloba o conteúdo e o quadrado da lateral */
 .main-container {
   display: flex;
-  justify-content: center;
-  /* Centra o conteúdo horizontalmente */
+  justify-content: space-between;
+  /* Certifica-se de que os elementos fiquem lado a lado */
   align-items: flex-start;
   margin-top: 50px;
   padding: 20px;
   flex-wrap: wrap;
-  /* Permite que o conteúdo se ajuste em telas menores */
   gap: 30px;
   /* Adiciona espaço entre os dois quadrados */
 }
 
 /* Estilo do quadrado lateral para Dúvidas Frequentes */
 .faq-box-container {
-  width: 250px;
-  /* Aumenta o tamanho para dar mais espaço ao conteúdo */
+  width: 20%;
+  /* Define 20% para a FAQ */
   padding: 20px;
   background-color: #007bff;
   color: white;
@@ -41,11 +40,11 @@
 
 /* Estilo do quadrado central para "Sobre Nós" */
 .about-container {
-  max-width: 800px;
+  width: 70%;
+  /* Define 70% para o "Sobre Nós" */
   padding: 30px;
   background: #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  /* Sombra mais suave */
   border-radius: 10px;
   font-family: Arial, sans-serif;
   line-height: 1.6;
@@ -121,10 +120,8 @@
   color: #555;
   font-size: 16px;
   border-top: 1px solid #ddd;
-  border-radius: 0 0 5px 5px;
 }
 
-/* Ícone da seta */
 .accordion-icon {
   float: right;
   transition: transform 0.3s ease;
@@ -132,4 +129,19 @@
 
 .accordion-icon.rotate {
   transform: rotate(180deg);
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+  .faq-box-container, .about-container {
+    width: 100%;
+    /* Quando a tela for menor, os quadrados ocupam 100% */
+    margin-bottom: 20px;
+    /* Adiciona espaço entre os elementos em telas menores */
+  }
+  
+  .main-container {
+    flex-direction: column;
+    /* Faz com que os elementos fiquem empilhados verticalmente */
+  }
 }
