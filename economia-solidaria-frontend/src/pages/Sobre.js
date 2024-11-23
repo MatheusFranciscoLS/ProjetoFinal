@@ -21,26 +21,31 @@ const About = () => {
         <div className="faq-content">
           <h3>Como participar?</h3>
           <p>
-            É simples! Crie um cadastro da sua empresa e escolha o plano que
-            melhor atende às suas necessidades.
+            É simples! Cadastre sua empresa na nossa plataforma e escolha o
+            plano que melhor se adapta às suas necessidades para aumentar sua
+            visibilidade.
           </p>
 
           <h3>Por que anunciar conosco?</h3>
           <p>
-            Somos uma plataforma acessível para pequenos empresários e
-            prestadores de serviços que buscam maior visibilidade online.
+            Somos uma plataforma acessível para pequenos empreendedores e
+            prestadores de serviços que desejam aumentar sua visibilidade e
+            atrair mais clientes locais.
           </p>
 
           <h3>Como me destacar nos anúncios?</h3>
           <p>
-            O site é gratuito para todos, mas com nossos planos você ganha maior
-            destaque de acordo com a sua escolha.
+            O aplicativo é gratuito para todos, mas ao escolher um de nossos
+            planos pagos, você poderá garantir maior destaque e visibilidade
+            para o seu negócio.
           </p>
+
           <h3>Quais são os benefícios dos planos pagos?</h3>
           <p>
-            Os planos pagos oferecem recursos extras, como destaque nos
-            resultados de busca, mais visibilidade nas páginas e opções
-            personalizadas para melhorar o alcance dos seus anúncios.
+            Os planos pagos oferecem vantagens como maior destaque nos
+            resultados de busca, visibilidade em áreas exclusivas e
+            funcionalidades personalizadas para ajudar a aumentar o alcance do
+            seu negócio.
           </p>
         </div>
       </div>
@@ -49,16 +54,17 @@ const About = () => {
       <div className="about-container">
         <h1>Sobre Nós</h1>
         <p>
-          Bem-vindo à <strong>Economia Solidária</strong>, uma plataforma
-          dedicada à promoção da colaboração, sustentabilidade e empoderamento
-          comunitário. Conectamos pessoas e organizações para fortalecer a
-          economia compartilhada e o bem-estar coletivo.
+          Bem-vindo à <strong>Economia Solidária</strong>, uma plataforma que
+          promove a colaboração e fortalece os negócios locais. Nosso objetivo é
+          conectar empreendedores e consumidores para impulsionar a economia
+          compartilhada e o bem-estar da comunidade local.
         </p>
+
         <h2>Missão</h2>
         <p>
-          Criamos um ambiente inclusivo, onde os usuários colaboram de forma
-          justa e sustentável, incentivando práticas de economia solidária em
-          suas comunidades.
+          Criamos um espaço digital inclusivo e sustentável, onde todos podem
+          colaborar de forma justa, promovendo a economia solidária nas
+          comunidades locais.
         </p>
 
         <h2>Valores</h2>
@@ -80,11 +86,13 @@ const About = () => {
             </h3>
             {activeIndex === 0 && (
               <div className="accordion-content">
-                Promovemos o trabalho conjunto, onde todos se ajudam para
-                alcançar objetivos comuns.
+                Valorizamos a colaboração entre empreendedores locais,
+                acreditando que, juntos, podemos fortalecer a economia da nossa
+                cidade e apoiar um ao outro no crescimento dos negócios.
               </div>
             )}
           </div>
+
           <div className="accordion-item">
             <h3
               className="accordion-header"
@@ -101,11 +109,13 @@ const About = () => {
             </h3>
             {activeIndex === 1 && (
               <div className="accordion-content">
-                Priorizamos práticas que protejam o meio ambiente e garantam um
-                futuro melhor para as próximas gerações.
+                Promovemos práticas sustentáveis que visam não apenas o sucesso
+                dos negócios, mas também o bem-estar do meio ambiente e o
+                fortalecimento da economia local para as próximas gerações.
               </div>
             )}
           </div>
+
           <div className="accordion-item">
             <h3
               className="accordion-header"
@@ -122,11 +132,14 @@ const About = () => {
             </h3>
             {activeIndex === 2 && (
               <div className="accordion-content">
-                Buscamos sempre novas soluções que melhorem a qualidade de vida
-                e promovam o bem-estar coletivo.
+                Acreditamos que a inovação deve ser acessível a todos os
+                empreendedores, oferecendo soluções simples e eficazes que
+                ajudem os pequenos negócios a se destacarem e se manterem
+                competitivos.
               </div>
             )}
           </div>
+
           <div className="accordion-item">
             <h3
               className="accordion-header"
@@ -143,8 +156,10 @@ const About = () => {
             </h3>
             {activeIndex === 3 && (
               <div className="accordion-content">
-                Valorizamos a participação de todos, independentemente de sua
-                origem ou condição.
+                A plataforma promove a inclusão, garantindo que todos,
+                independentemente do porte ou segmento, possam acessar
+                oportunidades de crescimento no mercado local e beneficiar-se da
+                economia solidária.
               </div>
             )}
           </div>
