@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../firebase"; // Certifique-se de importar o 'storage'
+import { db, storage } from "../firebase";
 import "../styles/registerbusiness.css";
 
 const RegisterBusiness = () => {
@@ -21,39 +21,40 @@ const RegisterBusiness = () => {
 
   const navigate = useNavigate();
 
+  // Upload de imagens
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     if (files.length + images.length > 5) {
       setError("Você pode enviar no máximo 5 imagens do seu negócio.");
     } else {
-      // Verifique o tamanho de cada imagem e se excede o limite (por exemplo, 5 MB por imagem)
-      const invalidFiles = files.filter(file => file.size > 5 * 1024 * 1024); // Limite de 5MB por imagem
-      if (invalidFiles.length > 0) {
-        setError("Cada imagem deve ter no máximo 5 MB.");
-      } else {
-        setImages((prevImages) => [...prevImages, ...files]);
+      const validFiles = files.filter((file) => file.size <= 5 * 1024 * 1024); // Máximo de 5MB por imagem
+      if (validFiles.length < files.length) {
+        setError("Algumas imagens excederam o limite de 5MB e não foram adicionadas.");
       }
+      setImages((prev) => [...prev, ...validFiles]);
     }
   };
 
+  // Remover imagem
   const removeImage = (index) => {
-    setImages(images.filter((_, i) => i !== index));
+    setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // Submissão do formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
     let errorMessage = "";
 
     if (!businessName || !businessDescription || !category || !address || !phone || !email) {
-      errorMessage += "Por favor, preencha todos os campos obrigatórios.\n";
+      errorMessage += "Preencha todos os campos obrigatórios.\n";
     }
 
     if (images.length === 0 || !cnDoc) {
-      errorMessage += "Por favor, carregue imagens do seu negócio e o comprovante do Simples Nacional.\n";
+      errorMessage += "Adicione ao menos uma imagem e o comprovante do Simples Nacional.\n";
     }
 
     if (!termsAccepted) {
-      errorMessage += "É necessário aceitar os Termos e Condições.\n";
+      errorMessage += "Aceite os Termos e Condições para continuar.\n";
     }
 
     if (errorMessage) {
@@ -157,7 +158,7 @@ const RegisterBusiness = () => {
 
         <div className="upload-instructions">
           <label htmlFor="businessImages">
-            Carregue imagens do seu negócio (máximo de 5 imagens, máximo de 5 MB cada)
+            Imagens do negócio (máximo de 5, até 5MB cada)
           </label>
           <input
             type="file"
@@ -171,7 +172,11 @@ const RegisterBusiness = () => {
               {images.map((image, index) => (
                 <div key={index} className="image-wrapper">
                   <img src={URL.createObjectURL(image)} alt={`preview ${index}`} />
-                  <button className="remove-image" onClick={() => removeImage(index)}>
+                  <button
+                    type="button"
+                    className="remove-image"
+                    onClick={() => removeImage(index)}
+                  >
                     X
                   </button>
                 </div>
