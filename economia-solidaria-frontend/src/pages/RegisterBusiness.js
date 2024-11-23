@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, addDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../firebase"; // Certifique-se de importar o 'storage'
+import { db } from "../firebase"; // Apenas Firestore
+import { getAuth } from "firebase/auth"; // Importando o Firebase Auth
 import "../styles/registerbusiness.css";
 
 const RegisterBusiness = () => {
@@ -20,13 +20,13 @@ const RegisterBusiness = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const auth = getAuth(); // Obter a autenticação do Firebase
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     if (files.length + images.length > 5) {
       setError("Você pode enviar no máximo 5 imagens do seu negócio.");
     } else {
-      // Verifique o tamanho de cada imagem e se excede o limite (por exemplo, 5 MB por imagem)
       const invalidFiles = files.filter(file => file.size > 5 * 1024 * 1024); // Limite de 5MB por imagem
       if (invalidFiles.length > 0) {
         setError("Cada imagem deve ter no máximo 5 MB.");
@@ -44,6 +44,7 @@ const RegisterBusiness = () => {
     e.preventDefault();
     let errorMessage = "";
 
+    // Validação
     if (!businessName || !businessDescription || !category || !address || !phone || !email) {
       errorMessage += "Por favor, preencha todos os campos obrigatórios.\n";
     }
@@ -56,6 +57,11 @@ const RegisterBusiness = () => {
       errorMessage += "É necessário aceitar os Termos e Condições.\n";
     }
 
+    // Verificando se o documento carregado é um PDF
+    if (cnDoc && cnDoc.type !== "application/pdf") {
+      errorMessage += "O comprovante do Simples Nacional deve ser um arquivo PDF.\n";
+    }
+
     if (errorMessage) {
       setError(errorMessage);
       return;
@@ -65,35 +71,28 @@ const RegisterBusiness = () => {
     setError("");
 
     try {
-      // Upload das imagens
-      const uploadedImages = await Promise.all(
-        images.map(async (image) => {
-          const imageRef = ref(storage, `lojas/${businessName}/${image.name}`);
-          await uploadBytes(imageRef, image);
-          return getDownloadURL(imageRef);
-        })
-      );
+      const userEmail = auth.currentUser.email; // Pega o email do usuário autenticado
 
-      // Upload do comprovante
-      const cnDocRef = ref(storage, `lojas/${businessName}/comprovante_${cnDoc.name}`);
-      await uploadBytes(cnDocRef, cnDoc);
-      const cnDocURL = await getDownloadURL(cnDocRef);
-
-      // Salvar no Firestore
+      // Salvar os dados no Firestore
       const docRef = await addDoc(collection(db, "lojas"), {
         nome: businessName,
         descricao: businessDescription,
         categoria: category,
         endereco: address,
         telefone: phone,
-        email,
+        email: userEmail, // Associando a loja ao email do usuário
         horarioDeFuncionamento: workingHours,
-        imagens: uploadedImages,
-        comprovante: cnDocURL,
+        imagens: images.map(image => image.name), // Apenas os nomes das imagens são salvos
+        comprovante: cnDoc.name,    // Nome do documento é salvo
+        status: "pendente", // Status inicial do negócio
+        mensagemNegada: "",   // Mensagem enviada ao gestor em caso de negação
       });
 
-      alert("Cadastro de negócio realizado com sucesso!");
-      navigate(`/loja/${docRef.id}`);
+      // Mensagem de sucesso
+      alert("Cadastro de negócio realizado com sucesso! Aguardando confirmação do administrador.");
+
+      // Redirecionar para a página de status do negócio
+      navigate(`/business-status/${docRef.id}`);
     } catch (err) {
       console.error("Erro ao cadastrar negócio:", err);
       setError("Erro ao cadastrar o negócio. Tente novamente.");

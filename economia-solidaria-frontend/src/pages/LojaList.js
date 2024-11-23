@@ -37,20 +37,24 @@ const LojasList = () => {
     <div className="container"> {/* Adicionando uma classe container */}
       <h2>Lista de Lojas</h2>
       <div className="lojas-list">
-        {lojas.map((loja) => (
-          <div className="loja-card" key={loja.id}>
-            <img
-              src={loja.foto || "default-image.jpg"} // Exibe a foto ou uma imagem padrão
-              alt={loja.nome}
-              className="loja-img" // Classe para a imagem
-            />
-            <h3>{loja.nome}</h3> {/* Nome da loja */}
-            <p>{loja.descricao}</p> {/* Descrição da loja */}
-            <Link to={`/loja/${loja.id}`} className="btn-ver-mais">
-              Ver mais
-            </Link>
-          </div>
-        ))}
+        {lojas.length === 0 ? (
+          <p>Não há lojas cadastradas.</p> // Caso não haja lojas cadastradas
+        ) : (
+          lojas.map((loja) => (
+            <div className="loja-card" key={loja.id}>
+              <img
+                src={loja.imagens?.[0] || "default-image.jpg"} // Exibe a primeira imagem ou uma imagem padrão
+                alt={loja.nome}
+                className="loja-img" // Classe para a imagem
+              />
+              <h3>{loja.nome}</h3> {/* Nome da loja */}
+              <p>{loja.descricao}</p> {/* Descrição da loja */}
+              <Link to={`/loja/${loja.id}`} className="btn-ver-mais">
+                Ver mais
+              </Link>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

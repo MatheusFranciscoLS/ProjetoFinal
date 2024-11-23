@@ -12,23 +12,36 @@ import Contato from "./pages/Contato";
 import Avaliacao from "./pages/Avaliacao";
 import LojasList from "./pages/LojaList"; // Importação de LojasList
 import LojaDetails from "./pages/LojaDetails"; // Importação de LojaDetails
+import EditBusiness from "./pages/EditBusiness"; // Importação de EditBusiness
+import BusinessStatus from "./pages/BusinessStatus"; // Importação de BusinessStatus
+import AdminDashboard from "./pages/AdminDashboard"; // Importação de AdminDashboard
 
 const App = () => {
   return (
     <Router>
       <Header />
       <Routes>
-        <Route path="/register" element={<Register />} />
-        <Route path="/business-question" element={<BusinessQuestion />} />
-        <Route path="/register-business" element={<RegisterBusiness />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
+        {/* Rotas públicas */}
         <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/contato" element={<Contato />} />
         <Route path="/avaliacao" element={<Avaliacao />} />
-        <Route path="/lojas" element={<LojasList />} /> {/* Rota para a lista de lojas */}
-        <Route path="/loja/:id" element={<LojaDetails />} /> {/* Rota para os detalhes de uma loja */}
+
+        {/* Rotas de registro e login */}
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        
+        {/* Rotas de negócios */}
+        <Route path="/business-question" element={<BusinessQuestion />} />
+        <Route path="/register-business" element={<RegisterBusiness />} />
+        <Route path="/lojas" element={<LojasList />} />
+        <Route path="/loja/:id" element={<LojaDetails />} />
+        
+        {/* Rotas administrativas */}
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/edit-business/:id" element={<EditBusiness />} />
+        <Route path="/business-status/:id" element={<BusinessStatus />} />
       </Routes>
       <Footer />
     </Router>
