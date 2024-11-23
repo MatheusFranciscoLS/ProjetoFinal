@@ -163,7 +163,7 @@ const RegisterBusiness = () => {
 
         <div className="upload-instructions">
           <label htmlFor="businessImages">
-            Carregue imagens do seu negócio (máximo de 6 imagens, máximo de 5 MB cada)
+            <strong>Carregue imagens do seu negócio (máximo de 6 imagens, máximo de 5 MB cada)</strong>
           </label>
           <input
             type="file"
@@ -192,7 +192,9 @@ const RegisterBusiness = () => {
         )}
 
         <div className="upload-instructions">
-          <label htmlFor="cnDoc">Comprovante do Simples Nacional</label>
+          <label htmlFor="cnDoc">
+            <strong>Comprovante do Simples Nacional</strong>
+          </label>
           <input
             type="file"
             id="cnDoc"
