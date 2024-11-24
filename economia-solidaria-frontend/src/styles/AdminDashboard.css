@@ -1,0 +1,182 @@
+/* Estilos principais do dashboard */
+.admin-dashboard {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-dashboard h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilos para a lista de negócios pendentes */
+  .admin-dashboard ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .admin-dashboard li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .admin-dashboard li h3 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .admin-dashboard li p {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .admin-dashboard li button {
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Estilos para os botões de aprovação e negação */
+  .admin-dashboard li button.approve {
+    background-color: #28a745; /* Verde para Aprovar */
+  }
+  
+  .admin-dashboard li button.approve:hover {
+    background-color: #218838; /* Tom de verde mais escuro */
+  }
+  
+  .admin-dashboard li button.deny {
+    background-color: #dc3545; /* Vermelho para Negar */
+  }
+  
+  .admin-dashboard li button.deny:hover {
+    background-color: #c82333; /* Tom de vermelho mais escuro */
+  }
+  
+  /* Estilos para os detalhes do negócio */
+  .business-details {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px;
+    border: 1px solid #ddd;
+  }
+  
+  .business-details h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .business-details p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  .business-details strong {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Estilos para as imagens do negócio */
+  .business-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .business-images img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .business-details a {
+    color: #007bff;
+    font-size: 16px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .business-details a:hover {
+    color: #0056b3;
+  }
+  
+  /* Estilos para os botões de ação no detalhe do negócio */
+  .business-details button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .business-details button:hover {
+    background-color: #218838;
+  }
+  
+  .business-details button:nth-child(2) {
+    background-color: #dc3545;
+  }
+  
+  .business-details button:nth-child(2):hover {
+    background-color: #c82333;
+  }
+  
+  .business-details button:nth-child(3) {
+    background-color: #6c757d;
+  }
+  
+  .business-details button:nth-child(3):hover {
+    background-color: #5a6268;
+  }
+  
+  /* Estilos para o carregamento */
+  .admin-dashboard p {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+  }
+  
+  /* Estilos de responsividade para telas menores */
+  @media (max-width: 768px) {
+    .admin-dashboard {
+      padding: 15px;
+    }
+  
+    .admin-dashboard li {
+      padding: 10px;
+    }
+  
+    .business-images img {
+      width: 80px;
+      height: 80px;
+    }
+  }
+  

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { collection, query, where, getDocs, getDoc, doc, deleteDoc, setDoc } from "firebase/firestore"; // Adicionando getDoc na importação
 import { db } from "../firebase"; // Certifique-se de importar o 'db'
+import "../styles/AdminDashboard.css";
 
 const AdminDashboard = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -94,8 +95,20 @@ const AdminDashboard = () => {
                   <p>{business.descricao}</p>
                   <p>Status: {business.status}</p>
                   <button onClick={() => handleViewDetails(business.id)}>Ver Detalhes</button>
-                  <button onClick={() => handleApproval(business.id, true)}>Aprovar</button>
-                  <button onClick={() => handleApproval(business.id, false)}>Negar</button>
+                  <button 
+                    className="approve" 
+                    onClick={() => handleApproval(business.id, true)}
+                    style={{ backgroundColor: 'green', color: 'white' }}
+                  >
+                    Aprovar
+                  </button>
+                  <button 
+                    className="deny" 
+                    onClick={() => handleApproval(business.id, false)}
+                    style={{ backgroundColor: 'red', color: 'white' }}
+                  >
+                    Negar
+                  </button>
                 </li>
               ))}
             </ul>
@@ -133,8 +146,6 @@ const AdminDashboard = () => {
           </div>
 
           <div>
-            <button onClick={() => handleApproval(selectedBusiness.id, true)}>Aprovar</button>
-            <button onClick={() => handleApproval(selectedBusiness.id, false)}>Negar</button>
             <button onClick={() => setSelectedBusiness(null)}>Fechar Detalhes</button>
           </div>
         </div>
