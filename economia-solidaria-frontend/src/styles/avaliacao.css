@@ -1,6 +1,6 @@
 /* Alinhar os botões no centro */
 .toggle-btn,
-button[type="submit"] {
+.avaliacao button[type="submit"] {
   display: block;
   margin: 20px auto;
   padding: 10px 20px;
@@ -14,7 +14,7 @@ button[type="submit"] {
 }
 
 .toggle-btn:hover,
-button[type="submit"]:hover {
+.avaliacao button[type="submit"]:hover {
   background-color: #45a049; /* Cor de fundo quando passar o mouse */
 }
 

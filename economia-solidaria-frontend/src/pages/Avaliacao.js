@@ -169,7 +169,7 @@ const Review = ({ lojaId }) => {
                   onChange={handleCommentChange}
                   required
                 ></textarea>
-                <button type="submit" disabled={isSubmitDisabled}>
+                <button class='avaliacao' type="submit" disabled={isSubmitDisabled}>
                   Enviar Avaliação
                 </button>
               </form>
