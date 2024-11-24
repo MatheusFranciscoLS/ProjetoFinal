@@ -1,39 +1,43 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    background-color: #007bff; /* Azul padrão */
-    color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .logo {
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 1px;
-  }
-  
-  .nav {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .nav-link {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
-  
-  .nav-link:hover {
-    color: #ffdd57; /* Amarelo destaque */
-  }
-  /* Exemplo de estilos para o cabeçalho */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: #007bff; /* Azul padrão */
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 100%; /* Altura consistente do header */
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.nav {
+  display: flex;
+  align-items: center; /* Alinha itens verticalmente */
+  gap: 20px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #ffdd57; /* Amarelo destaque */
+}
+
 .user-info {
   display: flex;
   align-items: center;
+  height: 100%; /* Mesma altura do header */
+  font-size: 18px; /* Mesma fonte dos links */
 }
 
 .user-name {
@@ -45,9 +49,11 @@
   background-color: #ff4d4d;
   border: none;
   padding: 8px 16px;
+  margin-bottom: 20px;
   color: white;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px; /* Consistente com o restante */
+  border-radius: 4px; /* Suave para combinar com o estilo geral */
 }
 
 .logout-button:hover {

@@ -1,10 +1,10 @@
 import React from "react";
-import "../styles/footer.css";  // Corrigi o nome para "footer.css" caso o arquivo seja de estilo para o footer
+import "../styles/footer.css";  // Certifique-se de que o caminho do CSS está correto
 
-const Footer = () => {
+const Footer = ({ className }) => {
   return (
-    <footer className="footer">
-      <p>&copy; {new Date().getFullYear()} Minha Aplicação. Todos os direitos reservados.</p>
+    <footer className={`footer ${className}`}>
+<p>&copy; {new Date().getFullYear()} Plataforma de Divulgação de Negócios Locais em Limeira. Todos os direitos reservados.</p>
     </footer>
   );
 };

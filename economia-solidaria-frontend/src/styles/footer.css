@@ -2,23 +2,29 @@
 .footer {
   text-align: center;
   padding: 20px;
-  background-color: #007bff; /* Azul mais escuro para mesclar com o header */
-  color: white; /* Texto branco para contraste */
-  border-top: 1px solid #333; /* Borda superior escura para separar o conteúdo */
-  width: 100%; /* Garantir que o footer ocupe toda a largura */
-  position: relative; /* Garantir que o footer fique no final da página */
-  bottom: 0; /* Fixar na parte inferior */
-}
-
-/* Estilo para o texto do footer */
-.footer p {
-  margin: 0;
+  background-color: #007bff; /* Azul mais escuro */
+  color: white; /* Texto branco */
+  border-top: 1px solid #333; /* Separador */
+  width: 100%; /* Garante que ocupa toda a largura */
   font-size: 14px;
   font-weight: 400;
+  position: relative; /* Usado para layout flexível */
+  bottom: 0;
 }
 
-/* Efeito de hover no texto */
+/* Efeito de hover */
 .footer p:hover {
-  color: #ffdd57; /* Amarelo destaque do header para hover */
+  color: #ffdd57; /* Amarelo para hover */
   transition: color 0.3s ease;
+}
+
+/* Contêiner principal, ajustando para layout flexível */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Garante que o contêiner tenha altura mínima da tela */
+}
+
+.admin-dashboard {
+  flex-grow: 1; /* O conteúdo da dashboard pode crescer para preencher o restante da altura */
 }

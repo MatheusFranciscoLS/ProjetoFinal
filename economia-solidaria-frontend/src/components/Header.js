@@ -19,11 +19,7 @@ const Header = () => {
           const userDoc = await getDoc(doc(db, "users", user.uid)); // Supondo que o usuário esteja na coleção 'users'
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            if (userData.tipo === "admin") {
-              setIsAdmin(true); // Usuário é administrador
-            } else {
-              setIsAdmin(false); // Usuário não é administrador
-            }
+            setIsAdmin(userData.tipo === "admin");
           }
         } catch (error) {
           console.error("Erro ao verificar o papel do usuário:", error);
@@ -54,40 +50,21 @@ const Header = () => {
       </Link>
       <nav className="nav">
         {/* Links de navegação públicos */}
-        <Link to="/register" className="nav-link">
-          Cadastro
-        </Link>
-        <Link to="/login" className="nav-link">
-          Login
-        </Link>
-        <Link to="/sobre" className="nav-link">
-          Sobre
-        </Link>
-        <Link to="/contato" className="nav-link">
-          Contato
-        </Link>
-
-        <Link to="/register-business" className="nav-link">
-          Cadastrar Loja
-        </Link>
-        <Link to="/lojas" className="nav-link">
-          Página da Loja
-        </Link>
+        <Link to="/register" className="nav-link">Cadastro</Link>
+        <Link to="/login" className="nav-link">Login</Link>
+        <Link to="/sobre" className="nav-link">Sobre</Link>
+        <Link to="/contato" className="nav-link">Contato</Link>
+        <Link to="/register-business" className="nav-link">Cadastrar Loja</Link>
+        <Link to="/lojas" className="nav-link">Página da Loja</Link>
 
         {/* Links visíveis apenas para usuários autenticados */}
         {user && (
-          <>
-            <Link to="/meus-negocios" className="nav-link">
-              Meus Negócios
-            </Link>
-          </>
+          <Link to="/meus-negocios" className="nav-link">Meus Negócios</Link>
         )}
 
         {/* Link visível apenas para administradores */}
         {isAdmin && (
-          <Link to="/admin-dashboard" className="nav-link">
-            Painel Administrativo
-          </Link>
+          <Link to="/admin-dashboard" className="nav-link">Painel Administrativo</Link>
         )}
 
         {/* Mostrar o nome do usuário e o botão de logout */}

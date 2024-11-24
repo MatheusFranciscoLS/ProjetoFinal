@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { collection, query, where, getDocs, getDoc, doc, deleteDoc, setDoc } from "firebase/firestore"; // Adicionando getDoc na importação
-import { db } from "../firebase"; // Certifique-se de importar o 'db'
+import { collection, query, where, getDocs, getDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 import "../styles/AdminDashboard.css";
 
 const AdminDashboard = () => {
@@ -36,28 +36,23 @@ const AdminDashboard = () => {
       if (businessSnapshot.exists()) {
         const businessData = businessSnapshot.data();
 
-        // Atualiza o status do negócio
         await setDoc(businessRef, {
           ...businessData,
-          status: approved ? "aprovado" : "negado", // Atualiza o status para "aprovado" ou "negado"
+          status: approved ? "aprovado" : "negado",
         });
 
-        // Se aprovado, move o negócio da coleção "negocios_pendentes" para "lojas"
         if (approved) {
           const newBusinessRef = doc(db, "lojas", businessId);
           await setDoc(newBusinessRef, {
             ...businessData,
-            status: "aprovado", // Adiciona o status aprovado na coleção "lojas"
+            status: "aprovado",
           });
-
-          // Remove o negócio da coleção de pendentes
           await deleteDoc(businessRef);
           console.log("Negócio aprovado e movido para 'lojas'.");
         } else {
           console.log("Negócio negado.");
         }
 
-        // Remove o negócio da lista visível após aprovação ou negação
         setBusinesses(businesses.filter((business) => business.id !== businessId));
       } else {
         console.error("Negócio não encontrado!");
@@ -67,89 +62,82 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleViewDetails = async (businessId) => {
-    const businessRef = doc(db, "negocios_pendentes", businessId);
-    const businessSnapshot = await getDoc(businessRef);
-
-    if (businessSnapshot.exists()) {
-      setSelectedBusiness(businessSnapshot.data());
-    } else {
-      console.error("Negócio não encontrado!");
-    }
-  };
-
   return (
-    <div className="admin-dashboard">
-      <h2>Cadastro de Negócios Pendentes</h2>
-      {loading ? (
-        <p>Carregando...</p>
-      ) : (
-        <div>
-          {businesses.length === 0 ? (
-            <p>Nenhum negócio pendente para aprovação.</p>
-          ) : (
-            <ul>
-              {businesses.map((business) => (
-                <li key={business.id}>
-                  <h3>{business.nome}</h3>
-                  <p>{business.descricao}</p>
-                  <p>Status: {business.status}</p>
-                  <button onClick={() => handleViewDetails(business.id)}>Ver Detalhes</button>
-                  <button 
-                    className="approve" 
-                    onClick={() => handleApproval(business.id, true)}
-                    style={{ backgroundColor: 'green', color: 'white' }}
-                  >
-                    Aprovar
-                  </button>
-                  <button 
-                    className="deny" 
-                    onClick={() => handleApproval(business.id, false)}
-                    style={{ backgroundColor: 'red', color: 'white' }}
-                  >
-                    Negar
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
-
-      {selectedBusiness && (
-        <div className="business-details">
-          <h2>Detalhes do Negócio</h2>
-          <p><strong>Nome:</strong> {selectedBusiness.nome}</p>
-          <p><strong>Descrição:</strong> {selectedBusiness.descricao}</p>
-          <p><strong>Categoria:</strong> {selectedBusiness.categoria}</p>
-          <p><strong>Endereço:</strong> {selectedBusiness.endereco}</p>
-          <p><strong>Telefone:</strong> {selectedBusiness.telefone}</p>
-          <p><strong>E-mail:</strong> {selectedBusiness.email}</p>
-          <p><strong>Horários de Funcionamento:</strong> {selectedBusiness.horarioDeFuncionamento}</p>
-
+    <div className="page-container">  {/* Contêiner flexível */}
+      <div className="admin-dashboard">
+        <h2>Cadastro de Negócios Pendentes</h2>
+        {loading ? (
+          <p>Carregando...</p>
+        ) : (
           <div>
-            <strong>Imagens do Negócio:</strong>
-            <div className="business-images">
-              {selectedBusiness.imagens?.map((img, index) => (
-                <img key={index} src={img} alt={`Imagem ${index + 1}`} />
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <strong>Comprovante do Simples Nacional:</strong>
-            {selectedBusiness.comprovante && (
-              <a href={`data:application/pdf;base64,${selectedBusiness.comprovante}`} target="_blank" rel="noopener noreferrer">
-                Visualizar Comprovante
-              </a>
+            {businesses.length === 0 ? (
+              <p>Nenhum negócio pendente para aprovação.</p>
+            ) : (
+              <div className="card-grid">
+                {businesses.map((business) => (
+                  <div
+                    key={business.id}
+                    className={`card ${selectedBusiness?.id === business.id ? "expanded" : ""}`}
+                  >
+                    <div className="card-content">
+                      <h3 className="business-name">{business.nome}</h3>
+                      <p className="business-status">
+                        <strong>Status:</strong> {business.status}
+                      </p>
+                      <p className="business-description">{business.descricao}</p>
+                      <div className="card-buttons">
+                        <button onClick={() => setSelectedBusiness(business)}>Ver Detalhes</button>
+                        <button
+                          className="approve"
+                          onClick={() => handleApproval(business.id, true)}
+                          style={{ backgroundColor: "green", color: "white" }}
+                        >
+                          Aprovar
+                        </button>
+                        <button
+                          className="deny"
+                          onClick={() => handleApproval(business.id, false)}
+                          style={{ backgroundColor: "red", color: "white" }}
+                        >
+                          Negar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
+        )}
 
-          <div>
-            <button onClick={() => setSelectedBusiness(null)}>Fechar Detalhes</button>
+        {selectedBusiness && (
+          <div className="business-details-overlay" onClick={() => setSelectedBusiness(null)}>
+            <div className="business-details" onClick={(e) => e.stopPropagation()}>
+              <h2>Detalhes do Negócio</h2>
+              <p><strong>Nome:</strong> {selectedBusiness.nome}</p>
+              <p><strong>Descrição:</strong> {selectedBusiness.descricao}</p>
+              <p><strong>Categoria:</strong> {selectedBusiness.categoria}</p>
+              <p><strong>Endereço:</strong> {selectedBusiness.endereco}</p>
+              <p><strong>Telefone:</strong> {selectedBusiness.telefone}</p>
+              <p><strong>E-mail:</strong> {selectedBusiness.email}</p>
+              <p><strong>Horários de Funcionamento:</strong> {selectedBusiness.horarioDeFuncionamento}</p>
+              <button
+                onClick={() => handleApproval(selectedBusiness.id, true)}
+                style={{ backgroundColor: "green", color: "white" }}
+              >
+                Aprovar
+              </button>
+              <button
+                onClick={() => handleApproval(selectedBusiness.id, false)}
+                style={{ backgroundColor: "red", color: "white" }}
+              >
+                Negar
+              </button>
+              <button onClick={() => setSelectedBusiness(null)}>Fechar</button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
