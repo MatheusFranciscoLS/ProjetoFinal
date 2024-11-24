@@ -13,8 +13,9 @@ import Avaliacao from "./pages/Avaliacao";
 import LojasList from "./pages/LojaList"; // Importação de LojasList
 import LojaDetails from "./pages/LojaDetails"; // Importação de LojaDetails
 import EditBusiness from "./pages/EditBusiness"; // Importação de EditBusiness
-import BusinessStatus from "./pages/BusinessStatus"; // Importação de BusinessStatus
+import MeusNegocios from "./pages/MeusNegocios"; // Atualização para o novo nome
 import AdminDashboard from "./pages/AdminDashboard"; // Importação de AdminDashboard
+import Terms from "./pages/Terms"; // Página de Termos e Condições
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/contato" element={<Contato />} />
         <Route path="/avaliacao" element={<Avaliacao />} />
+        <Route path="/terms" element={<Terms />} /> {/* Página de Termos e Condições */}
 
         {/* Rotas de registro e login */}
         <Route path="/register" element={<Register />} />
@@ -41,7 +43,7 @@ const App = () => {
         {/* Rotas administrativas */}
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/edit-business/:id" element={<EditBusiness />} />
-        <Route path="/business-status/:id" element={<BusinessStatus />} />
+        <Route path="/meus-negocios/:id" element={<MeusNegocios />} /> {/* Atualizado para MeusNegocios */}
       </Routes>
       <Footer />
     </Router>

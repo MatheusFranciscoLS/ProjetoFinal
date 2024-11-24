@@ -1,0 +1,35 @@
+.avaliacao-section {
+    margin-top: 30px; /* Adiciona um espaço entre os detalhes da loja e a seção de avaliação */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Alinha o conteúdo ao centro */
+  }
+  
+  .avaliacao-section form {
+    display: flex;
+    justify-content: center; /* Centraliza os itens horizontalmente */
+    align-items: center; /* Alinha os itens verticalmente, se necessário */
+    flex-direction: column; /* Garante que os botões fiquem empilhados se houver mais de um */
+  }
+  
+  .avaliacao-section button {
+    margin: 10px 0; /* Adiciona espaço entre os botões */
+    font-size: 14px;
+    padding: 10px 20px;
+    background-color: #0984e3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .space-large {
+    margin-top: 100px; /* ou o valor que você achar necessário */
+  }
+  
+  .avaliacao-section button:hover {
+    background-color: #74b9ff;
+  }
+  

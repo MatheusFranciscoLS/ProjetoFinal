@@ -2,61 +2,23 @@
 .footer {
   text-align: center;
   padding: 20px;
-  background-color: #007bff;
-  /* Azul mais escuro para mesclar com o header */
-  color: white;
-  /* Texto branco para contraste */
-  border-top: 1px solid #333;
-  /* Borda superior escura para separar o conteúdo */
-  position: relative;
-  bottom: 0;
-  width: 100%;
+  background-color: #007bff; /* Azul mais escuro para mesclar com o header */
+  color: white; /* Texto branco para contraste */
+  border-top: 1px solid #333; /* Borda superior escura para separar o conteúdo */
+  width: 100%; /* Garantir que o footer ocupe toda a largura */
+  position: relative; /* Garantir que o footer fique no final da página */
+  bottom: 0; /* Fixar na parte inferior */
 }
 
+/* Estilo para o texto do footer */
 .footer p {
   margin: 0;
   font-size: 14px;
   font-weight: 400;
 }
 
+/* Efeito de hover no texto */
 .footer p:hover {
-  color: #ffdd57;
-  /* Amarelo destaque do header para hover */
+  color: #ffdd57; /* Amarelo destaque do header para hover */
   transition: color 0.3s ease;
-}
-
-/* Estilos do Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  background-color: #007bff;
-  /* Azul padrão do header */
-  color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-
-.nav {
-  display: flex;
-  gap: 20px;
-}
-
-.nav-link {
-  color: white;
-  text-decoration: none;
-  font-size: 18px;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.nav-link:hover {
-  color: #ffdd57;
-  /* Amarelo destaque do header */
 }

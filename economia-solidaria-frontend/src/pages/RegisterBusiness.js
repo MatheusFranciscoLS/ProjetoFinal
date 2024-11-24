@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, addDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../firebase"; // Certifique-se de importar o 'storage'
+import { db } from "../firebase"; // Certifique-se de importar o 'db'
+import { getAuth } from "firebase/auth"; // Para pegar o UID do usuário autenticado
 import "../styles/registerbusiness.css";
 
 const RegisterBusiness = () => {
@@ -18,15 +18,18 @@ const RegisterBusiness = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  
   const navigate = useNavigate();
-
+  
+  const auth = getAuth();
+  const user = auth.currentUser; // Verifica o usuário autenticado
+  const userUid = user ? user.uid : null; // Obtém o UID do usuário
+  
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     if (files.length + images.length > 6) {
       setError("Você pode enviar no máximo 6 imagens do seu negócio.");
     } else {
-      // Verifique o tamanho de cada imagem e se excede o limite (por exemplo, 5 MB por imagem)
       const invalidFiles = files.filter(file => file.size > 5 * 1024 * 1024); // Limite de 5MB por imagem
       if (invalidFiles.length > 0) {
         setError("Cada imagem deve ter no máximo 5 MB.");
@@ -45,6 +48,7 @@ const RegisterBusiness = () => {
     e.preventDefault();
     let errorMessage = "";
 
+    // Validação dos campos
     if (!businessName || !businessDescription || !category || !address || !phone || !email) {
       errorMessage += "Por favor, preencha todos os campos obrigatórios.\n";
     }
@@ -57,6 +61,12 @@ const RegisterBusiness = () => {
       errorMessage += "É necessário aceitar os Termos e Condições.\n";
     }
 
+    // Verificação de formato de e-mail
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (email && !emailRegex.test(email)) {
+      errorMessage += "O e-mail fornecido não é válido.\n";
+    }
+
     if (errorMessage) {
       setError(errorMessage);
       return;
@@ -66,22 +76,20 @@ const RegisterBusiness = () => {
     setError(""); // Limpa a mensagem de erro antes de tentar enviar
 
     try {
-      // Upload das imagens
-      const uploadedImages = await Promise.all(
-        images.map(async (image) => {
-          const imageRef = ref(storage, `lojas/${businessName}/${image.name}`);
-          await uploadBytes(imageRef, image);
-          return getDownloadURL(imageRef);
-        })
-      );
+      // Converter imagens para base64 ou outras manipulações, se necessário
+      const imageBase64Promises = images.map(async (image) => {
+        const reader = new FileReader();
+        return new Promise((resolve, reject) => {
+          reader.onloadend = () => resolve(reader.result); // Salva o resultado em base64
+          reader.onerror = reject;
+          reader.readAsDataURL(image);
+        });
+      });
 
-      // Upload do comprovante
-      const cnDocRef = ref(storage, `lojas/${businessName}/comprovante_${cnDoc.name}`);
-      await uploadBytes(cnDocRef, cnDoc);
-      const cnDocURL = await getDownloadURL(cnDocRef);
+      const imageBase64 = await Promise.all(imageBase64Promises);
 
-      // Salvar no Firestore
-      const docRef = await addDoc(collection(db, "lojas"), {
+      // Salvar no Firestore na coleção "negocios_pendentes", incluindo o UID do usuário e status "pendente"
+      const docRef = await addDoc(collection(db, "negocios_pendentes"), {
         nome: businessName,
         descricao: businessDescription,
         categoria: category,
@@ -89,12 +97,18 @@ const RegisterBusiness = () => {
         telefone: phone,
         email,
         horarioDeFuncionamento: workingHours,
-        imagens: uploadedImages,
-        comprovante: cnDocURL,
+        imagens: imageBase64, // Salva as imagens em base64
+        comprovante: cnDoc.name, // Salva o nome do arquivo do comprovante
+        userId: userUid, // Adiciona o UID do usuário
+        status: "pendente", // Definindo o status como "pendente"
       });
 
-      alert("Cadastro de negócio realizado com sucesso!");
-      navigate(`/loja/${docRef.id}`);
+      // Mensagem de sucesso com a alteração para aguardar aprovação do admin
+      alert("Cadastro enviado, aguardando aprovação do admin!");
+
+      // Após o envio, redireciona o usuário para a home
+      navigate("/");
+
     } catch (err) {
       console.error("Erro ao cadastrar negócio:", err);
       setError("Erro ao cadastrar o negócio. Tente novamente.");
@@ -186,7 +200,6 @@ const RegisterBusiness = () => {
           )}
         </div>
 
-        {/* Exibe a mensagem de erro sobre o número de imagens, se necessário */}
         {error && error.includes("Você pode enviar no máximo 6 imagens") && (
           <div className="error">{error}</div>
         )}
@@ -204,7 +217,6 @@ const RegisterBusiness = () => {
           />
         </div>
 
-        {/* Exibe erro geral se houver */}
         {error && !error.includes("Você pode enviar no máximo 6 imagens") && (
           <div className="error">{error}</div>
         )}
@@ -226,8 +238,8 @@ const RegisterBusiness = () => {
           </label>
         </div>
 
-        <button type="submit" disabled={loading || !termsAccepted}>
-          {loading ? "Cadastrando..." : "Cadastrar Negócio"}
+        <button type="submit" disabled={loading}>
+          Enviar Cadastro
         </button>
       </form>
     </div>

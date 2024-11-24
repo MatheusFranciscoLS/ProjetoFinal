@@ -1,79 +1,84 @@
-.review-container {
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    background: #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-  }
-  
-  .review-container h1 {
-    font-size: 28px;
-    color: #007bff;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .review-container p {
-    font-size: 16px;
-    color: #555;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .success-message {
-    color: green;
-    text-align: center;
-    margin-bottom: 15px;
-  }
-  
-  .rating {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .star {
-    font-size: 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #ddd;
-    transition: color 0.3s ease;
-  }
-  
-  .star.active,
-  .star:hover {
-    color: #ffc107; /* Amarelo */
-  }
-  
-  form textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-bottom: 15px;
-    height: 100px;
-    resize: none;
-  }
-  
-  form button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  form button:hover {
-    background-color: #0056b3;
-  }
-  
+/* Alinhar os botões no centro */
+.toggle-btn,
+button[type="submit"] {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #4CAF50; /* Cor de fundo para os botões */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+}
+
+.toggle-btn:hover,
+button[type="submit"]:hover {
+  background-color: #45a049; /* Cor de fundo quando passar o mouse */
+}
+
+/* Formulário de Avaliação */
+form {
+  width: 80%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f4f4f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+}
+
+/* Estilo para a área de comentários e classificação */
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.rating {
+  text-align: center;
+}
+
+.star {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #ffd700;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.star.active {
+  color: #ffbf00;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+}
+
+.success-message {
+  color: green;
+  text-align: center;
+}
+
+.reviews-list {
+  margin-top: 20px;
+}
+
+.review-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}

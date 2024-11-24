@@ -1,16 +1,13 @@
-// src/pages/Home.js
 import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
-import { signOut } from "firebase/auth";
-import { auth, db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
-import "../styles/auth.css";
+import { db } from "../firebase";
+import "../styles/home.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "../styles/home.css";
 
 const Home = () => {
-  const [reviews, setReviews] = useState([]);
+  const [lojas, setLojas] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Configurações do carrossel
@@ -24,74 +21,51 @@ const Home = () => {
     autoplaySpeed: 3000,
   };
 
-  // Função para buscar as avaliações do Firestore
-  const fetchReviews = async () => {
+  // Função para buscar as lojas cadastradas
+  const fetchLojas = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, "avaliacoes"));
-      const reviewsData = querySnapshot.docs.map((doc) => ({
+      const querySnapshot = await getDocs(collection(db, "lojas"));
+      const lojasData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-
-      // Ordena as avaliações pela data (mais recentes primeiro)
-      reviewsData.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
-
-      setReviews(reviewsData);
+      setLojas(lojasData);
     } catch (error) {
-      console.error("Erro ao buscar avaliações:", error);
+      console.error("Erro ao carregar lojas:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Efeito para carregar as avaliações ao carregar o componente
   useEffect(() => {
-    fetchReviews();
+    fetchLojas();
   }, []);
-
-  // Função para realizar o logout
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      alert("Logout realizado com sucesso!");
-      window.location.href = "/login";
-    } catch (err) {
-      console.error("Erro ao sair:", err.message);
-    }
-  };
 
   return (
     <div className="home-container">
-      <h1>Bem-vindo à Home</h1>
-      <p>Você está autenticado!</p>
+   
+      <p>Seja bem-vindo à nossa plataforma!</p>
 
-      {/* Carrossel de avaliações */}
+      {/* Carrossel de lojas */}
       <Slider {...carouselSettings} className="carousel">
         {loading ? (
-          <div>Carregando avaliações...</div>
-        ) : reviews.length > 0 ? (
-          reviews.map((review) => (
-            <div key={review.id} className="review-card">
-              <div className="review-card-body">
-                <p>
-                  <strong>Avaliação:</strong> {review.rating} ★
-                </p>
-                <p>{review.comment}</p>
-                <p className="review-date">
-                  {new Date(review.createdAt.seconds * 1000).toLocaleString()}
-                </p>
-              </div>
+          <div>Carregando lojas...</div>
+        ) : lojas.length > 0 ? (
+          lojas.map((loja) => (
+            <div key={loja.id} className="loja-card">
+              <img
+                src={loja.imagens?.[0] || "default-image.jpg"} // Exibe a primeira imagem ou uma imagem padrão
+                alt={loja.nome}
+                className="loja-img"
+              />
+              <h3>{loja.nome}</h3>
+              <p>{loja.descricao}</p>
             </div>
           ))
         ) : (
-          <p>Nenhuma avaliação disponível no momento.</p>
+          <p>Não há lojas cadastradas no momento.</p>
         )}
       </Slider>
-
-      {/* Botão de logout */}
-      <button onClick={handleLogout} className="logout-button">
-        Sair
-      </button>
     </div>
   );
 };

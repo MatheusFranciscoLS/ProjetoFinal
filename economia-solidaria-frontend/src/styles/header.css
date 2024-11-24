@@ -30,4 +30,26 @@
   .nav-link:hover {
     color: #ffdd57; /* Amarelo destaque */
   }
-  
+  /* Exemplo de estilos para o cabeçalho */
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-name {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.logout-button {
+  background-color: #ff4d4d;
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.logout-button:hover {
+  background-color: #ff1a1a;
+}
