@@ -1,18 +1,10 @@
 {
-  "dependencies": {
-<<<<<<< HEAD
-    "firebase": "^11.0.2",
-    "react-slick": "^0.28.1",
-=======
-<<<<<<< HEAD
-    "axios": "^1.7.7",
-    "firebase": "^11.0.2",
-    "react-router-dom": "^7.0.1",
-=======
-    "firebase": "^11.0.2",
->>>>>>> 3f2d38b88e5cab8b8aced6eaee3684840305261b
-    "react-slick": "^0.30.2",
->>>>>>> 695d51883d81a01a88cd586e8aba7051e20bd616
-    "slick-carousel": "^1.8.1"
+    "dependencies": {
+      "axios": "^1.7.7",
+      "firebase": "^11.0.2",
+      "react-router-dom": "^7.0.1",
+      "react-slick": "^0.30.2",
+      "slick-carousel": "^1.8.1"
+    }
   }
-}
+  

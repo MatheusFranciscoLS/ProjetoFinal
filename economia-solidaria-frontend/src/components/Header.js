@@ -54,7 +54,12 @@ const Header = () => {
         <Link to="/login" className="nav-link">Login</Link>
         <Link to="/sobre" className="nav-link">Sobre</Link>
         <Link to="/contato" className="nav-link">Contato</Link>
-        <Link to="/register-business" className="nav-link">Cadastrar Loja</Link>
+
+        {/* Link visível apenas para usuários autenticados */}
+        {user && (
+          <Link to="/register-business" className="nav-link">Cadastrar Loja</Link>
+        )}
+
         <Link to="/lojas" className="nav-link">Página da Loja</Link>
 
         {/* Links visíveis apenas para usuários autenticados */}
