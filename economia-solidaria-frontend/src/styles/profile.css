@@ -1,0 +1,105 @@
+/* Container geral */
+.profile-container {
+    background-color: #f4f7fb;
+    border-radius: 8px;
+    padding: 30px;
+    max-width: 800px;
+    margin: 40px auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-title {
+    font-size: 24px;
+    color: #333;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-info {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-field {
+    font-size: 16px;
+    margin: 10px 0;
+  }
+  
+  .plan-description {
+    margin-top: 30px;
+  }
+  
+  .plan-title {
+    font-size: 18px;
+    color: #007bff;
+    font-weight: 500;
+  }
+  
+  .upgrade-container {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .upgrade-title {
+    font-size: 20px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  
+  .upgrade-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .upgrade-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .plan-details {
+    background-color: white;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .plan-details-title {
+    font-size: 22px;
+    color: #007bff;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  
+  .plan-details ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    font-size: 16px;
+  }
+  
+  .premium-message {
+    color: #28a745;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 20px;
+  }
+  
+  .error {
+    color: red;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  

@@ -60,8 +60,6 @@ const Header = () => {
         )}
 
         {/* Links sempre visíveis */}
-        <Link to="/sobre" className="nav-link">Sobre</Link>
-        <Link to="/contato" className="nav-link">Contato</Link>
         <Link to="/lojas" className="nav-link">Página da Loja</Link>
 
         {/* Links visíveis apenas para usuários autenticados */}
@@ -77,13 +75,18 @@ const Header = () => {
           <Link to="/admin-dashboard" className="nav-link">Painel Administrativo</Link>
         )}
 
-        {/* Mostrar o nome do usuário e o botão de logout */}
+        {/* Mostrar o nome do usuário, link de perfil e o botão de logout */}
         {user && (
           <div className="user-info">
             <span className="user-name">Olá, {user.displayName || user.email}</span>
-            <button className="logout-button" onClick={handleLogout}>
-              Sair
-            </button>
+            <div className="user-actions">
+              {/* Link para o perfil */}
+              <Link to="/perfil" className="nav-link">Perfil</Link>
+              {/* Botão de logout */}
+              <button className="logout-button" onClick={handleLogout}>
+                Sair
+              </button>
+            </div>
           </div>
         )}
       </nav>

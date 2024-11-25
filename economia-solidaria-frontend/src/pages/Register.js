@@ -14,8 +14,25 @@ const Register = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate(); // Hook de navegação
 
+  const validateFields = () => {
+    if (password.length < 6) {
+      setError("A senha deve ter pelo menos 6 caracteres.");
+      return false;
+    }
+    const phoneRegex = /^[0-9]{10,11}$/;
+    if (!phoneRegex.test(phone)) {
+      setError("Digite um telefone válido com 10 ou 11 dígitos.");
+      return false;
+    }
+    return true;
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
+    setError(""); // Resetar erro antes de validar
+
+    if (!validateFields()) return;
+
     try {
       // Cadastro no Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -28,6 +45,7 @@ const Register = () => {
         phone: phone,
         address: address || "", // Caso o endereço não seja informado, será salvo como string vazia
         tipo: "comum", // Inicialmente, o tipo será "comum"
+        plano: "gratuito", // Adicionando o plano padrão como "gratuito"
       });
 
       // Usuário cadastrado com sucesso
@@ -36,7 +54,7 @@ const Register = () => {
       // Após o cadastro, redireciona para a nova página
       navigate("/business-question"); // Redireciona para a página de perguntas
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // Exibir mensagem de erro do Firebase
     }
   };
 
@@ -60,14 +78,14 @@ const Register = () => {
         />
         <input
           type="password"
-          placeholder="Senha"
+          placeholder="Senha (mínimo 6 caracteres)"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
         <input
           type="tel"
-          placeholder="Telefone"
+          placeholder="Telefone (somente números)"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           required
