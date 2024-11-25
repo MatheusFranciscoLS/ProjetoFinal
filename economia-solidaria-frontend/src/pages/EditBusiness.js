@@ -1,59 +1,76 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { collection, getDocs } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 
-const BusinessList = () => {
-  const navigate = useNavigate();
-  const [businesses, setBusinesses] = useState([]);
-  const [error, setError] = useState("");
+const EditarLoja = () => {
+  const { id } = useParams();
+  const [form, setForm] = useState(null);
+  const [mensagem, setMensagem] = useState("");
 
   useEffect(() => {
-    const fetchBusinesses = async () => {
+    const fetchLoja = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "lojas"));
-        const businessList = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setBusinesses(businessList);
-      } catch (err) {
-        console.error("Erro ao buscar as lojas:", err);
-        setError("Erro ao buscar as lojas. Tente novamente.");
+        const docRef = doc(db, "lojas", id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setForm(docSnap.data());
+        } else {
+          console.log("Loja não encontrada.");
+        }
+      } catch (error) {
+        console.error("Erro ao carregar loja:", error);
       }
     };
 
-    fetchBusinesses();
-  }, []);
+    fetchLoja();
+  }, [id]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const docRef = doc(db, "lojas", id);
+      await updateDoc(docRef, form);
+      setMensagem("Loja atualizada com sucesso!");
+    } catch (error) {
+      console.error("Erro ao atualizar loja:", error);
+      setMensagem("Erro ao atualizar loja. Tente novamente.");
+    }
+  };
+
+  if (!form) {
+    return <p>Carregando...</p>;
+  }
 
   return (
     <div>
-      <h2>Lista de Lojas</h2>
-      {error && <div className="error">{error}</div>}
-      {businesses.length === 0 ? (
-        <p>Nenhuma loja cadastrada.</p>
-      ) : (
-        <ul>
-          {businesses.map((business) => (
-            <li key={business.id}>
-              <h3>{business.nome}</h3>
-              <p>{business.descricao}</p>
-              <p>Categoria: {business.categoria}</p>
-              <p>Endereço: {business.endereco}</p>
-              <p>Telefone: {business.telefone}</p>
-              <p>Email: {business.email}</p>
-              <button onClick={() => navigate(`/edit-business/${business.id}`)}>
-                Editar
-              </button>
-              <button onClick={() => navigate(`/loja/${business.id}`)}>
-                Ver Detalhes
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <h2>Editar Loja</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="nome"
+          value={form.nome}
+          onChange={handleChange}
+          required
+        />
+        <textarea
+          name="descricao"
+          value={form.descricao}
+          onChange={handleChange}
+          required
+        />
+        {/* Adicione os outros campos aqui */}
+        <button type="submit">Salvar Alterações</button>
+      </form>
+      {mensagem && <p>{mensagem}</p>}
     </div>
   );
 };
 
-export default BusinessList;
+export default EditarLoja;

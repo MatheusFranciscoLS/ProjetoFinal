@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Importe useNavigate
 import { auth, db } from "../firebase"; // Importe a configuração do Firebase
 import { signOut } from "firebase/auth"; // Para realizar o logout
 import { doc, getDoc } from "firebase/firestore"; // Para acessar dados do Firestore
@@ -8,6 +8,7 @@ import "../styles/header.css";
 const Header = () => {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate(); // Hook para navegação
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -38,6 +39,7 @@ const Header = () => {
       await signOut(auth); // Realiza o logout
       setUser(null); // Limpa o estado do usuário
       setIsAdmin(false); // Limpa o estado de administrador
+      navigate("/"); // Redireciona para a página "Home"
     } catch (error) {
       console.error("Erro ao sair", error);
     }
@@ -49,22 +51,25 @@ const Header = () => {
         <div className="logo">EconomiaSolidaria</div>
       </Link>
       <nav className="nav">
-        {/* Links de navegação públicos */}
-        <Link to="/register" className="nav-link">Cadastro</Link>
-        <Link to="/login" className="nav-link">Login</Link>
-        <Link to="/sobre" className="nav-link">Sobre</Link>
-        <Link to="/contato" className="nav-link">Contato</Link>
-
-        {/* Link visível apenas para usuários autenticados */}
-        {user && (
-          <Link to="/register-business" className="nav-link">Cadastrar Loja</Link>
+        {/* Links de navegação públicos visíveis apenas para usuários não autenticados */}
+        {!user && (
+          <>
+            <Link to="/register" className="nav-link">Cadastro</Link>
+            <Link to="/login" className="nav-link">Login</Link>
+          </>
         )}
 
+        {/* Links sempre visíveis */}
+        <Link to="/sobre" className="nav-link">Sobre</Link>
+        <Link to="/contato" className="nav-link">Contato</Link>
         <Link to="/lojas" className="nav-link">Página da Loja</Link>
 
         {/* Links visíveis apenas para usuários autenticados */}
         {user && (
-          <Link to="/meus-negocios" className="nav-link">Meus Negócios</Link>
+          <>
+            <Link to="/register-business" className="nav-link">Cadastrar Loja</Link>
+            <Link to="/meus-negocios" className="nav-link">Meus Negócios</Link>
+          </>
         )}
 
         {/* Link visível apenas para administradores */}
