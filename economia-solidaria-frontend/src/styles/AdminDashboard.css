@@ -1,14 +1,38 @@
-.admin-dashboard {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+/* Ajustes gerais do contêiner da página */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;  /* Garante que a altura mínima da página seja 100vh */
 }
 
+/* O conteúdo do painel não deve ocupar o restante da tela */
+.admin-dashboard {
+  flex: 1;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  overflow: auto;  /* Adiciona rolagem se o conteúdo for muito grande */
+}
+
+/* Layout responsivo para grid */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Garante 3 colunas */
+  grid-template-columns: repeat(3, 1fr);  /* 3 colunas padrão */
   gap: 20px;
 }
 
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: 1fr 1fr;  /* 2 colunas em telas menores */
+  }
+}
+
+@media (max-width: 480px) {
+  .card-grid {
+    grid-template-columns: 1fr;  /* 1 coluna em telas muito pequenas */
+  }
+}
+
+/* Cartões de negócios */
 .card {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -24,43 +48,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.card-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.business-name {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.business-status {
-  font-size: 0.9em;
-  margin-bottom: 10px;
-}
-
-.business-description {
-  font-size: 0.85em;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.card-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.card-buttons button {
-  flex: 1;
-  padding: 8px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.85em;
-}
-
+/* Detalhes do Negócio */
 .business-details-overlay {
   position: fixed;
   top: 0;
@@ -71,6 +59,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 100;  /* Garante que o overlay fique acima de outros conteúdos */
 }
 
 .business-details {
@@ -79,6 +68,8 @@
   padding: 20px;
   max-width: 600px;
   width: 90%;
+  max-height: 80vh;  /* Limita a altura máxima para evitar sobreposição */
+  overflow-y: auto;  /* Permite rolar se o conteúdo for muito grande */
 }
 
 .business-details button {
@@ -90,5 +81,19 @@
 }
 
 .business-details button:hover {
+  opacity: 0.9;
+}
+
+/* Estilos dos botões */
+.card-buttons button {
+  flex: 1;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+
+.card-buttons button:hover {
   opacity: 0.9;
 }
