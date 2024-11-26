@@ -47,9 +47,17 @@ const Header = () => {
 
   return (
     <header className="header">
+      
       <Link to="/" className="nav-link">
-        <div className="logo">EconomiaSolidaria</div>
-      </Link>
+  <img 
+    src={require("../assets/logotipo.jpg")} 
+    alt="Economia Solidária" 
+    className="logo" 
+    style={{ width: "80px", height: "auto" }} 
+  />
+</Link>
+
+
       <nav className="nav">
         {/* Links de navegação públicos visíveis apenas para usuários não autenticados */}
         {!user && (
