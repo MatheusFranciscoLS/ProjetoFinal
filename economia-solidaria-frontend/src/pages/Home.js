@@ -21,7 +21,7 @@ const Home = () => {
     autoplaySpeed: 3000,
   };
 
-  // Função para buscar as lojas cadastradas
+  // Função para buscar as lojas cadastradas de forma aleatória
   const fetchLojas = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "lojas"));
@@ -29,7 +29,11 @@ const Home = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      setLojas(lojasData);
+
+      // Seleciona 3 lojas aleatórias
+      const lojasAleatorias = lojasData.sort(() => Math.random() - 0.5).slice(0, 3);
+
+      setLojas(lojasAleatorias);
     } catch (error) {
       console.error("Erro ao carregar lojas:", error);
     } finally {
@@ -43,7 +47,6 @@ const Home = () => {
 
   return (
     <div className="home-container">
-   
       <p>Seja bem-vindo à nossa plataforma!</p>
 
       {/* Carrossel de lojas */}
