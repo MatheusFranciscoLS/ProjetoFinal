@@ -7,6 +7,8 @@ const AdminNegocios = () => {
   const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editBusiness, setEditBusiness] = useState(null);
+  const [filterCategory, setFilterCategory] = useState("todos");
+  const [sortOrder, setSortOrder] = useState("alfabetica");
 
   useEffect(() => {
     const fetchBusinesses = async () => {
@@ -58,14 +60,62 @@ const AdminNegocios = () => {
     }
   };
 
+  const sortedAndFilteredBusinesses = () => {
+    let filtered = businesses;
+
+    if (filterCategory !== "todos") {
+      filtered = filtered.filter((business) => business.categoria === filterCategory);
+    }
+
+    return filtered.sort((a, b) => {
+      if (sortOrder === "alfabetica") {
+        return a.nome.localeCompare(b.nome);
+      }
+      return a.categoria.localeCompare(b.categoria);
+    });
+  };
+
   return (
     <div className="admin-dashboard">
       <h1>Administração de Negócios</h1>
+
+      <div className="filter-sort">
+        <label>
+          Filtrar por Categoria:
+          <select
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value)}
+          >
+            <option value="todos">Todos</option>
+            <option value="restaurante">Restaurante</option>
+            <option value="loja">Loja</option>
+            <option value="servicos">Serviços</option>
+            <option value="artesanato">Artesanato</option>
+            <option value="beleza">Beleza e Estética</option>
+            <option value="educacao">Educação e Cursos</option>
+            <option value="saude">Saúde e Bem-estar</option>
+            <option value="esportes">Esportes e Lazer</option>
+            <option value="outro">Outro</option>
+          </select>
+        </label>
+
+        <label>
+          Ordenar por:
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="alfabetica">Ordem Alfabética</option>
+            <option value="categoria">Categoria</option>
+          </select>
+        </label>
+      </div>
+
       {loading ? (
         <p>Carregando...</p>
       ) : (
         <div className="business-list">
-          {businesses.map((business) => (
+          {sortedAndFilteredBusinesses().map((business) => (
             <div key={business.id} className="business-card">
               {editBusiness?.id === business.id ? (
                 <EditBusinessForm
