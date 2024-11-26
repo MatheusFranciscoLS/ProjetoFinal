@@ -12,19 +12,30 @@
   bottom: 0;
 }
 
-/* Efeito de hover */
-.footer p:hover {
-  color: #ffdd57; /* Amarelo para hover */
+.footer-nav {
+  display: flex;
+  justify-content: center; /* Alinha os links ao centro */
+  gap: 20px; /* Espaçamento entre os links */
+  margin-bottom: 10px; /* Espaço entre os links e o texto */
+}
+
+.footer-link {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
   transition: color 0.3s ease;
 }
 
-/* Contêiner principal, ajustando para layout flexível */
-.page-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Garante que o contêiner tenha altura mínima da tela */
+/* Efeito de hover para os links */
+.footer-link:hover {
+  color: #ffdd57; /* Amarelo para hover */
 }
 
-.admin-dashboard {
-  flex-grow: 1; /* O conteúdo da dashboard pode crescer para preencher o restante da altura */
+/* Responsividade: links no footer em telas pequenas */
+@media (max-width: 768px) {
+  .footer-nav {
+    flex-direction: column; /* Empilhar os links verticalmente em telas pequenas */
+    gap: 10px;
+  }
 }

@@ -16,6 +16,7 @@ import EditBusiness from "./pages/EditBusiness"; // Importação de EditBusiness
 import MeusNegocios from "./pages/MeusNegocios"; // Atualização para o novo nome
 import AdminDashboard from "./pages/AdminDashboard"; // Importação de AdminDashboard
 import Terms from "./pages/Terms"; // Página de Termos e Condições
+import Profile from "./pages/Profile"; // Importação da página de Perfil
 
 const App = () => {
   return (
@@ -33,17 +34,20 @@ const App = () => {
         {/* Rotas de registro e login */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        
+
         {/* Rotas de negócios */}
         <Route path="/business-question" element={<BusinessQuestion />} />
         <Route path="/register-business" element={<RegisterBusiness />} />
         <Route path="/lojas" element={<LojasList />} />
         <Route path="/loja/:id" element={<LojaDetails />} />
-        
+
         {/* Rotas administrativas */}
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/edit-business/:id" element={<EditBusiness />} />
         <Route path="/meus-negocios/:id" element={<MeusNegocios />} /> {/* Atualizado para MeusNegocios */}
+        
+        {/* Rota de perfil */}
+        <Route path="/perfil" element={<Profile />} /> {/* Página de Perfil */}
       </Routes>
       <Footer />
     </Router>
