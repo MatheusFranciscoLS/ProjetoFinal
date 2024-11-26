@@ -90,12 +90,17 @@ const Header = () => {
           </>
         )}
 
-        {/* Link visível apenas para administradores */}
-        {isAdmin && (
-          <Link to="/admin-dashboard" className="nav-link">
-            Painel Administrativo
-          </Link>
-        )}
+      {/* Links visíveis apenas para administradores */}
+{isAdmin && (
+  <>
+    <Link to="/admin-dashboard" className="nav-link">
+      Painel Administrativo
+    </Link>
+    <Link to="/admin-gerenciamento" className="nav-link">
+      Gerenciamento
+    </Link>
+  </>
+)}
 
         {/* Mostrar o nome do usuário, link de perfil e o botão de logout */}
         {user && (

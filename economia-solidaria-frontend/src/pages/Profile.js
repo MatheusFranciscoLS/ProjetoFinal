@@ -96,6 +96,16 @@ const Profile = () => {
         </div>
       </div>
 
+      {/* Link para mais informações sobre os planos */}
+      <div className="plans-info-link">
+        <button
+          onClick={() => navigate("/plans-details")}
+          className="info-button"
+        >
+          Saiba Mais sobre os Planos
+        </button>
+      </div>
+
       {/* Todos os planos disponíveis lado a lado */}
       <div className="all-plans">
         <h3 className="plans-title">Todos os Planos Disponíveis</h3>
