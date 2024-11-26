@@ -27,6 +27,27 @@ const RegisterBusiness = () => {
   const user = auth.currentUser;
   const userUid = user ? user.uid : null;
 
+  // Função para formatar o CNPJ
+  const formatCNPJ = (cnpj) => {
+    const cleaned = cnpj.replace(/[^\d]/g, ""); // Remove qualquer caractere não numérico
+    if (cleaned.length <= 14) {
+      return cleaned.replace(
+        /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+        "$1.$2.$3/$4-$5"
+      );
+    }
+    return cnpj;
+  };
+
+  // Função para formatar o telefone
+  const formatPhone = (phone) => {
+    const cleaned = phone.replace(/[^\d]/g, ""); // Remove qualquer caractere não numérico
+    if (cleaned.length <= 11) {
+      return cleaned.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+    }
+    return phone;
+  };
+
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     if (files.length + images.length > 6) {
@@ -48,6 +69,12 @@ const RegisterBusiness = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validação para garantir que pelo menos uma imagem foi enviada
+    if (images.length === 0) {
+      setError("Pelo menos uma imagem do seu negócio é obrigatória.");
+      return;
+    }
 
     // Chama a função de validação
     const validationError = validateForm({
@@ -146,7 +173,7 @@ const RegisterBusiness = () => {
         <input
           type="text"
           placeholder="CNPJ"
-          value={businessCNPJ}
+          value={formatCNPJ(businessCNPJ)}
           onChange={(e) => setBusinessCNPJ(e.target.value)}
           required
         />
@@ -186,7 +213,7 @@ const RegisterBusiness = () => {
         <input
           type="tel"
           placeholder="Telefone de Contato"
-          value={phone}
+          value={formatPhone(phone)}
           onChange={(e) => setPhone(e.target.value)}
           required
         />
@@ -242,6 +269,9 @@ const RegisterBusiness = () => {
         </div>
 
         {error && error.includes("Você pode enviar no máximo 6 imagens") && (
+          <div className="error">{error}</div>
+        )}
+        {error && error.includes("Pelo menos uma imagem") && (
           <div className="error">{error}</div>
         )}
 
