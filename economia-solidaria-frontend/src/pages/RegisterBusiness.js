@@ -70,6 +70,12 @@ const RegisterBusiness = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validação para garantir que pelo menos uma imagem foi enviada
+    if (images.length === 0) {
+      setError("Pelo menos uma imagem do seu negócio é obrigatória.");
+      return;
+    }
+
     // Chama a função de validação
     const validationError = validateForm({
       businessName,
@@ -263,6 +269,9 @@ const RegisterBusiness = () => {
         </div>
 
         {error && error.includes("Você pode enviar no máximo 6 imagens") && (
+          <div className="error">{error}</div>
+        )}
+        {error && error.includes("Pelo menos uma imagem") && (
           <div className="error">{error}</div>
         )}
 
