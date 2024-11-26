@@ -13,7 +13,7 @@ import Avaliacao from "./pages/Avaliacao";
 import LojasList from "./pages/LojaList"; // Importação de LojasList
 import LojaDetails from "./pages/LojaDetails"; // Importação de LojaDetails
 import EditBusiness from "./pages/EditBusiness"; // Importação de EditBusiness
-import MeusNegocios from "./pages/MeusNegocios"; // Atualização para o novo nome
+import MyBusinesses from "./pages/MyBusinesses"; // Atualização para o novo nome
 import AdminDashboard from "./pages/AdminDashboard"; // Importação de AdminDashboard
 import AdminNegocios from "./pages/AdminNegocios"; // Importação de AdminDashboard
 import Terms from "./pages/Terms"; // Página de Termos e Condições
@@ -47,7 +47,7 @@ const App = () => {
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/admin-gerenciamento" element={<AdminNegocios />} />
         <Route path="/edit-business/:id" element={<EditBusiness />} />
-        <Route path="/meus-negocios/:id" element={<MeusNegocios />} /> {/* Atualizado para MeusNegocios */}
+        <Route path="/meus-negocios/:id" element={<MyBusinesses />} /> {/* Atualizado para MeusNegocios */}
         
         {/* Rota de perfil */}
         <Route path="/perfil" element={<Profile />} /> {/* Página de Perfil */}
