@@ -1,62 +1,102 @@
+/* Estilo do container para as lojas */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .lojas-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  .loja-card {
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    width: 250px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
-  }
-  
-  .loja-card:hover {
-    transform: scale(1.05);
-  }
-  
-  .loja-img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
-  .loja-card h3 {
-    font-size: 1.2rem;
-    margin: 10px 0;
-    color: #333;
-  }
-  
-  .loja-card p {
-    font-size: 0.9rem;
-    color: #666;
-    margin: 10px 0;
-  }
-  
-  .btn-ver-mais {
-    display: inline-block;
-    padding: 8px 12px;
-    margin-top: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 4px;
-    text-decoration: none;
-    font-size: 0.9rem;
-  }
-  
-  .btn-ver-mais:hover {
-    background-color: #0056b3;
-  }
-  
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Filtros */
+.filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.filter-input, .filter-select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Estilo para a lista de lojas com Grid */
+.lojas-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 colunas */
+  gap: 20px; /* Espaço entre os cards */
+  margin-top: 20px;
+}
+
+.loja-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  padding: 15px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.loja-card:hover {
+  transform: translateY(-5px); /* Efeito de hover */
+}
+
+.loja-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.loja-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.loja-card p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+/* Botão "Ver mais" */
+.btn-ver-mais {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.btn-ver-mais:hover {
+  background-color: #0056b3;
+}
+
+/* Controles de Paginação */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+.pagination button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 1rem;
+  margin: 0 10px;
+}

@@ -9,6 +9,8 @@ const LojasList = () => {
   const [loading, setLoading] = useState(true);
   const [filtroNome, setFiltroNome] = useState(""); // Estado para o filtro de nome
   const [filtroCategoria, setFiltroCategoria] = useState(""); // Estado para o filtro de categoria
+  const [paginaAtual, setPaginaAtual] = useState(1); // Página atual
+  const lojasPorPagina = 12; // Número de lojas por página
 
   // Função que busca os dados das lojas
   useEffect(() => {
@@ -48,6 +50,16 @@ const LojasList = () => {
 
   const lojasFiltradas = filtrarLojas();
 
+  // Paginação: Calcula o índice das lojas para exibir na página atual
+  const indexOfLastLoja = paginaAtual * lojasPorPagina;
+  const indexOfFirstLoja = indexOfLastLoja - lojasPorPagina;
+  const lojasPaginas = lojasFiltradas.slice(indexOfFirstLoja, indexOfLastLoja);
+
+  // Função para alterar a página
+  const handleChangePage = (novaPagina) => {
+    setPaginaAtual(novaPagina);
+  };
+
   return (
     <div className="container">
       <h2>Lista de Lojas</h2>
@@ -80,10 +92,10 @@ const LojasList = () => {
       </div>
 
       <div className="lojas-list">
-        {lojasFiltradas.length === 0 ? (
+        {lojasPaginas.length === 0 ? (
           <p>Não há lojas que correspondem aos filtros.</p> // Caso não haja lojas que correspondam aos filtros
         ) : (
-          lojasFiltradas.map((loja) => (
+          lojasPaginas.map((loja) => (
             <div className="loja-card" key={loja.id}>
               <img
                 src={loja.imagens?.[0] || "default-image.jpg"} // Exibe a primeira imagem ou uma imagem padrão
@@ -98,6 +110,23 @@ const LojasList = () => {
             </div>
           ))
         )}
+      </div>
+
+      {/* Controles de paginação */}
+      <div className="pagination">
+        <button
+          onClick={() => handleChangePage(paginaAtual - 1)}
+          disabled={paginaAtual === 1} // Desabilita o botão se for a primeira página
+        >
+          Anterior
+        </button>
+        <span>Página {paginaAtual}</span>
+        <button
+          onClick={() => handleChangePage(paginaAtual + 1)}
+          disabled={paginaAtual * lojasPorPagina >= lojasFiltradas.length} // Desabilita o botão se for a última página
+        >
+          Próxima
+        </button>
       </div>
     </div>
   );
