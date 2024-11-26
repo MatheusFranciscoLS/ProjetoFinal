@@ -1,105 +1,100 @@
-/* Container geral */
 .profile-container {
-    background-color: #f4f7fb;
-    border-radius: 8px;
-    padding: 30px;
-    max-width: 800px;
-    margin: 40px auto;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
   }
   
   .profile-title {
-    font-size: 24px;
-    color: #333;
-    font-weight: 600;
-    text-align: center;
+    font-size: 2rem;
     margin-bottom: 20px;
   }
   
   .profile-info {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
   }
   
   .profile-field {
-    font-size: 16px;
     margin: 10px 0;
   }
   
   .plan-description {
-    margin-top: 30px;
+    margin-top: 20px;
   }
   
   .plan-title {
-    font-size: 18px;
-    color: #007bff;
-    font-weight: 500;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
   }
   
-  .upgrade-container {
+  .all-plans {
     margin-top: 20px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
-  .upgrade-title {
-    font-size: 20px;
-    color: #333;
-    font-weight: 600;
+  .plans-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .plan-options {
+    display: flex;
+    justify-content: space-between; /* Faz com que fiquem lado a lado */
+    gap: 20px; /* Espaçamento entre os planos */
+  }
+  
+  .plan-option {
+    flex: 1; /* Faz cada plano ocupar o mesmo espaço */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .plan-option h4 {
     margin-bottom: 15px;
+    font-size: 1.2rem;
   }
   
   .upgrade-button {
-    background-color: #007bff;
+    padding: 10px 15px;
+    background-color: #4CAF50;
     color: white;
     border: none;
-    padding: 12px 25px;
-    font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
-    margin: 5px;
-    transition: background-color 0.3s ease;
+    font-size: 1rem;
   }
   
   .upgrade-button:hover {
-    background-color: #0056b3;
+    background-color: #45a049;
   }
   
   .plan-details {
-    background-color: white;
-    padding: 20px;
     margin-top: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
   .plan-details-title {
-    font-size: 22px;
-    color: #007bff;
-    font-weight: 600;
+    font-size: 1.5rem;
     margin-bottom: 15px;
   }
   
-  .plan-details ul {
-    list-style-type: disc;
-    padding-left: 20px;
-    font-size: 16px;
-  }
-  
-  .premium-message {
-    color: #28a745;
-    font-size: 18px;
-    font-weight: 600;
+  .cancel-container {
     margin-top: 20px;
   }
   
-  .error {
-    color: red;
-    font-size: 16px;
-    margin-top: 10px;
+  .cancel-button {
+    padding: 10px 15px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .cancel-button:hover {
+    background-color: #e53935;
+  }
+  
+  .premium-message {
+    font-size: 1.1rem;
+    color: #4CAF50;
+    margin-top: 20px;
   }
   
