@@ -28,16 +28,20 @@ export const validateForm = ({
     return "Você precisa aceitar os termos e condições.";
   }
 
-  // Validação do CNPJ
-  const cnpjRegex = /^(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})-(\d{2})$/;
-  if (!cnpjRegex.test(businessCNPJ)) {
-    return "CNPJ inválido. O formato deve ser XX.XXX.XXX/XXXX-XX. Exemplo: 12.345.678/0001-99";
+  // Validação do CNPJ (aceita números puros)
+  const cleanedCNPJ = businessCNPJ.replace(/[^\d]/g, ""); // Remove caracteres não numéricos
+  const cnpjRegex = /^[0-9]{14}$/; // Verifica se tem 14 números
+
+  if (!cnpjRegex.test(cleanedCNPJ)) {
+    return "CNPJ inválido. Certifique-se de incluir 14 dígitos. Exemplo: 12345678000199";
   }
 
-  // Validação do telefone (formato (DD) 9XXXX-XXXX)
-  const phoneRegex = /^\(\d{2}\)\s\d{5}-\d{4}$/;
-  if (!phoneRegex.test(phone)) {
-    return "Telefone inválido. O formato deve ser (DD) 9XXXX-XXXX. Exemplo: (11) 98765-4321";
+  // Validação do telefone (aceita números puros com 11 dígitos)
+  const cleanedPhone = phone.replace(/[^\d]/g, ""); // Remove caracteres não numéricos
+  const phoneRegex = /^[0-9]{11}$/; // Verifica se tem 11 números (formato limpo)
+
+  if (!phoneRegex.test(cleanedPhone)) {
+    return "Telefone inválido. Certifique-se de incluir 11 dígitos. Exemplo: 11987654321 ou (11) 98765-4321";
   }
 
   // Validação do e-mail
