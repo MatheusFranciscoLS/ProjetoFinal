@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  getDoc,
-  doc,
-  deleteDoc,
-  setDoc,
-} from "firebase/firestore";
+import { collection, query, where, getDocs, getDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import "../styles/AdminDashboard.css";
 
@@ -20,10 +11,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchPendingBusinesses = async () => {
       try {
-        const q = query(
-          collection(db, "negocios_pendentes"),
-          where("status", "==", "pendente")
-        );
+        const q = query(collection(db, "negocios_pendentes"), where("status", "==", "pendente"));
         const querySnapshot = await getDocs(q);
         const businessesList = [];
         querySnapshot.forEach((doc) => {
@@ -60,14 +48,12 @@ const AdminDashboard = () => {
             status: "aprovado",
           });
           await deleteDoc(businessRef);
-          console.log("Negócio aprovado e movido para 'lojas'.");
+          alert("Negócio aprovado e movido para 'lojas'.");  // Aviso de sucesso
         } else {
-          console.log("Negócio negado.");
+          alert("Negócio negado.");  // Aviso de recusa
         }
 
-        setBusinesses(
-          businesses.filter((business) => business.id !== businessId)
-        );
+        setBusinesses(businesses.filter((business) => business.id !== businessId));
       } else {
         console.error("Negócio não encontrado!");
       }
@@ -77,9 +63,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="page-container">
-      {" "}
-      {/* Contêiner flexível */}
+    <div className="page-container">  {/* Contêiner flexível */}
       <div className="admin-dashboard">
         <h2>Cadastro de Negócios Pendentes</h2>
         {loading ? (
@@ -93,26 +77,16 @@ const AdminDashboard = () => {
                 {businesses.map((business) => (
                   <div
                     key={business.id}
-                    className={`card ${
-                      selectedBusiness?.id === business.id ? "expanded" : ""
-                    }`}
+                    className={`card ${selectedBusiness?.id === business.id ? "expanded" : ""}`}
                   >
                     <div className="card-content">
                       <h3 className="business-name">{business.nome}</h3>
                       <p className="business-status">
                         <strong>Status:</strong> {business.status}
                       </p>
-                      <p className="business-description">
-                        {business.descricao}
-                      </p>
-                      <p className="business-cnpj">
-                        <strong>CNPJ:</strong> {business.cnpj}
-                      </p>{" "}
-                      {/* Exibe o CNPJ */}
+                      <p className="business-description">{business.descricao}</p>
                       <div className="card-buttons">
-                        <button onClick={() => setSelectedBusiness(business)}>
-                          Ver Detalhes
-                        </button>
+                        <button onClick={() => setSelectedBusiness(business)}>Ver Detalhes</button>
                         <button
                           className="approve"
                           onClick={() => handleApproval(business.id, true)}
@@ -137,49 +111,30 @@ const AdminDashboard = () => {
         )}
 
         {selectedBusiness && (
-          <div
-            className="business-details-overlay"
-            onClick={() => setSelectedBusiness(null)}
-          >
-            <div
-              className="business-details"
-              onClick={(e) => e.stopPropagation()}
-            >
+          <div className="business-details-overlay" onClick={() => setSelectedBusiness(null)}>
+            <div className="business-details" onClick={(e) => e.stopPropagation()}>
               <h2>Detalhes do Negócio</h2>
-              <p>
-                <strong>Nome:</strong> {selectedBusiness.nome}
-              </p>
-              <p>
-                <strong>Descrição:</strong> {selectedBusiness.descricao}
-              </p>
-              <p>
-                <strong>Categoria:</strong> {selectedBusiness.categoria}
-              </p>
-              <p>
-                <strong>Endereço:</strong> {selectedBusiness.endereco}
-              </p>
-              <p>
-                <strong>Telefone:</strong> {selectedBusiness.telefone}
-              </p>
-              <p>
-                <strong>E-mail:</strong> {selectedBusiness.email}
-              </p>
-              <p>
-                <strong>Horários de Funcionamento:</strong>{" "}
-                {selectedBusiness.horarioDeFuncionamento}
-              </p>
-              <p>
-                <strong>CNPJ:</strong> {selectedBusiness.cnpj}
-              </p>{" "}
-              {/* Exibe o CNPJ nos detalhes */}
+              <p><strong>Nome:</strong> {selectedBusiness.nome}</p>
+              <p><strong>Descrição:</strong> {selectedBusiness.descricao}</p>
+              <p><strong>Categoria:</strong> {selectedBusiness.categoria}</p>
+              <p><strong>Endereço:</strong> {selectedBusiness.endereco}</p>
+              <p><strong>Telefone:</strong> {selectedBusiness.telefone}</p>
+              <p><strong>E-mail:</strong> {selectedBusiness.email}</p>
+              <p><strong>Horários de Funcionamento:</strong> {selectedBusiness.horarioDeFuncionamento}</p>
               <button
-                onClick={() => handleApproval(selectedBusiness.id, true)}
+                onClick={() => {
+                  handleApproval(selectedBusiness.id, true);
+                  setSelectedBusiness(null);  // Fechar detalhes ao aprovar
+                }}
                 style={{ backgroundColor: "green", color: "white" }}
               >
                 Aprovar
               </button>
               <button
-                onClick={() => handleApproval(selectedBusiness.id, false)}
+                onClick={() => {
+                  handleApproval(selectedBusiness.id, false);
+                  setSelectedBusiness(null);  // Fechar detalhes ao negar
+                }}
                 style={{ backgroundColor: "red", color: "white" }}
               >
                 Negar
