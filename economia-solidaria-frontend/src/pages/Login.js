@@ -1,4 +1,3 @@
-// src/pages/Login.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Importar o hook useNavigate
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -8,7 +7,7 @@ import "../styles/auth.css";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); // Estado para exibir mensagens de erro
 
   const navigate = useNavigate(); // Inicializar o hook useNavigate
 
@@ -19,7 +18,8 @@ const Login = () => {
       alert("Login realizado com sucesso!");
       navigate("/home"); // Redirecionar para a página Home
     } catch (err) {
-      setError(err.message);
+      // Exibir uma mensagem de erro simples e profissional
+      setError("Credenciais inválidas. Tente novamente.");
     }
   };
 
@@ -42,6 +42,7 @@ const Login = () => {
           required
         />
         {error && <p className="error">{error}</p>}
+        {/* Mensagem de erro simples e profissional */}
         <button type="submit">Entrar</button>
       </form>
     </div>
