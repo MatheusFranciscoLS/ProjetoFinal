@@ -21,13 +21,13 @@
     max-width: 600px;
     display: flex;
     flex-direction: column;
-    gap: 30px; /* Aumentei o gap entre as seções para melhorar a separação */
+    gap: 20px;
 }
 
 /* Título */
 .register-business-form h2 {
     color: #0984e3;
-    font-size: 28px;
+    font-size: 30px;
     margin-bottom: 20px;
     text-align: center;
     font-weight: bold;
@@ -55,109 +55,75 @@
     box-shadow: 0 0 6px rgba(9, 132, 227, 0.5);
 }
 
-/* Seção de Upload de Imagens */
-.upload-section {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 25px; /* Aumentei o padding para deixar mais espaçoso */
-    border-radius: 8px;
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Maior espaçamento entre os elementos */
-}
-
-/* Título da seção de Upload */
-.upload-section label {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-}
-
-/* Container de imagens */
+/* Upload de imagens */
 .image-preview {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-top: 10px;
-    justify-content: center; /* Alinha as imagens no centro */
-    align-items: center; /* Alinha as imagens verticalmente no centro */
 }
 
 /* Container de cada imagem */
 .image-wrapper {
     position: relative;
-    width: 120px; /* Largura ajustada */
-    height: 120px; /* Altura ajustada */
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-}
-
-/* Hover nas imagens */
-.image-wrapper:hover {
-    transform: scale(1.05); /* Aumento sutil das imagens */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra leve para dar destaque */
+    display: inline-block;
 }
 
 /* Estilo das imagens */
 .image-preview img {
-    width: 100%;
-    height: 100%;
+    max-width: 150px;
+    /* Limita a largura máxima */
+    max-height: 150px;
+    /* Limita a altura máxima */
     object-fit: cover;
+    /* Garante que a imagem não distorça */
+    margin: 5px;
+    /* Espaçamento entre as imagens */
+    border-radius: 8px;
 }
 
 /* Estilo do botão de remoção (X vermelho) */
 .remove-image {
     position: absolute;
+    /* Posiciona o "X" dentro da imagem */
     top: -10px;
+    /* Distância do topo da imagem */
     right: 5px;
-    background-color: rgba(255, 0, 0, 0.8);
-    color: #fff;
+    /* Distância da lateral direita da imagem */
+    background-color: rgba(255, 0, 0, 0.7);
+    /* Cor de fundo vermelha com transparência */
+    color: white;
     border: none;
     border-radius: 50%;
-    font-size: 14px;
-    width: 22px;
-    height: 22px;
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 /* Hover no "X" */
 .remove-image:hover {
-    background-color: #ff0000;
+    background-color: rgba(255, 0, 0, 1);
+    /* Torna o "X" mais vermelho quando passa o mouse */
 }
 
-
-/* Seção de Comprovante do Simples Nacional */
-.upload-section-cndoc {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 25px;
-    border-radius: 8px;
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Aumentei o espaçamento */
-}
-
-/* Container para termos e condições */
+/* Container para termos e condições (horizontal) */
 .terms-container {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 10px;
     justify-content: center;
+    width: 100%;
 }
 
 /* Estilo do checkbox */
 .terms-container input {
-    margin-bottom: 5px;
-    width: 18px;
-    height: 18px;
+    margin-top: 15px;
+    width: 15px;
+    height: 15px;
     cursor: pointer;
 }
 
@@ -165,14 +131,12 @@
 .terms-container label {
     font-size: 14px;
     color: #555;
-    line-height: 1.5;
 }
 
 /* Estilo do link dos termos */
 .terms-link {
     color: #0984e3;
     text-decoration: none;
-    font-weight: bold;
 }
 
 .terms-link:hover {
@@ -188,7 +152,8 @@ button {
     padding: 14px;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background 0.3s ease, transform 0.2s ease;
+    width: auto;
     margin-top: 20px;
 }
 
@@ -226,8 +191,8 @@ button:disabled {
         padding: 12px;
     }
 
-    .image-wrapper {
-        width: 90px;
-        height: 90px;
+    .image-preview img {
+        max-width: 80px;
+        max-height: 80px;
     }
 }

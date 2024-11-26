@@ -8,8 +8,6 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState("");
-  const [showDetails, setShowDetails] = useState(false); // Estado para controlar a exibição dos detalhes do plano
-  const [selectedPlan, setSelectedPlan] = useState(""); // Para armazenar o plano selecionado
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,8 +47,6 @@ const Profile = () => {
 
       alert(`Seu plano foi atualizado para ${newPlan}.`);
       setUserData((prev) => ({ ...prev, plano: newPlan })); // Atualiza o estado local
-      setSelectedPlan(""); // Reset the selected plan after upgrade
-      setShowDetails(false); // Fecha o painel de detalhes após o upgrade
     } catch (err) {
       console.error("Erro ao atualizar plano:", err);
       setError("Erro ao atualizar plano.");
@@ -72,11 +68,6 @@ const Profile = () => {
       console.error("Erro ao cancelar plano:", err);
       setError("Erro ao cancelar plano.");
     }
-  };
-
-  const toggleDetails = (plan) => {
-    setSelectedPlan(plan);
-    setShowDetails(!showDetails); // Alterna a visibilidade dos detalhes do plano
   };
 
   if (!userData) {
@@ -105,69 +96,50 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Descrição dos planos */}
-      <div className="plan-description">
-        <h3 className="plan-title">Sobre os Planos</h3>
-        <p><strong>Plano Essencial:</strong> Oferece acesso a recursos básicos, ideal para quem está começando a usar a plataforma.</p>
-        <p><strong>Plano Premium:</strong> Oferece recursos avançados, como suporte prioritário, acesso a funcionalidades exclusivas e mais.</p>
-      </div>
-
-      {/* Botões para upgrade de plano */}
-      {userData.plano !== "Premium" && (
-        <div className="upgrade-container">
-          <h3 className="upgrade-title">Faça o Upgrade do Plano</h3>
-          {userData.plano === "gratuito" && (
-            <button
-              onClick={() => toggleDetails("Essencial")}
-              className="upgrade-button"
-            >
-              Upgrade para Essencial
-            </button>
+      {/* Todos os planos disponíveis lado a lado */}
+      <div className="all-plans">
+        <h3 className="plans-title">Todos os Planos Disponíveis</h3>
+        <div className="plan-options">
+          {/* Exibe o botão de upgrade para o plano Essencial apenas se o usuário não tiver o plano Essencial */}
+          {userData.plano !== "Essencial" && (
+            <div className="plan-option">
+              <h4>Plano Essencial</h4>
+              <button
+                onClick={() => handleUpgrade("Essencial")}
+                className="upgrade-button"
+              >
+                Fazer Upgrade
+              </button>
+            </div>
           )}
-          {userData.plano !== "Premium" && (
-            <button
-              onClick={() => toggleDetails("Premium")}
-              className="upgrade-button"
-            >
-              Upgrade para Premium
-            </button>
+          {/* Exibe o botão de upgrade para o plano Premium apenas se o usuário não tiver o plano Premium ou Essencial */}
+          {userData.plano !== "Premium" && userData.plano !== "Essencial" && (
+            <div className="plan-option">
+              <h4>Plano Premium</h4>
+              <button
+                onClick={() => handleUpgrade("Premium")}
+                className="upgrade-button"
+              >
+                Fazer Upgrade
+              </button>
+            </div>
           )}
         </div>
-      )}
+      </div>
 
-      {/* Exibição dos detalhes do plano */}
-      {showDetails && selectedPlan && (
-        <div className="plan-details">
-          <h4 className="plan-details-title">Detalhes do Plano {selectedPlan}</h4>
-          {selectedPlan === "Essencial" && (
-            <div>
-              <p><strong>Plano Essencial:</strong></p>
-              <ul>
-                <li>Acesso a recursos básicos</li>
-                <li>Sem custos adicionais</li>
-                <li>Ideal para iniciantes</li>
-              </ul>
-            </div>
-          )}
-          {selectedPlan === "Premium" && (
-            <div>
-              <p><strong>Plano Premium:</strong></p>
-              <ul>
-                <li>Acesso a todos os recursos avançados</li>
-                <li>Suporte prioritário</li>
-                <li>Funcionalidades exclusivas</li>
-                <li>Maior capacidade de personalização</li>
-                <li>Suporte dedicado e recursos exclusivos</li>
-              </ul>
-            </div>
-          )}
-          <button onClick={() => handleUpgrade(selectedPlan)} className="upgrade-button">
-            Confirmar Upgrade para {selectedPlan}
+      {/* Se o usuário estiver no plano Essencial, mostra apenas o upgrade para Premium */}
+      {userData.plano === "Essencial" && (
+        <div className="upgrade-container">
+          <button
+            onClick={() => handleUpgrade("Premium")}
+            className="upgrade-button"
+          >
+            Upgrade para Premium
           </button>
         </div>
       )}
 
-      {/* Exibir botão para cancelar plano */}
+      {/* Mostrar botão para cancelar plano apenas se o usuário não estiver no plano gratuito */}
       {userData.plano !== "gratuito" && (
         <div className="cancel-container">
           <button onClick={handleCancelPlan} className="cancel-button">
@@ -176,6 +148,7 @@ const Profile = () => {
         </div>
       )}
 
+      {/* Exibe uma mensagem se o usuário já estiver no plano Premium */}
       {userData.plano === "Premium" && (
         <p className="premium-message">Você já está no plano Premium.</p>
       )}

@@ -4,9 +4,11 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase"; // Certifique-se de importar o 'db'
 import { getAuth } from "firebase/auth"; // Para pegar o UID do usuário autenticado
 import "../styles/registerbusiness.css";
+import { validateForm } from "../components/validation"; // Importa a função de validação
 
 const RegisterBusiness = () => {
   const [businessName, setBusinessName] = useState("");
+  const [businessCNPJ, setBusinessCNPJ] = useState("");
   const [businessDescription, setBusinessDescription] = useState("");
   const [category, setCategory] = useState("");
   const [address, setAddress] = useState("");
@@ -18,19 +20,19 @@ const RegisterBusiness = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  
+
   const navigate = useNavigate();
-  
+
   const auth = getAuth();
-  const user = auth.currentUser; // Verifica o usuário autenticado
-  const userUid = user ? user.uid : null; // Obtém o UID do usuário
-  
+  const user = auth.currentUser;
+  const userUid = user ? user.uid : null;
+
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     if (files.length + images.length > 6) {
       setError("Você pode enviar no máximo 6 imagens do seu negócio.");
     } else {
-      const invalidFiles = files.filter(file => file.size > 5 * 1024 * 1024); // Limite de 5MB por imagem
+      const invalidFiles = files.filter((file) => file.size > 5 * 1024 * 1024); // Limite de 5MB por imagem
       if (invalidFiles.length > 0) {
         setError("Cada imagem deve ter no máximo 5 MB.");
       } else {
@@ -46,29 +48,23 @@ const RegisterBusiness = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let errorMessage = "";
 
-    // Validação dos campos
-    if (!businessName || !businessDescription || !category || !address || !phone || !email) {
-      errorMessage += "Por favor, preencha todos os campos obrigatórios.\n";
-    }
+    // Chama a função de validação
+    const validationError = validateForm({
+      businessName,
+      businessCNPJ,
+      businessDescription,
+      category,
+      address,
+      phone,
+      email,
+      images,
+      cnDoc,
+      termsAccepted,
+    });
 
-    if (images.length === 0 || !cnDoc) {
-      errorMessage += "Por favor, carregue imagens do seu negócio e o comprovante do Simples Nacional.\n";
-    }
-
-    if (!termsAccepted) {
-      errorMessage += "É necessário aceitar os Termos e Condições.\n";
-    }
-
-    // Verificação de formato de e-mail
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (email && !emailRegex.test(email)) {
-      errorMessage += "O e-mail fornecido não é válido.\n";
-    }
-
-    if (errorMessage) {
-      setError(errorMessage);
+    if (validationError) {
+      setError(validationError); // Exibe a mensagem de erro de validação
       return;
     }
 
@@ -91,27 +87,44 @@ const RegisterBusiness = () => {
       // Salvar no Firestore na coleção "negocios_pendentes", incluindo o UID do usuário e status "pendente"
       const docRef = await addDoc(collection(db, "negocios_pendentes"), {
         nome: businessName,
+        cnpj: businessCNPJ,
         descricao: businessDescription,
         categoria: category,
         endereco: address,
         telefone: phone,
         email,
         horarioDeFuncionamento: workingHours,
-        imagens: imageBase64, // Salva as imagens em base64
+        imagens: imageBase64,
         comprovante: cnDoc.name, // Salva o nome do arquivo do comprovante
         userId: userUid, // Adiciona o UID do usuário
         status: "pendente", // Definindo o status como "pendente"
       });
 
-      // Mensagem de sucesso com a alteração para aguardar aprovação do admin
       alert("Cadastro enviado, aguardando aprovação do admin!");
-
-      // Após o envio, redireciona o usuário para a home
-      navigate("/");
-
+      navigate("/"); // Após o envio, redireciona o usuário para a home
     } catch (err) {
       console.error("Erro ao cadastrar negócio:", err);
-      setError("Erro ao cadastrar o negócio. Tente novamente.");
+
+      // Melhoria no tratamento de erros: identificar o tipo de erro
+      if (err.code) {
+        switch (err.code) {
+          case "unavailable":
+            setError(
+              "Erro de conexão com o Firebase. Tente novamente mais tarde."
+            );
+            break;
+          case "permission-denied":
+            setError("Você não tem permissão para realizar essa ação.");
+            break;
+          case "network-request-failed":
+            setError("Erro de rede. Verifique sua conexão.");
+            break;
+          default:
+            setError("Erro desconhecido. Tente novamente.");
+        }
+      } else {
+        setError("Erro ao cadastrar o negócio. Tente novamente.");
+      }
     } finally {
       setLoading(false);
     }
@@ -129,13 +142,27 @@ const RegisterBusiness = () => {
           onChange={(e) => setBusinessName(e.target.value)}
           required
         />
+
+        <input
+          type="text"
+          placeholder="CNPJ"
+          value={businessCNPJ}
+          onChange={(e) => setBusinessCNPJ(e.target.value)}
+          required
+        />
+
         <textarea
           placeholder="Descreva o seu negócio"
           value={businessDescription}
           onChange={(e) => setBusinessDescription(e.target.value)}
           required
         />
-        <select value={category} onChange={(e) => setCategory(e.target.value)} required>
+
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          required
+        >
           <option value="">Selecione a Categoria</option>
           <option value="restaurante">Restaurante</option>
           <option value="loja">Loja</option>
@@ -147,6 +174,7 @@ const RegisterBusiness = () => {
           <option value="esportes">Esportes e Lazer</option>
           <option value="outro">Outro</option>
         </select>
+
         <input
           type="text"
           placeholder="Endereço Completo"
@@ -154,6 +182,7 @@ const RegisterBusiness = () => {
           onChange={(e) => setAddress(e.target.value)}
           required
         />
+
         <input
           type="tel"
           placeholder="Telefone de Contato"
@@ -161,6 +190,7 @@ const RegisterBusiness = () => {
           onChange={(e) => setPhone(e.target.value)}
           required
         />
+
         <input
           type="email"
           placeholder="E-mail para Contato"
@@ -168,6 +198,7 @@ const RegisterBusiness = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+
         <input
           type="text"
           placeholder="Horários de Funcionamento"
@@ -177,7 +208,10 @@ const RegisterBusiness = () => {
 
         <div className="upload-instructions">
           <label htmlFor="businessImages">
-            <strong>Carregue imagens do seu negócio (máximo de 6 imagens, máximo de 5 MB cada)</strong>
+            <strong>
+              Carregue imagens do seu negócio (máximo de 6 imagens, máximo de
+              5MB cada)
+            </strong>
           </label>
           <input
             type="file"
@@ -186,12 +220,19 @@ const RegisterBusiness = () => {
             multiple
             onChange={handleImageUpload}
           />
+
           {images.length > 0 && (
             <div className="image-preview">
               {images.map((image, index) => (
                 <div key={index} className="image-wrapper">
-                  <img src={URL.createObjectURL(image)} alt={`preview ${index}`} />
-                  <button className="remove-image" onClick={() => removeImage(index)}>
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt={`preview ${index}`}
+                  />
+                  <button
+                    className="remove-image"
+                    onClick={() => removeImage(index)}
+                  >
                     X
                   </button>
                 </div>
@@ -229,17 +270,15 @@ const RegisterBusiness = () => {
             id="terms"
             checked={termsAccepted}
             onChange={(e) => setTermsAccepted(e.target.checked)}
+            required
           />
           <label htmlFor="terms">
-            Aceito os{' '}
-            <a href="/terms" target="_blank" rel="noopener noreferrer">
-              Termos e Condições
-            </a>
+            Aceito os <strong>termos e condições</strong>
           </label>
         </div>
 
         <button type="submit" disabled={loading}>
-          Enviar Cadastro
+          {loading ? "Enviando..." : "Cadastrar Negócio"}
         </button>
       </form>
     </div>

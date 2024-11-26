@@ -48,40 +48,66 @@ const Header = () => {
   return (
     <header className="header">
       <Link to="/" className="nav-link">
-        <div className="logo">EconomiaSolidaria</div>
+        <img
+          src={require("../assets/brabo.jpg")}
+          alt="Economia Solidária"
+          className="logo"
+          style={{
+            width: "50px",
+            height: "50px",
+            borderRadius: "50%",
+            objectFit: "cover",
+          }}
+        />
       </Link>
+
       <nav className="nav">
+        {/* Links sempre visíveis */}
+        <Link to="/lojas" className="nav-link">
+          Página da Loja
+        </Link>
         {/* Links de navegação públicos visíveis apenas para usuários não autenticados */}
         {!user && (
           <>
-            <Link to="/register" className="nav-link">Cadastro</Link>
-            <Link to="/login" className="nav-link">Login</Link>
+            <Link to="/register" className="nav-link">
+              Cadastro
+            </Link>
+            <Link to="/login" className="nav-link">
+              Login
+            </Link>
           </>
         )}
-
-        {/* Links sempre visíveis */}
-        <Link to="/lojas" className="nav-link">Página da Loja</Link>
 
         {/* Links visíveis apenas para usuários autenticados */}
         {user && (
           <>
-            <Link to="/register-business" className="nav-link">Cadastrar Loja</Link>
-            <Link to="/meus-negocios" className="nav-link">Meus Negócios</Link>
+            <Link to="/register-business" className="nav-link">
+              Cadastrar Loja
+            </Link>
+            <Link to="/meus-negocios" className="nav-link">
+              Meus Negócios
+            </Link>
           </>
         )}
 
         {/* Link visível apenas para administradores */}
         {isAdmin && (
-          <Link to="/admin-dashboard" className="nav-link">Painel Administrativo</Link>
+          <Link to="/admin-dashboard" className="nav-link">
+            Painel Administrativo
+          </Link>
         )}
 
         {/* Mostrar o nome do usuário, link de perfil e o botão de logout */}
         {user && (
           <div className="user-info">
-            <span className="user-name">Olá, {user.displayName || user.email}</span>
+            <span className="user-name">
+              Olá, {user.displayName || user.email}
+            </span>
             <div className="user-actions">
               {/* Link para o perfil */}
-              <Link to="/perfil" className="nav-link">Perfil</Link>
+              <Link to="/perfil" className="nav-link">
+                Perfil
+              </Link>
               {/* Botão de logout */}
               <button className="logout-button" onClick={handleLogout}>
                 Sair
