@@ -50,7 +50,14 @@ const LojaDetails = () => {
   };
 
   if (loading) {
-    return <p>Carregando detalhes da loja...</p>;
+    return (
+      <div className="loja-details-overlay">
+        <div className="loja-details skeleton-card"></div>
+        <div className="skeleton-img"></div>
+        <div className="skeleton-card"></div>
+        <div className="skeleton-card"></div>
+      </div>
+    );
   }
 
   if (!loja) {
@@ -67,13 +74,17 @@ const LojaDetails = () => {
           &#10094;
         </button>
 
-        {/* Exibe a imagem atual do carrossel */}
+        {/* Exibe a imagem atual do carrossel ou o placeholder */}
         <img
           src={loja.imagens?.[currentImageIndex] || "default-image.jpg"}
           alt={`Imagem da loja ${loja.nome}`}
           className="loja-img"
           style={{ width: "100%", height: "auto", objectFit: "cover" }}
         />
+        {/* Se ainda não houver imagem, exibe um placeholder */}
+        {!loja.imagens?.[currentImageIndex] && (
+          <div className="loja-img-placeholder"></div>
+        )}
 
         <button className="carrossel-btn" onClick={handleNextImage}>
           &#10095;
