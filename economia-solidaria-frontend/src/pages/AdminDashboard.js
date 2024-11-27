@@ -114,12 +114,7 @@ const AdminDashboard = () => {
         )}
 
         {loading ? (
-          <div className="card-grid">
-            {/* Placeholders para os cartões de carregamento */}
-            {[...Array(5)].map((_, index) => (
-              <div key={index} className="skeleton-card"></div>
-            ))}
-          </div>
+          <p>Carregando...</p> // Exibe a mensagem de carregamento
         ) : (
           <div>
             {businesses.length === 0 ? (

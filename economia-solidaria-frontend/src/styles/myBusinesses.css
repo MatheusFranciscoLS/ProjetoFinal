@@ -1,52 +1,171 @@
-/* src/styles/myBusinesses.css */
-.my-businesses-container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .my-businesses-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 20px;
-  }
-  
-  .business-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    padding: 10px;
-    text-align: center;
-    background: #fff;
-  }
-  
-  .business-card img.business-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-  }
-  
-  .business-card h3 {
-    font-size: 1.2em;
-    margin: 10px 0;
-  }
-  
-  .business-card p {
-    color: #555;
-  }
-  
-  .btn-details {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 8px 12px;
-    background: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 4px;
-  }
-  
-  .btn-details:hover {
-    background: #0056b3;
-  }
-  
+/* Estilo para o contêiner principal */
+.businesses-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 30px auto;
+  font-family: Arial, sans-serif;
+}
+
+/* Título principal */
+.businesses-container h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Estilo para o texto de carregamento */
+.loading-text {
+  text-align: center;
+  font-size: 18px;
+  color: #888;
+}
+
+/* Estilo para mensagens de erro */
+.error-text {
+  text-align: center;
+  font-size: 18px;
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+/* Estilo para a mensagem de 'sem negócios' */
+.no-businesses-text {
+  text-align: center;
+  font-size: 18px;
+  color: #7f8c8d;
+}
+
+/* Estilo para a lista de negócios */
+.business-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* Estilo para cada item de negócio */
+.business-item {
+  background-color: #ffffff;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.3s ease;
+}
+
+/* Efeito hover para os itens */
+.business-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Nome do negócio */
+.business-name {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+/* Status do negócio */
+.business-status {
+  font-size: 16px;
+  color: #7f8c8d;
+}
+/* Estilo para o contêiner principal */
+.businesses-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 30px auto;
+  font-family: Arial, sans-serif;
+}
+
+/* Título principal */
+.businesses-container h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Estilo para o texto de carregamento */
+.loading-text {
+  text-align: center;
+  font-size: 18px;
+  color: #888;
+}
+
+/* Estilo para mensagens de erro */
+.error-text {
+  text-align: center;
+  font-size: 18px;
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+/* Estilo para a mensagem de 'sem negócios' */
+.no-businesses-text {
+  text-align: center;
+  font-size: 18px;
+  color: #7f8c8d;
+}
+
+/* Estilo para a lista de negócios */
+.business-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* Estilo para cada item de negócio */
+.business-item {
+  background-color: #ffffff;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.3s ease;
+}
+
+/* Efeito hover para os itens */
+.business-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Nome do negócio */
+.business-name {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+/* Status do negócio */
+.business-status {
+  font-size: 16px;
+  color: #7f8c8d;
+}
+
+/* Estilos para o botão de editar */
+.edit-button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.edit-button:hover {
+  background-color: #2980b9;
+}

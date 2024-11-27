@@ -20,6 +20,7 @@ import Terms from "./pages/Terms"; // Página de Termos e Condições
 import Profile from "./pages/Profile"; // Importação da página de Perfil
 import PlansDetails from "./components/PlansDetails";
 
+
 const App = () => {
   return (
     <Router>
@@ -47,7 +48,8 @@ const App = () => {
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/admin-gerenciamento" element={<AdminNegocios />} />
         <Route path="/edit-business/:id" element={<EditBusiness />} />
-        <Route path="/meus-negocios/:id" element={<MyBusinesses />} /> {/* Atualizado para MeusNegocios */}
+        <Route path="/meus-negocios" element={<MyBusinesses />} /> {/* Atualizado para MeusNegocios */}
+        <Route path="/editar-negocio/:businessId" element={<EditBusiness />} />
         
         {/* Rota de perfil */}
         <Route path="/perfil" element={<Profile />} /> {/* Página de Perfil */}
