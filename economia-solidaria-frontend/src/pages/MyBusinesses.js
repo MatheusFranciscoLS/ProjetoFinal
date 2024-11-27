@@ -139,30 +139,31 @@ const MyBusinesses = () => {
   const auth = getAuth();
   const user = auth.currentUser;
 
+  // Função para buscar negócios
+  const fetchBusinesses = async () => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const q = query(collection(db, "lojas"), where("userId", "==", user.uid));
+      const querySnapshot = await getDocs(q);
+      const userBusinesses = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setBusinesses(userBusinesses);
+    } catch (error) {
+      console.error("Erro ao buscar negócios do usuário:", error);
+      setError("Ocorreu um erro ao carregar seus negócios. Tente novamente mais tarde.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchBusinesses = async () => {
-      if (!user) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const q = query(collection(db, "lojas"), where("userId", "==", user.uid));
-        const querySnapshot = await getDocs(q);
-        const userBusinesses = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setBusinesses(userBusinesses);
-      } catch (error) {
-        console.error("Erro ao buscar negócios do usuário:", error);
-        setError("Ocorreu um erro ao carregar seus negócios. Tente novamente mais tarde.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBusinesses();
+    fetchBusinesses(); // Chama a função ao carregar o componente
   }, [user]);
 
   const handleEdit = (business) => {

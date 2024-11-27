@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase"; // Certifique-se de importar o Firebase corretamente
 
@@ -12,7 +12,6 @@ const EditBusinessModal = ({ businessId, businessData, onClose }) => {
   const [email, setEmail] = useState(businessData.email || "");
   const [workingHours, setWorkingHours] = useState(businessData.horarioDeFuncionamento || "");
 
-  // Função para lidar com o envio do formulário e atualizar os dados
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -30,7 +29,7 @@ const EditBusinessModal = ({ businessId, businessData, onClose }) => {
         horarioDeFuncionamento: workingHours,
       });
       alert("Loja atualizada com sucesso!");
-      onClose(); // Fecha o modal após a atualização
+      onClose();
     } catch (error) {
       console.error("Erro ao atualizar loja: ", error);
       alert("Ocorreu um erro ao atualizar a loja.");
@@ -42,79 +41,81 @@ const EditBusinessModal = ({ businessId, businessData, onClose }) => {
       <div className="modal-content">
         <h2>Editar Loja</h2>
         <form onSubmit={handleSubmit}>
-          <label>
-            Nome:
+          <div className="input-group">
+            <label>Nome:</label>
             <input
               type="text"
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
               required
             />
-          </label>
-          <label>
-            CNPJ:
+          </div>
+          <div className="input-group">
+            <label>CNPJ:</label>
             <input
               type="text"
               value={businessCNPJ}
               onChange={(e) => setBusinessCNPJ(e.target.value)}
               required
             />
-          </label>
-          <label>
-            Descrição:
+          </div>
+          <div className="input-group">
+            <label>Descrição:</label>
             <textarea
               value={businessDescription}
               onChange={(e) => setBusinessDescription(e.target.value)}
               required
             />
-          </label>
-          <label>
-            Categoria:
+          </div>
+          <div className="input-group">
+            <label>Categoria:</label>
             <input
               type="text"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               required
             />
-          </label>
-          <label>
-            Endereço:
+          </div>
+          <div className="input-group">
+            <label>Endereço:</label>
             <input
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               required
             />
-          </label>
-          <label>
-            Telefone:
+          </div>
+          <div className="input-group">
+            <label>Telefone:</label>
             <input
               type="text"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required
             />
-          </label>
-          <label>
-            E-mail:
+          </div>
+          <div className="input-group">
+            <label>E-mail:</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-          </label>
-          <label>
-            Horário de Funcionamento:
+          </div>
+          <div className="input-group">
+            <label>Horário de Funcionamento:</label>
             <input
               type="text"
               value={workingHours}
               onChange={(e) => setWorkingHours(e.target.value)}
               required
             />
-          </label>
-          <button type="submit">Atualizar</button>
-          <button type="button" onClick={onClose}>Cancelar</button>
+          </div>
+          <div className="buttons">
+            <button type="submit" className="btn primary">Atualizar</button>
+            <button type="button" onClick={onClose} className="btn secondary">Cancelar</button>
+          </div>
         </form>
       </div>
     </div>
