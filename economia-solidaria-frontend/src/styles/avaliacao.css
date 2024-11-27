@@ -82,3 +82,94 @@ textarea {
   border: 1px solid #ddd;
   border-radius: 5px;
 }
+
+/* Media Queries para Responsividade */
+
+/* Para telas menores que 1024px (tablets e dispositivos menores) */
+@media (max-width: 1024px) {
+  .toggle-btn,
+  .avaliacao button[type="submit"] {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+
+  form {
+    width: 90%;
+    max-width: 500px;
+  }
+
+  textarea {
+    font-size: 16px;
+  }
+
+  .star {
+    font-size: 20px;
+  }
+
+  .review-item {
+    font-size: 14px;
+  }
+}
+
+/* Para telas menores que 768px (smartphones) */
+@media (max-width: 768px) {
+  form {
+    width: 95%;
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  .toggle-btn,
+  .avaliacao button[type="submit"] {
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+
+  textarea {
+    font-size: 16px;
+  }
+
+  .star {
+    font-size: 18px;
+  }
+
+  .review-item {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+/* Para telas menores que 480px (smartphones muito pequenos) */
+@media (max-width: 480px) {
+  form {
+    width: 100%;
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  .toggle-btn,
+  .avaliacao button[type="submit"] {
+    padding: 10px 15px;
+    font-size: 12px;
+  }
+
+  textarea {
+    font-size: 14px;
+  }
+
+  .star {
+    font-size: 16px;
+  }
+
+  .review-item {
+    font-size: 12px;
+    padding: 6px;
+  }
+}
