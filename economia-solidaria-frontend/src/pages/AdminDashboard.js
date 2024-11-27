@@ -20,6 +20,7 @@ const AdminDashboard = () => {
   const [feedbackClass, setFeedbackClass] = useState(""); // Classe para o feedback (verde ou vermelho)
   const [isFeedbackVisible, setIsFeedbackVisible] = useState(false); // Controla a visibilidade do feedback
   const [isProcessing, setIsProcessing] = useState(null); // Indica qual botão está sendo processado
+  const [selectedImage, setSelectedImage] = useState(null); // Imagem selecionada para exibição em grande
 
   useEffect(() => {
     const fetchPendingBusinesses = async () => {
@@ -128,10 +129,6 @@ const AdminDashboard = () => {
                 <div className="skeleton-text skeleton-line"></div>
                 <div className="skeleton-text skeleton-line"></div>
               </div>
-          <div className="card-grid">
-            {/* Placeholders para os cartões de carregamento */}
-            {[...Array(5)].map((_, index) => (
-              <div key={index} className="skeleton-card"></div>
             ))}
           </div>
         ) : (
@@ -157,37 +154,13 @@ const AdminDashboard = () => {
                         {business.cnpj || "Não informado"}
                       </p>
 
-                      {/* Status e descrição */}
-                      <p className="business-status">
-                        <strong>Status:</strong> {business.status}
-                      </p>
-                      <p className="business-description">
-                        {business.descricao}
-                      </p>
-
-                      {/* Imagens do Negócio */}
-                      <div className="business-images">
-                        {business.imagens && business.imagens.length > 0 && (
-                          <div className="image-thumbnails">
-                            {business.imagens
-                              .slice(0, 6)
-                              .map((image, index) => (
-                                <img
-                                  key={index}
-                                  src={image}
-                                  alt={`Imagem ${index + 1}`}
-                                  className="image-thumbnail"
-                                  onClick={() => setSelectedImage(image)}
-                                />
-                              ))}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Botões de Aprovar/Negar/VerificarCNPJ */}
-                      <div className="card-buttons">
-                        <button onClick={() => setSelectedBusiness(business)}>
-                          Ver Detalhes
+                      {/* Botões de Ação */}
+                      <div className="business-buttons">
+                        <button
+                          className="verify-cnpj"
+                          onClick={() => verifyCNPJ(business.cnpj)}
+                        >
+                          Verificar CNPJ
                         </button>
                         <button
                           className="approve"
@@ -217,19 +190,58 @@ const AdminDashboard = () => {
                             ? "Negando..."
                             : "Negar"}
                         </button>
-                        {/* Botão de Verificar CNPJ */}
-                        <button
-                          className="verify-cnpj"
-                          onClick={() => verifyCNPJ(business.cnpj)}
-                        >
-                          Verificar CNPJ
-                        </button>
+                      </div>
+
+                      {/* Status e descrição */}
+                      <p className="business-status">
+                        <strong>Status:</strong> {business.status}
+                      </p>
+                      <p className="business-description">
+                        {business.descricao}
+                      </p>
+
+                      {/* Imagens do Negócio */}
+                      <div className="business-images">
+                        {business.imagens && business.imagens.length > 0 && (
+                          <div className="image-thumbnails">
+                            {business.imagens
+                              .slice(0, 6)
+                              .map((image, index) => (
+                                <img
+                                  key={index}
+                                  src={image}
+                                  alt={`Imagem ${index + 1}`}
+                                  className="image-thumbnail"
+                                  onClick={() => setSelectedImage(image)}
+                                />
+                              ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Exibindo a imagem grande */}
+        {selectedImage && (
+          <div
+            className="image-overlay"
+            onClick={() => setSelectedImage(null)} // Fecha ao clicar fora da imagem
+          >
+            <div
+              className="image-modal"
+              onClick={(e) => e.stopPropagation()} // Impede o fechamento ao clicar dentro da modal
+            >
+              <img
+                src={selectedImage}
+                alt="Imagem grande"
+                className="modal-image"
+              />
+            </div>
           </div>
         )}
 
@@ -251,9 +263,13 @@ const AdminDashboard = () => {
 
               {/* CNPJ do Negócio */}
               <p>
-                <strong>CNPJ:</strong>{" "}
-                {selectedBusiness.cnpj || "Não informado"}
+                <strong>CNPJ:</strong> {selectedBusiness.cnpj}
               </p>
+
+              {/* Botão para verificar o CNPJ */}
+              <button onClick={() => verifyCNPJ(selectedBusiness.cnpj)}>
+                Verificar CNPJ
+              </button>
 
               {/* Outros detalhes */}
               <p>
@@ -277,44 +293,43 @@ const AdminDashboard = () => {
               </p>
 
               {/* Botões de ação */}
-              <button
-                onClick={() => {
-                  handleApproval(selectedBusiness.id, true);
-                  setSelectedBusiness(null); // Fechar detalhes ao aprovar
-                }}
-                disabled={isProcessing === selectedBusiness.id} // Desabilita enquanto processando
-                style={{
-                  backgroundColor:
-                    isProcessing === selectedBusiness.id ? "#ddd" : "green",
-                  color: "white",
-                }}
-              >
-                {isProcessing === selectedBusiness.id
-                  ? "Aprovando..."
-                  : "Aprovar"}
-              </button>
-              <button
-                onClick={() => {
-                  handleApproval(selectedBusiness.id, false);
-                  setSelectedBusiness(null); // Fechar detalhes ao negar
-                }}
-                disabled={isProcessing === selectedBusiness.id} // Desabilita enquanto processando
-                style={{
-                  backgroundColor:
-                    isProcessing === selectedBusiness.id ? "#ddd" : "red",
-                  color: "white",
-                }}
-              >
-                {isProcessing === selectedBusiness.id ? "Negando..." : "Negar"}
-              </button>
-              {/* Botão de Verificar CNPJ */}
-              <button
-                className="verify-cnpj"
-                onClick={() => verifyCNPJ(selectedBusiness.cnpj)}
-              >
-                Verificar CNPJ
-              </button>
-              <button onClick={() => setSelectedBusiness(null)}>Fechar</button>
+              <div className="action-buttons">
+                <button
+                  onClick={() => {
+                    handleApproval(selectedBusiness.id, true);
+                    setSelectedBusiness(null); // Fechar detalhes ao aprovar
+                  }}
+                  disabled={isProcessing === selectedBusiness.id}
+                  style={{
+                    backgroundColor:
+                      isProcessing === selectedBusiness.id ? "#ddd" : "green",
+                    color: "white",
+                  }}
+                >
+                  {isProcessing === selectedBusiness.id
+                    ? "Aprovando..."
+                    : "Aprovar"}
+                </button>
+                <button
+                  onClick={() => {
+                    handleApproval(selectedBusiness.id, false);
+                    setSelectedBusiness(null); // Fechar detalhes ao negar
+                  }}
+                  disabled={isProcessing === selectedBusiness.id}
+                  style={{
+                    backgroundColor:
+                      isProcessing === selectedBusiness.id ? "#ddd" : "red",
+                    color: "white",
+                  }}
+                >
+                  {isProcessing === selectedBusiness.id
+                    ? "Negando..."
+                    : "Negar"}
+                </button>
+                <button onClick={() => setSelectedBusiness(null)}>
+                  Fechar
+                </button>
+              </div>
             </div>
           </div>
         )}
