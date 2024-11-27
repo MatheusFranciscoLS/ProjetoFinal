@@ -48,20 +48,79 @@ const RegisterBusiness = () => {
     return phone;
   };
 
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length + images.length > 6) {
-      setError("Você pode enviar no máximo 6 imagens do seu negócio.");
-    } else {
-      const invalidFiles = files.filter((file) => file.size > 5 * 1024 * 1024); // Limite de 5MB por imagem
-      if (invalidFiles.length > 0) {
-        setError("Cada imagem deve ter no máximo 5 MB.");
+const resizeImage = (file, maxWidth = 1024, maxHeight = 1024) => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      img.src = e.target.result;
+    };
+
+    reader.onerror = reject;
+
+    reader.readAsDataURL(file);
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      let width = img.width;
+      let height = img.height;
+
+      // Calcula a escala para redimensionar a imagem mantendo a proporção
+      if (width > height) {
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
       } else {
-        setImages((prevImages) => [...prevImages, ...files]);
-        setError(""); // Limpa o erro ao adicionar novas imagens
+        if (height > maxHeight) {
+          width = (width * maxHeight) / height;
+          height = maxHeight;
+        }
       }
-    }
-  };
+
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => {
+          resolve(blob);
+        },
+        file.type,
+        0.8
+      ); // Compressão de 80%
+    };
+  });
+};
+
+const handleImageUpload = async (e) => {
+  const files = Array.from(e.target.files);
+
+  // Verifica se a quantidade total de imagens será maior que 6
+  if (files.length + images.length > 6) {
+    setError("Você pode enviar no máximo 6 imagens do seu negócio.");
+    return;
+  }
+
+  // Verifica se algum arquivo excede o tamanho de 10MB
+  const invalidFiles = files.filter((file) => file.size > 10 * 1024 * 1024);
+  if (invalidFiles.length > 0) {
+    setError("Cada imagem deve ter no máximo 10 MB.");
+    return;
+  }
+
+  // Redimensiona as imagens antes de adicionar
+  const resizedImages = await Promise.all(
+    files.map((file) => resizeImage(file))
+  );
+
+  // Atualiza o estado com as imagens redimensionadas
+  setImages((prevImages) => [...prevImages, ...resizedImages]);
+  setError(""); // Limpa a mensagem de erro
+};
 
   const removeImage = (index) => {
     setImages(images.filter((_, i) => i !== index));
@@ -70,36 +129,29 @@ const RegisterBusiness = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validação para garantir que pelo menos uma imagem foi enviada
-    if (images.length === 0) {
-      setError("Pelo menos uma imagem do seu negócio é obrigatória.");
-      return;
-    }
+   // Chama a função de validação
+   const validationError = validateForm({
+     businessName,
+     businessCNPJ,
+     businessDescription,
+     category,
+     address,
+     phone,
+     email,
+     images,
+     cnDoc,
+     termsAccepted,
+   });
 
-    // Chama a função de validação
-    const validationError = validateForm({
-      businessName,
-      businessCNPJ,
-      businessDescription,
-      category,
-      address,
-      phone,
-      email,
-      images,
-      cnDoc,
-      termsAccepted,
-    });
+   if (validationError) {
+     setError(validationError); // Exibe a mensagem de erro de validação
+     return;
+   }
 
-    if (validationError) {
-      setError(validationError); // Exibe a mensagem de erro de validação
-      return;
-    }
-
-    setLoading(true);
-    setError(""); // Limpa a mensagem de erro antes de tentar enviar
+   setLoading(true);
+   setError(""); // Limpa a mensagem de erro antes de tentar enviar
 
     try {
-      // Converter imagens para base64 ou outras manipulações, se necessário
       const imageBase64Promises = images.map(async (image) => {
         const reader = new FileReader();
         return new Promise((resolve, reject) => {
@@ -109,10 +161,9 @@ const RegisterBusiness = () => {
         });
       });
 
-      const imageBase64 = await Promise.all(imageBase64Promises);
+     const imageBase64 = await Promise.all(imageBase64Promises);
 
-      // Salvar no Firestore na coleção "negocios_pendentes", incluindo o UID do usuário e status "pendente"
-      const docRef = await addDoc(collection(db, "negocios_pendentes"), {
+      await addDoc(collection(db, "negocios_pendentes"), {
         nome: businessName,
         cnpj: businessCNPJ,
         descricao: businessDescription,
@@ -131,27 +182,7 @@ const RegisterBusiness = () => {
       navigate("/"); // Após o envio, redireciona o usuário para a home
     } catch (err) {
       console.error("Erro ao cadastrar negócio:", err);
-
-      // Melhoria no tratamento de erros: identificar o tipo de erro
-      if (err.code) {
-        switch (err.code) {
-          case "unavailable":
-            setError(
-              "Erro de conexão com o Firebase. Tente novamente mais tarde."
-            );
-            break;
-          case "permission-denied":
-            setError("Você não tem permissão para realizar essa ação.");
-            break;
-          case "network-request-failed":
-            setError("Erro de rede. Verifique sua conexão.");
-            break;
-          default:
-            setError("Erro desconhecido. Tente novamente.");
-        }
-      } else {
-        setError("Erro ao cadastrar o negócio. Tente novamente.");
-      }
+      setError("Erro ao cadastrar o negócio. Tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -233,21 +264,21 @@ const RegisterBusiness = () => {
           onChange={(e) => setWorkingHours(e.target.value)}
         />
 
-<div className="upload-instructions">
-  <label htmlFor="businessImages">
-    <strong>
-      Carregue imagens do seu negócio (máximo de 6 imagens, máximo de
-      5MB cada)
-    </strong>
-  </label>
-  <input
-    type="file"
-    id="businessImages"
-    accept="image/*"
-    multiple
-    required
-    onChange={handleImageUpload}
-  />
+        <div className="upload-instructions">
+          <label htmlFor="businessImages">
+            <strong>
+              Carregue imagens do seu negócio (máximo de 6 imagens, máximo de
+              5MB cada)
+            </strong>
+          </label>
+          <input
+            type="file"
+            id="businessImages"
+            accept="image/*"
+            multiple
+            required
+            onChange={handleImageUpload}
+          />
 
   {images.length > 0 && (
     <div className="image-preview">
@@ -298,6 +329,8 @@ const RegisterBusiness = () => {
         {loading && <div className="loading">Carregando...</div>}
 
         <div className="terms-container">
+          {" "}
+          {/* Corrigido para manter a classe correta */}
           <input
             type="checkbox"
             id="terms"
