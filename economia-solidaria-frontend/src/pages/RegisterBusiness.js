@@ -70,6 +70,12 @@ const RegisterBusiness = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validação para garantir que pelo menos uma imagem foi enviada
+    if (images.length === 0) {
+      setError("Pelo menos uma imagem do seu negócio é obrigatória.");
+      return;
+    }
+
     // Chama a função de validação
     const validationError = validateForm({
       businessName,
@@ -93,6 +99,7 @@ const RegisterBusiness = () => {
     setError(""); // Limpa a mensagem de erro antes de tentar enviar
 
     try {
+      // Converter imagens para base64 ou outras manipulações, se necessário
       const imageBase64Promises = images.map(async (image) => {
         const reader = new FileReader();
         return new Promise((resolve, reject) => {
@@ -104,7 +111,8 @@ const RegisterBusiness = () => {
 
       const imageBase64 = await Promise.all(imageBase64Promises);
 
-      await addDoc(collection(db, "negocios_pendentes"), {
+      // Salvar no Firestore na coleção "negocios_pendentes", incluindo o UID do usuário e status "pendente"
+      const docRef = await addDoc(collection(db, "negocios_pendentes"), {
         nome: businessName,
         cnpj: businessCNPJ,
         descricao: businessDescription,
@@ -123,7 +131,27 @@ const RegisterBusiness = () => {
       navigate("/"); // Após o envio, redireciona o usuário para a home
     } catch (err) {
       console.error("Erro ao cadastrar negócio:", err);
-      setError("Erro ao cadastrar o negócio. Tente novamente.");
+
+      // Melhoria no tratamento de erros: identificar o tipo de erro
+      if (err.code) {
+        switch (err.code) {
+          case "unavailable":
+            setError(
+              "Erro de conexão com o Firebase. Tente novamente mais tarde."
+            );
+            break;
+          case "permission-denied":
+            setError("Você não tem permissão para realizar essa ação.");
+            break;
+          case "network-request-failed":
+            setError("Erro de rede. Verifique sua conexão.");
+            break;
+          default:
+            setError("Erro desconhecido. Tente novamente.");
+        }
+      } else {
+        setError("Erro ao cadastrar o negócio. Tente novamente.");
+      }
     } finally {
       setLoading(false);
     }
@@ -205,41 +233,50 @@ const RegisterBusiness = () => {
           onChange={(e) => setWorkingHours(e.target.value)}
         />
 
-        <div className="upload-instructions">
-          <label htmlFor="businessImages">
-            <strong>
-              Carregue imagens do seu negócio (máximo de 6 imagens, máximo de
-              5MB cada)
-            </strong>
-          </label>
-          <input
-            type="file"
-            id="businessImages"
-            accept="image/*"
-            multiple
-            required
-            onChange={handleImageUpload}
-          />
+<div className="upload-instructions">
+  <label htmlFor="businessImages">
+    <strong>
+      Carregue imagens do seu negócio (máximo de 6 imagens, máximo de
+      5MB cada)
+    </strong>
+  </label>
+  <input
+    type="file"
+    id="businessImages"
+    accept="image/*"
+    multiple
+    required
+    onChange={handleImageUpload}
+  />
 
-          {images.length > 0 && (
-            <div className="image-preview">
-              {images.map((image, index) => (
-                <div key={index} className="image-wrapper">
-                  <img
-                    src={URL.createObjectURL(image)}
-                    alt={`preview ${index}`}
-                  />
-                  <button
-                    className="remove-image"
-                    onClick={() => removeImage(index)}
-                  >
-                    X
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+  {images.length > 0 && (
+    <div className="image-preview">
+      {images.map((image, index) => (
+        <div key={index} className="image-wrapper">
+          <img
+            src={URL.createObjectURL(image)}
+            alt={`preview ${index}`}
+            className="image-item"
+          />
+          <button
+            className="remove-image"
+            onClick={() => removeImage(index)}
+          >
+            X
+          </button>
         </div>
+      ))}
+    </div>
+  )}
+</div>
+
+
+        {error && error.includes("Você pode enviar no máximo 6 imagens") && (
+          <div className="error">{error}</div>
+        )}
+        {error && error.includes("Pelo menos uma imagem") && (
+          <div className="error">{error}</div>
+        )}
 
         <div className="upload-instructions">
           <label htmlFor="cnDoc">
@@ -254,7 +291,10 @@ const RegisterBusiness = () => {
           />
         </div>
 
-        {error && <div className="error">{error}</div>}
+        {error && !error.includes("Você pode enviar no máximo 6 imagens") && (
+          <div className="error">{error}</div>
+        )}
+
         {loading && <div className="loading">Carregando...</div>}
 
         <div className="terms-container">
@@ -270,8 +310,8 @@ const RegisterBusiness = () => {
           </label>
         </div>
 
-        <button type="submit" className="submit-button" disabled={loading}>
-          Cadastrar Negócio
+        <button type="submit" disabled={loading}>
+          {loading ? "Enviando..." : "Cadastrar Negócio"}
         </button>
       </form>
     </div>

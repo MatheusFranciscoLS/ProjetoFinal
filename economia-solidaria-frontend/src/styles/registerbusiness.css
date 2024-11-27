@@ -68,29 +68,21 @@
     display: inline-block;
 }
 
-/* Estilo das imagens */
-.image-preview img {
-    max-width: 150px;
-    /* Limita a largura máxima */
-    max-height: 150px;
-    /* Limita a altura máxima */
-    object-fit: cover;
-    /* Garante que a imagem não distorça */
-    margin: 5px;
-    /* Espaçamento entre as imagens */
-    border-radius: 8px;
+/* Estilo das imagens com tamanho fixo */
+.image-item {
+    width: 150px; /* Largura fixa */
+    height: 150px; /* Altura fixa */
+    object-fit: cover; /* Garante que a imagem seja redimensionada sem distorção */
+    margin: 5px; /* Espaçamento entre as imagens */
+    border-radius: 8px; /* Bordas arredondadas */
 }
 
 /* Estilo do botão de remoção (X vermelho) */
 .remove-image {
     position: absolute;
-    /* Posiciona o "X" dentro da imagem */
     top: -10px;
-    /* Distância do topo da imagem */
     right: 5px;
-    /* Distância da lateral direita da imagem */
     background-color: rgba(255, 0, 0, 0.7);
-    /* Cor de fundo vermelha com transparência */
     color: white;
     border: none;
     border-radius: 50%;
@@ -107,7 +99,6 @@
 /* Hover no "X" */
 .remove-image:hover {
     background-color: rgba(255, 0, 0, 1);
-    /* Torna o "X" mais vermelho quando passa o mouse */
 }
 
 /* Container para termos e condições (horizontal) */
