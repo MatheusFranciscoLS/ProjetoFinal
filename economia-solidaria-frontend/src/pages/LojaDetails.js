@@ -9,6 +9,7 @@ const LojaDetails = () => {
   const { id } = useParams(); // Obtém o ID da loja da URL
   const [loja, setLoja] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0); // Estado para controlar a imagem atual do carrossel
 
   useEffect(() => {
     const fetchLoja = async () => {
@@ -36,6 +37,18 @@ const LojaDetails = () => {
     fetchLoja();
   }, [id]);
 
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? loja.imagens.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === loja.imagens.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
   if (loading) {
     return <p>Carregando detalhes da loja...</p>;
   }
@@ -47,11 +60,27 @@ const LojaDetails = () => {
   return (
     <div className="loja-details">
       <h2>{loja.nome}</h2>
-      <img
-        src={loja.foto || loja.imagens?.[0] || "default-image.jpg"} // Usa a primeira imagem disponível ou uma imagem padrão
-        alt={`Imagem da loja ${loja.nome}`}
-        className="loja-img" // Classe para estilos da imagem
-      />
+
+      {/* Carrossel de Imagens */}
+      <div className="carrossel">
+        <button className="carrossel-btn" onClick={handlePrevImage}>
+          &#10094;
+        </button>
+
+        {/* Exibe a imagem atual do carrossel */}
+        <img
+          src={loja.imagens?.[currentImageIndex] || "default-image.jpg"}
+          alt={`Imagem da loja ${loja.nome}`}
+          className="loja-img"
+          style={{ width: "100%", height: "auto", objectFit: "cover" }}
+        />
+
+        <button className="carrossel-btn" onClick={handleNextImage}>
+          &#10095;
+        </button>
+      </div>
+
+      {/* Detalhes da Loja */}
       <p><strong>Descrição:</strong> {loja.descricao}</p>
       <p><strong>Endereço:</strong> {loja.endereco}</p>
       <p><strong>Telefone:</strong> {loja.telefone}</p>
@@ -59,7 +88,7 @@ const LojaDetails = () => {
       <p><strong>Horário de Funcionamento:</strong> {loja.horarioDeFuncionamento}</p>
 
       {/* Espaço para avaliações */}
-      <div style={{ marginTop: "50px" }}></div> {/* Espaço entre os detalhes e avaliações */}
+      <div style={{ marginTop: "50px" }}></div>
 
       {/* Seção de avaliação */}
       <div className="avaliacao-section">

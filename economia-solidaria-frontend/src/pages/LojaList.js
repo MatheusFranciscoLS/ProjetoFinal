@@ -95,18 +95,17 @@ const LojasList = () => {
           <p>Não há lojas que correspondem aos filtros.</p>
         ) : (
           lojasPaginas.map((loja) => (
-            <div className="loja-card" key={loja.id}>
+            <Link to={`/loja/${loja.id}`} key={loja.id} className="loja-card">
               <img
                 src={loja.imagens?.[0] || "default-image.jpg"}
                 alt={loja.nome}
                 className="loja-img"
               />
-              <h3>{loja.nome}</h3>
-              <p>{loja.descricao}</p>
-              <Link to={`/loja/${loja.id}`} className="btn-ver-mais">
-                Ver mais
-              </Link>
-            </div>
+              <div className="loja-info">
+                <h3>{loja.nome}</h3>
+                <p>{loja.descricao}</p>
+              </div>
+            </Link>
           ))
         )}
       </div>
