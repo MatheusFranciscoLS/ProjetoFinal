@@ -1,100 +1,188 @@
+/* Container principal do perfil */
 .profile-container {
-    padding: 20px;
-  }
-  
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+/* Título do perfil */
+.profile-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+/* Seção de informações do perfil */
+.profile-info {
+  margin-bottom: 20px;
+}
+
+/* Cada campo do perfil */
+.profile-field {
+  margin: 10px 0;
+}
+
+/* Descrição do plano */
+.plan-description {
+  margin-top: 20px;
+}
+
+/* Título da seção do plano */
+.plan-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Lista de todos os planos */
+.all-plans {
+  margin-top: 20px;
+}
+
+/* Título da seção de planos */
+.plans-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Seção das opções de plano */
+.plan-options {
+  display: flex;
+  justify-content: space-between; /* Faz com que fiquem lado a lado */
+  gap: 20px;
+  flex-wrap: wrap; /* Permite que as opções de plano se ajustem para uma nova linha em telas menores */
+}
+
+/* Cada opção de plano */
+.plan-option {
+  flex: 1 1 calc(33.33% - 20px); /* Faz cada plano ocupar um terço do espaço (com espaçamento) */
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.plan-option:hover {
+  transform: translateY(-5px); /* Efeito de hover */
+}
+
+/* Título de cada opção de plano */
+.plan-option h4 {
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Botão de upgrade */
+.upgrade-button {
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.upgrade-button:hover {
+  background-color: #45a049;
+}
+
+/* Detalhes do plano */
+.plan-details {
+  margin-top: 20px;
+}
+
+/* Título dos detalhes do plano */
+.plan-details-title {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* Container de cancelamento */
+.cancel-container {
+  margin-top: 20px;
+}
+
+/* Botão de cancelamento */
+.cancel-button {
+  padding: 10px 15px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: #e53935;
+}
+
+/* Mensagem premium */
+.premium-message {
+  font-size: 1.1rem;
+  color: #4CAF50;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Responsividade */
+
+/* Para telas pequenas, como smartphones */
+@media (max-width: 768px) {
   .profile-title {
-    font-size: 2rem;
-    margin-bottom: 20px;
+    font-size: 1.8rem; /* Reduz o tamanho do título em telas menores */
   }
-  
-  .profile-info {
-    margin-bottom: 20px;
-  }
-  
-  .profile-field {
-    margin: 10px 0;
-  }
-  
-  .plan-description {
-    margin-top: 20px;
-  }
-  
-  .plan-title {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
-  
-  .all-plans {
-    margin-top: 20px;
-  }
-  
-  .plans-title {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
-  
+
   .plan-options {
-    display: flex;
-    justify-content: space-between; /* Faz com que fiquem lado a lado */
-    gap: 20px; /* Espaçamento entre os planos */
+    flex-direction: column; /* Coloca as opções de plano em coluna */
   }
-  
+
   .plan-option {
-    flex: 1; /* Faz cada plano ocupar o mesmo espaço */
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    text-align: center;
+    flex: 1 1 100%; /* As opções de plano ocupam 100% da largura */
+    margin-bottom: 20px; /* Espaçamento entre os planos */
   }
-  
-  .plan-option h4 {
-    margin-bottom: 15px;
-    font-size: 1.2rem;
-  }
-  
-  .upgrade-button {
-    padding: 10px 15px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  
-  .upgrade-button:hover {
-    background-color: #45a049;
-  }
-  
-  .plan-details {
-    margin-top: 20px;
-  }
-  
-  .plan-details-title {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-  }
-  
-  .cancel-container {
-    margin-top: 20px;
-  }
-  
-  .cancel-button {
-    padding: 10px 15px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .cancel-button:hover {
-    background-color: #e53935;
-  }
-  
-  .premium-message {
+
+  .upgrade-button, .cancel-button {
+    width: 100%; /* Botões ocupam 100% da largura */
     font-size: 1.1rem;
-    color: #4CAF50;
-    margin-top: 20px;
+    padding: 12px 20px; /* Ajusta o padding */
   }
-  
+
+  .premium-message {
+    font-size: 1rem; /* Ajusta o tamanho da mensagem premium */
+  }
+}
+
+/* Para telas muito pequenas, como dispositivos móveis estreitos */
+@media (max-width: 480px) {
+  .profile-title {
+    font-size: 1.6rem; /* Menor tamanho para o título */
+  }
+
+  .plan-option {
+    flex: 1 1 100%; /* Opções de plano ocupam toda a largura */
+  }
+
+  .plan-option h4 {
+    font-size: 1.1rem; /* Tamanho menor para os títulos das opções de plano */
+  }
+
+  .upgrade-button, .cancel-button {
+    padding: 12px 18px; /* Ajusta o padding para telas menores */
+    font-size: 1rem; /* Ajusta o tamanho da fonte do botão */
+  }
+}

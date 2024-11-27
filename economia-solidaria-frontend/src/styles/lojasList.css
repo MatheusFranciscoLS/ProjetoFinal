@@ -1,39 +1,53 @@
-/* Estilo do container para as lojas */
+/* Container principal */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  width: 100%; /* Garantir que o container ocupe 100% da largura disponível */
 }
 
-/* Filtros */
+/* Título da página */
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  color: #333;
+}
+
+/* Estilo para os filtros */
 .filters {
   display: flex;
-  flex-wrap: wrap; /* Permite que os filtros se ajustem em telas menores */
+  flex-wrap: wrap;
   justify-content: space-between;
   margin-bottom: 20px;
 }
 
 .filter-input, .filter-select {
-  padding: 8px;
+  padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 5px;
   font-size: 1rem;
-  margin-bottom: 10px;
-  width: 48%; /* Ajusta o tamanho para caber em telas pequenas */
+  width: 48%; /* Ajusta a largura para telas menores */
+  margin-bottom: 15px;
+}
+
+.filter-select {
+  width: 48%;
 }
 
 @media (max-width: 768px) {
   .filter-input, .filter-select {
-    width: 100%; /* Em telas pequenas, os filtros ocupam toda a largura */
+    width: 100%; /* Filtros ocupam toda a largura em telas pequenas */
+    margin-bottom: 10px;
   }
 }
 
-/* Estilo para a lista de lojas com Grid */
+/* Estilo para a lista de lojas (grid) */
 .lojas-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 colunas */
-  gap: 20px; /* Espaço entre os cards */
-  margin-top: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 30px;
 }
 
 @media (max-width: 1024px) {
@@ -63,6 +77,10 @@
   text-align: center;
   padding: 15px;
   transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none; /* Garantir que o card não tenha sublinhado */
 }
 
 .loja-card:hover {
@@ -77,57 +95,24 @@
   margin-bottom: 10px;
 }
 
-.loja-card h3 {
+.loja-info h3 {
   font-size: 1.2rem;
   margin-bottom: 10px;
+  color: #333;
 }
 
-.loja-card p {
+.loja-info p {
   font-size: 1rem;
   margin-bottom: 15px;
   color: #555;
 }
 
-/* Botão "Ver mais" */
-.btn-ver-mais {
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
+.loja-info-placeholder {
+  margin-top: 12px;
+  width: 100%;
 }
 
-.btn-ver-mais:hover {
-  background-color: #0056b3;
-}
-
-/* Controles de Paginação */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 0 10px;
-}
-
-.pagination button:disabled {
-  background-color: #ddd;
-  cursor: not-allowed;
-}
-
-.pagination span {
-  font-size: 1rem;
-  margin: 0 10px;
-}
+/* Estilos de placeholders para carregamento */
 .loja-img-placeholder,
 .loja-title-placeholder,
 .loja-description-placeholder {
@@ -139,11 +124,6 @@
   width: 100%;
   height: 200px;
   animation: placeholderShimmer 1.5s infinite;
-}
-
-.loja-info-placeholder {
-  margin-top: 12px;
-  width: 100%;
 }
 
 .loja-title-placeholder {
@@ -168,36 +148,131 @@
   }
 }
 
+/* Estilo do botão "Ver mais" */
 .btn-ver-mais {
-  margin-top: 12px;
   padding: 8px 16px;
   background-color: #3498db;
   color: white;
   border-radius: 4px;
   text-decoration: none;
+  text-align: center;
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 1rem; /* Ajuste de tamanho de fonte para telas menores */
 }
 
 .btn-ver-mais:hover {
   background-color: #2980b9;
 }
 
+/* Estilo para os controles de paginação */
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .pagination button {
-  padding: 8px 16px;
-  margin: 0 5px;
+  padding: 10px 20px;
   background-color: #3498db;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin: 0 10px;
+  font-size: 1rem; /* Tamanho de fonte adequado */
 }
 
-.pagination button[disabled] {
+.pagination button:disabled {
   background-color: #bbb;
   cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 1rem;
+  margin: 0 10px;
+  color: #333;
+}
+
+/* Responsividade */
+
+/* Para telas menores que 1024px (tablets e dispositivos médios) */
+@media (max-width: 1024px) {
+  .container {
+    padding: 15px; /* Menos padding em telas médias */
+  }
+
+  h2 {
+    font-size: 1.8rem; /* Ajusta o tamanho do título */
+  }
+
+  .filters {
+    flex-direction: column; /* Empilha os filtros em telas menores */
+    align-items: flex-start;
+  }
+
+  .filter-input, .filter-select {
+    width: 100%; /* Filtros ocupam 100% da largura */
+  }
+
+  .lojas-list {
+    grid-template-columns: repeat(3, 1fr); /* 3 colunas em telas médias */
+  }
+}
+
+/* Para telas menores que 768px (smartphones e dispositivos pequenos) */
+@media (max-width: 768px) {
+  h2 {
+    font-size: 1.6rem; /* Ajuste no tamanho da fonte do título */
+  }
+
+  .filters {
+    flex-direction: column; /* Filtros empilhados */
+    justify-content: center;
+  }
+
+  .filter-input, .filter-select {
+    width: 100%; /* Filtros ocupam 100% da largura */
+    margin-bottom: 10px;
+  }
+
+  .lojas-list {
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas em telas menores */
+  }
+
+  .loja-card {
+    padding: 10px; /* Reduz o padding do card */
+  }
+
+  .btn-ver-mais {
+    padding: 8px 14px; /* Ajuste no tamanho do botão */
+    font-size: 0.9rem; /* Reduz o tamanho da fonte no botão */
+  }
+}
+
+/* Para telas menores que 480px (smartphones muito pequenos) */
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.4rem; /* Reduz o tamanho do título */
+  }
+
+  .lojas-list {
+    grid-template-columns: 1fr; /* 1 coluna em telas pequenas */
+  }
+
+  .loja-img {
+    height: 180px; /* Reduz a altura das imagens */
+  }
+
+  .loja-info h3 {
+    font-size: 1rem; /* Reduz o tamanho do título no card */
+  }
+
+  .loja-info p {
+    font-size: 0.9rem; /* Reduz o tamanho da descrição */
+  }
+
+  .pagination button {
+    padding: 8px 16px; /* Reduz o tamanho do botão de paginação */
+  }
 }

@@ -6,9 +6,11 @@ import "../styles/AdminNegocios.css";
 const AdminNegocios = () => {
   const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editBusiness, setEditBusiness] = useState(null);
   const [filterCategory, setFilterCategory] = useState("todos");
   const [sortOrder, setSortOrder] = useState("alfabetica");
+  const [editBusiness, setEditBusiness] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12; // 4x3 grid
 
   useEffect(() => {
     const fetchBusinesses = async () => {
@@ -75,6 +77,14 @@ const AdminNegocios = () => {
     });
   };
 
+  // Pagination Logic
+  const displayedBusinesses = sortedAndFilteredBusinesses().slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(sortedAndFilteredBusinesses().length / itemsPerPage);
+
   return (
     <div className="admin-gerenciamento">
       <h1>Administração de Negócios</h1>
@@ -111,35 +121,57 @@ const AdminNegocios = () => {
         </label>
       </div>
 
-      {loading ? (
-        <p>Carregando...</p>
-      ) : (
-        <div className="business-list">
-          {sortedAndFilteredBusinesses().map((business) => (
-            <div key={business.id} className="business-card">
-              {editBusiness?.id === business.id ? (
-                <EditBusinessForm
-                  business={business}
-                  onCancel={() => setEditBusiness(null)}
-                  onSave={handleSave}
-                />
-              ) : (
-                <div className="business-details">
-                  <h3>{business.nome}</h3>
-                  <p><strong>Categoria:</strong> {business.categoria}</p>
-                  <p><strong>Descrição:</strong> {business.descricao}</p>
-                  <p><strong>Endereço:</strong> {business.endereco}</p>
-                  <div className="business-actions">
-                    <button onClick={() => setEditBusiness(business)}>Editar</button>
-                    <button className="delete-button" onClick={() => handleDelete(business.id)}>
-                      Deletar
-                    </button>
-                  </div>
+      <div className="business-list">
+        {loading
+          ? Array.from({ length: itemsPerPage }).map((_, index) => (
+              <div key={index} className="skeleton-card"></div>
+            ))
+          : displayedBusinesses.map((business) => (
+              <div key={business.id} className="business-card">
+                <h3>{business.nome || "Nome do negócio"}</h3>
+                <p><strong>Categoria:</strong> {business.categoria || "Sem categoria"}</p>
+                <div className="business-actions">
+                  <button onClick={() => setEditBusiness(business)}>Editar</button>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDelete(business.id)}
+                  >
+                    Deletar
+                  </button>
                 </div>
-              )}
-            </div>
-          ))}
-          {businesses.length === 0 && <p>Nenhum negócio encontrado.</p>}
+              </div>
+            ))}
+        {displayedBusinesses.length === 0 && !loading && <p>Nenhum negócio encontrado.</p>}
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="pagination">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Anterior
+        </button>
+        <span>
+          Página {currentPage} de {totalPages}
+        </span>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          Próxima
+        </button>
+      </div>
+
+      {editBusiness && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <EditBusinessForm
+              business={editBusiness}
+              onCancel={() => setEditBusiness(null)}
+              onSave={handleSave}
+            />
+          </div>
         </div>
       )}
     </div>
@@ -168,6 +200,7 @@ const EditBusinessForm = ({ business, onCancel, onSave }) => {
           name="nome"
           value={formData.nome}
           onChange={handleChange}
+          placeholder="Nome do negócio"
         />
       </label>
       <label>
@@ -177,23 +210,26 @@ const EditBusinessForm = ({ business, onCancel, onSave }) => {
           name="categoria"
           value={formData.categoria}
           onChange={handleChange}
+          placeholder="Categoria"
         />
       </label>
       <label>
         Descrição:
         <textarea
           name="descricao"
-          value={formData.descricao}
+          value={formData.descricao || ""}
           onChange={handleChange}
-        />
+          placeholder="Descrição do negócio"
+        ></textarea>
       </label>
       <label>
         Endereço:
         <input
           type="text"
           name="endereco"
-          value={formData.endereco}
+          value={formData.endereco || ""}
           onChange={handleChange}
+          placeholder="Endereço"
         />
       </label>
       <div className="edit-form-actions">

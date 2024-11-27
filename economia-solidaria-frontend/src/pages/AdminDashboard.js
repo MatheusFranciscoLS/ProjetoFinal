@@ -20,7 +20,6 @@ const AdminDashboard = () => {
   const [feedbackClass, setFeedbackClass] = useState(""); // Classe para o feedback (verde ou vermelho)
   const [isFeedbackVisible, setIsFeedbackVisible] = useState(false); // Controla a visibilidade do feedback
   const [isProcessing, setIsProcessing] = useState(null); // Indica qual botão está sendo processado
-  const [selectedImage, setSelectedImage] = useState(null); // Imagem selecionada para exibição em grande
 
   useEffect(() => {
     const fetchPendingBusinesses = async () => {
@@ -129,6 +128,10 @@ const AdminDashboard = () => {
                 <div className="skeleton-text skeleton-line"></div>
                 <div className="skeleton-text skeleton-line"></div>
               </div>
+          <div className="card-grid">
+            {/* Placeholders para os cartões de carregamento */}
+            {[...Array(5)].map((_, index) => (
+              <div key={index} className="skeleton-card"></div>
             ))}
           </div>
         ) : (
@@ -227,25 +230,6 @@ const AdminDashboard = () => {
                 ))}
               </div>
             )}
-          </div>
-        )}
-
-        {/* Exibindo a imagem grande */}
-        {selectedImage && (
-          <div
-            className="image-overlay"
-            onClick={() => setSelectedImage(null)} // Fecha ao clicar fora da imagem
-          >
-            <div
-              className="image-modal"
-              onClick={(e) => e.stopPropagation()} // Impede o fechamento ao clicar dentro da modal
-            >
-              <img
-                src={selectedImage}
-                alt="Imagem grande"
-                className="modal-image"
-              />
-            </div>
           </div>
         )}
 

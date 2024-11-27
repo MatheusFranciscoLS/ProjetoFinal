@@ -2,24 +2,20 @@
 .main-container {
   display: flex;
   justify-content: space-between;
-  /* Certifica-se de que os elementos fiquem lado a lado */
   align-items: flex-start;
   margin-top: 50px;
   padding: 20px;
   flex-wrap: wrap;
   gap: 30px;
-  /* Adiciona espaço entre os dois quadrados */
 }
 
 /* Estilo do quadrado lateral para Dúvidas Frequentes */
 .faq-box-container {
   width: 20%;
-  /* Define 20% para a FAQ */
   padding: 20px;
   background-color: #007bff;
   color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  /* Sombra mais suave */
   border-radius: 10px;
   font-family: Arial, sans-serif;
   display: flex;
@@ -41,7 +37,6 @@
 /* Estilo do quadrado central para "Sobre Nós" */
 .about-container {
   width: 70%;
-  /* Define 70% para o "Sobre Nós" */
   padding: 30px;
   background: #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -49,9 +44,7 @@
   font-family: Arial, sans-serif;
   line-height: 1.6;
   flex-grow: 1;
-  /* Permite que ocupe mais espaço quando necessário */
   min-width: 320px;
-  /* Garante que o quadrado central tenha largura mínima */
 }
 
 /* Estilo do título principal */
@@ -132,16 +125,74 @@
 }
 
 /* Responsividade para telas menores */
+@media (max-width: 1024px) {
+  .faq-box-container, .about-container {
+    width: 100%;
+    margin-bottom: 20px; /* Adiciona espaço entre os quadrados */
+  }
+
+  .main-container {
+    flex-direction: column;
+    /* Alinha os itens verticalmente em telas médias */
+  }
+}
+
+/* Responsividade para telas pequenas */
 @media (max-width: 768px) {
   .faq-box-container, .about-container {
     width: 100%;
-    /* Quando a tela for menor, os quadrados ocupam 100% */
-    margin-bottom: 20px;
-    /* Adiciona espaço entre os elementos em telas menores */
+    margin-bottom: 20px; /* Adiciona espaço entre os quadrados */
   }
-  
+
   .main-container {
     flex-direction: column;
     /* Faz com que os elementos fiquem empilhados verticalmente */
+  }
+
+  .faq-box {
+    font-size: 35px; /* Ajusta o tamanho da fonte */
+  }
+
+  .about-container h1 {
+    font-size: 24px; /* Ajusta o tamanho do título */
+  }
+
+  .about-container h2 {
+    font-size: 20px; /* Ajusta o tamanho do título secundário */
+  }
+
+  .about-container p {
+    font-size: 14px; /* Ajusta o tamanho da fonte do parágrafo */
+  }
+
+  .about-container ul li {
+    font-size: 14px; /* Ajusta o tamanho da fonte das listas */
+  }
+}
+
+/* Responsividade para telas muito pequenas (smartphones estreitos) */
+@media (max-width: 480px) {
+  .faq-box-container, .about-container {
+    padding: 15px; /* Reduz o padding em telas menores */
+  }
+
+  .faq-box {
+    font-size: 30px; /* Reduz o tamanho da fonte do ícone FAQ */
+  }
+
+  .about-container h1 {
+    font-size: 22px; /* Reduz o tamanho do título principal */
+  }
+
+  .about-container h2 {
+    font-size: 18px; /* Reduz o tamanho do título secundário */
+  }
+
+  .about-container p {
+    font-size: 12px; /* Ajusta o tamanho do parágrafo */
+  }
+
+  .about-container ul li {
+    font-size: 12px; /* Ajusta o tamanho das listas */
   }
 }
