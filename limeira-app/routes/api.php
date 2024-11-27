@@ -2,4 +2,6 @@
 
 use App\Http\Controllers\CnpjController;
 
-Route::get('/consultar-cnpj/{cnpj}', [CnpjController::class, 'consultarCnpj']);
+Route::get('verify-cnpj/{cnpj}', [CnpjController::class, 'verifyCnpj']);
+
+
