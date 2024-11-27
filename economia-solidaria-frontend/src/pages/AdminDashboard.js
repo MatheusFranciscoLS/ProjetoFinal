@@ -20,6 +20,7 @@ const AdminDashboard = () => {
   const [feedbackClass, setFeedbackClass] = useState(""); // Classe para o feedback (verde ou vermelho)
   const [isFeedbackVisible, setIsFeedbackVisible] = useState(false); // Controla a visibilidade do feedback
   const [isProcessing, setIsProcessing] = useState(null); // Indica qual botão está sendo processado
+  const [selectedImage, setSelectedImage] = useState(null); // Imagem selecionada para exibição em grande
 
   useEffect(() => {
     const fetchPendingBusinesses = async () => {
@@ -136,6 +137,26 @@ const AdminDashboard = () => {
                       <p className="business-description">
                         {business.descricao}
                       </p>
+
+                      {/* Exibindo as imagens enviadas em tamanho pequeno */}
+                      <div className="business-images">
+                        {business.imagens && business.imagens.length > 0 && (
+                          <div className="image-thumbnails">
+                            {business.imagens
+                              .slice(0, 6)
+                              .map((image, index) => (
+                                <img
+                                  key={index}
+                                  src={image} // A imagem pode ser uma string em base64 ou URL
+                                  alt={`Imagem ${index + 1}`}
+                                  className="image-thumbnail"
+                                  onClick={() => setSelectedImage(image)} // Exibe a imagem grande
+                                />
+                              ))}
+                          </div>
+                        )}
+                      </div>
+
                       <div className="card-buttons">
                         <button onClick={() => setSelectedBusiness(business)}>
                           Ver Detalhes
@@ -174,6 +195,25 @@ const AdminDashboard = () => {
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Exibindo a imagem grande */}
+        {selectedImage && (
+          <div
+            className="image-overlay"
+            onClick={() => setSelectedImage(null)} // Fecha ao clicar fora da imagem
+          >
+            <div
+              className="image-modal"
+              onClick={(e) => e.stopPropagation()} // Impede o fechamento ao clicar dentro da modal
+            >
+              <img
+                src={selectedImage}
+                alt="Imagem grande"
+                className="modal-image"
+              />
+            </div>
           </div>
         )}
 

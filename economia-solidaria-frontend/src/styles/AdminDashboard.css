@@ -122,3 +122,49 @@
   border: 1px solid #f5c6cb;
   /* Bordas vermelhas */
 }
+
+.business-images {
+  margin-top: 10px;
+}
+
+.image-thumbnails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.image-thumbnail {
+  width: 50px;
+  /* Defina o tamanho desejado para as miniaturas */
+  height: 50px;
+  object-fit: cover;
+  /* Garante que a imagem seja cortada de forma apropriada */
+  border-radius: 5px;
+}
+
+.image-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.image-modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 80%;
+  max-height: 80%;
+  overflow: hidden;
+}
+
+.modal-image {
+  width: 100%;
+  height: auto;
+}
