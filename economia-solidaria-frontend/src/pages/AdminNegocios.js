@@ -11,6 +11,7 @@ const AdminNegocios = () => {
   const [editBusiness, setEditBusiness] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12; // 4x3 grid
+  const [editSuccess, setEditSuccess] = useState(false); // Novo estado para controle de sucesso de edição
 
   useEffect(() => {
     const fetchBusinesses = async () => {
@@ -29,7 +30,7 @@ const AdminNegocios = () => {
     };
 
     fetchBusinesses();
-  }, []);
+  }, [editSuccess]); // Adicionando editSuccess para refazer o fetch após edição
 
   const handleDelete = async (businessId) => {
     const confirm = window.confirm("Tem certeza de que deseja deletar este negócio?");
@@ -55,6 +56,7 @@ const AdminNegocios = () => {
         )
       );
       setEditBusiness(null);
+      setEditSuccess(true); // Marcar como sucesso após edição
       alert("Negócio atualizado com sucesso!");
     } catch (err) {
       console.error("Erro ao atualizar negócio:", err);
@@ -166,6 +168,9 @@ const AdminNegocios = () => {
       {editBusiness && (
         <div className="modal-overlay">
           <div className="modal-content">
+            {/* Aviso de sucesso de edição */}
+            {editSuccess && <div className="edit-success-message">Negócio editado com sucesso!</div>}
+
             <EditBusinessForm
               business={editBusiness}
               onCancel={() => setEditBusiness(null)}
