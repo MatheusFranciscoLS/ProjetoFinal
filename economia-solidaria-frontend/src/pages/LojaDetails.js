@@ -70,25 +70,24 @@ const LojaDetails = () => {
 
       {/* Carrossel de Imagens */}
       <div className="carrossel">
-        <button className="carrossel-btn" onClick={handlePrevImage}>
-          &#10094;
-        </button>
+        {loja.imagens?.length > 1 && (
+          <button className="carrossel-btn" onClick={handlePrevImage}>
+            &#10094;
+          </button>
+        )}
 
         {/* Exibe a imagem atual do carrossel ou o placeholder */}
         <img
           src={loja.imagens?.[currentImageIndex] || "default-image.jpg"}
           alt={`Imagem da loja ${loja.nome}`}
           className="loja-img"
-          style={{ width: "100%", height: "auto", objectFit: "cover" }}
         />
-        {/* Se ainda não houver imagem, exibe um placeholder */}
-        {!loja.imagens?.[currentImageIndex] && (
-          <div className="loja-img-placeholder"></div>
-        )}
 
-        <button className="carrossel-btn" onClick={handleNextImage}>
-          &#10095;
-        </button>
+        {loja.imagens?.length > 1 && (
+          <button className="carrossel-btn" onClick={handleNextImage}>
+            &#10095;
+          </button>
+        )}
       </div>
 
       {/* Detalhes da Loja */}
