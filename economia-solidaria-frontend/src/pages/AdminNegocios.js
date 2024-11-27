@@ -76,7 +76,7 @@ const AdminNegocios = () => {
   };
 
   return (
-    <div className="admin-dashboard">
+    <div className="admin-gerenciamento">
       <h1>Administração de Negócios</h1>
 
       <div className="filter-sort">
