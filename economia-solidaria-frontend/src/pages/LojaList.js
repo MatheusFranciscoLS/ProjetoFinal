@@ -1,29 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Para navegação
+import { Link } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
-import "../styles/lojasList.css"; // Importação do CSS para estilos
+import "../styles/lojasList.css";
 
 const LojasList = () => {
   const [lojas, setLojas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filtroNome, setFiltroNome] = useState(""); // Estado para o filtro de nome
-  const [filtroCategoria, setFiltroCategoria] = useState(""); // Estado para o filtro de categoria
-  const [paginaAtual, setPaginaAtual] = useState(1); // Página atual
-  const lojasPorPagina = 12; // Número de lojas por página
+  const [filtroNome, setFiltroNome] = useState("");
+  const [filtroCategoria, setFiltroCategoria] = useState("");
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const lojasPorPagina = 12;
 
-  // Função que busca os dados das lojas
   useEffect(() => {
     const fetchLojas = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "lojas")); // Certifique-se de que a coleção é 'lojas'
-        const lojasData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const querySnapshot = await getDocs(collection(db, "lojas"));
+        const lojasData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setLojas(lojasData);
       } catch (error) {
         console.error("Erro ao carregar lojas:", error);
+        setLojas([]);
       } finally {
         setLoading(false);
       }
@@ -32,30 +29,22 @@ const LojasList = () => {
     fetchLojas();
   }, []);
 
-  // Função para filtrar as lojas com base nos filtros definidos
   const filtrarLojas = () => {
     return lojas.filter((loja) => {
       const nomeFiltrado = loja.nome.toLowerCase().includes(filtroNome.toLowerCase());
       const categoriaFiltrada = filtroCategoria
         ? loja.categoria?.toLowerCase().includes(filtroCategoria.toLowerCase())
-        : true; // Se não houver filtro de categoria, retorna todas
+        : true;
       return nomeFiltrado && categoriaFiltrada;
     });
   };
 
-  // Se os dados ainda estão carregando
-  if (loading) {
-    return <p>Carregando lojas...</p>;
-  }
-
   const lojasFiltradas = filtrarLojas();
 
-  // Paginação: Calcula o índice das lojas para exibir na página atual
   const indexOfLastLoja = paginaAtual * lojasPorPagina;
   const indexOfFirstLoja = indexOfLastLoja - lojasPorPagina;
   const lojasPaginas = lojasFiltradas.slice(indexOfFirstLoja, indexOfLastLoja);
 
-  // Função para alterar a página
   const handleChangePage = (novaPagina) => {
     setPaginaAtual(novaPagina);
   };
@@ -63,19 +52,19 @@ const LojasList = () => {
   return (
     <div className="container">
       <h2>Lista de Lojas</h2>
-      
+
       {/* Filtros */}
       <div className="filters">
         <input
           type="text"
           placeholder="Filtrar por nome"
           value={filtroNome}
-          onChange={(e) => setFiltroNome(e.target.value)} // Atualiza o filtro de nome
+          onChange={(e) => setFiltroNome(e.target.value)}
           className="filter-input"
         />
         <select
           value={filtroCategoria}
-          onChange={(e) => setFiltroCategoria(e.target.value)} // Atualiza o filtro de categoria
+          onChange={(e) => setFiltroCategoria(e.target.value)}
           className="filter-select"
         >
           <option value="">Todas as Categorias</option>
@@ -92,18 +81,28 @@ const LojasList = () => {
       </div>
 
       <div className="lojas-list">
-        {lojasPaginas.length === 0 ? (
-          <p>Não há lojas que correspondem aos filtros.</p> // Caso não haja lojas que correspondam aos filtros
+        {loading ? (
+          Array(12).fill().map((_, idx) => (
+            <div className="loja-card" key={idx}>
+              <div className="loja-img-placeholder"></div>
+              <div className="loja-info-placeholder">
+                <div className="loja-title-placeholder"></div>
+                <div className="loja-description-placeholder"></div>
+              </div>
+            </div>
+          ))
+        ) : lojasPaginas.length === 0 ? (
+          <p>Não há lojas que correspondem aos filtros.</p>
         ) : (
           lojasPaginas.map((loja) => (
             <div className="loja-card" key={loja.id}>
               <img
-                src={loja.imagens?.[0] || "default-image.jpg"} // Exibe a primeira imagem ou uma imagem padrão
+                src={loja.imagens?.[0] || "default-image.jpg"}
                 alt={loja.nome}
-                className="loja-img" // Classe para a imagem
+                className="loja-img"
               />
-              <h3>{loja.nome}</h3> {/* Nome da loja */}
-              <p>{loja.descricao}</p> {/* Descrição da loja */}
+              <h3>{loja.nome}</h3>
+              <p>{loja.descricao}</p>
               <Link to={`/loja/${loja.id}`} className="btn-ver-mais">
                 Ver mais
               </Link>
@@ -116,14 +115,14 @@ const LojasList = () => {
       <div className="pagination">
         <button
           onClick={() => handleChangePage(paginaAtual - 1)}
-          disabled={paginaAtual === 1} // Desabilita o botão se for a primeira página
+          disabled={paginaAtual === 1}
         >
           Anterior
         </button>
         <span>Página {paginaAtual}</span>
         <button
           onClick={() => handleChangePage(paginaAtual + 1)}
-          disabled={paginaAtual * lojasPorPagina >= lojasFiltradas.length} // Desabilita o botão se for a última página
+          disabled={paginaAtual * lojasPorPagina >= lojasFiltradas.length}
         >
           Próxima
         </button>
