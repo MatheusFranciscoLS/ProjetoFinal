@@ -97,3 +97,28 @@
 .card-buttons button:hover {
   opacity: 0.9;
 }
+
+.feedback-message {
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.feedback-approve {
+  background-color: #d4edda;
+  /* Verde claro */
+  color: #155724;
+  /* Verde escuro */
+  border: 1px solid #c3e6cb;
+  /* Bordas verdes */
+}
+
+.feedback-deny {
+  background-color: #f8d7da;
+  /* Vermelho claro */
+  color: #721c24;
+  /* Vermelho escuro */
+  border: 1px solid #f5c6cb;
+  /* Bordas vermelhas */
+}
