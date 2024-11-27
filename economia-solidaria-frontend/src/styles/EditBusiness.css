@@ -23,7 +23,7 @@
     max-height: 80%;
     overflow-y: auto;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    font-family: 'Roboto', sans-serif; /* Fontes modernas para melhorar a legibilidade */
+    font-family: 'Roboto', sans-serif;
   }
   
   /* Título */
@@ -38,16 +38,21 @@
   /* Estilo para cada grupo de entrada */
   .input-group {
     margin-bottom: 24px;
+    display: flex;
+    flex-direction: column; /* Garante que os campos fiquem organizados verticalmente */
   }
   
+  /* Estilo para o label */
   .input-group label {
     font-weight: 500;
     margin-bottom: 8px;
-    display: block;
     color: #555;
     font-size: 16px;
+    display: block;
+    text-align: left; /* Garante que o texto do label fique alinhado à esquerda */
   }
   
+  /* Estilos uniformes para campos de texto */
   .input-group input,
   .input-group textarea {
     width: 100%;
@@ -59,6 +64,7 @@
     background-color: #f9f9f9;
     box-sizing: border-box; /* Garante que o padding não afete o tamanho do campo */
     transition: border-color 0.3s ease, background-color 0.3s ease;
+    margin-top: 4px; /* Dá um pequeno espaço entre o label e o campo */
   }
   
   /* Estilos ao focar nos campos */
@@ -72,7 +78,7 @@
   /* Estilos para o campo de texto */
   .input-group textarea {
     resize: vertical;
-    min-height: 120px;
+    min-height: 120px; /* Tamanho mínimo para o textarea */
   }
   
   /* Placeholder de campos */
@@ -94,8 +100,8 @@
     border: none;
     cursor: pointer;
     border-radius: 8px;
-    width: 48%; /* Faz os botões ocuparem 48% do espaço, deixando um espaço entre eles */
-    transition: background-color 0.3s, transform 0.2s;
+    width: 45%; /* Ajusta para ocupar 45% do espaço e manter os botões alinhados */
+    transition: background-color 0.3s, transform 0.2s ease, box-shadow 0.2s ease;
   }
   
   /* Botão Principal */
@@ -108,6 +114,7 @@
   .buttons .btn.primary:hover {
     background-color: #0056b3;
     transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4);
   }
   
   /* Botão Secundário */
@@ -120,6 +127,7 @@
   .buttons .btn.secondary:hover {
     background-color: #ddd;
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
   /* Animação de fade-in para o modal */
