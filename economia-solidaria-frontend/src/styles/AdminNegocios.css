@@ -52,6 +52,7 @@ select {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
+  margin-top: 20px;
 }
 
 .business-card {
@@ -206,6 +207,7 @@ p {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+/* Skeleton loading para carregamento de lista */
 .skeleton-card {
   background-color: #f0f0f0;
   height: 200px;  /* Ajuste conforme necessário */
@@ -223,5 +225,89 @@ p {
   }
   100% {
     background-color: #f0f0f0;
+  }
+}
+
+/* Media Queries para Responsividade */
+
+/* Para telas menores que 1024px (tablets e dispositivos menores) */
+@media (max-width: 1024px) {
+  .business-list {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .filter-sort {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .edit-form {
+    gap: 10px;
+  }
+
+  .modal-content {
+    max-width: 90%;
+  }
+
+  button {
+    padding: 8px 14px;
+  }
+}
+
+/* Para telas menores que 768px (smartphones) */
+@media (max-width: 768px) {
+  .business-list {
+    grid-template-columns: 1fr;  /* Uma coluna em telas pequenas */
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .business-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-sort {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .edit-form {
+    gap: 8px;
+  }
+
+  .modal-content {
+    max-width: 95%;
+  }
+
+  button {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Para telas muito pequenas (menor que 480px, como smartphones antigos) */
+@media (max-width: 480px) {
+  .business-card h3 {
+    font-size: 1rem;
+  }
+
+  .business-card p {
+    font-size: 0.85rem;
+  }
+
+  button {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+
+  .modal-content {
+    max-width: 95%;
   }
 }

@@ -22,6 +22,8 @@
   background-color: #f9f9f9;
   position: relative;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 90%; /* Para garantir que a janela ocupe a maior parte da tela em dispositivos pequenos */
+  box-sizing: border-box;
 }
 
 /* Imagem dentro dos detalhes da loja */
@@ -42,7 +44,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  overflow: hidden;  /* Evita o transbordamento das imagens */
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .carrossel-btn {
@@ -85,5 +89,66 @@
   }
   100% {
     background-position: 200%;
+  }
+}
+
+/* Responsividade */
+
+/* Para telas menores que 1024px (tablets e dispositivos menores) */
+@media (max-width: 1024px) {
+  .loja-details {
+    width: 90%; /* Reduz a largura da janela em telas menores */
+  }
+
+  .carrossel img {
+    height: 300px; /* Diminui a altura da imagem do carrossel */
+  }
+
+  .carrossel-btn {
+    padding: 8px; /* Ajusta o tamanho do botão */
+  }
+}
+
+/* Para telas menores que 768px (smartphones) */
+@media (max-width: 768px) {
+  .loja-details {
+    width: 95%; /* Aumenta um pouco a largura da janela modal */
+    padding: 15px; /* Diminui o padding */
+  }
+
+  .carrossel {
+    width: 100%; /* Garante que o carrossel ocupe toda a largura disponível */
+    padding: 0; /* Remove o padding extra */
+  }
+
+  .carrossel img {
+    height: 250px; /* Diminui ainda mais a altura das imagens */
+  }
+
+  .carrossel-btn {
+    padding: 6px; /* Ajusta o tamanho dos botões */
+  }
+}
+
+/* Para telas menores que 480px (smartphones muito pequenos) */
+@media (max-width: 480px) {
+  .loja-details {
+    width: 100%; /* Garante que a janela ocupe 100% da largura da tela */
+    padding: 10px; /* Menos padding */
+  }
+
+  .carrossel img {
+    height: 200px; /* Diminui ainda mais a altura das imagens */
+  }
+
+  .carrossel-btn {
+    padding: 5px; /* Ajuste dos botões no carrossel */
+  }
+
+  .loja-details .close-button {
+    top: 5px;
+    right: 5px;
+    padding: 8px;
+    font-size: 16px;
   }
 }
