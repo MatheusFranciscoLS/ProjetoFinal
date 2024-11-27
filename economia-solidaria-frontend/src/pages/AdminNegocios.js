@@ -131,7 +131,9 @@ const AdminNegocios = () => {
                   <p><strong>Endereço:</strong> {business.endereco}</p>
                   <div className="business-actions">
                     <button onClick={() => setEditBusiness(business)}>Editar</button>
-                    <button onClick={() => handleDelete(business.id)}>Deletar</button>
+                    <button className="delete-button" onClick={() => handleDelete(business.id)}>
+                      Deletar
+                    </button>
                   </div>
                 </div>
               )}
