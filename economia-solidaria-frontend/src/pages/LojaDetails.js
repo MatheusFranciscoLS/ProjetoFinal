@@ -50,7 +50,14 @@ const LojaDetails = () => {
   };
 
   if (loading) {
-    return <p>Carregando detalhes da loja...</p>;
+    return (
+      <div className="loja-details-overlay">
+        <div className="loja-details skeleton-card"></div>
+        <div className="skeleton-img"></div>
+        <div className="skeleton-card"></div>
+        <div className="skeleton-card"></div>
+      </div>
+    );
   }
 
   if (!loja) {
@@ -63,21 +70,24 @@ const LojaDetails = () => {
 
       {/* Carrossel de Imagens */}
       <div className="carrossel">
-        <button className="carrossel-btn" onClick={handlePrevImage}>
-          &#10094;
-        </button>
+        {loja.imagens?.length > 1 && (
+          <button className="carrossel-btn" onClick={handlePrevImage}>
+            &#10094;
+          </button>
+        )}
 
-        {/* Exibe a imagem atual do carrossel */}
+        {/* Exibe a imagem atual do carrossel ou o placeholder */}
         <img
           src={loja.imagens?.[currentImageIndex] || "default-image.jpg"}
           alt={`Imagem da loja ${loja.nome}`}
           className="loja-img"
-          style={{ width: "100%", height: "auto", objectFit: "cover" }}
         />
 
-        <button className="carrossel-btn" onClick={handleNextImage}>
-          &#10095;
-        </button>
+        {loja.imagens?.length > 1 && (
+          <button className="carrossel-btn" onClick={handleNextImage}>
+            &#10095;
+          </button>
+        )}
       </div>
 
       {/* Detalhes da Loja */}

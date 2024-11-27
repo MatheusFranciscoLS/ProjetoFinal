@@ -5,11 +5,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);  /* Fundo semi-transparente para "escurecer" a página de fundo */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;  /* Garante que a janela modal fique sobre outros conteúdos */
+  z-index: 100;
 }
 
 /* Estilos para a janela de detalhes da loja */
@@ -20,9 +20,8 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f9f9f9;
-  z-index: 101;  /* Garante que a janela modal fique sobre o overlay */
   position: relative;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);  /* Sombras para dar um efeito de "profundidade" */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   width: 90%; /* Para garantir que a janela ocupe a maior parte da tela em dispositivos pequenos */
   box-sizing: border-box;
 }
@@ -30,45 +29,13 @@
 /* Imagem dentro dos detalhes da loja */
 .loja-details img {
   display: block;
-  width: 100%; /* Garantir que a imagem ocupe toda a largura disponível */
-  height: auto; /* Manter a proporção da imagem */
-  margin: 0 auto;
+  width: 100%;
+  height: 400px; /* Altura fixa para padronizar o carrossel */
+  object-fit: cover;
   border-radius: 8px;
 }
 
-/* Parágrafos dentro dos detalhes da loja */
-.loja-details p {
-  margin: 10px 0;
-  line-height: 1.6;
-}
-
-/* Seção de Avaliação */
-.avaliacao-section {
-  margin-top: 50px;
-  padding: 15px;
-  border-top: 1px solid #ddd;
-}
-
-/* Botão para fechar a janela */
-.loja-details .close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #ff5c5c;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 18px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.loja-details .close-button:hover {
-  background-color: #e54b4b;
-}
-
-/* Estilos do carrossel */
+/* Estilo do carrossel */
 .carrossel {
   position: relative;
   width: 100%;
@@ -92,6 +59,7 @@
   padding: 10px;
   cursor: pointer;
   z-index: 1;
+  border-radius: 50%;
 }
 
 .carrossel-btn:hover {
@@ -106,15 +74,6 @@
   right: 10px;
 }
 
-/* Estilo das imagens no carrossel */
-.carrossel img {
-  width: 100%;
-  height: 400px; /* Altura fixa para todas as imagens */
-  object-fit: cover; /* Ajusta a imagem mantendo a proporção */
-  border-radius: 8px;
-  transition: opacity 0.3s ease-in-out;
-}
-
 /* Placeholder para imagens */
 .loja-img-placeholder {
   background-color: #e0e0e0;
@@ -124,7 +83,6 @@
   animation: placeholderShimmer 1.5s infinite;
 }
 
-/* Efeito de brilho para o placeholder */
 @keyframes placeholderShimmer {
   0% {
     background-position: -200%;
