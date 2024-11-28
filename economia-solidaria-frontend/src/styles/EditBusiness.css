@@ -1,93 +1,142 @@
-/* Modal Overlay */
+/* Estilos do Modal */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    opacity: 0;
+    animation: fadeIn 0.3s forwards;
   }
   
-  /* Modal Content */
   .modal-content {
-    background-color: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    width: 90%; /* Ajustado para ser mais estreito */
-    max-width: 500px; /* Limita o tamanho máximo */
-    max-height: 80vh; /* Limita a altura máxima */
-    overflow-y: auto; /* Permite rolagem se necessário */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80%;
+    overflow-y: auto;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    font-family: 'Roboto', sans-serif;
   }
   
+  /* Título */
   h2 {
     text-align: center;
-    font-size: 18px; /* Tamanho reduzido */
-    margin-bottom: 15px;
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 24px;
+    font-weight: 600;
   }
   
-  /* Estilo para os grupos de input */
+  /* Estilo para cada grupo de entrada */
   .input-group {
-    margin-bottom: 12px; /* Reduzido para economizar espaço */
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column; /* Garante que os campos fiquem organizados verticalmente */
   }
   
+  /* Estilo para o label */
   .input-group label {
-    font-weight: bold;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 16px;
     display: block;
-    margin-bottom: 5px;
-    font-size: 14px;
+    text-align: left; /* Garante que o texto do label fique alinhado à esquerda */
   }
   
+  /* Estilos uniformes para campos de texto */
   .input-group input,
   .input-group textarea {
     width: 100%;
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    color: #333;
+    background-color: #f9f9f9;
+    box-sizing: border-box; /* Garante que o padding não afete o tamanho do campo */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    margin-top: 4px; /* Dá um pequeno espaço entre o label e o campo */
   }
   
-  textarea {
+  /* Estilos ao focar nos campos */
+  .input-group input:focus,
+  .input-group textarea:focus {
+    border-color: #007bff;
+    background-color: #fff;
+    outline: none;
+  }
+  
+  /* Estilos para o campo de texto */
+  .input-group textarea {
     resize: vertical;
-    height: 80px;
+    min-height: 120px; /* Tamanho mínimo para o textarea */
+  }
+  
+  /* Placeholder de campos */
+  .input-group input::placeholder,
+  .input-group textarea::placeholder {
+    color: #aaa;
   }
   
   /* Botões */
   .buttons {
     display: flex;
     justify-content: space-between;
-    margin-top: 15px;
+    gap: 12px; /* Espaçamento entre os botões */
   }
   
-  .buttons button {
-    padding: 8px 16px;
-    font-size: 14px;
-    cursor: pointer;
+  .buttons .btn {
+    padding: 14px 28px;
+    font-size: 16px;
     border: none;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-    width: 48%;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 45%; /* Ajusta para ocupar 45% do espaço e manter os botões alinhados */
+    transition: background-color 0.3s, transform 0.2s ease, box-shadow 0.2s ease;
   }
   
-  .buttons button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
+  /* Botão Principal */
+  .buttons .btn.primary {
+    background-color: #007bff;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
   }
   
-  .buttons button[type="submit"]:hover {
-    background-color: #45a049;
+  .buttons .btn.primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4);
   }
   
-  .buttons button[type="button"] {
-    background-color: #f44336;
-    color: white;
+  /* Botão Secundário */
+  .buttons .btn.secondary {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
   }
   
-  .buttons button[type="button"]:hover {
-    background-color: #da190b;
+  .buttons .btn.secondary:hover {
+    background-color: #ddd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Animação de fade-in para o modal */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   
