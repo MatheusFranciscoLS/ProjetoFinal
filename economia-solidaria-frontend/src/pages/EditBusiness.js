@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase"; // Certifique-se de importar o Firebase corretamente
-
+import "../styles/EditBusiness.css";
 const EditBusinessModal = ({ businessId, businessData, onClose }) => {
   const [businessName, setBusinessName] = useState(businessData.nome || "");
   const [businessCNPJ, setBusinessCNPJ] = useState(businessData.cnpj || "");
