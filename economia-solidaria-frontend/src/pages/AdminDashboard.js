@@ -10,6 +10,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import axios from 'axios'; // Importa axios para fazer requisições HTTP
 import "../styles/AdminDashboard.css";
 
 const AdminDashboard = () => {
@@ -21,6 +22,7 @@ const AdminDashboard = () => {
   const [isFeedbackVisible, setIsFeedbackVisible] = useState(false); // Controla a visibilidade do feedback
   const [isProcessing, setIsProcessing] = useState(null); // Indica qual botão está sendo processado
   const [selectedImage, setSelectedImage] = useState(null); // Imagem selecionada para exibição em grande
+  const [cnpjInfo, setCnpjInfo] = useState(null); // Para armazenar o resultado da verificação do CNPJ
 
   useEffect(() => {
     const fetchPendingBusinesses = async () => {
@@ -103,9 +105,19 @@ const AdminDashboard = () => {
   };
 
   // Função para verificar CNPJ
-  const verifyCNPJ = (cnpj) => {
-    // Aqui você pode adicionar a lógica de verificação do CNPJ
-    alert(`Verificando CNPJ: ${cnpj}`);
+  const verifyCNPJ = async (cnpj) => {
+    const cleanCNPJ = cnpj.replace(/[^\d]+/g, ""); // Remove formatação
+
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/verificar-cnpj/${cleanCNPJ}`
+      );
+      console.log("Resposta da API:", response.data); // Verifique o que está sendo retornado
+      setCnpjInfo(response.data); // Atualiza o estado com os dados da API
+    } catch (error) {
+      console.error("Erro ao verificar CNPJ:", error);
+      setCnpjInfo(null);
+    }
   };
 
   return (
@@ -214,6 +226,13 @@ const AdminDashboard = () => {
                           Verificar CNPJ
                         </button>
                       </div>
+                      {/* Exibe as informações do CNPJ */}
+                        {cnpjInfo && (
+                          <div>
+                            <h3>Informações do CNPJ</h3>
+                            <pre>{JSON.stringify(cnpjInfo, null, 2)}</pre>
+                          </div>
+                        )}
                     </div>
                   </div>
                 ))}

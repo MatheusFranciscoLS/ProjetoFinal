@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\CnpjController;
+use App\Http\Controllers\CNPJController;
 
-Route::get('verify-cnpj/{cnpj}', [CnpjController::class, 'verifyCnpj']);
+Route::get('/verificar-cnpj/{cnpj}', [CnpjController::class, 'verifyCNPJ']);
 
 
