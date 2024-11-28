@@ -54,8 +54,8 @@ const EditBusinessModal = ({ business, onClose, onSave }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className="modal-overlay" id="modalOverlay">
+      <div className="modal-content" id="modalContent">
         <h2>Editar Loja</h2>
         <form onSubmit={handleSubmit}>
           <label>
@@ -127,6 +127,7 @@ const EditBusinessModal = ({ business, onClose, onSave }) => {
       </div>
     </div>
   );
+  
 };
 
 const MyBusinesses = () => {
