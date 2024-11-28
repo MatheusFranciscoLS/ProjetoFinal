@@ -3,7 +3,7 @@ import { collection, getDocs, query, where, doc, updateDoc } from "firebase/fire
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom"; // Alterado para useNavigate
-import "../styles/myBusinesses.css";
+import "../styles/MyBusinesses.css";
 
 // Componente para renderizar cada negócio
 const BusinessItem = ({ business, onEdit }) => (
