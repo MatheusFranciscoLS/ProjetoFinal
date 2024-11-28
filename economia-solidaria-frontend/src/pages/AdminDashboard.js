@@ -154,14 +154,6 @@ const AdminDashboard = () => {
                         {business.cnpj || "Não informado"}
                       </p>
 
-                      {/* Status e descrição */}
-                      <p className="business-status">
-                        <strong>Status:</strong> {business.status}
-                      </p>
-                      <p className="business-description">
-                        {business.descricao}
-                      </p>
-
                       {/* Imagens do Negócio */}
                       <div className="business-images">
                         {business.imagens && business.imagens.length > 0 && (
@@ -340,3 +332,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+  
