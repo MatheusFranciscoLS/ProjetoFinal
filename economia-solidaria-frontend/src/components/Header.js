@@ -8,6 +8,7 @@ import "../styles/header.css";
 const Header = () => {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para controlar o menu hambúrguer
   const navigate = useNavigate(); // Hook para navegação
 
   useEffect(() => {
@@ -61,12 +62,16 @@ const Header = () => {
         />
       </Link>
 
-      <nav className="nav">
-        {/* Links sempre visíveis */}
+      <div className="hamburger-menu" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        <div className={`bar ${isMenuOpen ? "open" : ""}`}></div>
+        <div className={`bar ${isMenuOpen ? "open" : ""}`}></div>
+        <div className={`bar ${isMenuOpen ? "open" : ""}`}></div>
+      </div>
+
+      <nav className={`nav ${isMenuOpen ? "open" : ""}`}>
         <Link to="/lojas" className="nav-link">
           Página da Loja
         </Link>
-        {/* Links de navegação públicos visíveis apenas para usuários não autenticados */}
         {!user && (
           <>
             <Link to="/register" className="nav-link">
@@ -77,8 +82,6 @@ const Header = () => {
             </Link>
           </>
         )}
-
-        {/* Links visíveis apenas para usuários autenticados */}
         {user && (
           <>
             <Link to="/register-business" className="nav-link">
@@ -89,31 +92,25 @@ const Header = () => {
             </Link>
           </>
         )}
-
-      {/* Links visíveis apenas para administradores */}
-{isAdmin && (
-  <>
-    <Link to="/admin-dashboard" className="nav-link">
-      Painel Administrativo
-    </Link>
-    <Link to="/admin-gerenciamento" className="nav-link">
-      Gerenciamento
-    </Link>
-  </>
-)}
-
-        {/* Mostrar o nome do usuário, link de perfil e o botão de logout */}
+        {isAdmin && (
+          <>
+            <Link to="/admin-dashboard" className="nav-link">
+              Painel Administrativo
+            </Link>
+            <Link to="/admin-gerenciamento" className="nav-link">
+              Gerenciamento
+            </Link>
+          </>
+        )}
         {user && (
           <div className="user-info">
             <span className="user-name">
               Olá, {user.displayName || user.email}
             </span>
             <div className="user-actions">
-              {/* Link para o perfil */}
               <Link to="/perfil" className="nav-link">
                 Perfil
               </Link>
-              {/* Botão de logout */}
               <button className="logout-button" onClick={handleLogout}>
                 Sair
               </button>

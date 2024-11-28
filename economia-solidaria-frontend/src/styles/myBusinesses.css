@@ -7,6 +7,7 @@
   max-width: 900px;
   margin: 30px auto;
   font-family: Arial, sans-serif;
+  width: 100%; /* Garante que o contêiner ocupe 100% da largura em telas menores */
 }
 
 /* Título principal */
@@ -75,85 +76,74 @@
   font-size: 16px;
   color: #7f8c8d;
 }
-/* Estilo para o contêiner principal */
-.businesses-container {
+
+/* Estilo para o conteúdo do modal */
+#modalContent {
+  background-color: #fff;
   padding: 20px;
-  background-color: #f8f9fa;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  max-width: 900px;
-  margin: 30px auto;
-  font-family: Arial, sans-serif;
+  width: 600px; /* Aumenta a largura do modal */
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  max-height: 90vh; /* A altura máxima foi ajustada */
+  overflow-y: auto; /* Adiciona barra de rolagem se o conteúdo exceder a altura */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 0 auto; /* Centra o modal na tela */
 }
 
-/* Título principal */
-.businesses-container h2 {
+/* Estilo para o título do modal */
+#modalContent h2 {
   font-size: 26px;
-  font-weight: 600;
+  margin-bottom: 15px;
   color: #333;
-  margin-bottom: 20px;
   text-align: center;
 }
 
-/* Estilo para o texto de carregamento */
-.loading-text {
-  text-align: center;
-  font-size: 18px;
-  color: #888;
+/* Estilo para o formulário */
+#modalContent form label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #555;
 }
 
-/* Estilo para mensagens de erro */
-.error-text {
-  text-align: center;
-  font-size: 18px;
-  color: #e74c3c;
-  font-weight: bold;
+#modalContent form input,
+#modalContent form textarea {
+  width: calc(100% - 10px);
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  resize: none;
 }
 
-/* Estilo para a mensagem de 'sem negócios' */
-.no-businesses-text {
-  text-align: center;
-  font-size: 18px;
-  color: #7f8c8d;
-}
-
-/* Estilo para a lista de negócios */
-.business-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-/* Estilo para cada item de negócio */
-.business-item {
-  background-color: #ffffff;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.3s ease;
-}
-
-/* Efeito hover para os itens */
-.business-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Nome do negócio */
-.business-name {
-  font-size: 22px;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 8px;
-}
-
-/* Status do negócio */
-.business-status {
+#modalContent form button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #3498db;
+  color: #fff;
   font-size: 16px;
-  color: #7f8c8d;
+  cursor: pointer;
+  margin-right: 10px;
 }
 
-/* Estilos para o botão de editar */
+#modalContent form button:hover {
+  background-color: #2980b9;
+}
+
+#modalContent form button[type="button"] {
+  background-color: #e74c3c;
+}
+
+#modalContent form button[type="button"]:hover {
+  background-color: #c0392b;
+}
+
+/* Botões de edição */
 .edit-button {
   background-color: #3498db;
   color: #fff;
@@ -168,4 +158,37 @@
 
 .edit-button:hover {
   background-color: #2980b9;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  /* Ajuste no contêiner principal para telas menores */
+  .businesses-container {
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  /* Ajuste no tamanho do modal para telas menores */
+  #modalContent {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Reduzir o tamanho do título */
+  .businesses-container h2 {
+    font-size: 22px;
+  }
+
+  /* Ajustes nos inputs do modal */
+  #modalContent form input,
+  #modalContent form textarea {
+    font-size: 12px;
+  }
+
+  /* Ajuste nos botões */
+  #modalContent form button,
+  .edit-button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
 }
