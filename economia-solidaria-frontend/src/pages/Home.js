@@ -50,25 +50,27 @@ const Home = () => {
       <p>Seja bem-vindo à nossa plataforma!</p>
 
       {/* Carrossel de lojas */}
-      <Slider {...carouselSettings} className="carousel">
-        {loading ? (
-          <div>Carregando lojas...</div>
-        ) : lojas.length > 0 ? (
-          lojas.map((loja) => (
-            <div key={loja.id} className="loja-card">
-              <img
-                src={loja.imagens?.[0] || "default-image.jpg"} // Exibe a primeira imagem ou uma imagem padrão
-                alt={loja.nome}
-                className="loja-img"
-              />
-              <h3>{loja.nome}</h3>
-              <p>{loja.descricao}</p>
-            </div>
-          ))
-        ) : (
-          <p>Não há lojas cadastradas no momento.</p>
-        )}
-      </Slider>
+     <Slider {...carouselSettings} className="carousel">
+  {loading ? (
+    <div>Carregando lojas...</div>
+  ) : lojas.length > 0 ? (
+    lojas.map((loja) => (
+      <div key={loja.id} className="loja-card">
+        <img
+          src={loja.imagens?.[0] || "default-image.jpg"} // Exibe a primeira imagem ou uma imagem padrão
+          alt={loja.nome}
+          className="loja-img"
+          style={{ height: '400px', objectFit: 'cover' }} // Definindo a altura fixa da imagem
+        />
+        <h3>{loja.nome}</h3>
+        <p>{loja.descricao}</p>
+      </div>
+    ))
+  ) : (
+    <p>Não há lojas cadastradas no momento.</p>
+  )}
+</Slider>
+
     </div>
   );
 };

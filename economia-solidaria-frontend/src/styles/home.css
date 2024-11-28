@@ -36,6 +36,8 @@ body {
 .carousel-item img {
   width: 100%;
   border-radius: 10px;
+  height: 700px; /* Altura aumentada */
+  object-fit: cover; /* Ajusta o conteúdo da imagem para preencher */
 }
 
 /* Título do item do carousel */
@@ -68,6 +70,10 @@ body {
     width: 90%; /* Aumenta a largura do carousel em telas menores */
   }
 
+  .carousel-item img {
+    height: 500px; /* Ajusta a altura das imagens */
+  }
+
   .carousel-item h3 {
     font-size: 20px; /* Reduz o tamanho da fonte do título */
     bottom: 50px; /* Ajusta a posição para caber melhor */
@@ -85,13 +91,17 @@ body {
     width: 95%; /* Reduz ainda mais a largura do carousel */
   }
 
+  .carousel-item img {
+    height: 400px; /* Ajusta a altura para dispositivos menores */
+  }
+
   .carousel-item h3 {
     font-size: 18px; /* Reduz ainda mais o tamanho do título */
     bottom: 40px; /* Ajusta a posição para dispositivos menores */
   }
 
   .carousel-item p {
-    font-size: 12px; /* Reduz a descrição */
+    font-size: 12px; /* Reduz o tamanho da descrição */
     bottom: 10px; /* Ajusta a posição */
   }
 }
@@ -100,6 +110,10 @@ body {
 @media (max-width: 480px) {
   .carousel {
     width: 100%; /* Faz o carousel ocupar toda a largura da tela */
+  }
+
+  .carousel-item img {
+    height: 300px; /* Ajusta a altura das imagens */
   }
 
   .carousel-item h3 {
