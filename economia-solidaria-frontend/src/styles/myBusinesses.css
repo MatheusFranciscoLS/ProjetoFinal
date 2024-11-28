@@ -1,41 +1,22 @@
 /* Estilo para o contêiner principal */
 .businesses-container {
-  padding: 30px;
+  padding: 20px;
   background-color: #f8f9fa;
-  border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-width: 900px;
   margin: 30px auto;
-<<<<<<< HEAD
   font-family: Arial, sans-serif;
   width: 100%; /* Garante que o contêiner ocupe 100% da largura em telas menores */
-=======
-  font-family: 'Roboto', Arial, sans-serif;
-  transition: box-shadow 0.3s ease;
->>>>>>> 7a90a35d62e19e083441cfb9acf5e24fa2b4f1f2
 }
 
 /* Título principal */
 .businesses-container h2 {
-<<<<<<< HEAD
   font-size: 26px;
-=======
-  font-size: 28px;
->>>>>>> 7a90a35d62e19e083441cfb9acf5e24fa2b4f1f2
   font-weight: 600;
   color: #333;
   margin-bottom: 20px;
   text-align: center;
-<<<<<<< HEAD
-=======
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: color 0.3s ease;
-}
-
-.businesses-container h2:hover {
-  color: #3498db; /* Cor de destaque ao passar o mouse */
->>>>>>> 7a90a35d62e19e083441cfb9acf5e24fa2b4f1f2
 }
 
 /* Estilo para o texto de carregamento */
@@ -43,10 +24,6 @@
   text-align: center;
   font-size: 18px;
   color: #888;
-<<<<<<< HEAD
-=======
-  margin-top: 20px;
->>>>>>> 7a90a35d62e19e083441cfb9acf5e24fa2b4f1f2
 }
 
 /* Estilo para mensagens de erro */
@@ -55,10 +32,6 @@
   font-size: 18px;
   color: #e74c3c;
   font-weight: bold;
-<<<<<<< HEAD
-=======
-  margin-top: 20px;
->>>>>>> 7a90a35d62e19e083441cfb9acf5e24fa2b4f1f2
 }
 
 /* Estilo para a mensagem de 'sem negócios' */
@@ -66,69 +39,42 @@
   text-align: center;
   font-size: 18px;
   color: #7f8c8d;
-<<<<<<< HEAD
 }
 
 /* Estilo para a lista de negócios */
 .business-list {
   list-style-type: none;
   padding: 0;
-=======
-  margin-top: 20px;
-}
-
-/* Estilo para a lista de negócios - Adicionando flexbox */
-.business-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap; /* Faz com que os itens que não cabem na linha se movam para a linha seguinte */
-  gap: 20px; /* Espaçamento entre os cards */
->>>>>>> 7a90a35d62e19e083441cfb9acf5e24fa2b4f1f2
 }
 
 /* Estilo para cada item de negócio */
 .business-item {
   background-color: #ffffff;
-<<<<<<< HEAD
   padding: 15px;
-=======
-  padding: 20px;
->>>>>>> 7a90a35d62e19e083441cfb9acf5e24fa2b4f1f2
   margin: 10px 0;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s ease;
-  flex: 1 1 calc(33.333% - 20px); /* Cada card ocupa 1/3 da largura com espaçamento entre eles */
-  min-width: 280px; /* Garante que os cards não fiquem muito pequenos em telas pequenas */
-  max-width: 300px; /* Limita o tamanho máximo dos cards */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.3s ease;
 }
 
+/* Efeito hover para os itens */
 .business-item:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Nome do negócio */
 .business-name {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
   color: #2c3e50;
-  margin-bottom: 10px;
-  transition: color 0.3s ease;
-}
-
-.business-name:hover {
-  color: #3498db; /* Cor de destaque ao passar o mouse */
+  margin-bottom: 8px;
 }
 
 /* Status do negócio */
 .business-status {
   font-size: 16px;
   color: #7f8c8d;
-  font-weight: 500;
 }
 
 /* Estilo para o conteúdo do modal */
@@ -139,7 +85,7 @@
   width: 600px; /* Aumenta a largura do modal */
   max-width: 90%;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  max-height: 100vh; /* A altura máxima foi ajustada */
+  max-height: 90vh; /* A altura máxima foi ajustada */
   overflow-y: auto; /* Adiciona barra de rolagem se o conteúdo exceder a altura */
   display: flex;
   flex-direction: column;
@@ -202,96 +148,16 @@
   background-color: #3498db;
   color: #fff;
   border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  margin-top: 15px;
-  display: inline-flex;
-  align-items: center;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
 }
 
 .edit-button:hover {
   background-color: #2980b9;
-  transform: scale(1.05);
-}
-
-/* Adicionando ícones ao botão de editar */
-.edit-button i {
-  margin-right: 8px; /* Espaçamento entre ícone e texto */
-}
-
-/* Responsividade para telas pequenas */
-@media (max-width: 768px) {
-  .businesses-container {
-    padding: 20px;
-    width: 95%;
-    max-width: 95%;
-  }
-
-  /* Tamanho do título */
-  .businesses-container h2 {
-    font-size: 22px;
-  }
-
-  /* Ajusta o estilo dos itens da lista para telas pequenas */
-  .business-list {
-    flex-direction: column;
-    align-items: center;
-    padding: 0;
-    width: 100%;
-  }
-
-  .business-item {
-    padding: 15px;
-    margin: 8px 0;
-    width: 90%; /* Faz com que os cards ocupem 90% da largura da tela */
-  }
-
-  .business-name {
-    font-size: 20px;
-  }
-
-  .business-status {
-    font-size: 14px;
-  }
-
-  .edit-button {
-    padding: 8px 15px;
-    font-size: 14px;
-  }
-}
-
-/* Responsividade para telas muito pequenas (smartphones estreitos) */
-@media (max-width: 480px) {
-  .businesses-container {
-    padding: 15px;
-  }
-
-  /* Tamanho do título */
-  .businesses-container h2 {
-    font-size: 20px;
-  }
-
-  /* Ajusta o estilo dos itens da lista para telas muito pequenas */
-  .business-item {
-    padding: 12px;
-    margin: 6px 0;
-  }
-
-  .business-name {
-    font-size: 18px;
-  }
-
-  .business-status {
-    font-size: 12px;
-  }
-
-  .edit-button {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
 }
 
 /* Responsividade */
