@@ -4,6 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase"; // Certifique-se de que o Firebase está configurado corretamente
 import Avaliacao from "./Avaliacao"; // Componente de avaliação
 import "../styles/lojaDetails.css"; // Importar estilos
+import { Link } from "react-router-dom";
 
 const LojaDetails = () => {
   const { id } = useParams(); // Obtém o ID da loja da URL
@@ -90,13 +91,17 @@ const LojaDetails = () => {
         )}
       </div>
 
-      {/* Detalhes da Loja */}
-      <p><strong>Descrição:</strong> {loja.descricao}</p>
-      <p><strong>Endereço:</strong> {loja.endereco}</p>
-      <p><strong>Telefone:</strong> {loja.telefone}</p>
-      <p><strong>Email:</strong> {loja.email}</p>
-      <p><strong>Horário de Funcionamento:</strong> {loja.horarioDeFuncionamento}</p>
-
+     {/* Detalhes da Loja */}
+<p><strong>Descrição:</strong> {loja.descricao}</p>
+<p>
+  <strong>Endereço:</strong>{" "}
+  <Link to={`/rota-endereco/${encodeURIComponent(loja.endereco)}`}>
+    {loja.endereco}
+  </Link>
+</p>
+<p><strong>Telefone:</strong> {loja.telefone}</p>
+<p><strong>Email:</strong> {loja.email}</p>
+<p><strong>Horário de Funcionamento:</strong> {loja.horarioDeFuncionamento}</p>
       {/* Espaço para avaliações */}
       <div style={{ marginTop: "50px" }}></div>
 
