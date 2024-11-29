@@ -281,8 +281,9 @@ const AdminDashboard = () => {
                               <p><strong>Razão Social:</strong> {business.cnpjInfo.nome}</p>
                               <p><strong>Nome Fantasia:</strong> {business.cnpjInfo.fantasia}</p>
                               <p><strong>Situação:</strong> {business.cnpjInfo.situacao_cadastral}</p>
-                              <p><strong>Simples Nacional:</strong> {business.cnpjInfo.simples_nacional ? 'Sim' : 'Não'}</p>
-                              <p><strong>MEI:</strong> {business.cnpjInfo.mei ? 'Sim' : 'Não'}</p>
+                              <p><strong>Simples Nacional:</strong> {business.cnpjInfo.opcao_pelo_simples ? 'Sim' : 'Não'}</p>
+                              <p><strong>MEI:</strong> {business.cnpjInfo.opcao_pelo_mei ? 'Sim' : 'Não'}</p>
+                              <p><strong>Natureza Jurídica:</strong> {business.cnpjInfo.natureza_juridica}</p>
                               <p><strong>Porte:</strong> {business.cnpjInfo.porte}</p>
                               <p><strong>Capital Social:</strong> R$ {business.cnpjInfo.capital_social?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
                             </div>
