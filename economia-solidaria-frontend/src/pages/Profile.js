@@ -52,6 +52,20 @@ const Profile = () => {
     document.body.className = darkMode ? "dark-theme" : "light-theme";
   }, [darkMode]);
 
+  // Função para formatar o número de telefone
+  const formatPhone = (phone) => {
+    if (!phone) return "Não informado";
+    const cleanPhone = phone.replace(/[^\d]+/g, "");
+    if (cleanPhone.length === 10) {
+      // Formato fixo: (XX) XXXX-XXXX
+      return cleanPhone.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3");
+    } else if (cleanPhone.length === 11) {
+      // Formato móvel: (XX) XXXXX-XXXX
+      return cleanPhone.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    }
+    return phone; // Retorna o número sem formatação se for inválido
+  };
+
   if (!userData) {
     return <div>Carregando...</div>;
   }
@@ -71,7 +85,7 @@ const Profile = () => {
           <strong>Email:</strong> {user.email}
         </div>
         <div className="profile-field">
-          <strong>Telefone:</strong> {userData.phone || "Não informado"}
+          <strong>Telefone:</strong> {formatPhone(userData.phone)}
         </div>
         <div className="profile-field">
           <strong>Endereço:</strong> {userData.address || "Não informado"}
