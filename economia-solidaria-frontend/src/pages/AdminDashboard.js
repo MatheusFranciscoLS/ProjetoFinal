@@ -106,13 +106,24 @@ const AdminDashboard = () => {
   // Função para verificar CNPJ
   const verifyCNPJ = async (cnpj, businessId) => {
     if (!cnpj) {
-      console.error('CNPJ não informado');
+      console.error("CNPJ não informado");
       return;
     }
 
-    const cleanCNPJ = cnpj.replace(/[^\d]+/g, '');
+    // Função para formatar o CNPJ
+    const formatCNPJ = (cnpj) => {
+      if (!cnpj) return "Não informado";
+      const cleanCNPJ = cnpj.replace(/[^\d]+/g, "");
+      if (cleanCNPJ.length !== 14) return cnpj; // Retorna o CNPJ sem formatação se estiver inválido
+      return cleanCNPJ.replace(
+        /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
+        "$1.$2.$3/$4-$5"
+      );
+    };
+
+    const cleanCNPJ = cnpj.replace(/[^\d]+/g, "");
     if (cleanCNPJ.length !== 14) {
-      console.error('CNPJ inválido');
+      console.error("CNPJ inválido");
       return;
     }
 
@@ -121,22 +132,22 @@ const AdminDashboard = () => {
       const response = await axios.get(
         `http://127.0.0.1:8000/api/cnpj/${cleanCNPJ}`
       );
-      console.log('Resposta da API:', response.data);
-      
+      console.log("Resposta da API:", response.data);
+
       // Atualiza o estado apenas para o negócio específico
-      setBusinesses(prevBusinesses => 
-        prevBusinesses.map(business => 
-          business.id === businessId 
+      setBusinesses((prevBusinesses) =>
+        prevBusinesses.map((business) =>
+          business.id === businessId
             ? { ...business, cnpjInfo: response.data }
             : business
         )
       );
     } catch (error) {
-      console.error('Erro ao verificar CNPJ:', error);
+      console.error("Erro ao verificar CNPJ:", error);
       // Limpa as informações do CNPJ em caso de erro
-      setBusinesses(prevBusinesses => 
-        prevBusinesses.map(business => 
-          business.id === businessId 
+      setBusinesses((prevBusinesses) =>
+        prevBusinesses.map((business) =>
+          business.id === businessId
             ? { ...business, cnpjInfo: null }
             : business
         )
