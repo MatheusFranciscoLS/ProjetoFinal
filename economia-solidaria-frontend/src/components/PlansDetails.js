@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase"; // Certifique-se de exportar auth e db do Firebase
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import "../styles/plansDetails.css"; // Estilo para a página de planos
 
 const PlansDetails = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [currentPlan, setCurrentPlan] = useState(""); // Armazena o plano atual do usuário
   const navigate = useNavigate();
 
   const plans = [
@@ -14,8 +15,8 @@ const PlansDetails = () => {
       name: "Essencial",
       description:
         "O plano Essencial oferece recursos básicos para utilizar a plataforma sem custos adicionais. Ideal para usuários iniciantes ou para quem deseja uma solução simples e prática.",
-      price: "0",
-      period: "Gratuito",
+      price: "19",
+      period: "/mês",
     },
     {
       name: "Premium",
@@ -33,6 +34,31 @@ const PlansDetails = () => {
     },
   ];
 
+  useEffect(() => {
+    const fetchCurrentPlan = async () => {
+      try {
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) {
+          setError("Usuário não autenticado. Faça login para continuar.");
+          return;
+        }
+
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          setCurrentPlan(userDoc.data().plano || ""); // Obtém o plano atual do usuário
+        } else {
+          setError("Erro ao carregar informações do usuário.");
+        }
+      } catch (err) {
+        console.error("Erro ao buscar plano atual:", err);
+        setError("Erro ao carregar informações do plano.");
+      }
+    };
+
+    fetchCurrentPlan();
+  }, []);
+
   const handleSelectPlan = async (selectedPlan) => {
     setError("");
     setSuccess("");
@@ -49,6 +75,7 @@ const PlansDetails = () => {
         plano: selectedPlan,
       });
 
+      setCurrentPlan(selectedPlan); // Atualiza o plano atual no estado
       setSuccess(`Plano ${selectedPlan} selecionado com sucesso!`);
     } catch (err) {
       console.error("Erro ao atualizar o plano:", err);
@@ -65,7 +92,12 @@ const PlansDetails = () => {
 
       <div className="plans-cards">
         {plans.map((plan, index) => (
-          <div key={index} className="pack_card">
+          <div
+            key={index}
+            className={`pack_card ${
+              currentPlan === plan.name ? "active-plan" : ""
+            }`} // Adiciona uma classe CSS para destacar o plano ativo
+          >
             <div className="banner">
               {plan.name === "Premium" && (
                 <span className="banner_tag">Mais popular</span>
@@ -79,12 +111,18 @@ const PlansDetails = () => {
                 <span className="price">{plan.price}</span>
                 <span className="date">{plan.period}</span>
               </div>
-              <button
-                className="btn"
-                onClick={() => handleSelectPlan(plan.name)}
-              >
-                Escolher {plan.name}
-              </button>
+              {currentPlan === plan.name ? (
+                <button className="btn active-button" disabled>
+                  Plano Ativo
+                </button>
+              ) : (
+                <button
+                  className="btn"
+                  onClick={() => handleSelectPlan(plan.name)}
+                >
+                  Escolher {plan.name}
+                </button>
+              )}
             </div>
           </div>
         ))}
