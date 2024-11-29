@@ -8,8 +8,13 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState("");
+  const [darkMode, setDarkMode] = useState(() => {
+    // Recupera o tema armazenado no localStorage
+    return localStorage.getItem("theme") === "dark";
+  });
   const navigate = useNavigate();
 
+  // Carrega dados do usuário
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -70,12 +75,25 @@ const Profile = () => {
     }
   };
 
+  const toggleTheme = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem("theme", newDarkMode ? "dark" : "light");
+  };
+
+  useEffect(() => {
+    document.body.className = darkMode ? "dark-theme" : "light-theme";
+  }, [darkMode]);
+
   if (!userData) {
     return <div>Carregando...</div>;
   }
 
   return (
     <div className="profile-container">
+      <button onClick={toggleTheme} className="theme-toggle-button">
+        {darkMode ? "Modo Claro" : "Modo Escuro"}
+      </button>
       <h2 className="profile-title">Perfil do Usuário</h2>
       {error && <p className="error">{error}</p>}
       <div className="profile-info">
@@ -96,7 +114,6 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Link para mais informações sobre os planos */}
       <div className="plans-info-link">
         <button
           onClick={() => navigate("/plans-details")}
@@ -106,11 +123,9 @@ const Profile = () => {
         </button>
       </div>
 
-      {/* Todos os planos disponíveis lado a lado */}
       <div className="all-plans">
         <h3 className="plans-title">Todos os Planos Disponíveis</h3>
         <div className="plan-options">
-          {/* Exibe o botão de upgrade para o plano Essencial apenas se o usuário não tiver o plano Essencial */}
           {userData.plano !== "Essencial" && (
             <div className="plan-option">
               <h4>Plano Essencial</h4>
@@ -122,7 +137,6 @@ const Profile = () => {
               </button>
             </div>
           )}
-          {/* Exibe o botão de upgrade para o plano Premium apenas se o usuário não tiver o plano Premium ou Essencial */}
           {userData.plano !== "Premium" && userData.plano !== "Essencial" && (
             <div className="plan-option">
               <h4>Plano Premium</h4>
@@ -137,7 +151,6 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Se o usuário estiver no plano Essencial, mostra apenas o upgrade para Premium */}
       {userData.plano === "Essencial" && (
         <div className="upgrade-container">
           <button
@@ -149,7 +162,6 @@ const Profile = () => {
         </div>
       )}
 
-      {/* Mostrar botão para cancelar plano apenas se o usuário não estiver no plano gratuito */}
       {userData.plano !== "gratuito" && (
         <div className="cancel-container">
           <button onClick={handleCancelPlan} className="cancel-button">
@@ -158,7 +170,6 @@ const Profile = () => {
         </div>
       )}
 
-      {/* Exibe uma mensagem se o usuário já estiver no plano Premium */}
       {userData.plano === "Premium" && (
         <p className="premium-message">Você já está no plano Premium.</p>
       )}

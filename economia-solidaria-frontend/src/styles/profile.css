@@ -1,9 +1,37 @@
+/* Tema Claro */
+.light-theme {
+  --bg-color: #f9f9f9;
+  --text-color: #333;
+  --card-bg-color: #fff;
+  --button-bg-color: #4CAF50;
+  --button-hover-bg-color: #45a049;
+  --error-color: #f44336;
+}
+
+/* Tema Escuro */
+.dark-theme {
+  --bg-color: #1e1e1e;
+  --text-color: #f9f9f9;
+  --card-bg-color: #2b2b2b;
+  --button-bg-color: #6b8e23;
+  --button-hover-bg-color: #556b2f;
+  --error-color: #ff6347;
+}
+
+/* Estilos gerais */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 /* Container principal do perfil */
 .profile-container {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #f9f9f9;
+  background-color: var(--card-bg-color);
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -15,7 +43,7 @@
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
-  color: #333;
+  color: var(--text-color);
 }
 
 /* Seção de informações do perfil */
@@ -28,66 +56,41 @@
   margin: 10px 0;
 }
 
-/* Descrição do plano */
-.plan-description {
-  margin-top: 20px;
-}
-
-/* Título da seção do plano */
-.plan-title {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-/* Lista de todos os planos */
-.all-plans {
-  margin-top: 20px;
-}
-
-/* Título da seção de planos */
-.plans-title {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: #333;
-}
-
 /* Seção das opções de plano */
 .plan-options {
   display: flex;
-  justify-content: space-between; /* Faz com que fiquem lado a lado */
+  justify-content: space-between;
   gap: 20px;
-  flex-wrap: wrap; /* Permite que as opções de plano se ajustem para uma nova linha em telas menores */
+  flex-wrap: wrap;
 }
 
 /* Cada opção de plano */
 .plan-option {
-  flex: 1 1 calc(33.33% - 20px); /* Faz cada plano ocupar um terço do espaço (com espaçamento) */
+  flex: 1 1 calc(33.33% - 20px);
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 8px;
   text-align: center;
-  background-color: #fff;
+  background-color: var(--card-bg-color);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
 
 .plan-option:hover {
-  transform: translateY(-5px); /* Efeito de hover */
+  transform: translateY(-5px);
 }
 
-/* Título de cada opção de plano */
 .plan-option h4 {
   margin-bottom: 15px;
   font-size: 1.2rem;
-  color: #333;
+  color: var(--text-color);
 }
 
 /* Botão de upgrade */
 .upgrade-button {
   padding: 10px 15px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: var(--button-bg-color);
+  color: var(--text-color);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -96,24 +99,7 @@
 }
 
 .upgrade-button:hover {
-  background-color: #45a049;
-}
-
-/* Detalhes do plano */
-.plan-details {
-  margin-top: 20px;
-}
-
-/* Título dos detalhes do plano */
-.plan-details-title {
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-  color: #333;
-}
-
-/* Container de cancelamento */
-.cancel-container {
-  margin-top: 20px;
+  background-color: var(--button-hover-bg-color);
 }
 
 /* Botão de cancelamento */
@@ -134,9 +120,20 @@
 /* Mensagem premium */
 .premium-message {
   font-size: 1.1rem;
-  color: #4CAF50;
+  color: var(--button-bg-color);
   margin-top: 20px;
   text-align: center;
+}
+
+/* Botão de alternância de tema */
+.theme-toggle-button {
+  padding: 10px;
+  margin: 20px 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--text-color);
 }
 
 /* Responsividade */
@@ -144,45 +141,45 @@
 /* Para telas pequenas, como smartphones */
 @media (max-width: 768px) {
   .profile-title {
-    font-size: 1.8rem; /* Reduz o tamanho do título em telas menores */
+    font-size: 1.8rem;
   }
 
   .plan-options {
-    flex-direction: column; /* Coloca as opções de plano em coluna */
+    flex-direction: column;
   }
 
   .plan-option {
-    flex: 1 1 100%; /* As opções de plano ocupam 100% da largura */
-    margin-bottom: 20px; /* Espaçamento entre os planos */
+    flex: 1 1 100%;
+    margin-bottom: 20px;
   }
 
   .upgrade-button, .cancel-button {
-    width: 100%; /* Botões ocupam 100% da largura */
+    width: 100%;
     font-size: 1.1rem;
-    padding: 12px 20px; /* Ajusta o padding */
+    padding: 12px 20px;
   }
 
   .premium-message {
-    font-size: 1rem; /* Ajusta o tamanho da mensagem premium */
+    font-size: 1rem;
   }
 }
 
 /* Para telas muito pequenas, como dispositivos móveis estreitos */
 @media (max-width: 480px) {
   .profile-title {
-    font-size: 1.6rem; /* Menor tamanho para o título */
+    font-size: 1.6rem;
   }
 
   .plan-option {
-    flex: 1 1 100%; /* Opções de plano ocupam toda a largura */
+    flex: 1 1 100%;
   }
 
   .plan-option h4 {
-    font-size: 1.1rem; /* Tamanho menor para os títulos das opções de plano */
+    font-size: 1.1rem;
   }
 
   .upgrade-button, .cancel-button {
-    padding: 12px 18px; /* Ajusta o padding para telas menores */
-    font-size: 1rem; /* Ajusta o tamanho da fonte do botão */
+    padding: 12px 18px;
+    font-size: 1rem;
   }
 }
