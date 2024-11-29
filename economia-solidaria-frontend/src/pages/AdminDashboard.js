@@ -22,7 +22,6 @@ const AdminDashboard = () => {
   const [isFeedbackVisible, setIsFeedbackVisible] = useState(false); // Controla a visibilidade do feedback
   const [isProcessing, setIsProcessing] = useState(null); // Indica qual botão está sendo processado
   const [selectedImage, setSelectedImage] = useState(null); // Imagem selecionada para exibição em grande
-  const [cnpjInfo, setCnpjInfo] = useState(null); // Para armazenar o resultado da verificação do CNPJ
 
   useEffect(() => {
     const fetchPendingBusinesses = async () => {
@@ -105,19 +104,57 @@ const AdminDashboard = () => {
   };
 
   // Função para verificar CNPJ
-  const verifyCNPJ = async (cnpj) => {
-    const cleanCNPJ = cnpj.replace(/[^\d]+/g, ""); // Remove formatação
+  const verifyCNPJ = async (cnpj, businessId) => {
+    if (!cnpj) {
+      console.error('CNPJ não informado');
+      return;
+    }
+
+    const cleanCNPJ = cnpj.replace(/[^\d]+/g, '');
+    if (cleanCNPJ.length !== 14) {
+      console.error('CNPJ inválido');
+      return;
+    }
 
     try {
+      setIsProcessing(businessId); // Indica que está processando
       const response = await axios.get(
-        `http://localhost:8000/api/verificar-cnpj/${cleanCNPJ}`
+        `http://127.0.0.1:8000/api/cnpj/${cleanCNPJ}`
       );
-      console.log("Resposta da API:", response.data); // Verifique o que está sendo retornado
-      setCnpjInfo(response.data); // Atualiza o estado com os dados da API
+      console.log('Resposta da API:', response.data);
+      
+      // Atualiza o estado apenas para o negócio específico
+      setBusinesses(prevBusinesses => 
+        prevBusinesses.map(business => 
+          business.id === businessId 
+            ? { ...business, cnpjInfo: response.data }
+            : business
+        )
+      );
     } catch (error) {
-      console.error("Erro ao verificar CNPJ:", error);
-      setCnpjInfo(null);
+      console.error('Erro ao verificar CNPJ:', error);
+      // Limpa as informações do CNPJ em caso de erro
+      setBusinesses(prevBusinesses => 
+        prevBusinesses.map(business => 
+          business.id === businessId 
+            ? { ...business, cnpjInfo: null }
+            : business
+        )
+      );
+    } finally {
+      setIsProcessing(null); // Finaliza o processamento
     }
+  };
+
+  // Função para limpar informações do CNPJ
+  const clearCnpjInfo = (businessId) => {
+    setBusinesses(prevBusinesses => 
+      prevBusinesses.map(business => 
+        business.id === businessId 
+          ? { ...business, cnpjInfo: null }
+          : business
+      )
+    );
   };
 
   return (
@@ -221,18 +258,37 @@ const AdminDashboard = () => {
                         {/* Botão de Verificar CNPJ */}
                         <button
                           className="verify-cnpj"
-                          onClick={() => verifyCNPJ(business.cnpj)}
+                          onClick={() => verifyCNPJ(business.cnpj, business.id)}
+                          disabled={isProcessing === business.id}
                         >
-                          Verificar CNPJ
+                          {isProcessing === business.id ? 'Verificando...' : 'Verificar CNPJ'}
                         </button>
-                      </div>
-                      {/* Exibe as informações do CNPJ */}
-                        {cnpjInfo && (
-                          <div>
-                            <h3>Informações do CNPJ</h3>
-                            <pre>{JSON.stringify(cnpjInfo, null, 2)}</pre>
+
+                        {/* Exibe as informações do CNPJ */}
+                        {business.cnpjInfo && (
+                          <div className="cnpj-info">
+                            <div className="cnpj-header">
+                              <h4>Informações do CNPJ</h4>
+                              <button 
+                                className="close-button"
+                                onClick={() => clearCnpjInfo(business.id)}
+                                aria-label="Fechar informações"
+                              >
+                                ×
+                              </button>
+                            </div>
+                            <div className="cnpj-details">
+                              <p><strong>Razão Social:</strong> {business.cnpjInfo.nome}</p>
+                              <p><strong>Nome Fantasia:</strong> {business.cnpjInfo.fantasia}</p>
+                              <p><strong>Situação:</strong> {business.cnpjInfo.situacao_cadastral}</p>
+                              <p><strong>Simples Nacional:</strong> {business.cnpjInfo.simples_nacional ? 'Sim' : 'Não'}</p>
+                              <p><strong>MEI:</strong> {business.cnpjInfo.mei ? 'Sim' : 'Não'}</p>
+                              <p><strong>Porte:</strong> {business.cnpjInfo.porte}</p>
+                              <p><strong>Capital Social:</strong> R$ {business.cnpjInfo.capital_social?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
+                            </div>
                           </div>
                         )}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -307,7 +363,7 @@ const AdminDashboard = () => {
               {/* Botão de Verificar CNPJ */}
               <button
                 className="verify-cnpj"
-                onClick={() => verifyCNPJ(selectedBusiness.cnpj)}
+                onClick={() => verifyCNPJ(selectedBusiness.cnpj, selectedBusiness.id)}
               >
                 Verificar CNPJ
               </button>
@@ -351,4 +407,3 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-  

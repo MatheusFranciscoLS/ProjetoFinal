@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\CNPJController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CnpjController;
 
-Route::get('/verificar-cnpj/{cnpj}', [CnpjController::class, 'verifyCNPJ']);
-
-
+// Rota pública para verificação de CNPJ (temporariamente sem autenticação para teste)
+Route::get('/cnpj/{cnpj}', [CnpjController::class, 'verifyCNPJ']);

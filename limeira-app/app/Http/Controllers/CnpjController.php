@@ -1,25 +1,79 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 class CnpjController extends Controller
 {
     public function verifyCNPJ($cnpj)
     {
-        $client = new Client();
-
-        // URL da API ReceitaWS
-        $url = "https://www.receitaws.com.br/v1/cnpj/{$cnpj}";
-
         try {
-            $response = $client->request('GET', $url);
-            $data = json_decode($response->getBody()->getContents(), true);
+            // Remove caracteres especiais do CNPJ
+            $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
+            
+            // Valida o tamanho do CNPJ
+            if (strlen($cnpj) !== 14) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'CNPJ inválido: deve conter 14 dígitos'
+                ], 400);
+            }
 
-            return response()->json($data);  // Retorna os dados para o front-end
+            // Valida se todos os dígitos são iguais
+            if (preg_match('/^(\d)\1+$/', $cnpj)) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'CNPJ inválido: todos os dígitos são iguais'
+                ], 400);
+            }
+            
+            // Consulta dados na Brasil API
+            $response = Http::withoutVerifying()
+                ->get("https://brasilapi.com.br/api/cnpj/v1/{$cnpj}");
+            
+            if (!$response->successful()) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'CNPJ não encontrado ou erro na consulta'
+                ], $response->status());
+            }
+            
+            $data = $response->json();
+            
+            // Formata os dados
+            $formattedData = [
+                'cnpj' => $data['cnpj'] ?? '',
+                'nome' => $data['razao_social'] ?? '',
+                'fantasia' => $data['nome_fantasia'] ?? '',
+                'telefone' => $data['ddd_telefone_1'] ?? '',
+                'email' => $data['email'] ?? '',
+                'logradouro' => $data['logradouro'] ?? '',
+                'numero' => $data['numero'] ?? '',
+                'complemento' => $data['complemento'] ?? '',
+                'bairro' => $data['bairro'] ?? '',
+                'municipio' => $data['municipio'] ?? '',
+                'uf' => $data['uf'] ?? '',
+                'cep' => $data['cep'] ?? '',
+                'situacao_cadastral' => $data['descricao_situacao_cadastral'] ?? '',
+                'data_situacao_cadastral' => $data['data_situacao_cadastral'] ?? '',
+                'simples_nacional' => $data['simples'] ?? null,
+                'simples_inicio' => $data['simples_inicio'] ?? null,
+                'mei' => $data['mei'] ?? null,
+                'natureza_juridica' => $data['natureza_juridica'] ?? '',
+                'porte' => $data['porte'] ?? '',
+                'capital_social' => $data['capital_social'] ?? 0,
+            ];
+
+            return response()->json($formattedData);
+            
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Erro ao acessar a API ReceitaWS.'], 500);
+            \Log::error('Erro na consulta de CNPJ: ' . $e->getMessage());
+            return response()->json([
+                'error' => true,
+                'message' => 'Erro ao consultar CNPJ: ' . $e->getMessage()
+            ], 500);
         }
     }
 }
