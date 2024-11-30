@@ -5,46 +5,34 @@ import { db } from "../firebase"; // Certifique-se de importar o 'db'
 import { getAuth } from "firebase/auth"; // Para pegar o UID do usuário autenticado
 import "../styles/registerbusiness.css";
 import { validateForm } from "../components/validation"; // Importa a função de validação
-import InputMask from "react-input-mask"; // Para máscara de telefone
-import axios from "axios"; // Importando axios
+import InputMask from "react-input-mask"; //
 
-    const RegisterBusiness = () => {
-      const [businessName, setBusinessName] = useState("");
-      const [businessCNPJ, setBusinessCNPJ] = useState("");
-      const [businessDescription, setBusinessDescription] = useState("");
-      const [category, setCategory] = useState("");
-      const [address, setAddress] = useState("");
-      const [phone, setPhone] = useState("");
-      const [email, setEmail] = useState("");
-      const [workingHours, setWorkingHours] = useState("");
-      const [images, setImages] = useState([]);
-      const [cnDoc, setCnDoc] = useState(null);
-      const [termsAccepted, setTermsAccepted] = useState(false);
-      const [error, setError] = useState("");
-      const [loading, setLoading] = useState(false);
+const RegisterBusiness = () => {
+  const [businessName, setBusinessName] = useState("");
+  const [businessCNPJ, setBusinessCNPJ] = useState("");
+  const [businessDescription, setBusinessDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [openingTime, setOpeningTime] = useState("");
+  const [closingTime, setClosingTime] = useState("");
+  const [images, setImages] = useState([]);
+  const [cnDoc, setCnDoc] = useState(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-      const auth = getAuth();
-      const user = auth.currentUser;
-      const userUid = user ? user.uid : null;
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const userUid = user ? user.uid : null;
 
-      // Função para formatar o CNPJ
-      const formatCNPJ = (cnpj) => {
-        const cleaned = cnpj.replace(/[^\d]/g, ""); // Remove qualquer caractere não numérico
-        if (cleaned.length <= 14) {
-          return cleaned.replace(
-            /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
-            "$1.$2.$3/$4-$5"
-          );
-        }
-        return cnpj;
-      };
-
-    const resizeImage = (file, maxWidth = 1024, maxHeight = 1024) => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        const reader = new FileReader();
+  const resizeImage = (file, maxWidth = 1024, maxHeight = 1024) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const reader = new FileReader();
 
       reader.onload = (e) => {
         img.src = e.target.result;
@@ -122,54 +110,57 @@ import axios from "axios"; // Importando axios
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-      // Chama a função de validação
-      const validationError = validateForm({
-        businessName,
-        businessCNPJ,
-        businessDescription,
-        category,
-        address,
-        phone,
-        email,
-        images,
-        cnDoc,
-        termsAccepted,
+    // Chama a função de validação
+    const validationError = validateForm({
+      businessName,
+      businessCNPJ,
+      businessDescription,
+      category,
+      address,
+      phone,
+      email,
+      images,
+      cnDoc,
+      termsAccepted,
+    });
+
+    // Verifica se há erros na validação
+    if (validationError) {
+      setError(validationError); // Exibe a mensagem de erro de validação
+      return; // Interrompe o envio se houver erro
+    }
+
+    setLoading(true);
+    setError(""); // Limpa mensagens de erro antes do envio
+
+    try {
+      // Processa as imagens para base64
+      const imageBase64Promises = images.map(async (image) => {
+        const reader = new FileReader();
+        return new Promise((resolve, reject) => {
+          reader.onloadend = () => resolve(reader.result); // Salva o resultado em base64
+          reader.onerror = reject;
+          reader.readAsDataURL(image);
+        });
       });
-
-      if (validationError) {
-        setError(validationError); // Exibe a mensagem de erro de validação
-        return;
-      }
-
-      setLoading(true);
-      setError(""); // Limpa a mensagem de erro antes de tentar enviar
-
-        try {
-          const imageBase64Promises = images.map(async (image) => {
-            const reader = new FileReader();
-            return new Promise((resolve, reject) => {
-              reader.onloadend = () => resolve(reader.result); // Salva o resultado em base64
-              reader.onerror = reject;
-              reader.readAsDataURL(image);
-            });
-          });
 
       const imageBase64 = await Promise.all(imageBase64Promises);
 
-          await addDoc(collection(db, "negocios_pendentes"), {
-            nome: businessName,
-            cnpj: businessCNPJ,
-            descricao: businessDescription,
-            categoria: category,
-            endereco: address,
-            telefone: phone,
-            email,
-            horarioDeFuncionamento: workingHours,
-            imagens: imageBase64,
-            comprovante: cnDoc.name, // Salva o nome do arquivo do comprovante
-            userId: userUid, // Adiciona o UID do usuário
-            status: "pendente", // Definindo o status como "pendente"
-          });
+      // Envia os dados para o Firestore
+      await addDoc(collection(db, "negocios_pendentes"), {
+        nome: businessName,
+        cnpj: businessCNPJ,
+        descricao: businessDescription,
+        categoria: category,
+        endereco: address,
+        telefone: phone,
+        email,
+        horarioDeFuncionamento: { abertura: openingTime, fechamento: closingTime },
+        imagens: imageBase64,
+        comprovante: cnDoc.name, // Salva o nome do arquivo do comprovante
+        userId: userUid, // Adiciona o UID do usuário
+        status: "pendente", // Definindo o status como "pendente"
+      });
 
       alert("Cadastro enviado, aguardando aprovação do admin!");
       navigate("/"); // Após o envio, redireciona o usuário para a home
@@ -194,148 +185,159 @@ import axios from "axios"; // Importando axios
           required
         />
 
-            <input
-              type="text"
-              placeholder="CNPJ"
-              value={formatCNPJ(businessCNPJ)}
-              onChange={(e) => setBusinessCNPJ(e.target.value)}
-              required
-            />
+        <InputMask
+          mask="99.999.999/9999-99" // Máscara para CNPJ
+          placeholder="CNPJ"
+          value={businessCNPJ}
+          onChange={(e) => setBusinessCNPJ(e.target.value)}
+          required
+        />
 
-            <textarea
-              placeholder="Descreva o seu negócio"
-              value={businessDescription}
-              onChange={(e) => setBusinessDescription(e.target.value)}
-              required
-            />
+        <textarea
+          placeholder="Descreva o seu negócio"
+          value={businessDescription}
+          onChange={(e) => setBusinessDescription(e.target.value)}
+          required
+        />
 
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              required
-            >
-              <option value="">Selecione a Categoria</option>
-              <option value="restaurante">Restaurante</option>
-              <option value="loja">Loja</option>
-              <option value="servicos">Serviços</option>
-              <option value="artesanato">Artesanato</option>
-              <option value="beleza">Beleza e Estética</option>
-              <option value="educacao">Educação e Cursos</option>
-              <option value="saude">Saúde e Bem-estar</option>
-              <option value="esportes">Esportes e Lazer</option>
-              <option value="outro">Outro</option>
-            </select>
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          required
+        >
+          <option value="">Selecione a Categoria</option>
+          <option value="restaurante">Restaurante</option>
+          <option value="loja">Loja</option>
+          <option value="servicos">Serviços</option>
+          <option value="artesanato">Artesanato</option>
+          <option value="beleza">Beleza e Estética</option>
+          <option value="educacao">Educação e Cursos</option>
+          <option value="saude">Saúde e Bem-estar</option>
+          <option value="esportes">Esportes e Lazer</option>
+          <option value="outro">Outro</option>
+        </select>
 
-            <input
-              type="text"
-              placeholder="Endereço Completo"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              required
-            />
+        <input
+          type="text"
+          placeholder="Endereço Completo"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          required
+        />
 
-            <InputMask
-              mask="(99) 99999-9999" // Máscara para telefone
-              placeholder="Telefone de Contato"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-            />
+        <InputMask
+          mask="(99) 99999-9999" // Máscara para telefone
+          placeholder="Telefone de Contato"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required
+        />
 
-            <input
-              type="email"
-              placeholder="E-mail para Contato"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+        <input
+          type="email"
+          placeholder="E-mail para Contato"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-            <input
-              type="text"
-              placeholder="Horários de Funcionamento"
-              value={workingHours}
-              onChange={(e) => setWorkingHours(e.target.value)}
-            />
+        <input
+          type="time"
+          value={openingTime}
+          onChange={(e) => setOpeningTime(e.target.value)}
+          required
+          step="300" // Define o intervalo de 5 minutos
+        />
 
-            <div className="upload-instructions">
-              <label htmlFor="businessImages">
-                <strong>
-                  Carregue imagens do seu negócio (máximo de 6 imagens, máximo
-                  de 5MB cada)
-                </strong>
-              </label>
-              <input
-                type="file"
-                id="businessImages"
-                accept="image/*"
-                multiple
-                required
-                onChange={handleImageUpload}
-              />
+        <input
+          type="time"
+          value={closingTime}
+          onChange={(e) => setClosingTime(e.target.value)}
+          required
+          step="300" // Define o intervalo de 5 minutos
+        />
 
-              {images.length > 0 && (
-                <div className="image-preview">
-                  {images.map((image, index) => (
-                    <div key={index} className="image-wrapper">
-                      <img
-                        src={URL.createObjectURL(image)}
-                        alt={`preview ${index}`}
-                        className="image-item"
-                      />
-                      <button
-                        className="remove-image"
-                        onClick={() => removeImage(index)}
-                      >
-                        X
-                      </button>
-                    </div>
-                  ))}
+
+        <div className="upload-instructions">
+          <label htmlFor="businessImages">
+            <strong>
+              Carregue imagens do seu negócio (máximo de 6 imagens, máximo
+              de 5MB cada)
+            </strong>
+          </label>
+          <input
+            type="file"
+            id="businessImages"
+            accept="image/*"
+            multiple
+            required
+            onChange={handleImageUpload}
+          />
+
+          {images.length > 0 && (
+            <div className="image-preview">
+              {images.map((image, index) => (
+                <div key={index} className="image-wrapper">
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt={`preview ${index}`}
+                    className="image-item"
+                  />
+
+                  <button
+                    className="remove-image"
+                    onClick={() => removeImage(index)}
+                  >
+                    X
+                  </button>
                 </div>
-              )}
+              ))}
             </div>
+          )}
+        </div>
 
-            {error &&
-              error.includes("Você pode enviar no máximo 6 imagens") && (
-                <div className="error">{error}</div>
-              )}
-            {error && error.includes("Pelo menos uma imagem") && (
-              <div className="error">{error}</div>
-            )}
+        {error &&
+          error.includes("Você pode enviar no máximo 6 imagens") && (
+            <div className="error">{error}</div>
+          )}
+        {error && error.includes("Pelo menos uma imagem") && (
+          <div className="error">{error}</div>
+        )}
 
-            <div className="upload-instructions">
-              <label htmlFor="cnDoc">
-                <strong>Comprovante do Simples Nacional</strong>
-              </label>
-              <input
-                type="file"
-                id="cnDoc"
-                accept="application/pdf"
-                onChange={(e) => setCnDoc(e.target.files[0])}
-                required
-              />
-            </div>
+        <div className="upload-instructions">
+          <label htmlFor="cnDoc">
+            <strong>Comprovante do Simples Nacional</strong>
+          </label>
+          <input
+            type="file"
+            id="cnDoc"
+            accept="application/pdf"
+            onChange={(e) => setCnDoc(e.target.files[0])}
+            required
+          />
+        </div>
 
-            {error &&
-              !error.includes("Você pode enviar no máximo 6 imagens") && (
-                <div className="error">{error}</div>
-              )}
+        {error &&
+          !error.includes("Você pode enviar no máximo 6 imagens") && (
+            <div className="error">{error}</div>
+          )}
 
-            {loading && <div className="loading">Carregando...</div>}
+        {loading && <div className="loading">Carregando...</div>}
 
-            <div className="terms-container">
-              {" "}
-              {/* Corrigido para manter a classe correta */}
-              <input
-                type="checkbox"
-                id="terms"
-                checked={termsAccepted}
-                onChange={(e) => setTermsAccepted(e.target.checked)}
-                required
-              />
-              <label htmlFor="terms">
-                Aceito os <strong>termos e condições</strong>
-              </label>
-            </div>
+        <div className="terms-container">
+          {" "}
+          {/* Corrigido para manter a classe correta */}
+          <input
+            type="checkbox"
+            id="terms"
+            checked={termsAccepted}
+            onChange={(e) => setTermsAccepted(e.target.checked)}
+            required
+          />
+          <label htmlFor="terms">
+            Aceito os <strong>termos e condições</strong>
+          </label>
+        </div>
 
         <button type="submit" disabled={loading}>
           {loading ? "Enviando..." : "Cadastrar Negócio"}
