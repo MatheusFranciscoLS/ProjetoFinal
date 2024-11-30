@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { auth, db } from "../firebase"; // Certifique-se de exportar auth e db do Firebase
-import { doc, getDoc, updateDoc } from "firebase/firestore"; // Firestore
+import { doc, getDoc } from "firebase/firestore"; // Firestore
 import { useNavigate } from "react-router-dom";
 import "../styles/profile.css";
 
@@ -42,39 +42,6 @@ const Profile = () => {
     fetchUserData();
   }, [navigate]);
 
-  const handleUpgrade = async (newPlan) => {
-    try {
-      if (!user) return;
-
-      await updateDoc(doc(db, "users", user.uid), {
-        plano: newPlan,
-      });
-
-      alert(`Seu plano foi atualizado para ${newPlan}.`);
-      setUserData((prev) => ({ ...prev, plano: newPlan })); // Atualiza o estado local
-    } catch (err) {
-      console.error("Erro ao atualizar plano:", err);
-      setError("Erro ao atualizar plano.");
-    }
-  };
-
-  const handleCancelPlan = async () => {
-    try {
-      if (!user) return;
-
-      // Atualiza o plano para o padrão (gratuito)
-      await updateDoc(doc(db, "users", user.uid), {
-        plano: "gratuito",
-      });
-
-      alert("Seu plano foi cancelado e você foi movido para o plano gratuito.");
-      setUserData((prev) => ({ ...prev, plano: "gratuito" }));
-    } catch (err) {
-      console.error("Erro ao cancelar plano:", err);
-      setError("Erro ao cancelar plano.");
-    }
-  };
-
   const toggleTheme = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
@@ -84,6 +51,20 @@ const Profile = () => {
   useEffect(() => {
     document.body.className = darkMode ? "dark-theme" : "light-theme";
   }, [darkMode]);
+
+  // Função para formatar o número de telefone
+  const formatPhone = (phone) => {
+    if (!phone) return "Não informado";
+    const cleanPhone = phone.replace(/[^\d]+/g, "");
+    if (cleanPhone.length === 10) {
+      // Formato fixo: (XX) XXXX-XXXX
+      return cleanPhone.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3");
+    } else if (cleanPhone.length === 11) {
+      // Formato móvel: (XX) XXXXX-XXXX
+      return cleanPhone.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    }
+    return phone; // Retorna o número sem formatação se for inválido
+  };
 
   if (!userData) {
     return <div>Carregando...</div>;
@@ -104,13 +85,13 @@ const Profile = () => {
           <strong>Email:</strong> {user.email}
         </div>
         <div className="profile-field">
-          <strong>Telefone:</strong> {userData.phone || "Não informado"}
+          <strong>Telefone:</strong> {formatPhone(userData.phone)}
         </div>
         <div className="profile-field">
           <strong>Endereço:</strong> {userData.address || "Não informado"}
         </div>
         <div className="profile-field">
-          <strong>Plano Atual:</strong> {userData.plano}
+          <strong>Plano Atual:</strong> {userData.plano || "Não especificado"}
         </div>
       </div>
 
@@ -122,57 +103,6 @@ const Profile = () => {
           Saiba Mais sobre os Planos
         </button>
       </div>
-
-      <div className="all-plans">
-        <h3 className="plans-title">Todos os Planos Disponíveis</h3>
-        <div className="plan-options">
-          {userData.plano !== "Essencial" && (
-            <div className="plan-option">
-              <h4>Plano Essencial</h4>
-              <button
-                onClick={() => handleUpgrade("Essencial")}
-                className="upgrade-button"
-              >
-                Fazer Upgrade
-              </button>
-            </div>
-          )}
-          {userData.plano !== "Premium" && userData.plano !== "Essencial" && (
-            <div className="plan-option">
-              <h4>Plano Premium</h4>
-              <button
-                onClick={() => handleUpgrade("Premium")}
-                className="upgrade-button"
-              >
-                Fazer Upgrade
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {userData.plano === "Essencial" && (
-        <div className="upgrade-container">
-          <button
-            onClick={() => handleUpgrade("Premium")}
-            className="upgrade-button"
-          >
-            Upgrade para Premium
-          </button>
-        </div>
-      )}
-
-      {userData.plano !== "gratuito" && (
-        <div className="cancel-container">
-          <button onClick={handleCancelPlan} className="cancel-button">
-            Cancelar Plano e Voltar para Gratuito
-          </button>
-        </div>
-      )}
-
-      {userData.plano === "Premium" && (
-        <p className="premium-message">Você já está no plano Premium.</p>
-      )}
     </div>
   );
 };

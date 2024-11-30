@@ -126,6 +126,8 @@ const formatCNPJ = (cnpj) => {
       return;
     }
 
+    
+
     const cleanCNPJ = cnpj.replace(/[^\d]+/g, '');
     if (cleanCNPJ.length !== 14) {
       console.error('CNPJ inválido');

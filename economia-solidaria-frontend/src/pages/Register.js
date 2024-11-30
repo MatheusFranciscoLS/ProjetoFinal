@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import InputMask from "react-input-mask"; // Importando o React Input Mask
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase"; // Certifique-se de exportar o db do Firebase
 import { useNavigate } from "react-router-dom"; // Hook de navegação
@@ -19,9 +20,9 @@ const Register = () => {
       setError("A senha deve ter pelo menos 6 caracteres.");
       return false;
     }
-    const phoneRegex = /^[0-9]{10,11}$/;
+    const phoneRegex = /^\(\d{2}\) \d{5}-\d{4}$/; // Valida o formato com a máscara
     if (!phoneRegex.test(phone)) {
-      setError("Digite um telefone válido com 10 ou 11 dígitos.");
+      setError("Digite um telefone válido no formato (XX) XXXXX-XXXX.");
       return false;
     }
     return true;
@@ -35,14 +36,18 @@ const Register = () => {
 
     try {
       // Cadastro no Firebase Authentication
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user; // Obter o usuário autenticado
 
       // Salvar os dados do usuário no Firestore
       await setDoc(doc(db, "users", user.uid), {
         email: user.email,
         nome: name,
-        phone: phone,
+        phone: phone.replace(/[^\d]/g, ""), // Armazena apenas os números no banco
         address: address || "", // Caso o endereço não seja informado, será salvo como string vazia
         tipo: "comum", // Inicialmente, o tipo será "comum"
         plano: "gratuito", // Adicionando o plano padrão como "gratuito"
@@ -83,8 +88,8 @@ const Register = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <input
-          type="tel"
+        <InputMask
+          mask="(99) 99999-9999" // Máscara para telefone celular
           placeholder="Telefone (somente números)"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}

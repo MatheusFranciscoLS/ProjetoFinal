@@ -5,6 +5,7 @@
     import { getAuth } from "firebase/auth"; // Para pegar o UID do usuário autenticado
     import "../styles/registerbusiness.css";
     import { validateForm } from "../components/validation"; // Importa a função de validação
+    import InputMask from "react-input-mask"; //
 
     const RegisterBusiness = () => {
       const [businessName, setBusinessName] = useState("");
@@ -37,15 +38,6 @@
           );
         }
         return cnpj;
-      };
-
-      // Função para formatar o telefone
-      const formatPhone = (phone) => {
-        const cleaned = phone.replace(/[^\d]/g, ""); // Remove qualquer caractere não numérico
-        if (cleaned.length <= 11) {
-          return cleaned.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
-        }
-        return phone;
       };
 
     const resizeImage = (file, maxWidth = 1024, maxHeight = 1024) => {
@@ -241,10 +233,10 @@
               required
             />
 
-            <input
-              type="tel"
+            <InputMask
+              mask="(99) 99999-9999" // Máscara para telefone
               placeholder="Telefone de Contato"
-              value={formatPhone(phone)}
+              value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required
             />
@@ -267,8 +259,8 @@
             <div className="upload-instructions">
               <label htmlFor="businessImages">
                 <strong>
-                  Carregue imagens do seu negócio (máximo de 6 imagens, máximo de
-                  5MB cada)
+                  Carregue imagens do seu negócio (máximo de 6 imagens, máximo
+                  de 5MB cada)
                 </strong>
               </label>
               <input
@@ -280,31 +272,31 @@
                 onChange={handleImageUpload}
               />
 
-      {images.length > 0 && (
-        <div className="image-preview">
-          {images.map((image, index) => (
-            <div key={index} className="image-wrapper">
-              <img
-                src={URL.createObjectURL(image)}
-                alt={`preview ${index}`}
-                className="image-item"
-              />
-              <button
-                className="remove-image"
-                onClick={() => removeImage(index)}
-              >
-                X
-              </button>
+              {images.length > 0 && (
+                <div className="image-preview">
+                  {images.map((image, index) => (
+                    <div key={index} className="image-wrapper">
+                      <img
+                        src={URL.createObjectURL(image)}
+                        alt={`preview ${index}`}
+                        className="image-item"
+                      />
+                      <button
+                        className="remove-image"
+                        onClick={() => removeImage(index)}
+                      >
+                        X
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          ))}
-        </div>
-      )}
-    </div>
 
-
-            {error && error.includes("Você pode enviar no máximo 6 imagens") && (
-              <div className="error">{error}</div>
-            )}
+            {error &&
+              error.includes("Você pode enviar no máximo 6 imagens") && (
+                <div className="error">{error}</div>
+              )}
             {error && error.includes("Pelo menos uma imagem") && (
               <div className="error">{error}</div>
             )}
@@ -322,9 +314,10 @@
               />
             </div>
 
-            {error && !error.includes("Você pode enviar no máximo 6 imagens") && (
-              <div className="error">{error}</div>
-            )}
+            {error &&
+              !error.includes("Você pode enviar no máximo 6 imagens") && (
+                <div className="error">{error}</div>
+              )}
 
             {loading && <div className="loading">Carregando...</div>}
 

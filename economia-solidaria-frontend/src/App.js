@@ -19,7 +19,7 @@ import AdminNegocios from "./pages/AdminNegocios"; // Importação de AdminDashb
 import Terms from "./pages/Terms"; // Página de Termos e Condições
 import Profile from "./pages/Profile"; // Importação da página de Perfil
 import PlansDetails from "./components/PlansDetails";
-
+import EnderecoDetails from "./components/EnderecoDetails"; 
 
 const App = () => {
   return (
@@ -43,6 +43,7 @@ const App = () => {
         <Route path="/register-business" element={<RegisterBusiness />} />
         <Route path="/lojas" element={<LojasList />} />
         <Route path="/loja/:id" element={<LojaDetails />} />
+        <Route path="/rota-endereco/:endereco" element={<EnderecoDetails />} />
 
         {/* Rotas administrativas */}
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
