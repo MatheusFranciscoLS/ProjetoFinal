@@ -371,9 +371,16 @@ const AdminDashboard = () => {
                 <strong>E-mail:</strong> {selectedBusiness.email}
               </p>
               <p>
-                <strong>Horários de Funcionamento:</strong>{" "}
-                {selectedBusiness.horarioDeFuncionamento}
-              </p>
+  <strong>Horário de Funcionamento:</strong> 
+  {selectedBusiness.horarioDeFuncionamento ? (
+    <>
+      <p>Abertura: {selectedBusiness.horarioDeFuncionamento.abertura}</p>
+      <p>Fechamento: {selectedBusiness.horarioDeFuncionamento.fechamento}</p>
+    </>
+  ) : (
+    "Não disponível"
+  )}
+</p>
 
               {/* Botões de ação */}
               {/* Botão de Verificar CNPJ */}
