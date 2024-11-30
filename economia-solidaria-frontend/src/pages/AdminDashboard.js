@@ -23,21 +23,21 @@ const AdminDashboard = () => {
   const [isProcessing, setIsProcessing] = useState(null); // Indica qual botão está sendo processado
   const [selectedImage, setSelectedImage] = useState(null); // Imagem selecionada para exibição em grande
 
-// Função para formatar o CNPJ
-const formatCNPJ = (cnpj) => {
-  // Remove qualquer caractere não numérico
-  const cleanCNPJ = cnpj.replace(/[^\d]+/g, '');
+  // Função para formatar o CNPJ
+  const formatCNPJ = (cnpj) => {
+    // Remove qualquer caractere não numérico
+    const cleanCNPJ = cnpj.replace(/[^\d]+/g, '');
 
-  // Verifica se o CNPJ tem 14 caracteres (tamanho válido)
-  if (cleanCNPJ.length === 14) {
-    return cleanCNPJ.replace(
-      /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
-      '$1.$2.$3/$4-$5'
-    );
-  }
-  
-  return cnpj; // Retorna o CNPJ original caso não tenha 14 dígitos
-};
+    // Verifica se o CNPJ tem 14 caracteres (tamanho válido)
+    if (cleanCNPJ.length === 14) {
+      return cleanCNPJ.replace(
+        /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+        '$1.$2.$3/$4-$5'
+      );
+    }
+
+    return cnpj; // Retorna o CNPJ original caso não tenha 14 dígitos
+  };
 
   useEffect(() => {
     const fetchPendingBusinesses = async () => {
@@ -126,7 +126,7 @@ const formatCNPJ = (cnpj) => {
       return;
     }
 
-    
+
 
     const cleanCNPJ = cnpj.replace(/[^\d]+/g, '');
     if (cleanCNPJ.length !== 14) {
@@ -140,11 +140,11 @@ const formatCNPJ = (cnpj) => {
         `http://127.0.0.1:8000/api/cnpj/${cleanCNPJ}`
       );
       console.log('Resposta da API:', response.data);
-      
+
       // Atualiza o estado apenas para o negócio específico
-      setBusinesses(prevBusinesses => 
-        prevBusinesses.map(business => 
-          business.id === businessId 
+      setBusinesses(prevBusinesses =>
+        prevBusinesses.map(business =>
+          business.id === businessId
             ? { ...business, cnpjInfo: response.data }
             : business
         )
@@ -152,9 +152,9 @@ const formatCNPJ = (cnpj) => {
     } catch (error) {
       console.error('Erro ao verificar CNPJ:', error);
       // Limpa as informações do CNPJ em caso de erro
-      setBusinesses(prevBusinesses => 
-        prevBusinesses.map(business => 
-          business.id === businessId 
+      setBusinesses(prevBusinesses =>
+        prevBusinesses.map(business =>
+          business.id === businessId
             ? { ...business, cnpjInfo: null }
             : business
         )
@@ -166,9 +166,9 @@ const formatCNPJ = (cnpj) => {
 
   // Função para limpar informações do CNPJ
   const clearCnpjInfo = (businessId) => {
-    setBusinesses(prevBusinesses => 
-      prevBusinesses.map(business => 
-        business.id === businessId 
+    setBusinesses(prevBusinesses =>
+      prevBusinesses.map(business =>
+        business.id === businessId
           ? { ...business, cnpjInfo: null }
           : business
       )
@@ -207,9 +207,8 @@ const formatCNPJ = (cnpj) => {
                 {businesses.map((business) => (
                   <div
                     key={business.id}
-                    className={`card ${
-                      selectedBusiness?.id === business.id ? "expanded" : ""
-                    }`}
+                    className={`card ${selectedBusiness?.id === business.id ? "expanded" : ""
+                      }`}
                   >
                     <div className="card-content">
                       {/* Nome do Negócio */}
@@ -217,7 +216,7 @@ const formatCNPJ = (cnpj) => {
 
                       {/* CNPJ do Negócio */}
                       <p className="business-cnpj">
-                      <strong>CNPJ:</strong> {formatCNPJ(business.cnpj) || "Não informado"}
+                        <strong>CNPJ:</strong> {formatCNPJ(business.cnpj) || "Não informado"}
                       </p>
 
                       {/* Imagens do Negócio */}
@@ -286,7 +285,7 @@ const formatCNPJ = (cnpj) => {
                           <div className="cnpj-info">
                             <div className="cnpj-header">
                               <h4>Informações do CNPJ</h4>
-                              <button 
+                              <button
                                 className="close-button"
                                 onClick={() => clearCnpjInfo(business.id)}
                                 aria-label="Fechar informações"
@@ -351,9 +350,8 @@ const formatCNPJ = (cnpj) => {
               </p>
 
               {/* CNPJ do Negócio */}
-              <p>
-                <strong>CNPJ:</strong>{" "}
-                {selectedBusiness.cnpj || "Não informado"}
+              <p >
+                <strong>CNPJ:</strong> {selectedBusiness.cnpj || "Não informado"}
               </p>
 
               {/* Outros detalhes */}

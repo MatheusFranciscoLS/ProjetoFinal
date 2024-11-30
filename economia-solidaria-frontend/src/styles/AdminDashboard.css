@@ -315,7 +315,6 @@
 }
 
 /* Responsividade adicional */
-
 @media (max-width: 768px) {
   .admin-dashboard {
     padding: 15px;
@@ -373,4 +372,66 @@
     max-width: 95%;
     max-height: 95%;
   }
+}
+
+/* Alinhamento à esquerda e ajuste de espaçamento */
+.cnpj-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinha os elementos à esquerda */
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.cnpj-details p {
+  margin: 8px 0; /* Espaçamento entre os parágrafos */
+  font-size: 0.95em;
+  color: #666;
+}
+
+.cnpj-details strong {
+  color: #333;
+  margin-right: 5px;
+}
+
+/* Ajuste geral de layout para manter tudo organizado */
+.cnpj-details p {
+  text-align: left; /* Alinha o texto à esquerda */
+}
+
+.cnpj-header h4 {
+  text-align: center; /* Centraliza o texto do título */
+  width: 100%; /* Garante que o h4 ocupe toda a largura disponível */
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-left {
+  text-align: left;
+  margin: 5px 0; /* Adiciona um pequeno espaçamento entre as linhas */
+}
+
+.details-container p {
+  text-align: left;
+  font-size: 1em;
+  color: #333;
+  margin-bottom: 10px; /* Espaço entre os parágrafos */
+}
+
+.details-container strong {
+  font-weight: bold;
+  color: #555; /* Cor do texto forte */
+}
+.business-cnpj {
+  text-align: left; /* Alinha o texto à esquerda */
+  margin: 5px 0; /* Adiciona espaçamento entre as linhas */
+  font-size: 1em; /* Define o tamanho da fonte */
+  color: #333; /* Cor do texto */
+}
+
+.business-cnpj strong {
+  font-weight: bold; /* Deixa o texto forte (rótulo) em negrito */
+  color: #555; /* Cor para o rótulo */
 }
