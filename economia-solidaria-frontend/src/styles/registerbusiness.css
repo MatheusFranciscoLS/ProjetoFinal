@@ -187,3 +187,20 @@ button:disabled {
         max-height: 80px;
     }
 }
+
+/* Estilo do TimePicker */
+.react-time-picker {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s ease;
+}
+
+/* Foco no TimePicker */
+.react-time-picker:focus {
+    outline: none;
+    border-color: #0984e3;
+    box-shadow: 0 0 6px rgba(9, 132, 227, 0.5);
+}

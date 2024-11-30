@@ -1,11 +1,12 @@
-    import React, { useState } from "react";
-    import { useNavigate } from "react-router-dom";
-    import { collection, addDoc } from "firebase/firestore";
-    import { db } from "../firebase"; // Certifique-se de importar o 'db'
-    import { getAuth } from "firebase/auth"; // Para pegar o UID do usuário autenticado
-    import "../styles/registerbusiness.css";
-    import { validateForm } from "../components/validation"; // Importa a função de validação
-    import InputMask from "react-input-mask"; //
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../firebase"; // Certifique-se de importar o 'db'
+import { getAuth } from "firebase/auth"; // Para pegar o UID do usuário autenticado
+import "../styles/registerbusiness.css";
+import { validateForm } from "../components/validation"; // Importa a função de validação
+import InputMask from "react-input-mask"; // Para máscara de telefone
+import axios from "axios"; // Importando axios
 
     const RegisterBusiness = () => {
       const [businessName, setBusinessName] = useState("");
@@ -22,7 +23,7 @@
       const [error, setError] = useState("");
       const [loading, setLoading] = useState(false);
 
-      const navigate = useNavigate();
+  const navigate = useNavigate();
 
       const auth = getAuth();
       const user = auth.currentUser;
@@ -45,161 +46,158 @@
         const img = new Image();
         const reader = new FileReader();
 
-        reader.onload = (e) => {
-          img.src = e.target.result;
-        };
-
-        reader.onerror = reject;
-
-        reader.readAsDataURL(file);
-
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
-
-          let width = img.width;
-          let height = img.height;
-
-          // Calcula a escala para redimensionar a imagem mantendo a proporção
-          if (width > height) {
-            if (width > maxWidth) {
-              height = (height * maxWidth) / width;
-              width = maxWidth;
-            }
-          } else {
-            if (height > maxHeight) {
-              width = (width * maxHeight) / height;
-              height = maxHeight;
-            }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          ctx.drawImage(img, 0, 0, width, height);
-
-          canvas.toBlob(
-            (blob) => {
-              resolve(blob);
-            },
-            file.type,
-            0.8
-          ); // Compressão de 80%
-        };
-      });
-    };
-
-    const handleImageUpload = async (e) => {
-      const files = Array.from(e.target.files);
-
-      // Verifica se a quantidade total de imagens será maior que 6
-      if (files.length + images.length > 6) {
-        setError("Você pode enviar no máximo 6 imagens do seu negócio.");
-        return;
-      }
-
-      // Verifica se algum arquivo excede o tamanho de 10MB
-      const invalidFiles = files.filter((file) => file.size > 10 * 1024 * 1024);
-      if (invalidFiles.length > 0) {
-        setError("Cada imagem deve ter no máximo 10 MB.");
-        return;
-      }
-
-      // Redimensiona as imagens antes de adicionar
-      const resizedImages = await Promise.all(
-        files.map((file) => resizeImage(file))
-      );
-
-      // Atualiza o estado com as imagens redimensionadas
-      setImages((prevImages) => [...prevImages, ...resizedImages]);
-      setError(""); // Limpa a mensagem de erro
-    };
-
-      const removeImage = (index) => {
-        setImages(images.filter((_, i) => i !== index));
+      reader.onload = (e) => {
+        img.src = e.target.result;
       };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+      reader.onerror = reject;
 
-  // Chama a função de validação
-  const validationError = validateForm({
-    businessName,
-    businessCNPJ,
-    businessDescription,
-    category,
-    address,
-    phone,
-    email,
-    images,
-    cnDoc,
-    termsAccepted,
-  });
+      reader.readAsDataURL(file);
 
-  // Verifica se há erros na validação
-  if (validationError) {
-    setError(validationError); // Exibe a mensagem de erro de validação
-    return; // Interrompe o envio se houver erro
-  }
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
 
-  setLoading(true);
-  setError(""); // Limpa mensagens de erro antes do envio
+        let width = img.width;
+        let height = img.height;
 
-  try {
-    // Processa as imagens para base64
-    const imageBase64Promises = images.map(async (image) => {
-      const reader = new FileReader();
-      return new Promise((resolve, reject) => {
-        reader.onloadend = () => resolve(reader.result); // Salva o resultado em base64
-        reader.onerror = reject;
-        reader.readAsDataURL(image);
+        // Calcula a escala para redimensionar a imagem mantendo a proporção
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            resolve(blob);
+          },
+          file.type,
+          0.8
+        ); // Compressão de 80%
+      };
+    });
+  };
+
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+
+    // Verifica se a quantidade total de imagens será maior que 6
+    if (files.length + images.length > 6) {
+      setError("Você pode enviar no máximo 6 imagens do seu negócio.");
+      return;
+    }
+
+    // Verifica se algum arquivo excede o tamanho de 10MB
+    const invalidFiles = files.filter((file) => file.size > 10 * 1024 * 1024);
+    if (invalidFiles.length > 0) {
+      setError("Cada imagem deve ter no máximo 10 MB.");
+      return;
+    }
+
+    // Redimensiona as imagens antes de adicionar
+    const resizedImages = await Promise.all(
+      files.map((file) => resizeImage(file))
+    );
+
+    // Atualiza o estado com as imagens redimensionadas
+    setImages((prevImages) => [...prevImages, ...resizedImages]);
+    setError(""); // Limpa a mensagem de erro
+  };
+
+  const removeImage = (index) => {
+    setImages(images.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+      // Chama a função de validação
+      const validationError = validateForm({
+        businessName,
+        businessCNPJ,
+        businessDescription,
+        category,
+        address,
+        phone,
+        email,
+        images,
+        cnDoc,
+        termsAccepted,
       });
-    });
 
-    const imageBase64 = await Promise.all(imageBase64Promises);
+      if (validationError) {
+        setError(validationError); // Exibe a mensagem de erro de validação
+        return;
+      }
 
-    // Envia os dados para o Firestore
-    await addDoc(collection(db, "negocios_pendentes"), {
-      nome: businessName,
-      cnpj: businessCNPJ,
-      descricao: businessDescription,
-      categoria: category,
-      endereco: address,
-      telefone: phone,
-      email,
-      horarioDeFuncionamento: workingHours,
-      imagens: imageBase64,
-      comprovante: cnDoc.name, // Salva o nome do arquivo do comprovante
-      userId: userUid, // Adiciona o UID do usuário
-      status: "pendente", // Definindo o status como "pendente"
-    });
+      setLoading(true);
+      setError(""); // Limpa a mensagem de erro antes de tentar enviar
 
-    alert("Cadastro enviado, aguardando aprovação do admin!");
-    navigate("/"); // Após o envio, redireciona o usuário para a home
-  } catch (err) {
-    console.error("Erro ao cadastrar negócio:", err);
-    setError("Erro ao cadastrar o negócio. Tente novamente.");
-  } finally {
-    setLoading(false);
-  }
-};
+        try {
+          const imageBase64Promises = images.map(async (image) => {
+            const reader = new FileReader();
+            return new Promise((resolve, reject) => {
+              reader.onloadend = () => resolve(reader.result); // Salva o resultado em base64
+              reader.onerror = reject;
+              reader.readAsDataURL(image);
+            });
+          });
 
-      return (
-        <div className="register-business-page">
-          <form className="register-business-form" onSubmit={handleSubmit}>
-            <h2>Cadastro de Negócio</h2>
+      const imageBase64 = await Promise.all(imageBase64Promises);
+
+          await addDoc(collection(db, "negocios_pendentes"), {
+            nome: businessName,
+            cnpj: businessCNPJ,
+            descricao: businessDescription,
+            categoria: category,
+            endereco: address,
+            telefone: phone,
+            email,
+            horarioDeFuncionamento: workingHours,
+            imagens: imageBase64,
+            comprovante: cnDoc.name, // Salva o nome do arquivo do comprovante
+            userId: userUid, // Adiciona o UID do usuário
+            status: "pendente", // Definindo o status como "pendente"
+          });
+
+      alert("Cadastro enviado, aguardando aprovação do admin!");
+      navigate("/"); // Após o envio, redireciona o usuário para a home
+    } catch (err) {
+      console.error("Erro ao cadastrar negócio:", err);
+      setError("Erro ao cadastrar o negócio. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="register-business-page">
+      <form className="register-business-form" onSubmit={handleSubmit}>
+        <h2>Cadastro de Negócio</h2>
+
+        <input
+          type="text"
+          placeholder="Nome do Negócio"
+          value={businessName}
+          onChange={(e) => setBusinessName(e.target.value)}
+          required
+        />
 
             <input
               type="text"
-              placeholder="Nome do Negócio"
-              value={businessName}
-              onChange={(e) => setBusinessName(e.target.value)}
-              required
-            />
-
-            <InputMask
-              mask="99.999.999/9999-99" // Máscara para CNPJ
               placeholder="CNPJ"
-              value={businessCNPJ}
+              value={formatCNPJ(businessCNPJ)}
               onChange={(e) => setBusinessCNPJ(e.target.value)}
               required
             />
@@ -339,12 +337,12 @@ const handleSubmit = async (e) => {
               </label>
             </div>
 
-            <button type="submit" disabled={loading}>
-              {loading ? "Enviando..." : "Cadastrar Negócio"}
-            </button>
-          </form>
-        </div>
-      );
-    };
+        <button type="submit" disabled={loading}>
+          {loading ? "Enviando..." : "Cadastrar Negócio"}
+        </button>
+      </form>
+    </div>
+  );
+};
 
-    export default RegisterBusiness;
+export default RegisterBusiness;

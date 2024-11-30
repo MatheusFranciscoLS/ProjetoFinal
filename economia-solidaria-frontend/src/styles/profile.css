@@ -23,23 +23,25 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   font-family: Arial, sans-serif;
+  font-size: 15px; /* Fonte ligeiramente menor */
+  line-height: 1.5; /* Ajuste no espaçamento entre linhas */
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Container principal do perfil */
 .profile-container {
-  padding: 20px;
+  padding: 20px; /* Padding reduzido */
   max-width: 1200px;
   margin: 0 auto;
   background-color: var(--card-bg-color);
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px; /* Cantos um pouco mais afiados */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Menos profundidade */
   width: 100%;
 }
 
 /* Título do perfil */
 .profile-title {
-  font-size: 2rem;
+  font-size: 2rem; /* Título reduzido */
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
@@ -53,48 +55,50 @@ body {
 
 /* Cada campo do perfil */
 .profile-field {
-  margin: 10px 0;
+  margin: 8px 0;
+  font-size: 1.2rem; /* Texto um pouco menor */
+  font-weight: 400; /* Peso da fonte mais leve */
 }
 
 /* Seção das opções de plano */
 .plan-options {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: 20px; /* Menos espaçamento */
   flex-wrap: wrap;
 }
 
 /* Cada opção de plano */
 .plan-option {
   flex: 1 1 calc(33.33% - 20px);
-  padding: 15px;
+  padding: 12px; /* Padding um pouco menor */
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 8px; /* Cantos mais suaves */
   text-align: center;
   background-color: var(--card-bg-color);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Sombras mais suaves */
   transition: transform 0.3s ease;
 }
 
 .plan-option:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px); /* Efeito de hover mais sutil */
 }
 
 .plan-option h4 {
-  margin-bottom: 15px;
-  font-size: 1.2rem;
+  margin-bottom: 12px;
+  font-size: 1.3rem; /* Fonte reduzida */
   color: var(--text-color);
 }
 
 /* Botão de upgrade */
 .upgrade-button {
-  padding: 10px 15px;
+  padding: 10px 15px; /* Menor padding */
   background-color: var(--button-bg-color);
   color: var(--text-color);
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1rem; /* Fonte ligeiramente menor */
   transition: background-color 0.3s ease;
 }
 
@@ -102,46 +106,23 @@ body {
   background-color: var(--button-hover-bg-color);
 }
 
-/* Botão de cancelamento */
-.cancel-button {
-  padding: 10px 15px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.cancel-button:hover {
-  background-color: #e53935;
-}
-
-/* Mensagem premium */
-.premium-message {
-  font-size: 1.1rem;
-  color: var(--button-bg-color);
-  margin-top: 20px;
-  text-align: center;
-}
-
 /* Botão de alternância de tema */
 .theme-toggle-button {
-  padding: 10px;
-  margin: 20px 0;
+  padding: 8px 14px; /* Padding mais compacto */
+  margin: 15px 0;
   border: none;
   background-color: transparent;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1rem; /* Tamanho reduzido */
   color: var(--text-color);
 }
 
 /* Responsividade */
 
-/* Para telas pequenas, como smartphones */
+/* Para telas pequenas */
 @media (max-width: 768px) {
   .profile-title {
-    font-size: 1.8rem;
+    font-size: 1.8rem; /* Título menor */
   }
 
   .plan-options {
@@ -150,36 +131,17 @@ body {
 
   .plan-option {
     flex: 1 1 100%;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
 
-  .upgrade-button, .cancel-button {
+  .upgrade-button,
+  .cancel-button {
     width: 100%;
-    font-size: 1.1rem;
-    padding: 12px 20px;
+    font-size: 1.1rem; /* Fonte ajustada */
+    padding: 10px 18px; /* Padding menor */
   }
 
   .premium-message {
-    font-size: 1rem;
-  }
-}
-
-/* Para telas muito pequenas, como dispositivos móveis estreitos */
-@media (max-width: 480px) {
-  .profile-title {
-    font-size: 1.6rem;
-  }
-
-  .plan-option {
-    flex: 1 1 100%;
-  }
-
-  .plan-option h4 {
-    font-size: 1.1rem;
-  }
-
-  .upgrade-button, .cancel-button {
-    padding: 12px 18px;
-    font-size: 1rem;
+    font-size: 0.9rem; /* Fonte reduzida */
   }
 }

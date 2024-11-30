@@ -19,7 +19,7 @@ import AdminNegocios from "./pages/AdminNegocios"; // Importação de AdminDashb
 import Terms from "./pages/Terms"; // Página de Termos e Condições
 import Profile from "./pages/Profile"; // Importação da página de Perfil
 import PlansDetails from "./components/PlansDetails";
-import EnderecoDetails from "./components/EnderecoDetails"; 
+import EnderecoDetails from "./pages/EnderecoDetails"; 
 
 const App = () => {
   return (
