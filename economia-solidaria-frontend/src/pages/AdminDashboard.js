@@ -23,6 +23,22 @@ const AdminDashboard = () => {
   const [isProcessing, setIsProcessing] = useState(null); // Indica qual botão está sendo processado
   const [selectedImage, setSelectedImage] = useState(null); // Imagem selecionada para exibição em grande
 
+// Função para formatar o CNPJ
+const formatCNPJ = (cnpj) => {
+  // Remove qualquer caractere não numérico
+  const cleanCNPJ = cnpj.replace(/[^\d]+/g, '');
+
+  // Verifica se o CNPJ tem 14 caracteres (tamanho válido)
+  if (cleanCNPJ.length === 14) {
+    return cleanCNPJ.replace(
+      /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+      '$1.$2.$3/$4-$5'
+    );
+  }
+  
+  return cnpj; // Retorna o CNPJ original caso não tenha 14 dígitos
+};
+
   useEffect(() => {
     const fetchPendingBusinesses = async () => {
       try {
@@ -199,8 +215,7 @@ const AdminDashboard = () => {
 
                       {/* CNPJ do Negócio */}
                       <p className="business-cnpj">
-                        <strong>CNPJ:</strong>{" "}
-                        {business.cnpj || "Não informado"}
+                      <strong>CNPJ:</strong> {formatCNPJ(business.cnpj) || "Não informado"}
                       </p>
 
                       {/* Imagens do Negócio */}
