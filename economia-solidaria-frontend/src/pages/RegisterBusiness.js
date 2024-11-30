@@ -196,10 +196,10 @@ const handleSubmit = async (e) => {
               required
             />
 
-            <input
-              type="text"
+            <InputMask
+              mask="99.999.999/9999-99" // Máscara para CNPJ
               placeholder="CNPJ"
-              value={formatCNPJ(businessCNPJ)}
+              value={businessCNPJ}
               onChange={(e) => setBusinessCNPJ(e.target.value)}
               required
             />
