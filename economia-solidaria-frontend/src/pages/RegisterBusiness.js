@@ -118,67 +118,70 @@
         setImages(images.filter((_, i) => i !== index));
       };
 
-      const handleSubmit = async (e) => {
-        e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-      // Chama a função de validação
-      const validationError = validateForm({
-        businessName,
-        businessCNPJ,
-        businessDescription,
-        category,
-        address,
-        phone,
-        email,
-        images,
-        cnDoc,
-        termsAccepted,
+  // Chama a função de validação
+  const validationError = validateForm({
+    businessName,
+    businessCNPJ,
+    businessDescription,
+    category,
+    address,
+    phone,
+    email,
+    images,
+    cnDoc,
+    termsAccepted,
+  });
+
+  // Verifica se há erros na validação
+  if (validationError) {
+    setError(validationError); // Exibe a mensagem de erro de validação
+    return; // Interrompe o envio se houver erro
+  }
+
+  setLoading(true);
+  setError(""); // Limpa mensagens de erro antes do envio
+
+  try {
+    // Processa as imagens para base64
+    const imageBase64Promises = images.map(async (image) => {
+      const reader = new FileReader();
+      return new Promise((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result); // Salva o resultado em base64
+        reader.onerror = reject;
+        reader.readAsDataURL(image);
       });
+    });
 
-      if (validationError) {
-        setError(validationError); // Exibe a mensagem de erro de validação
-        return;
-      }
+    const imageBase64 = await Promise.all(imageBase64Promises);
 
-      setLoading(true);
-      setError(""); // Limpa a mensagem de erro antes de tentar enviar
+    // Envia os dados para o Firestore
+    await addDoc(collection(db, "negocios_pendentes"), {
+      nome: businessName,
+      cnpj: businessCNPJ,
+      descricao: businessDescription,
+      categoria: category,
+      endereco: address,
+      telefone: phone,
+      email,
+      horarioDeFuncionamento: workingHours,
+      imagens: imageBase64,
+      comprovante: cnDoc.name, // Salva o nome do arquivo do comprovante
+      userId: userUid, // Adiciona o UID do usuário
+      status: "pendente", // Definindo o status como "pendente"
+    });
 
-        try {
-          const imageBase64Promises = images.map(async (image) => {
-            const reader = new FileReader();
-            return new Promise((resolve, reject) => {
-              reader.onloadend = () => resolve(reader.result); // Salva o resultado em base64
-              reader.onerror = reject;
-              reader.readAsDataURL(image);
-            });
-          });
-
-        const imageBase64 = await Promise.all(imageBase64Promises);
-
-          await addDoc(collection(db, "negocios_pendentes"), {
-            nome: businessName,
-            cnpj: businessCNPJ,
-            descricao: businessDescription,
-            categoria: category,
-            endereco: address,
-            telefone: phone,
-            email,
-            horarioDeFuncionamento: workingHours,
-            imagens: imageBase64,
-            comprovante: cnDoc.name, // Salva o nome do arquivo do comprovante
-            userId: userUid, // Adiciona o UID do usuário
-            status: "pendente", // Definindo o status como "pendente"
-          });
-
-          alert("Cadastro enviado, aguardando aprovação do admin!");
-          navigate("/"); // Após o envio, redireciona o usuário para a home
-        } catch (err) {
-          console.error("Erro ao cadastrar negócio:", err);
-          setError("Erro ao cadastrar o negócio. Tente novamente.");
-        } finally {
-          setLoading(false);
-        }
-      };
+    alert("Cadastro enviado, aguardando aprovação do admin!");
+    navigate("/"); // Após o envio, redireciona o usuário para a home
+  } catch (err) {
+    console.error("Erro ao cadastrar negócio:", err);
+    setError("Erro ao cadastrar o negócio. Tente novamente.");
+  } finally {
+    setLoading(false);
+  }
+};
 
       return (
         <div className="register-business-page">
