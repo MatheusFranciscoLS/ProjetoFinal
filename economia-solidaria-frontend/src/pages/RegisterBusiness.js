@@ -7,16 +7,19 @@ import "../styles/registerbusiness.css";
 import { validateForm } from "../components/validation"; // Importa a função de validação
 import InputMask from "react-input-mask"; //
 
+
 const RegisterBusiness = () => {
   const [businessName, setBusinessName] = useState("");
   const [businessCNPJ, setBusinessCNPJ] = useState("");
   const [businessDescription, setBusinessDescription] = useState("");
   const [category, setCategory] = useState("");
   const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
+  const [landline, setLandline] = useState(""); // Telefone fixo
+  const [cellphone, setCellphone] = useState(""); // Celular
   const [email, setEmail] = useState("");
-  const [openingTime, setOpeningTime] = useState("");
-  const [closingTime, setClosingTime] = useState("");
+  const [weekdaysHours, setWeekdaysHours] = useState({ open: "", close: "" }); // Segunda a sexta
+  const [saturdayHours, setSaturdayHours] = useState({ open: "", close: "" }); // Sábado
+  const [sundayHours, setSundayHours] = useState({ open: "", close: "" }); // Domingo
   const [images, setImages] = useState([]);
   const [cnDoc, setCnDoc] = useState(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -27,7 +30,6 @@ const RegisterBusiness = () => {
     facebook: "",
     whatsapp: "",
   });
-  
 
   const navigate = useNavigate();
 
@@ -128,7 +130,8 @@ const RegisterBusiness = () => {
       businessDescription,
       category,
       address,
-      phone,
+      landline,
+      cellphone,
       email,
       images,
       cnDoc,
@@ -136,20 +139,21 @@ const RegisterBusiness = () => {
       socialLinks,
     });
 
+    // Verifica se há erros na validação
     if (validationError) {
-      setError(validationError);
-      return;
+      setError(validationError); // Exibe a mensagem de erro de validação
+      return; // Interrompe o envio se houver erro
     }
 
     setLoading(true);
-    setError("");
+    setError(""); // Limpa mensagens de erro antes do envio
 
     try {
       // Processa as imagens para base64
       const imageBase64Promises = images.map(async (image) => {
         const reader = new FileReader();
         return new Promise((resolve, reject) => {
-          reader.onloadend = () => resolve(reader.result);
+          reader.onloadend = () => resolve(reader.result); // Salva o resultado em base64
           reader.onerror = reject;
           reader.readAsDataURL(image);
         });
@@ -164,18 +168,23 @@ const RegisterBusiness = () => {
         descricao: businessDescription,
         categoria: category,
         endereco: address,
-        telefone: phone,
+        telefoneFixo: landline, // Telefone fixo
+        telefoneCelular: cellphone, // Telefone celular
         email,
-        horarioDeFuncionamento: { abertura: openingTime, fechamento: closingTime },
+        horarioDeFuncionamento: {
+          segundaAsexta: weekdaysHours,
+          sabado: saturdayHours,
+          domingo: sundayHours,
+        },
         imagens: imageBase64,
-        comprovante: cnDoc.name,
-        userId: userUid,
-        status: "pendente",
+        comprovante: cnDoc.name, // Salva o nome do arquivo do comprovante
+        userId: userUid, // Adiciona o UID do usuário
+        status: "pendente", // Definindo o status como "pendente"
         redesSociais: socialLinks,
       });
 
       alert("Cadastro enviado, aguardando aprovação do admin!");
-      navigate("/");
+      navigate("/"); // Após o envio, redireciona o usuário para a home
     } catch (err) {
       console.error("Erro ao cadastrar negócio:", err);
       setError("Erro ao cadastrar o negócio. Tente novamente.");
@@ -183,6 +192,7 @@ const RegisterBusiness = () => {
       setLoading(false);
     }
   };
+
   return (
     <div className="register-business-page">
       <form className="register-business-form" onSubmit={handleSubmit}>
@@ -236,12 +246,22 @@ const RegisterBusiness = () => {
           required
         />
 
+        {/* Telefone Fixo */}
         <InputMask
-          mask="(99) 99999-9999" // Máscara para telefone
-          placeholder="Telefone de Contato"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          mask="(99) 9999-9999" // Máscara para telefone fixo
+          placeholder="Telefone Fixo"
+          value={landline}
+          onChange={(e) => setLandline(e.target.value)}
           required
+        />
+
+        {/* Celular */}
+        <InputMask
+          mask="(99) 99999-9999" // Máscara para celular
+          placeholder="Celular (Opcional)"
+          value={cellphone}
+          onChange={(e) => setCellphone(e.target.value)}
+          
         />
 
         <input
@@ -251,7 +271,7 @@ const RegisterBusiness = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <h3>Redes Sociais</h3>
+         <h3>Redes Sociais</h3>
         <input
           type="url"
           name="instagram"
@@ -273,23 +293,69 @@ const RegisterBusiness = () => {
           value={socialLinks.whatsapp}
           onChange={handleSocialLinksChange}
         />
- 
 
-        <input
-          type="time"
-          value={openingTime}
-          onChange={(e) => setOpeningTime(e.target.value)}
-          required
-          step="300" // Define o intervalo de 5 minutos
-        />
+ {/* Horário de funcionamento de segunda a sexta */}
+ <div className="hours-section">
+          <h3>Horário de Funcionamento (Segunda a Sexta)</h3>
+          <input
+            type="time"
+            value={weekdaysHours.open}
+            onChange={(e) =>
+              setWeekdaysHours({ ...weekdaysHours, open: e.target.value })
+            }
+            required
+          />
+          <input
+            type="time"
+            value={weekdaysHours.close}
+            onChange={(e) =>
+              setWeekdaysHours({ ...weekdaysHours, close: e.target.value })
+            }
+            required
+          />
+        </div>
 
-        <input
-          type="time"
-          value={closingTime}
-          onChange={(e) => setClosingTime(e.target.value)}
-          required
-          step="300" // Define o intervalo de 5 minutos
-        />
+        {/* Horário de funcionamento de sábado */}
+        <div className="hours-section">
+          <h3>Horário de Funcionamento (Sábado)</h3>
+          <input
+            type="time"
+            value={saturdayHours.open}
+            onChange={(e) =>
+              setSaturdayHours({ ...saturdayHours, open: e.target.value })
+            }
+            required
+          />
+          <input
+            type="time"
+            value={saturdayHours.close}
+            onChange={(e) =>
+              setSaturdayHours({ ...saturdayHours, close: e.target.value })
+            }
+            required
+          />
+        </div>
+
+        {/* Horário de funcionamento de domingo */}
+        <div className="hours-section">
+          <h3>Horário de Funcionamento (Domingo)</h3>
+          <input
+            type="time"
+            value={sundayHours.open}
+            onChange={(e) =>
+              setSundayHours({ ...sundayHours, open: e.target.value })
+            }
+            required
+          />
+          <input
+            type="time"
+            value={sundayHours.close}
+            onChange={(e) =>
+              setSundayHours({ ...sundayHours, close: e.target.value })
+            }
+            required
+          />
+        </div>
 
 
         <div className="upload-instructions">
