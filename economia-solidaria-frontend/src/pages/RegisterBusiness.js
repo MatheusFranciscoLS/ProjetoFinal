@@ -324,7 +324,7 @@ const RegisterBusiness = () => {
             onChange={(e) =>
               setSaturdayHours({ ...saturdayHours, open: e.target.value })
             }
-            required
+            
           />
           <input
             type="time"
@@ -332,7 +332,7 @@ const RegisterBusiness = () => {
             onChange={(e) =>
               setSaturdayHours({ ...saturdayHours, close: e.target.value })
             }
-            required
+            
           />
         </div>
 
@@ -345,7 +345,7 @@ const RegisterBusiness = () => {
             onChange={(e) =>
               setSundayHours({ ...sundayHours, open: e.target.value })
             }
-            required
+            
           />
           <input
             type="time"
@@ -353,7 +353,7 @@ const RegisterBusiness = () => {
             onChange={(e) =>
               setSundayHours({ ...sundayHours, close: e.target.value })
             }
-            required
+            
           />
         </div>
 
