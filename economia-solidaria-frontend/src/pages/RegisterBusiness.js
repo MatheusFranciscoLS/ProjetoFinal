@@ -22,12 +22,23 @@ const RegisterBusiness = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [socialLinks, setSocialLinks] = useState({
+    instagram: "",
+    facebook: "",
+    whatsapp: "",
+  });
+  
 
   const navigate = useNavigate();
 
   const auth = getAuth();
   const user = auth.currentUser;
   const userUid = user ? user.uid : null;
+
+  const handleSocialLinksChange = (e) => {
+    const { name, value } = e.target;
+    setSocialLinks((prevLinks) => ({ ...prevLinks, [name]: value }));
+  };
 
   const resizeImage = (file, maxWidth = 1024, maxHeight = 1024) => {
     return new Promise((resolve, reject) => {
@@ -122,23 +133,23 @@ const RegisterBusiness = () => {
       images,
       cnDoc,
       termsAccepted,
+      socialLinks,
     });
 
-    // Verifica se há erros na validação
     if (validationError) {
-      setError(validationError); // Exibe a mensagem de erro de validação
-      return; // Interrompe o envio se houver erro
+      setError(validationError);
+      return;
     }
 
     setLoading(true);
-    setError(""); // Limpa mensagens de erro antes do envio
+    setError("");
 
     try {
       // Processa as imagens para base64
       const imageBase64Promises = images.map(async (image) => {
         const reader = new FileReader();
         return new Promise((resolve, reject) => {
-          reader.onloadend = () => resolve(reader.result); // Salva o resultado em base64
+          reader.onloadend = () => resolve(reader.result);
           reader.onerror = reject;
           reader.readAsDataURL(image);
         });
@@ -157,13 +168,14 @@ const RegisterBusiness = () => {
         email,
         horarioDeFuncionamento: { abertura: openingTime, fechamento: closingTime },
         imagens: imageBase64,
-        comprovante: cnDoc.name, // Salva o nome do arquivo do comprovante
-        userId: userUid, // Adiciona o UID do usuário
-        status: "pendente", // Definindo o status como "pendente"
+        comprovante: cnDoc.name,
+        userId: userUid,
+        status: "pendente",
+        redesSociais: socialLinks,
       });
 
       alert("Cadastro enviado, aguardando aprovação do admin!");
-      navigate("/"); // Após o envio, redireciona o usuário para a home
+      navigate("/");
     } catch (err) {
       console.error("Erro ao cadastrar negócio:", err);
       setError("Erro ao cadastrar o negócio. Tente novamente.");
@@ -171,7 +183,6 @@ const RegisterBusiness = () => {
       setLoading(false);
     }
   };
-
   return (
     <div className="register-business-page">
       <form className="register-business-form" onSubmit={handleSubmit}>
@@ -240,6 +251,29 @@ const RegisterBusiness = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+        <h3>Redes Sociais</h3>
+        <input
+          type="url"
+          name="instagram"
+          placeholder="Link do Instagram"
+          value={socialLinks.instagram}
+          onChange={handleSocialLinksChange}
+        />
+        <input
+          type="url"
+          name="facebook"
+          placeholder="Link do Facebook"
+          value={socialLinks.facebook}
+          onChange={handleSocialLinksChange}
+        />
+        <input
+          type="url"
+          name="whatsapp"
+          placeholder="Link do WhatsApp (com https://wa.me/)"
+          value={socialLinks.whatsapp}
+          onChange={handleSocialLinksChange}
+        />
+ 
 
         <input
           type="time"

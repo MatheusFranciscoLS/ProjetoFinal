@@ -5,6 +5,8 @@ import { db } from "../firebase"; // Certifique-se de que o Firebase está confi
 import Avaliacao from "./Avaliacao"; // Componente de avaliação
 import "../styles/lojaDetails.css"; // Importar estilos
 import { Link } from "react-router-dom";
+import { FaInstagram, FaFacebook, FaWhatsapp } from "react-icons/fa";
+
 
 const LojaDetails = () => {
   const { id } = useParams(); // Obtém o ID da loja da URL
@@ -94,11 +96,37 @@ const LojaDetails = () => {
      {/* Detalhes da Loja */}
 <p><strong>Descrição:</strong> {loja.descricao}</p>
 <p>
-  <strong>Endereço:</strong>{" "}
-  <Link to={`/rota-endereco/${encodeURIComponent(loja.endereco)}`}>
-    {loja.endereco}
-  </Link>
+  <strong>  <h3>Redes Sociais</h3>
+  <div className="social-links">
+  {loja.redesSociais?.instagram && (
+    <a href={loja.redesSociais.instagram} target="_blank" rel="noopener noreferrer">
+      <FaInstagram size={30} />
+    </a>
+  )}
+  {loja.redesSociais?.facebook && (
+    <a href={loja.redesSociais.facebook} target="_blank" rel="noopener noreferrer">
+      <FaFacebook size={30} />
+    </a>
+  )}
+  {loja.redesSociais?.whatsapp && (
+    <a href={`https://wa.me/${loja.redesSociais.whatsapp}`} target="_blank" rel="noopener noreferrer">
+      <FaWhatsapp size={30} />
+    </a>
+  )}
+</div>
+</strong>
 </p>
+<p>
+  <strong>Endereço:</strong>{" "}
+  <a
+    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(loja.endereco)}`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {loja.endereco}
+  </a>
+</p>
+
 <p><strong>Telefone:</strong> {loja.telefone}</p>
 <p><strong>Email:</strong> {loja.email}</p>
 <p><strong>Horário de Funcionamento:</strong> {loja.horarioDeFuncionamento}</p>
