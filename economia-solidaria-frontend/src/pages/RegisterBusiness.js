@@ -120,33 +120,31 @@ const RegisterBusiness = () => {
     setImages(images.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // Chama a função de validação
-    const validationError = validateForm({
-      businessName,
-      businessCNPJ,
-      businessDescription,
-      category,
-      address,
-      landline,
-      cellphone,
-      email,
-      images,
-      cnDoc,
-      termsAccepted,
-      socialLinks,
-    });
+  // Chama a função de validação
+  const validationError = validateForm({
+    businessName,
+    businessCNPJ,
+    businessDescription,
+    category,
+    address,
+    landline,
+    email,
+    images,
+    cnDoc,
+    termsAccepted,
+  });
 
-    // Verifica se há erros na validação
-    if (validationError) {
-      setError(validationError); // Exibe a mensagem de erro de validação
-      return; // Interrompe o envio se houver erro
-    }
+  if (validationError) {
+    setError(validationError); // Exibe a mensagem de erro detalhada
+    return; // Interrompe o envio se houver erro
+  }
 
-    setLoading(true);
-    setError(""); // Limpa mensagens de erro antes do envio
+  setLoading(true);
+  setError(""); // Limpa as mensagens de erro antes do envio
+
 
     try {
       // Processa as imagens para base64

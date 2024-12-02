@@ -1,42 +1,38 @@
 export const validateForm = ({
   businessName,
-  businessCNPJ, // Inclui o CNPJ
+  businessCNPJ,
   businessDescription,
   category,
   address,
-  phone,
+  landline,
   email,
   images,
   cnDoc,
   termsAccepted,
 }) => {
-  if (
-    !businessName ||
-    !businessDescription ||
-    !category ||
-    !address ||
-    !phone ||
-    !email ||
-    images.length === 0 ||
-    !cnDoc ||
-    !businessCNPJ // Verifica se o CNPJ foi preenchido
-  ) {
-    return "Todos os campos são obrigatórios!";
-  }
+  if (!businessName) return "O nome do negócio é obrigatório!";
+  if (!businessDescription) return "A descrição do negócio é obrigatória!";
+  if (!category) return "A categoria é obrigatória!";
+  if (!address) return "O endereço é obrigatório!";
+  if (!landline) return "O telefone é obrigatório!";
+  if (!email) return "O e-mail é obrigatório!";
+  if (images.length === 0) return "Pelo menos uma imagem é obrigatória!";
+  if (!cnDoc) return "O comprovante do Simples Nacional é obrigatório!";
+  if (!businessCNPJ) return "O CNPJ é obrigatório!";
 
+  // Verificação dos termos
   if (!termsAccepted) {
     return "Você precisa aceitar os termos e condições.";
   }
 
   // Validação do CNPJ
-  const cleanedCNPJ = businessCNPJ.replace(/[^\d]/g, ""); // Remove caracteres não numéricos
-  const cnpjRegex = /^[0-9]{14}$/; // Verifica se tem 14 números
-
+  const cleanedCNPJ = businessCNPJ.replace(/[^\d]/g, "");
+  const cnpjRegex = /^[0-9]{14}$/;
   if (!cnpjRegex.test(cleanedCNPJ)) {
     return "CNPJ inválido. Certifique-se de incluir 14 dígitos. Exemplo: 12345678000199";
   }
 
-  // Validação completa do CNPJ (verificando o dígito verificador)
+  // Validação completa do CNPJ (verificação dos dígitos verificadores)
   const validateCNPJ = (cnpj) => {
     let t = cnpj.length - 2;
     let d = cnpj.substring(t);
@@ -64,12 +60,11 @@ export const validateForm = ({
     return "CNPJ inválido. O CNPJ informado não é válido.";
   }
 
-  // Validação do telefone (aceita números puros com 11 dígitos)
-  const cleanedPhone = phone.replace(/[^\d]/g, ""); // Remove caracteres não numéricos
-  const phoneRegex = /^[0-9]{11}$/; // Verifica se tem 11 números (formato limpo)
-
-  if (!phoneRegex.test(cleanedPhone)) {
-    return "Telefone inválido. Certifique-se de incluir 11 dígitos. Exemplo: 11987654321 ou (11) 98765-4321";
+  // Validação do telefone (11 dígitos)
+  const cleanedLandline = landline.replace(/[^\d]/g, "");
+  const LandlineRegex = /^[0-9]{10}$/;
+  if (!LandlineRegex.test(cleanedLandline)) {
+    return "Telefone fixo inválido. Certifique-se de incluir 11 dígitos. Exemplo: 11987654321";
   }
 
   // Validação do e-mail
@@ -78,5 +73,5 @@ export const validateForm = ({
     return "E-mail inválido. Exemplo: nome@dominio.com";
   }
 
-  return null;
+  return null; // Se não houver erros
 };
