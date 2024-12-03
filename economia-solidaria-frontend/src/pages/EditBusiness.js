@@ -1,267 +1,507 @@
-import React, { useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import "../styles/EditBusiness.css";
+import { getAuth } from "firebase/auth";
+import InputMask from "react-input-mask";
+import { FaInstagram, FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { validateForm } from "../components/validation";
+import "../styles/editbusiness.css";
 
-const EditBusinessModal = ({ businessId, businessData, onClose }) => {
-  const [businessName, setBusinessName] = useState(businessData.nome || "");
-  const [businessCNPJ, setBusinessCNPJ] = useState(businessData.cnpj || "");
-  const [businessDescription, setBusinessDescription] = useState(businessData.descricao || "");
-  const [category, setCategory] = useState(businessData.categoria || "");
-  const [address, setAddress] = useState(businessData.endereco || "");
-  const [phoneFixed, setPhoneFixed] = useState(businessData.telefoneFixo || "");
-  const [phoneMobile, setPhoneMobile] = useState(businessData.telefoneCelular || "");
-  const [email, setEmail] = useState(businessData.email || "");
-  const [instagram, setInstagram] = useState(businessData.redesSociais?.instagram || "");
-  const [facebook, setFacebook] = useState(businessData.redesSociais?.facebook || "");
-  const [whatsapp, setWhatsapp] = useState(businessData.redesSociais?.whatsapp || "");
-  const [workingHoursWeek, setWorkingHoursWeek] = useState(
-    businessData.horarioDeFuncionamento?.segundaAsexta?.open || ""
-  );
-  const [workingHoursWeekClose, setWorkingHoursWeekClose] = useState(
-    businessData.horarioDeFuncionamento?.segundaAsexta?.close || ""
-  );
-  const [workingHoursSat, setWorkingHoursSat] = useState(
-    businessData.horarioDeFuncionamento?.sabado?.open || ""
-  );
-  const [workingHoursSatClose, setWorkingHoursSatClose] = useState(
-    businessData.horarioDeFuncionamento?.sabado?.close || ""
-  );
-  const [workingHoursSun, setWorkingHoursSun] = useState(
-    businessData.horarioDeFuncionamento?.domingo?.open || ""
-  );
-  const [workingHoursSunClose, setWorkingHoursSunClose] = useState(
-    businessData.horarioDeFuncionamento?.domingo?.close || ""
-  );
+const EditBusiness = () => {
+  const { id } = useParams();
+  const [businessName, setBusinessName] = useState("");
+  const [businessCNPJ, setBusinessCNPJ] = useState("");
+  const [businessDescription, setBusinessDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [address, setAddress] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [cellphone, setCellphone] = useState("");
+  const [email, setEmail] = useState("");
+  const [weekdaysHours, setWeekdaysHours] = useState({ open: "", close: "" });
+  const [saturdayHours, setSaturdayHours] = useState({ open: "", close: "", closed: true });
+  const [sundayHours, setSundayHours] = useState({ open: "", close: "", closed: true });
+  const [lunchBreak, setLunchBreak] = useState(false);
+  const [lunchStart, setLunchStart] = useState("");
+  const [lunchEnd, setLunchEnd] = useState("");
+  const [showWeekend, setShowWeekend] = useState(false);
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [socialLinks, setSocialLinks] = useState({
+    instagram: "",
+    facebook: "",
+    whatsapp: ""
+  });
+  const [showSocialInputs, setShowSocialInputs] = useState({
+    instagram: false,
+    facebook: false,
+    whatsapp: false
+  });
+
+  const navigate = useNavigate();
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  useEffect(() => {
+    const fetchBusinessData = async () => {
+      try {
+        const docRef = doc(db, "lojas", id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setBusinessName(data.nome || "");
+          setBusinessCNPJ(data.cnpj || "");
+          setBusinessDescription(data.descricao || "");
+          setCategory(data.categoria || "");
+          setAddress(data.endereco || "");
+          setTelefone(data.telefoneFixo || "");
+          setCellphone(data.telefoneCelular || "");
+          setEmail(data.email || "");
+          
+          // Carregar horários
+          if (data.horarioDeFuncionamento) {
+            // Segunda a Sexta
+            if (data.horarioDeFuncionamento.segundaAsexta) {
+              setWeekdaysHours({
+                open: data.horarioDeFuncionamento.segundaAsexta.open || "",
+                close: data.horarioDeFuncionamento.segundaAsexta.close || ""
+              });
+            }
+
+            // Sábado
+            if (data.horarioDeFuncionamento.sabado) {
+              setSaturdayHours({
+                open: data.horarioDeFuncionamento.sabado.open || "",
+                close: data.horarioDeFuncionamento.sabado.close || "",
+                closed: data.horarioDeFuncionamento.sabado.open === "00:00" && 
+                       data.horarioDeFuncionamento.sabado.close === "00:00"
+              });
+              setShowWeekend(true);
+            }
+
+            // Domingo
+            if (data.horarioDeFuncionamento.domingo) {
+              setSundayHours({
+                open: data.horarioDeFuncionamento.domingo.open || "",
+                close: data.horarioDeFuncionamento.domingo.close || "",
+                closed: data.horarioDeFuncionamento.domingo.open === "00:00" && 
+                       data.horarioDeFuncionamento.domingo.close === "00:00"
+              });
+              setShowWeekend(true);
+            }
+          }
+
+          setSocialLinks(data.redesSociais || { instagram: "", facebook: "", whatsapp: "" });
+          
+          // Ativar inputs de redes sociais se existirem
+          setShowSocialInputs({
+            instagram: !!data.redesSociais?.instagram,
+            facebook: !!data.redesSociais?.facebook,
+            whatsapp: !!data.redesSociais?.whatsapp
+          });
+        }
+      } catch (error) {
+        console.error("Erro ao carregar dados:", error);
+        setError("Erro ao carregar dados do negócio");
+      }
+    };
+
+    if (id) {
+      fetchBusinessData();
+    }
+  }, [id]);
+
+  const handleSocialLinkChange = (e) => {
+    const { name, value } = e.target;
+    setSocialLinks(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
 
-    const newBusinessRef = doc(db, "lojas", businessId);
+    const formData = {
+      nome: businessName,
+      cnpj: businessCNPJ,
+      descricao: businessDescription,
+      categoria: category,
+      endereco: address,
+      telefoneFixo: telefone,
+      telefoneCelular: cellphone,
+      email,
+      horarioDeFuncionamento: {
+        segundaAsexta: {
+          open: weekdaysHours.open,
+          close: weekdaysHours.close
+        },
+        sabado: {
+          open: !saturdayHours.closed ? saturdayHours.open : "00:00",
+          close: !saturdayHours.closed ? saturdayHours.close : "00:00"
+        },
+        domingo: {
+          open: !sundayHours.closed ? sundayHours.open : "00:00",
+          close: !sundayHours.closed ? sundayHours.close : "00:00"
+        }
+      },
+      redesSociais: {
+        instagram: socialLinks.instagram || "",
+        facebook: socialLinks.facebook || "",
+        whatsapp: socialLinks.whatsapp || ""
+      }
+    };
 
     try {
-      // Preserve existing fields and update only the ones we're editing
-      const updatedData = {
-        ...businessData,
-        nome: businessName,
-        cnpj: businessCNPJ,
-        descricao: businessDescription,
-        categoria: category,
-        endereco: address,
-        telefoneFixo: phoneFixed,
-        telefoneCelular: phoneMobile,
-        email: email,
-        redesSociais: {
-          instagram: instagram,
-          facebook: facebook,
-          whatsapp: whatsapp
-        },
-        horarioDeFuncionamento: {
-          segundaAsexta: {
-            open: workingHoursWeek,
-            close: workingHoursWeekClose
-          },
-          sabado: {
-            open: workingHoursSat,
-            close: workingHoursSatClose
-          },
-          domingo: {
-            open: workingHoursSun,
-            close: workingHoursSunClose
-          }
-        }
-      };
+      if (!user) {
+        setError("Você precisa estar logado para editar um negócio.");
+        return;
+      }
 
-      await updateDoc(newBusinessRef, updatedData);
-      alert("Loja atualizada com sucesso!");
-      onClose();
-    } catch (error) {
-      console.error("Erro ao atualizar loja: ", error);
-      alert("Ocorreu um erro ao atualizar a loja.");
+      // Validar o formulário
+      const validation = validateForm(formData);
+      if (!validation.isValid) {
+        const errorMessages = Object.entries(validation.errors)
+          .map(([field, message]) => message)
+          .filter(message => message);
+        
+        setError(errorMessages.join('\n'));
+        setLoading(false);
+        return;
+      }
+
+      // Atualizar no Firestore
+      const businessRef = doc(db, "lojas", id);
+      await updateDoc(businessRef, formData);
+
+      alert("Negócio atualizado com sucesso!");
+      navigate("/meus-negocios");
+    } catch (err) {
+      console.error("Erro ao atualizar negócio:", err);
+      setError("Erro ao atualizar o negócio. Tente novamente.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>Editar Loja</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <label>Nome:</label>
-            <input
-              type="text"
-              value={businessName}
-              onChange={(e) => setBusinessName(e.target.value)}
-              required
+    <div className="edit-business-page">
+      <form className="edit-business-form" onSubmit={handleSubmit}>
+        <h2>Editar Negócio</h2>
+
+        <input
+          type="text"
+          placeholder="Nome do Negócio"
+          value={businessName}
+          onChange={(e) => setBusinessName(e.target.value)}
+          required
+        />
+
+        <InputMask
+          mask="99.999.999/9999-99"
+          placeholder="CNPJ"
+          value={businessCNPJ}
+          onChange={(e) => setBusinessCNPJ(e.target.value)}
+          required
+        />
+
+        <textarea
+          placeholder="Descreva o seu negócio"
+          value={businessDescription}
+          onChange={(e) => setBusinessDescription(e.target.value)}
+          required
+        />
+
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          required
+        >
+          <option value="">Selecione a Categoria</option>
+          <option value="restaurante">Restaurante</option>
+          <option value="loja">Loja</option>
+          <option value="servicos">Serviços</option>
+          <option value="artesanato">Artesanato</option>
+          <option value="beleza">Beleza e Estética</option>
+          <option value="educacao">Educação e Cursos</option>
+          <option value="saude">Saúde e Bem-estar</option>
+          <option value="esportes">Esportes e Lazer</option>
+          <option value="outro">Outro</option>
+        </select>
+
+        <input
+          type="text"
+          placeholder="Endereço Completo"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          required
+        />
+
+        <InputMask
+          mask="(99) 9999-9999"
+          placeholder="Telefone Fixo"
+          value={telefone}
+          onChange={(e) => setTelefone(e.target.value)}
+          required
+        />
+
+        <InputMask
+          mask="(99) 99999-9999"
+          placeholder="Celular (Opcional)"
+          value={cellphone}
+          onChange={(e) => setCellphone(e.target.value)}
+        />
+
+        <input
+          type="email"
+          placeholder="E-mail para Contato"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
+        <h3>Redes Sociais</h3>
+        <div className="social-icons">
+          <div className="social-icon-wrapper">
+            <FaInstagram
+              className={`social-icon ${showSocialInputs.instagram ? "active" : ""}`}
+              onClick={() =>
+                setShowSocialInputs({
+                  ...showSocialInputs,
+                  instagram: !showSocialInputs.instagram,
+                })
+              }
             />
-          </div>
-          <div className="input-group">
-            <label>CNPJ:</label>
-            <input
-              type="text"
-              value={businessCNPJ}
-              onChange={(e) => setBusinessCNPJ(e.target.value)}
-              required
-            />
-          </div>
-          <div className="input-group">
-            <label>Descrição:</label>
-            <textarea
-              value={businessDescription}
-              onChange={(e) => setBusinessDescription(e.target.value)}
-              required
-            />
-          </div>
-          <div className="input-group">
-            <label>Categoria:</label>
-            <input
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              required
-            />
-          </div>
-          <div className="input-group">
-            <label>Endereço:</label>
-            <input
-              type="text"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              required
-            />
-          </div>
-          <div className="input-group">
-            <label>Telefone Fixo:</label>
-            <input
-              type="text"
-              value={phoneFixed}
-              onChange={(e) => setPhoneFixed(e.target.value)}
-            />
-          </div>
-          <div className="input-group">
-            <label>Telefone Celular:</label>
-            <input
-              type="text"
-              value={phoneMobile}
-              onChange={(e) => setPhoneMobile(e.target.value)}
-              required
-            />
-          </div>
-          <div className="input-group">
-            <label>E-mail:</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            {showSocialInputs.instagram && (
+              <input
+                type="url"
+                name="instagram"
+                placeholder="Link do Instagram"
+                value={socialLinks.instagram}
+                onChange={handleSocialLinkChange}
+                className="social-input"
+              />
+            )}
           </div>
 
-          <div className="social-media-section">
-            <h3>Redes Sociais</h3>
-            <div className="input-group">
-              <label>Instagram:</label>
+          <div className="social-icon-wrapper">
+            <FaFacebook
+              className={`social-icon ${showSocialInputs.facebook ? "active" : ""}`}
+              onClick={() =>
+                setShowSocialInputs({
+                  ...showSocialInputs,
+                  facebook: !showSocialInputs.facebook,
+                })
+              }
+            />
+            {showSocialInputs.facebook && (
               <input
-                type="text"
-                value={instagram}
-                onChange={(e) => setInstagram(e.target.value)}
+                type="url"
+                name="facebook"
+                placeholder="Link do Facebook"
+                value={socialLinks.facebook}
+                onChange={handleSocialLinkChange}
+                className="social-input"
               />
-            </div>
-            <div className="input-group">
-              <label>Facebook:</label>
-              <input
-                type="text"
-                value={facebook}
-                onChange={(e) => setFacebook(e.target.value)}
-              />
-            </div>
-            <div className="input-group">
-              <label>WhatsApp:</label>
-              <input
-                type="text"
-                value={whatsapp}
-                onChange={(e) => setWhatsapp(e.target.value)}
-              />
-            </div>
+            )}
           </div>
 
-          <div className="working-hours-section">
-            <h3>Horário de Funcionamento</h3>
-            <div className="working-hours-group">
-              <h4>Segunda a Sexta</h4>
-              <div className="hours-input-group">
-                <div className="input-group">
-                  <label>Abertura:</label>
+          <div className="social-icon-wrapper">
+            <FaWhatsapp
+              className={`social-icon ${showSocialInputs.whatsapp ? "active" : ""}`}
+              onClick={() =>
+                setShowSocialInputs({
+                  ...showSocialInputs,
+                  whatsapp: !showSocialInputs.whatsapp,
+                })
+              }
+            />
+            {showSocialInputs.whatsapp && (
+              <input
+                type="url"
+                name="whatsapp"
+                placeholder="Link do WhatsApp"
+                value={socialLinks.whatsapp}
+                onChange={handleSocialLinkChange}
+                className="social-input"
+              />
+            )}
+          </div>
+        </div>
+
+        <div className="hours-section">
+          <h3>Horário de Funcionamento (Segunda a Sexta)</h3>
+          <div className="time-inputs">
+            <input
+              type="time"
+              value={weekdaysHours.open}
+              onChange={(e) =>
+                setWeekdaysHours({ ...weekdaysHours, open: e.target.value })
+              }
+              required
+            />
+            <span>até</span>
+            <input
+              type="time"
+              value={weekdaysHours.close}
+              onChange={(e) =>
+                setWeekdaysHours({ ...weekdaysHours, close: e.target.value })
+              }
+              required
+            />
+          </div>
+        </div>
+
+        <div className="lunch-break-toggle">
+          <label>
+            <input
+              type="checkbox"
+              checked={lunchBreak}
+              onChange={(e) => setLunchBreak(e.target.checked)}
+            />
+            Fecha para o almoço?
+          </label>
+        </div>
+
+        {lunchBreak && (
+          <div className="lunch-break-hours">
+            <label>
+              Horário de fechamento para o almoço:
+              <input
+                type="time"
+                value={lunchStart}
+                onChange={(e) => setLunchStart(e.target.value)}
+              />
+              até
+              <input
+                type="time"
+                value={lunchEnd}
+                onChange={(e) => setLunchEnd(e.target.value)}
+              />
+            </label>
+          </div>
+        )}
+
+        <div className="weekend-toggle">
+          <label>
+            <input
+              type="checkbox"
+              checked={showWeekend}
+              onChange={(e) => setShowWeekend(e.target.checked)}
+            />
+            Funciona aos finais de semana?
+          </label>
+        </div>
+
+        {showWeekend && (
+          <>
+            <div className="hours-section">
+              <h3>Horário de Funcionamento (Sábado)</h3>
+              <div className="time-inputs">
+                <label>
                   <input
-                    type="time"
-                    value={workingHoursWeek}
-                    onChange={(e) => setWorkingHoursWeek(e.target.value)}
+                    type="checkbox"
+                    checked={!saturdayHours.closed}
+                    onChange={(e) =>
+                      setSaturdayHours({
+                        ...saturdayHours,
+                        closed: !e.target.checked,
+                      })
+                    }
                   />
-                </div>
-                <div className="input-group">
-                  <label>Fechamento:</label>
-                  <input
-                    type="time"
-                    value={workingHoursWeekClose}
-                    onChange={(e) => setWorkingHoursWeekClose(e.target.value)}
-                  />
-                </div>
+                  Aberto aos sábados
+                </label>
+                {!saturdayHours.closed && (
+                  <>
+                    <input
+                      type="time"
+                      value={saturdayHours.open}
+                      onChange={(e) =>
+                        setSaturdayHours({
+                          ...saturdayHours,
+                          open: e.target.value,
+                        })
+                      }
+                    />
+                    <span>até</span>
+                    <input
+                      type="time"
+                      value={saturdayHours.close}
+                      onChange={(e) =>
+                        setSaturdayHours({
+                          ...saturdayHours,
+                          close: e.target.value,
+                        })
+                      }
+                    />
+                  </>
+                )}
               </div>
             </div>
 
-            <div className="working-hours-group">
-              <h4>Sábado</h4>
-              <div className="hours-input-group">
-                <div className="input-group">
-                  <label>Abertura:</label>
+            <div className="hours-section">
+              <h3>Horário de Funcionamento (Domingo)</h3>
+              <div className="time-inputs">
+                <label>
                   <input
-                    type="time"
-                    value={workingHoursSat}
-                    onChange={(e) => setWorkingHoursSat(e.target.value)}
+                    type="checkbox"
+                    checked={!sundayHours.closed}
+                    onChange={(e) =>
+                      setSundayHours({
+                        ...sundayHours,
+                        closed: !e.target.checked,
+                      })
+                    }
                   />
-                </div>
-                <div className="input-group">
-                  <label>Fechamento:</label>
-                  <input
-                    type="time"
-                    value={workingHoursSatClose}
-                    onChange={(e) => setWorkingHoursSatClose(e.target.value)}
-                  />
-                </div>
+                  Aberto aos domingos
+                </label>
+                {!sundayHours.closed && (
+                  <>
+                    <input
+                      type="time"
+                      value={sundayHours.open}
+                      onChange={(e) =>
+                        setSundayHours({ ...sundayHours, open: e.target.value })
+                      }
+                    />
+                    <span>até</span>
+                    <input
+                      type="time"
+                      value={sundayHours.close}
+                      onChange={(e) =>
+                        setSundayHours({
+                          ...sundayHours,
+                          close: e.target.value,
+                        })
+                      }
+                    />
+                  </>
+                )}
               </div>
             </div>
+          </>
+        )}
 
-            <div className="working-hours-group">
-              <h4>Domingo</h4>
-              <div className="hours-input-group">
-                <div className="input-group">
-                  <label>Abertura:</label>
-                  <input
-                    type="time"
-                    value={workingHoursSun}
-                    onChange={(e) => setWorkingHoursSun(e.target.value)}
-                  />
-                </div>
-                <div className="input-group">
-                  <label>Fechamento:</label>
-                  <input
-                    type="time"
-                    value={workingHoursSunClose}
-                    onChange={(e) => setWorkingHoursSunClose(e.target.value)}
-                  />
-                </div>
-              </div>
-            </div>
+        {error && (
+          <div className="error">
+            {error.split("\n").map((err, index) => (
+              <p key={index}>{err}</p>
+            ))}
           </div>
+        )}
 
-          <div className="buttons">
-            <button type="submit" className="btn primary">Atualizar</button>
-            <button type="button" onClick={onClose} className="btn secondary">Cancelar</button>
-          </div>
-        </form>
-      </div>
+        {loading && <div className="loading">Carregando...</div>}
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Salvando..." : "Salvar Alterações"}
+        </button>
+      </form>
     </div>
   );
 };
 
-export default EditBusinessModal;
+export default EditBusiness;

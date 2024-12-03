@@ -35,6 +35,17 @@ const LojaCard = ({ loja, isPremium = false }) => {
   );
 };
 
+const SkeletonCard = () => (
+  <div className="loja-card skeleton">
+    <div className="skeleton-image"></div>
+    <div className="skeleton-content">
+      <div className="skeleton-title"></div>
+      <div className="skeleton-text"></div>
+      <div className="skeleton-text"></div>
+    </div>
+  </div>
+);
+
 const Home = () => {
   const [lojas, setLojas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -125,8 +136,13 @@ const Home = () => {
   if (loading) {
     return (
       <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Carregando negócios...</p>
+        <div className="loading-grid">
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+          <SkeletonCard />
+        </div>
       </div>
     );
   }

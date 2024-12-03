@@ -194,32 +194,36 @@ const LojaDetails = () => {
       </p>
       <p>
         <strong>Horário de Funcionamento:</strong>
+      </p>
+      <div className="horarios-funcionamento">
         {loja.horarioDeFuncionamento ? (
-          <div>
-            {/* Exibir horário de funcionamento de forma detalhada */}
+          <>
             <p>
               <strong>Segunda a Sexta:</strong>{" "}
-              {loja.horarioDeFuncionamento.segundaAsexta?.open ||
-                "Não disponível"}{" "}
-              -{" "}
-              {loja.horarioDeFuncionamento.segundaAsexta?.close ||
-                "Não disponível"}
+              {loja.horarioDeFuncionamento.segundaAsexta?.open && 
+               loja.horarioDeFuncionamento.segundaAsexta?.close ? (
+                `${loja.horarioDeFuncionamento.segundaAsexta.open} às ${loja.horarioDeFuncionamento.segundaAsexta.close}`
+              ) : "Não disponível"}
             </p>
             <p>
               <strong>Sábado:</strong>{" "}
-              {loja.horarioDeFuncionamento.sabado?.open || "Não disponível"} -{" "}
-              {loja.horarioDeFuncionamento.sabado?.close || "Não disponível"}
+              {loja.horarioDeFuncionamento.sabado?.open && 
+               loja.horarioDeFuncionamento.sabado?.close ? (
+                `${loja.horarioDeFuncionamento.sabado.open} às ${loja.horarioDeFuncionamento.sabado.close}`
+              ) : "Não disponível"}
             </p>
             <p>
               <strong>Domingo:</strong>{" "}
-              {loja.horarioDeFuncionamento.domingo?.open || "Não disponível"} -{" "}
-              {loja.horarioDeFuncionamento.domingo?.close || "Não disponível"}
+              {loja.horarioDeFuncionamento.domingo?.open && 
+               loja.horarioDeFuncionamento.domingo?.close ? (
+                `${loja.horarioDeFuncionamento.domingo.open} às ${loja.horarioDeFuncionamento.domingo.close}`
+              ) : "Não disponível"}
             </p>
-          </div>
+          </>
         ) : (
-          "Não disponível"
+          <p>Não disponível</p>
         )}
-      </p>
+      </div>
 
       {/* Espaço para avaliações */}
       <div style={{ marginTop: "50px" }}></div>
