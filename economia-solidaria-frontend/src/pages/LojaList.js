@@ -69,16 +69,16 @@ const LojasList = () => {
         return nomeFiltrado && categoriaFiltrada;
       })
       .sort((a, b) => {
-        // Definir prioridade dos planos
+        // Definir prioridade dos planos (Premium > Essencial > Gratuito)
         const prioridadePlano = {
-          premium: 1,
-          essencial: 2,
-          gratuito: 3
+          premium: 0,    // Mudando para 0 para ter maior prioridade
+          essencial: 1,  // Mudando para 1 para ser segundo
+          gratuito: 2    // Mudando para 2 para ser último
         };
 
         // Obter prioridade de cada loja (default para gratuito se não tiver plano)
-        const prioridadeA = prioridadePlano[a.plano || "gratuito"];
-        const prioridadeB = prioridadePlano[b.plano || "gratuito"];
+        const prioridadeA = prioridadePlano[a.plano?.toLowerCase() || "gratuito"];
+        const prioridadeB = prioridadePlano[b.plano?.toLowerCase() || "gratuito"];
 
         // Ordenar primeiro por plano
         if (prioridadeA !== prioridadeB) {
@@ -121,7 +121,7 @@ const LojasList = () => {
         />
         <div className="loja-info">
           <h3>{loja.nome}</h3>
-          <p>{loja.descricao?.substring(0, 100)}{loja.descricao?.length > 100 ? '...' : ''}</p>
+         
           <p className="loja-categoria">{loja.categoria || 'Categoria não especificada'}</p>
         </div>
       </Link>

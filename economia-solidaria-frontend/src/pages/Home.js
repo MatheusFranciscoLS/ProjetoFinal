@@ -30,7 +30,6 @@ const LojaCard = ({ loja, isPremium = false }) => {
       <div className="loja-info">
         <h3>{nome}</h3>
         {categoria && <span className="categoria-tag">{categoria}</span>}
-        <p>{descricao || "Descrição não disponível."}</p>
       </div>
     </Link>
   );
@@ -116,7 +115,11 @@ const Home = () => {
     fetchLojas();
   }, []);
 
-  const lojasPremium = lojas.filter(loja => loja.plano?.toLowerCase() === "premium");
+  const lojasPremium = lojas
+    .filter(loja => loja.plano?.toLowerCase() === "premium")
+    .sort(() => 0.5 - Math.random()) // Ordena aleatoriamente
+    .slice(0, 5); // Seleciona os primeiros 5
+
   const lojasEssential = lojas.filter(loja => loja.plano?.toLowerCase() === "essencial");
 
   if (loading) {
