@@ -22,7 +22,7 @@ const LojasList = () => {
         const lojasData = await Promise.all(
           querySnapshot.docs.map(async (docSnapshot) => {
             const lojaData = { id: docSnapshot.id, ...docSnapshot.data() };
-            
+
             // Buscar o plano atualizado do usuário
             if (lojaData.userId) {
               const userDoc = await getDoc(doc(db, "users", lojaData.userId));
@@ -42,11 +42,11 @@ const LojasList = () => {
             } else {
               lojaData.plano = "gratuito";
             }
-            
+
             return lojaData;
           })
         );
-        
+
         setLojas(lojasData);
       } catch (error) {
         console.error("Erro ao carregar lojas:", error);
@@ -121,7 +121,6 @@ const LojasList = () => {
         />
         <div className="loja-info">
           <h3>{loja.nome}</h3>
-         
           <p className="loja-categoria">{loja.categoria || 'Categoria não especificada'}</p>
         </div>
       </Link>
@@ -180,21 +179,23 @@ const LojasList = () => {
         )}
       </div>
 
-      <div className="pagination">
-        <button
-          onClick={() => handleChangePage(paginaAtual - 1)}
-          disabled={paginaAtual === 1}
-        >
-          Anterior
-        </button>
-        <span>Página {paginaAtual}</span>
-        <button
-          onClick={() => handleChangePage(paginaAtual + 1)}
-          disabled={paginaAtual * lojasPorPagina >= lojasFiltradas.length}
-        >
-          Próxima
-        </button>
-      </div>
+      {lojasFiltradas.length > lojasPorPagina && (
+        <div className="pagination">
+          <button
+            onClick={() => handleChangePage(paginaAtual - 1)}
+            disabled={paginaAtual === 1}
+          >
+            Anterior
+          </button>
+          <span>Página {paginaAtual}</span>
+          <button
+            onClick={() => handleChangePage(paginaAtual + 1)}
+            disabled={paginaAtual * lojasPorPagina >= lojasFiltradas.length}
+          >
+            Próxima
+          </button>
+        </div>
+      )}
     </div>
   );
 };

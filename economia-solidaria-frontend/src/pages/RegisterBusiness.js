@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
@@ -39,6 +39,15 @@ const RegisterBusiness = () => {
     facebook: false,
     whatsapp: false
   });
+  const [cep, setCep] = useState("");
+  const [logradouro, setLogradouro] = useState("");
+  const [bairro, setBairro] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [uf, setUf] = useState("");
+  const [numero, setNumero] = useState("");
+  const [complemento, setComplemento] = useState("");
+  const [loadingCep, setLoadingCep] = useState(false);
+  const [errorCep, setErrorCep] = useState("");
 
   const navigate = useNavigate();
   const auth = getAuth();
@@ -162,6 +171,53 @@ const RegisterBusiness = () => {
     }
   };
 
+  const buscarCep = async (cepValue) => {
+    const cepLimpo = cepValue.replace(/\D/g, '');
+    
+    if (cepLimpo.length !== 8) {
+      return;
+    }
+
+    setLoadingCep(true);
+    setErrorCep("");
+    
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+      const data = await response.json();
+
+      if (data.erro) {
+        setErrorCep("CEP não encontrado");
+        return;
+      }
+
+      setLogradouro(data.logradouro || "");
+      setBairro(data.bairro || "");
+      setCidade(data.localidade || "");
+      setUf(data.uf || "");
+      
+      // Atualiza o endereço completo
+      const enderecoCompleto = `${data.logradouro}, ${bairro}, ${cidade} - ${uf}`;
+      setAddress(enderecoCompleto);
+      
+    } catch (error) {
+      console.error("Erro ao buscar CEP:", error);
+      setErrorCep("Erro ao buscar CEP. Tente novamente.");
+    } finally {
+      setLoadingCep(false);
+    }
+  };
+
+  const atualizarEnderecoCompleto = () => {
+    if (logradouro) {
+      const enderecoCompleto = `${logradouro}${numero ? `, ${numero}` : ""}${complemento ? `, ${complemento}` : ""}, ${bairro}, ${cidade} - ${uf}`;
+      setAddress(enderecoCompleto);
+    }
+  };
+
+  useEffect(() => {
+    atualizarEnderecoCompleto();
+  }, [logradouro, numero, complemento, bairro, cidade, uf]);
+
   return (
     <div className="register-business-page">
       <form className="register-business-form" onSubmit={handleSubmit}>
@@ -207,13 +263,94 @@ const RegisterBusiness = () => {
           <option value="outro">Outro</option>
         </select>
 
-        <input
-          type="text"
-          placeholder="Endereço Completo"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          required
-        />
+        <div className="endereco-section">
+          <h3>Endereço</h3>
+          
+          {/* CEP */}
+          <div className="input-group">
+            <InputMask
+              mask="99999-999"
+              value={cep}
+              onChange={(e) => {
+                setCep(e.target.value);
+                if (e.target.value.replace(/\D/g, '').length === 8) {
+                  buscarCep(e.target.value);
+                }
+              }}
+              placeholder="CEP"
+            >
+              {(inputProps) => (
+                <input
+                  {...inputProps}
+                  type="text"
+                  required
+                />
+              )}
+            </InputMask>
+            {loadingCep && <span className="loading-cep">Buscando CEP...</span>}
+            {errorCep && <span className="error-cep">{errorCep}</span>}
+          </div>
+
+          {/* Logradouro */}
+          <input
+            type="text"
+            value={logradouro}
+            onChange={(e) => setLogradouro(e.target.value)}
+            placeholder="Logradouro"
+            required
+          />
+
+          {/* Número */}
+          <input
+            type="text"
+            value={numero}
+            onChange={(e) => setNumero(e.target.value)}
+            placeholder="Número"
+            required
+          />
+
+          {/* Complemento */}
+          <input
+            type="text"
+            value={complemento}
+            onChange={(e) => setComplemento(e.target.value)}
+            placeholder="Complemento (opcional)"
+          />
+
+          {/* Bairro */}
+          <input
+            type="text"
+            value={bairro}
+            onChange={(e) => setBairro(e.target.value)}
+            placeholder="Bairro"
+            required
+          />
+
+          {/* Cidade */}
+          <input
+            type="text"
+            value={cidade}
+            onChange={(e) => setCidade(e.target.value)}
+            placeholder="Cidade"
+            required
+          />
+
+          {/* UF */}
+          <input
+            type="text"
+            value={uf}
+            onChange={(e) => setUf(e.target.value)}
+            placeholder="UF"
+            required
+            maxLength="2"
+          />
+
+          {/* Campo de endereço completo (hidden) */}
+          <input
+            type="hidden"
+            value={address}
+          />
+        </div>
 
         <InputMask
           mask="(99) 9999-9999"
