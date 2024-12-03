@@ -123,8 +123,6 @@ const RegisterBusiness = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    
-
     setLoading(true);
     setError(""); // Limpa as mensagens de erro antes do envio
 
@@ -262,21 +260,21 @@ const RegisterBusiness = () => {
           name="instagram"
           placeholder="Link do Instagram"
           value={socialLinks.instagram}
-          onChange={handleSocialLinksChange}
+          onChange={(e) => setSocialLinks({ ...socialLinks, instagram: e.target.value })}
         />
         <input
           type="url"
           name="facebook"
           placeholder="Link do Facebook"
           value={socialLinks.facebook}
-          onChange={handleSocialLinksChange}
+          onChange={(e) => setSocialLinks({ ...socialLinks, facebook: e.target.value })}
         />
         <input
           type="url"
           name="whatsapp"
           placeholder="Link do WhatsApp (com https://wa.me/)"
           value={socialLinks.whatsapp}
-          onChange={handleSocialLinksChange}
+          onChange={(e) => setSocialLinks({ ...socialLinks, whatsapp: e.target.value })}
         />
 
         {/* Horário de funcionamento de segunda a sexta */}

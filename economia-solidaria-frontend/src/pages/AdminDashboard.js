@@ -411,46 +411,32 @@ const AdminDashboard = () => {
                 <strong>E-mail:</strong> {selectedBusiness.email}
               </p>
               <p>
-<<<<<<< HEAD
-                <strong>Horário de Funcionamento:</strong> 
-                {selectedBusiness.horarioDeFuncionamento ? (
-                  <>
-                    <p>Abertura: {selectedBusiness.horarioDeFuncionamento.abertura}</p>
-                    <p>Fechamento: {selectedBusiness.horarioDeFuncionamento.fechamento}</p>
-=======
                 <strong>Horário de Funcionamento:</strong>
                 {selectedBusiness?.horarioDeFuncionamento ? (
                   <>
                     {/* Horário de Funcionamento de Segunda a Sexta */}
                     <p>
                       <strong>Segunda a Sexta:</strong>{" "}
-                      {selectedBusiness.horarioDeFuncionamento.segundaAsexta
-                        ?.open || "Não disponível"}{" "}
+                      {selectedBusiness.horarioDeFuncionamento.segundaAsexta?.open || "Não disponível"}{" "}
                       -{" "}
-                      {selectedBusiness.horarioDeFuncionamento.sabado?.close ||
-                        "Não disponível"}
+                      {selectedBusiness.horarioDeFuncionamento.segundaAsexta?.close || "Não disponível"}
                     </p>
 
                     {/* Horário de Funcionamento de Sábado */}
                     <p>
                       <strong>Sábado:</strong>{" "}
-                      {selectedBusiness.horarioDeFuncionamento.sabado?.open ||
-                        "Não disponível"}{" "}
+                      {selectedBusiness.horarioDeFuncionamento.sabado?.open || "Não disponível"}{" "}
                       -{" "}
-                      {selectedBusiness.horarioDeFuncionamento.sabado?.close ||
-                        "Não disponível"}
+                      {selectedBusiness.horarioDeFuncionamento.sabado?.close || "Não disponível"}
                     </p>
 
                     {/* Horário de Funcionamento de Domingo */}
                     <p>
                       <strong>Domingo:</strong>{" "}
-                      {selectedBusiness.horarioDeFuncionamento.domingo?.open ||
-                        "Não disponível"}{" "}
+                      {selectedBusiness.horarioDeFuncionamento.domingo?.open || "Não disponível"}{" "}
                       -{" "}
-                      {selectedBusiness.horarioDeFuncionamento.domingo?.close ||
-                        "Não disponível"}
+                      {selectedBusiness.horarioDeFuncionamento.domingo?.close || "Não disponível"}
                     </p>
->>>>>>> 480342fee9c64a716725b68423ae5f01248a5289
                   </>
                 ) : (
                   "Não disponível"
