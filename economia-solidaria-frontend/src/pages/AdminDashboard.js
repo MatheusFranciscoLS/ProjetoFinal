@@ -79,10 +79,15 @@ const AdminDashboard = () => {
       if (businessSnapshot.exists()) {
         const businessData = businessSnapshot.data();
 
-        // Atualiza o status do negócio
+        // Buscar o plano do usuário
+        const userDoc = await getDoc(doc(db, "users", businessData.userId));
+        const userPlan = userDoc.exists() ? userDoc.data().plano || "gratuito" : "gratuito";
+
+        // Atualiza o status do negócio e adiciona o plano
         await setDoc(businessRef, {
           ...businessData,
           status: approved ? "aprovado" : "negado",
+          plano: userPlan // Adiciona o plano do usuário
         });
 
         if (approved) {
@@ -90,6 +95,7 @@ const AdminDashboard = () => {
           await setDoc(newBusinessRef, {
             ...businessData,
             status: "aprovado",
+            plano: userPlan // Adiciona o plano do usuário
           });
           await deleteDoc(businessRef);
           setFeedbackMessage("Negócio aprovado e movido para 'lojas'.");
@@ -125,8 +131,6 @@ const AdminDashboard = () => {
       console.error('CNPJ não informado');
       return;
     }
-
-
 
     const cleanCNPJ = cnpj.replace(/[^\d]+/g, '');
     if (cleanCNPJ.length !== 14) {
@@ -413,31 +417,25 @@ const AdminDashboard = () => {
                     {/* Horário de Funcionamento de Segunda a Sexta */}
                     <p>
                       <strong>Segunda a Sexta:</strong>{" "}
-                      {selectedBusiness.horarioDeFuncionamento.segundaAsexta
-                        ?.open || "Não disponível"}{" "}
+                      {selectedBusiness.horarioDeFuncionamento.segundaAsexta?.open || "Não disponível"}{" "}
                       -{" "}
-                      {selectedBusiness.horarioDeFuncionamento.sabado?.close ||
-                        "Não disponível"}
+                      {selectedBusiness.horarioDeFuncionamento.segundaAsexta?.close || "Não disponível"}
                     </p>
 
                     {/* Horário de Funcionamento de Sábado */}
                     <p>
                       <strong>Sábado:</strong>{" "}
-                      {selectedBusiness.horarioDeFuncionamento.sabado?.open ||
-                        "Não disponível"}{" "}
+                      {selectedBusiness.horarioDeFuncionamento.sabado?.open || "Não disponível"}{" "}
                       -{" "}
-                      {selectedBusiness.horarioDeFuncionamento.sabado?.close ||
-                        "Não disponível"}
+                      {selectedBusiness.horarioDeFuncionamento.sabado?.close || "Não disponível"}
                     </p>
 
                     {/* Horário de Funcionamento de Domingo */}
                     <p>
                       <strong>Domingo:</strong>{" "}
-                      {selectedBusiness.horarioDeFuncionamento.domingo?.open ||
-                        "Não disponível"}{" "}
+                      {selectedBusiness.horarioDeFuncionamento.domingo?.open || "Não disponível"}{" "}
                       -{" "}
-                      {selectedBusiness.horarioDeFuncionamento.domingo?.close ||
-                        "Não disponível"}
+                      {selectedBusiness.horarioDeFuncionamento.domingo?.close || "Não disponível"}
                     </p>
                   </>
                 ) : (

@@ -4,7 +4,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase"; // Certifique-se de importar o 'db'
 import { getAuth } from "firebase/auth"; // Para pegar o UID do usuário autenticado
 import "../styles/registerbusiness.css";
-import { validateForm } from "../components/validation"; // Importa a função de validação
+
 import InputMask from "react-input-mask"; //
 
 
@@ -37,7 +37,7 @@ const RegisterBusiness = () => {
   const user = auth.currentUser;
   const userUid = user ? user.uid : null;
 
-  const handleSocialLinksChange = (e) => {
+  const handleSocialLinkChange = (e) => {
     const { name, value } = e.target;
     setSocialLinks((prevLinks) => ({ ...prevLinks, [name]: value }));
   };
@@ -120,31 +120,96 @@ const RegisterBusiness = () => {
     setImages(images.filter((_, i) => i !== index));
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const validateForm = (formData) => {
+    const errors = {};
 
-  // Chama a função de validação
-  const validationError = validateForm({
-    businessName,
-    businessCNPJ,
-    businessDescription,
-    category,
-    address,
-    landline,
-    email,
-    images,
-    cnDoc,
-    termsAccepted,
-  });
+    if (!formData.businessName) {
+      errors.businessName = "O nome do negócio é obrigatório.";
+    }
 
-  if (validationError) {
-    setError(validationError); // Exibe a mensagem de erro detalhada
-    return; // Interrompe o envio se houver erro
-  }
+    if (!formData.businessCNPJ) {
+      errors.businessCNPJ = "O CNPJ é obrigatório.";
+    }
 
-  setLoading(true);
-  setError(""); // Limpa as mensagens de erro antes do envio
+    if (!formData.businessDescription) {
+      errors.businessDescription = "A descrição do negócio é obrigatória.";
+    }
 
+    if (!formData.category) {
+      errors.category = "A categoria é obrigatória.";
+    }
+
+    if (!formData.address) {
+      errors.address = "O endereço é obrigatório.";
+    }
+
+    if (!formData.landline) {
+      errors.landline = "O telefone fixo é obrigatório.";
+    }
+
+    if (!formData.email) {
+      errors.email = "O e-mail é obrigatório.";
+    }
+
+    if (formData.images.length === 0) {
+      errors.images = "Pelo menos uma imagem é obrigatória.";
+    }
+
+    if (!formData.cnDoc) {
+      errors.cnDoc = "O comprovante do Simples Nacional é obrigatório.";
+    }
+
+    if (!formData.horarioDeFuncionamento.segundaAsexta.open || !formData.horarioDeFuncionamento.segundaAsexta.close) {
+      errors.horarioDeFuncionamento = "O horário de funcionamento de segunda a sexta é obrigatório.";
+    }
+
+    if (!formData.horarioDeFuncionamento.sabado.open || !formData.horarioDeFuncionamento.sabado.close) {
+      errors.horarioDeFuncionamento = "O horário de funcionamento de sábado é obrigatório.";
+    }
+
+    if (!formData.horarioDeFuncionamento.domingo.open || !formData.horarioDeFuncionamento.domingo.close) {
+      errors.horarioDeFuncionamento = "O horário de funcionamento de domingo é obrigatório.";
+    }
+
+    if (!formData.socialLinks.instagram || !formData.socialLinks.facebook || !formData.socialLinks.whatsapp) {
+      errors.socialLinks = "As redes sociais são obrigatórias.";
+    }
+
+    return { isValid: Object.keys(errors).length === 0, errors };
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    // Criar objeto com todos os dados do formulário
+    const formData = {
+      businessName,
+      businessCNPJ,
+      businessDescription,
+      category,
+      address,
+      landline,
+      email,
+      images,
+      cnDoc,
+      horarioDeFuncionamento: {
+        segundaAsexta: weekdaysHours,
+        sabado: saturdayHours,
+        domingo: sundayHours
+      },
+      socialLinks
+    };
+
+    // Validar formulário
+    const { isValid, errors } = validateForm(formData);
+
+    if (!isValid) {
+      setError(Object.values(errors).join('\n'));
+      setLoading(false);
+      return;
+    }
 
     try {
       // Processa as imagens para base64
@@ -160,14 +225,14 @@ const handleSubmit = async (e) => {
       const imageBase64 = await Promise.all(imageBase64Promises);
 
       // Envia os dados para o Firestore
-      await addDoc(collection(db, "negocios_pendentes"), {
+      const businessData = {
         nome: businessName,
         cnpj: businessCNPJ,
         descricao: businessDescription,
         categoria: category,
         endereco: address,
-        telefoneFixo: landline, // Telefone fixo
-        telefoneCelular: cellphone, // Telefone celular
+        telefoneFixo: landline,
+        telefoneCelular: cellphone,
         email,
         horarioDeFuncionamento: {
           segundaAsexta: weekdaysHours,
@@ -175,11 +240,17 @@ const handleSubmit = async (e) => {
           domingo: sundayHours,
         },
         imagens: imageBase64,
-        comprovante: cnDoc.name, // Salva o nome do arquivo do comprovante
-        userId: userUid, // Adiciona o UID do usuário
-        status: "pendente", // Definindo o status como "pendente"
-        redesSociais: socialLinks,
-      });
+        comprovante: cnDoc.name,
+        userId: userUid,
+        status: "pendente",
+        redesSociais: {
+          instagram: socialLinks.instagram || "",
+          facebook: socialLinks.facebook || "",
+          whatsapp: socialLinks.whatsapp ? socialLinks.whatsapp.replace(/[^\d]/g, "") : ""
+        },
+      };
+
+      await addDoc(collection(db, "negocios_pendentes"), businessData);
 
       alert("Cadastro enviado, aguardando aprovação do admin!");
       navigate("/"); // Após o envio, redireciona o usuário para a home
@@ -259,7 +330,6 @@ const handleSubmit = async (e) => {
           placeholder="Celular (Opcional)"
           value={cellphone}
           onChange={(e) => setCellphone(e.target.value)}
-          
         />
 
         <input
@@ -275,25 +345,25 @@ const handleSubmit = async (e) => {
           name="instagram"
           placeholder="Link do Instagram"
           value={socialLinks.instagram}
-          onChange={handleSocialLinksChange}
+          onChange={(e) => setSocialLinks({ ...socialLinks, instagram: e.target.value })}
         />
         <input
           type="url"
           name="facebook"
           placeholder="Link do Facebook"
           value={socialLinks.facebook}
-          onChange={handleSocialLinksChange}
+          onChange={(e) => setSocialLinks({ ...socialLinks, facebook: e.target.value })}
         />
         <input
           type="url"
           name="whatsapp"
           placeholder="Link do WhatsApp (https://api.whatsapp/ ou https://wa.me/)"
           value={socialLinks.whatsapp}
-          onChange={handleSocialLinksChange}
+          onChange={(e) => setSocialLinks({ ...socialLinks, whatsapp: e.target.value })}
         />
 
- {/* Horário de funcionamento de segunda a sexta */}
- <div className="hours-section">
+        {/* Horário de funcionamento de segunda a sexta */}
+        <div className="hours-section">
           <h3>Horário de Funcionamento (Segunda a Sexta)</h3>
           <input
             type="time"
@@ -322,7 +392,6 @@ const handleSubmit = async (e) => {
             onChange={(e) =>
               setSaturdayHours({ ...saturdayHours, open: e.target.value })
             }
-            
           />
           <input
             type="time"
@@ -330,7 +399,6 @@ const handleSubmit = async (e) => {
             onChange={(e) =>
               setSaturdayHours({ ...saturdayHours, close: e.target.value })
             }
-            
           />
         </div>
 
@@ -343,7 +411,6 @@ const handleSubmit = async (e) => {
             onChange={(e) =>
               setSundayHours({ ...sundayHours, open: e.target.value })
             }
-            
           />
           <input
             type="time"
@@ -351,10 +418,8 @@ const handleSubmit = async (e) => {
             onChange={(e) =>
               setSundayHours({ ...sundayHours, close: e.target.value })
             }
-            
           />
         </div>
-
 
         <div className="upload-instructions">
           <label htmlFor="businessImages">

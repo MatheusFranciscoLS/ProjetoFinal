@@ -1,64 +1,143 @@
 import { cnpj } from "cpf-cnpj-validator";
 
-export const validateForm = ({
-  businessName,
-  businessCNPJ,
-  businessDescription,
-  category,
-  address,
-  landline,
-  email,
-  images,
-  cnDoc,
-  termsAccepted,
-}) => {
-  console.log("Dados recebidos:", {
-    businessName,
-    businessCNPJ,
-    businessDescription,
-    category,
-    address,
-    landline,
-    email,
-    images,
-    cnDoc,
-    termsAccepted,
-  });
+export const validateForm = (formData) => {
+  const errors = {};
 
-  if (!businessName) return "O nome do negócio é obrigatório!";
-  if (!businessDescription) return "A descrição do negócio é obrigatória!";
-  if (!category) return "A categoria é obrigatória!";
-  if (!address) return "O endereço é obrigatório!";
-  if (!landline) return "O telefone é obrigatório!";
-  if (!email) return "O e-mail é obrigatório!";
-  if (images.length === 0) return "Pelo menos uma imagem é obrigatória!";
-  if (!cnDoc) return "O comprovante do Simples Nacional é obrigatório!";
-  if (!businessCNPJ) return "O CNPJ é obrigatório!";
-
-  if (!termsAccepted) {
-    return "Você precisa aceitar os termos e condições.";
+  // Validação do nome
+  if (!formData.businessName || formData.businessName.trim().length < 3) {
+    errors.businessName = "O nome do negócio deve ter pelo menos 3 caracteres";
   }
 
   // Validação do CNPJ
-  const cleanedCNPJ = businessCNPJ.replace(/[^\d]/g, ""); // Remove qualquer caractere não numérico
-  console.log("CNPJ limpo:", cleanedCNPJ); // Log para verificar o CNPJ limpo
-
-  if (!cnpj.isValid(cleanedCNPJ)) {
-    return "CNPJ inválido. O CNPJ informado não é válido.";
+  if (!formData.businessCNPJ || !/^\d{14}$/.test(formData.businessCNPJ.replace(/[^\d]+/g, ''))) {
+    errors.businessCNPJ = "CNPJ inválido. Deve conter 14 dígitos";
   }
 
-  // Validação do telefone (10 dígitos)
-  const cleanedLandline = landline.replace(/[^\d]/g, "");
-  const landlineRegex = /^[0-9]{10}$/;
-  if (!landlineRegex.test(cleanedLandline)) {
-    return "Telefone fixo inválido. Certifique-se de incluir 10 dígitos. Exemplo: 11987654321";
+  // Validação do telefone
+  if (!formData.landline || !/^\(\d{2}\) \d{5}-\d{4}$/.test(formData.landline)) {
+    errors.landline = "Telefone inválido. Use o formato (99) 99999-9999";
   }
 
-  // Validação do e-mail
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  if (!emailRegex.test(email)) {
-    return "E-mail inválido. Exemplo: nome@dominio.com";
+  // Validação do email
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!formData.email || !emailRegex.test(formData.email)) {
+    errors.email = "Email inválido";
   }
 
-  return null; // Se não houver erros
+  // Validação de imagens
+  if (formData.images) {
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+    formData.images.forEach((img, index) => {
+      if (!allowedTypes.includes(img.type)) {
+        errors[`imagem${index}`] = "Formato de imagem inválido. Use JPG, JPEG ou PNG";
+      }
+      if (img.size > maxSize) {
+        errors[`imagem${index}`] = "Imagem muito grande. Tamanho máximo: 5MB";
+      }
+    });
+  }
+
+  // Validação dos horários de funcionamento
+  if (formData.horarioDeFuncionamento) {
+    const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+    const diasSemana = ['segundaAsexta', 'sabado', 'domingo'];
+
+    diasSemana.forEach(dia => {
+      const horarios = formData.horarioDeFuncionamento[dia];
+      if (horarios) {
+        if (horarios.open && !timeRegex.test(horarios.open)) {
+          errors[`horario_${dia}_open`] = "Horário de abertura inválido. Use o formato HH:MM";
+        }
+        if (horarios.close && !timeRegex.test(horarios.close)) {
+          errors[`horario_${dia}_close`] = "Horário de fechamento inválido. Use o formato HH:MM";
+        }
+        if (horarios.open && horarios.close) {
+          const [openHour, openMin] = horarios.open.split(':').map(Number);
+          const [closeHour, closeMin] = horarios.close.split(':').map(Number);
+          const openTime = openHour * 60 + openMin;
+          const closeTime = closeHour * 60 + closeMin;
+          
+          if (closeTime <= openTime) {
+            errors[`horario_${dia}`] = "Horário de fechamento deve ser após o horário de abertura";
+          }
+        }
+      }
+    });
+  }
+
+  // Validação das redes sociais (opcional)
+  if (formData.socialLinks) {
+    const { instagram, facebook, whatsapp } = formData.socialLinks;
+
+    // Validação do Instagram
+    if (instagram && !instagram.startsWith('https://www.instagram.com/')) {
+      errors.instagram = "Link do Instagram inválido. Use o formato https://www.instagram.com/seu_perfil";
+    }
+
+    // Validação do Facebook
+    if (facebook && !facebook.startsWith('https://www.facebook.com/')) {
+      errors.facebook = "Link do Facebook inválido. Use o formato https://www.facebook.com/sua_pagina";
+    }
+
+    // Validação do WhatsApp
+    if (whatsapp && !whatsapp.startsWith('https://wa.me/')) {
+      errors.whatsapp = "Link do WhatsApp inválido. Use o formato https://wa.me/seu_numero";
+    }
+  }
+
+  // Validação da descrição
+  if (!formData.businessDescription || formData.businessDescription.trim().length < 10) {
+    errors.businessDescription = "A descrição deve ter pelo menos 10 caracteres";
+  }
+
+  // Validação da categoria
+  if (!formData.category || formData.category.trim() === '') {
+    errors.category = "Selecione uma categoria";
+  }
+
+  // Validação do endereço
+  if (!formData.address || formData.address.trim().length < 5) {
+    errors.address = "Endereço inválido";
+  }
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+};
+
+export const formatCNPJ = (cnpj) => {
+  const cleanCNPJ = cnpj.replace(/[^\d]+/g, '');
+  return cleanCNPJ.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+};
+
+export const formatPhone = (phone) => {
+  const cleanPhone = phone.replace(/[^\d]+/g, '');
+  return cleanPhone.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+};
+
+export const validateImageFile = (file) => {
+  const maxSize = 5 * 1024 * 1024; // 5MB
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+  if (!allowedTypes.includes(file.type)) {
+    return {
+      isValid: false,
+      error: "Formato de arquivo inválido. Use JPG, JPEG ou PNG"
+    };
+  }
+
+  if (file.size > maxSize) {
+    return {
+      isValid: false,
+      error: "Arquivo muito grande. Tamanho máximo: 5MB"
+    };
+  }
+
+  return {
+    isValid: true,
+    error: null
+  };
 };
