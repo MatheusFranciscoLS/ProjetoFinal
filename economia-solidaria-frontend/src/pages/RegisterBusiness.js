@@ -77,6 +77,35 @@ const RegisterBusiness = () => {
     setLoading(true);
     setError("");
 
+    // Criar objeto com todos os dados do formulário
+    const formData = {
+      businessName,
+      businessCNPJ,
+      businessDescription,
+      category,
+      address,
+      telefone,
+      cellphone: cellphone ? cellphone : null,
+      email,
+      images,
+      cnDoc,
+      horarioDeFuncionamento: {
+        segundaAsexta: weekdaysHours,
+        sabado: saturdayHours,
+        domingo: sundayHours,
+      },
+      socialLinks,
+    };
+
+    // Validar formulário
+    const { isValid, errors } = validateForm(formData);
+
+    if (!isValid) {
+      setError(Object.values(errors).join('\n'));
+      setLoading(false);
+      return;
+    }
+
     try {
       if (!termsAccepted) {
         setError("Você precisa aceitar os termos e condições.");
