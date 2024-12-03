@@ -78,7 +78,13 @@ const validateTime = (time) => {
 const validateBusinessHours = (hours) => {
   if (!hours) return { isValid: false, error: 'Horário de funcionamento é obrigatório' };
   
-  const { open, close } = hours;
+  const { open, close, closed } = hours;
+  
+  // Se estiver marcado como fechado, não precisa validar horários
+  if (closed) {
+    return { isValid: true };
+  }
+
   if (!open || !close) {
     return { isValid: false, error: 'Horário de abertura e fechamento são obrigatórios' };
   }
@@ -158,10 +164,15 @@ const validateForm = (formData) => {
   }
 
   // Validar telefone
-  if (!formData.telefone) {
-    errors.telefone = 'Telefone é obrigatório';
-  } else if (!validatePhone(formData.telefone)) {
-    errors.telefone = 'Telefone inválido';
+  if (!formData.telefoneFixo) {
+    errors.telefoneFixo = 'Telefone é obrigatório';
+  } else if (!validatePhone(formData.telefoneFixo)) {
+    errors.telefoneFixo = 'Telefone inválido';
+  }
+
+  // Validar celular (opcional)
+  if (formData.telefoneCelular && !validatePhone(formData.telefoneCelular)) {
+    errors.telefoneCelular = 'Celular inválido';
   }
 
   // Validar email
@@ -172,8 +183,8 @@ const validateForm = (formData) => {
   }
 
   // Validar redes sociais
-  if (formData.socialLinks) {
-    const { instagram, facebook, whatsapp } = formData.socialLinks;
+  if (formData.redesSociais) {
+    const { instagram, facebook, whatsapp } = formData.redesSociais;
     if (instagram && !validateURL(instagram)) {
       errors.instagram = 'URL do Instagram inválida';
     }
@@ -187,13 +198,39 @@ const validateForm = (formData) => {
 
   // Validar horário de funcionamento
   if (formData.horarioDeFuncionamento) {
-    const { segundaAsexta } = formData.horarioDeFuncionamento;
-    const weekdaysValidation = validateBusinessHours(segundaAsexta);
+    // Validar horário de segunda a sexta (obrigatório)
+    const weekdaysValidation = validateBusinessHours(formData.horarioDeFuncionamento.segundaAsexta);
     if (!weekdaysValidation.isValid) {
       errors.horarioSegundaASexta = weekdaysValidation.error;
     }
+
+    // Validar horário de sábado (opcional)
+    if (formData.horarioDeFuncionamento.sabado && !formData.horarioDeFuncionamento.sabado.closed) {
+      const saturdayValidation = validateBusinessHours(formData.horarioDeFuncionamento.sabado);
+      if (!saturdayValidation.isValid) {
+        errors.horarioSabado = saturdayValidation.error;
+      }
+    }
+
+    // Validar horário de domingo (opcional)
+    if (formData.horarioDeFuncionamento.domingo && !formData.horarioDeFuncionamento.domingo.closed) {
+      const sundayValidation = validateBusinessHours(formData.horarioDeFuncionamento.domingo);
+      if (!sundayValidation.isValid) {
+        errors.horarioDomingo = sundayValidation.error;
+      }
+    }
   } else {
     errors.horarioSegundaASexta = 'Horário de funcionamento é obrigatório';
+  }
+
+  // Validar imagens
+  if (!formData.imagens || formData.imagens.length === 0) {
+    errors.imagens = 'Pelo menos uma imagem é obrigatória';
+  }
+
+  // Validar comprovante
+  if (!formData.comprovante) {
+    errors.comprovante = 'Comprovante do Simples Nacional é obrigatório';
   }
 
   return {

@@ -2,50 +2,93 @@
 .register-business-page {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     min-height: 100vh;
-    background-color: var(--bg-color); /* Cor de fundo baseada no tema */
+    background-color: var(--bg-color);
     font-family: 'Roboto', sans-serif;
-    padding: 20px;
+    padding: 40px 20px;
     box-sizing: border-box;
     overflow: auto;
 }
 
 /* Formulário */
 .register-business-form {
-    background-color: var(--card-bg-color); /* Cor de fundo do cartão */
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.register-business-form:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
 }
 
 /* Título */
 .register-business-form h2 {
-    color: var(--text-color); /* Cor do texto baseada no tema */
-    font-size: 30px;
-    margin-bottom: 20px;
     text-align: center;
-    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2em;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.register-business-form h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--button-bg-color);
+    border-radius: 2px;
 }
 
 /* Campos do formulário */
-.register-business-form input,
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    font-weight: 500;
+    font-size: 0.95em;
+}
+
+.register-business-form input[type="text"],
+.register-business-form input[type="email"],
+.register-business-form input[type="url"],
+.register-business-form input[type="time"],
 .register-business-form textarea,
 .register-business-form select {
-    padding: 14px;
-    border: 1px solid #ddd;
+    width: 100%;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border: 2px solid #e0e0e0;
     border-radius: 8px;
     font-size: 16px;
-    background-color: var(--card-bg-color); /* Fundo do campo baseado no tema */
-    color: var(--text-color); /* Cor do texto baseada no tema */
-    width: 100%;
-    box-sizing: border-box;
-    transition: border-color 0.3s, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+}
+
+.register-business-form input::placeholder,
+.register-business-form textarea::placeholder {
+    color: #adb5bd;
+}
+
+.register-business-form textarea {
+    height: 120px;
+    resize: vertical;
+    line-height: 1.5;
 }
 
 /* Foco nos campos */
@@ -53,153 +96,268 @@
 .register-business-form textarea:focus,
 .register-business-form select:focus {
     outline: none;
-    border-color: var(--button-bg-color); /* Cor do botão como destaque */
-    box-shadow: 0 0 6px rgba(76, 175, 80, 0.5); /* Tom verde similar ao botão */
+    border-color: var(--button-bg-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    background-color: #fff;
 }
 
 /* Upload de imagens */
 .image-preview {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
 }
 
 /* Container de cada imagem */
 .image-wrapper {
     position: relative;
-    display: inline-block;
+    padding-top: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
 }
 
-/* Estilo das imagens com tamanho fixo */
+.image-wrapper:hover {
+    transform: scale(1.02);
+}
+
+/* Estilo das imagens */
 .image-item {
-    width: 150px;
-    height: 150px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    margin: 5px;
+    border-radius: 12px;
+}
+
+/* Botão de remoção */
+.remove-image {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #dc3545;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.remove-image:hover {
+    background-color: #dc3545;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Horários de funcionamento */
+.hours-section {
+    margin-bottom: 24px;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    transition: border-color 0.3s ease;
+}
+
+.hours-section:hover {
+    border-color: var(--button-bg-color);
+}
+
+.hours-section h3 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.time-inputs input[type="time"] {
+    width: auto;
+    min-width: 120px;
+    margin-bottom: 0;
+}
+
+.time-inputs span {
+    color: #495057;
+    font-weight: 500;
+}
+
+.weekend-toggle {
+    margin: 24px 0;
+    padding: 16px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.weekend-toggle:hover {
+    border-color: var(--button-bg-color);
+    background-color: #f8f9fa;
+}
+
+/* Termos e condições */
+.terms-container {
+    display: flex;
+    align-items: flex-start;
+    margin: 24px 0;
+    gap: 12px;
+    padding: 16px;
+    background-color: #f8f9fa;
     border-radius: 8px;
 }
 
-/* Estilo do botão de remoção (X vermelho) */
-.remove-image {
-    position: absolute;
-    top: -10px;
-    right: 5px;
-    background-color: rgba(255, 0, 0, 0.7);
-    color: var(--text-color); /* Cor do texto baseada no tema */
-    border: none;
-    border-radius: 50%;
-    font-size: 16px;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-/* Hover no "X" */
-.remove-image:hover {
-    background-color: rgba(255, 0, 0, 1);
-}
-
-/* Container para termos e condições */
-.terms-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: center;
-    width: 100%;
-}
-
-/* Estilo do checkbox */
-.terms-container input {
-    margin-top: 15px;
-    width: 15px;
-    height: 15px;
+.terms-container input[type="checkbox"] {
+    margin: 0;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
 }
 
-/* Estilo do texto dos termos */
 .terms-container label {
-    font-size: 14px;
-    color: var(--text-color); /* Cor do texto baseada no tema */
+    color: #495057;
+    font-size: 0.95em;
+    line-height: 1.5;
 }
 
-/* Estilo do link dos termos */
 .terms-link {
-    color: var(--button-bg-color); /* Cor baseada no botão */
+    color: var(--button-bg-color);
     text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
 }
 
 .terms-link:hover {
+    color: #2c3e50;
     text-decoration: underline;
 }
 
-/* Estilo do botão */
+/* Botão de envio */
 button {
-    background-color: var(--button-bg-color); /* Fundo do botão baseado no tema */
-    color: var(--text-color); /* Cor do texto baseada no tema */
-    font-size: 18px;
-    border: none;
+    width: 100%;
     padding: 14px;
+    background-color: var(--button-bg-color);
+    color: white;
+    font-size: 1.1em;
+    font-weight: 600;
+    border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-    width: auto;
-    margin-top: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
 }
 
-/* Hover no botão */
-button:hover {
-    background-color: var(--button-hover-bg-color); /* Hover baseado no tema */
-    transform: scale(1.05);
+button:hover:not(:disabled) {
+    background-color: var(--button-hover-bg-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.3);
 }
 
-/* Botão desabilitado */
+button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
 button:disabled {
-    background-color: #b2bec3;
+    background-color: #e0e0e0;
     cursor: not-allowed;
+    box-shadow: none;
+    color: #888;
 }
 
-/* Responsividade para telas menores */
+/* Responsividade */
 @media (max-width: 768px) {
     .register-business-page {
-        padding: 10px;
+        padding: 20px 16px;
     }
 
     .register-business-form {
         padding: 20px;
     }
 
-    .register-business-form input,
-    .register-business-form textarea,
-    .register-business-form select {
-        font-size: 14px;
-        padding: 12px;
+    .register-business-form h2 {
+        font-size: 1.5em;
     }
 
-    button {
-        font-size: 16px;
-        padding: 12px;
+    .time-inputs {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .time-inputs input[type="time"] {
+        width: 100%;
     }
 }
 
-/* Estilo do TimePicker */
-.react-time-picker {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    font-size: 16px;
-    background-color: var(--card-bg-color); /* Fundo baseado no tema */
-    color: var(--text-color); /* Texto baseado no tema */
-    transition: border-color 0.3s, box-shadow 0.3s ease;
+/* Mensagens de erro */
+.error-message {
+    color: #dc3545;
+    font-size: 0.9em;
+    margin-top: 4px;
+    padding: 8px;
+    background-color: rgba(220, 53, 69, 0.1);
+    border-radius: 4px;
+    transition: all 0.3s ease;
 }
 
-/* Foco no TimePicker */
-.react-time-picker:focus {
-    outline: none;
-    border-color: var(--button-bg-color); /* Cor de foco baseada no botão */
-    box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
+/* Animação para elementos que aparecem/desaparecem */
+.fade-enter {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.fade-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms, transform 300ms;
+}
+
+.fade-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fade-exit-active {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 300ms, transform 300ms;
+}
+
+/* Ícones de mídia social */
+.social-media-icons {
+    display: flex;
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.social-icon {
+    font-size: 24px;
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    color: var(--button-bg-color);
+    transform: scale(1.2);
+}
+
+.social-icon.active {
+    color: var(--button-bg-color);
 }

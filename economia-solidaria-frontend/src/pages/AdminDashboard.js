@@ -92,10 +92,13 @@ const AdminDashboard = () => {
 
         if (approved) {
           const newBusinessRef = doc(db, "lojas", businessId);
+          // Garantir que o plano do usuário seja corretamente atribuído
+          const userData = userDoc.exists() ? userDoc.data() : { plano: "gratuito" };
           await setDoc(newBusinessRef, {
             ...businessData,
             status: "aprovado",
-            plano: userPlan // Adiciona o plano do usuário
+            plano: userData.plano || "gratuito",
+            userId: businessData.userId // Garantir que o userId seja mantido
           });
           await deleteDoc(businessRef);
           setFeedbackMessage("Negócio aprovado e movido para 'lojas'.");

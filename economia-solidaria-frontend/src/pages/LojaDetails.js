@@ -5,7 +5,7 @@ import { db } from "../firebase"; // Certifique-se de que o Firebase está confi
 import Avaliacao from "./Avaliacao"; // Componente de avaliação
 import "../styles/lojaDetails.css"; // Importar estilos
 import { Link } from "react-router-dom";
-import { FaInstagram, FaFacebook, FaWhatsapp } from "react-icons/fa";
+import { FaInstagram, FaFacebook, FaWhatsapp, FaMapMarkerAlt } from "react-icons/fa";
 
 const LojaDetails = () => {
   const { id } = useParams(); // Obtém o ID da loja da URL
@@ -49,6 +49,11 @@ const LojaDetails = () => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex === loja.imagens.length - 1 ? 0 : prevIndex + 1
     );
+  };
+
+  const openGoogleMaps = (endereco) => {
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}`;
+    window.open(mapsUrl, '_blank');
   };
 
   if (loading) {
@@ -137,18 +142,16 @@ const LojaDetails = () => {
           </div>
         </strong>
       </p>
-      <p>
-        <strong>Endereço:</strong>{" "}
-        <a
-          href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-            loja.endereco
-          )}`}
-          target="_blank"
-          rel="noopener noreferrer"
+      <div className="endereco-container">
+        <strong>Endereço:</strong>
+        <div
+          className="endereco-link"
+          onClick={() => openGoogleMaps(loja.endereco)}
         >
-          {loja.endereco}
-        </a>
-      </p>
+          <FaMapMarkerAlt className="map-icon" />
+          <span>{loja.endereco}</span>
+        </div>
+      </div>
 
       <p>
         <strong>Telefone:</strong> {loja.telefoneFixo}
@@ -162,7 +165,7 @@ const LojaDetails = () => {
       <p>
         <strong>Horário de Funcionamento:</strong>
         {loja.horarioDeFuncionamento ? (
-          <>
+          <div>
             {/* Exibir horário de funcionamento de forma detalhada */}
             <p>
               <strong>Segunda a Sexta:</strong>{" "}
@@ -182,7 +185,7 @@ const LojaDetails = () => {
               {loja.horarioDeFuncionamento.domingo?.open || "Não disponível"} -{" "}
               {loja.horarioDeFuncionamento.domingo?.close || "Não disponível"}
             </p>
-          </>
+          </div>
         ) : (
           "Não disponível"
         )}
