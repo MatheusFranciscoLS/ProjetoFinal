@@ -287,7 +287,7 @@ const handleSubmit = async (e) => {
         <input
           type="url"
           name="whatsapp"
-          placeholder="Link do WhatsApp (com https://api.whatsapp/)"
+          placeholder="Link do WhatsApp (https://api.whatsapp/ ou https://wa.me/)"
           value={socialLinks.whatsapp}
           onChange={handleSocialLinksChange}
         />

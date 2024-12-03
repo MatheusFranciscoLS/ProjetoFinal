@@ -121,9 +121,13 @@ const LojaDetails = () => {
             )}
             {loja.redesSociais?.whatsapp && (
               <a
-                href={`https://api.whatsapp.com/send/?phone=${loja.redesSociais.whatsapp
-                  .replace(/\D/g, "")
-                  .replace(/^1/, "")}`}
+                href={
+                  loja.redesSociais.whatsapp.startsWith("https://wa.me/")
+                    ? loja.redesSociais.whatsapp
+                    : `https://api.whatsapp.com/send/?phone=${loja.redesSociais.whatsapp
+                        .replace(/\D/g, "")
+                        .replace(/^1/, "")}`
+                }
                 target="_blank"
                 rel="noopener noreferrer"
               >
