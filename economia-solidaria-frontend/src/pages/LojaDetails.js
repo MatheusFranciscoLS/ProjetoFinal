@@ -7,7 +7,6 @@ import "../styles/lojaDetails.css"; // Importar estilos
 import { Link } from "react-router-dom";
 import { FaInstagram, FaFacebook, FaWhatsapp } from "react-icons/fa";
 
-
 const LojaDetails = () => {
   const { id } = useParams(); // Obtém o ID da loja da URL
   const [loja, setLoja] = useState(null);
@@ -93,43 +92,95 @@ const LojaDetails = () => {
         )}
       </div>
 
-     {/* Detalhes da Loja */}
-<p><strong>Descrição:</strong> {loja.descricao}</p>
-<p>
-  <strong>  <h3>Redes Sociais</h3>
-  <div className="social-links">
-  {loja.redesSociais?.instagram && (
-    <a href={loja.redesSociais.instagram} target="_blank" rel="noopener noreferrer">
-      <FaInstagram size={30} />
-    </a>
-  )}
-  {loja.redesSociais?.facebook && (
-    <a href={loja.redesSociais.facebook} target="_blank" rel="noopener noreferrer">
-      <FaFacebook size={30} />
-    </a>
-  )}
-  {loja.redesSociais?.whatsapp && (
-    <a href={`https://wa.me/${loja.redesSociais.whatsapp}`} target="_blank" rel="noopener noreferrer">
-      <FaWhatsapp size={30} />
-    </a>
-  )}
-</div>
-</strong>
-</p>
-<p>
-  <strong>Endereço:</strong>{" "}
-  <a
-    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(loja.endereco)}`}
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    {loja.endereco}
-  </a>
-</p>
+      {/* Detalhes da Loja */}
+      <p>
+        <strong>Descrição:</strong> {loja.descricao}
+      </p>
+      <p>
+        <strong>
+          {" "}
+          <h3>Redes Sociais</h3>
+          <div className="social-links">
+            {loja.redesSociais?.instagram && (
+              <a
+                href={loja.redesSociais.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaInstagram size={30} />
+              </a>
+            )}
+            {loja.redesSociais?.facebook && (
+              <a
+                href={loja.redesSociais.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaFacebook size={30} />
+              </a>
+            )}
+            {loja.redesSociais?.whatsapp && (
+              <a
+                href={`https://api.whatsapp.com/send/?phone=${loja.redesSociais.whatsapp
+                  .replace(/\D/g, "")
+                  .replace(/^1/, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaWhatsapp size={30} />
+              </a>
+            )}
+          </div>
+        </strong>
+      </p>
+      <p>
+        <strong>Endereço:</strong>{" "}
+        <a
+          href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+            loja.endereco
+          )}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {loja.endereco}
+        </a>
+      </p>
 
-<p><strong>Telefone:</strong> {loja.telefone}</p>
-<p><strong>Email:</strong> {loja.email}</p>
-<p><strong>Horário de Funcionamento:</strong> {loja.horarioDeFuncionamento}</p>
+      <p>
+        <strong>Telefone:</strong> {loja.telefone}
+      </p>
+      <p>
+        <strong>Email:</strong> {loja.email}
+      </p>
+      <p>
+        <strong>Horário de Funcionamento:</strong>
+        {loja.horarioDeFuncionamento ? (
+          <>
+            {/* Exibir horário de funcionamento de forma detalhada */}
+            <p>
+              <strong>Segunda a Sexta:</strong>{" "}
+              {loja.horarioDeFuncionamento.segundaAsexta?.open ||
+                "Não disponível"}{" "}
+              -{" "}
+              {loja.horarioDeFuncionamento.segundaAsexta?.close ||
+                "Não disponível"}
+            </p>
+            <p>
+              <strong>Sábado:</strong>{" "}
+              {loja.horarioDeFuncionamento.sabado?.open || "Não disponível"} -{" "}
+              {loja.horarioDeFuncionamento.sabado?.close || "Não disponível"}
+            </p>
+            <p>
+              <strong>Domingo:</strong>{" "}
+              {loja.horarioDeFuncionamento.domingo?.open || "Não disponível"} -{" "}
+              {loja.horarioDeFuncionamento.domingo?.close || "Não disponível"}
+            </p>
+          </>
+        ) : (
+          "Não disponível"
+        )}
+      </p>
+
       {/* Espaço para avaliações */}
       <div style={{ marginTop: "50px" }}></div>
 

@@ -256,46 +256,28 @@ const RegisterBusiness = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-
-        <div className="form-group">
-          <h3>Redes Sociais (Opcional)</h3>
-          <div className="social-media-inputs">
-            <div className="social-input">
-              <label htmlFor="instagram">Instagram:</label>
-              <input
-                type="text"
-                id="instagram"
-                name="instagram"
-                value={socialLinks.instagram}
-                onChange={handleSocialLinkChange}
-                placeholder="@seu_instagram (opcional)"
-              />
-            </div>
-            <div className="social-input">
-              <label htmlFor="facebook">Facebook:</label>
-              <input
-                type="text"
-                id="facebook"
-                name="facebook"
-                value={socialLinks.facebook}
-                onChange={handleSocialLinkChange}
-                placeholder="facebook.com/sua_pagina (opcional)"
-              />
-            </div>
-            <div className="social-input">
-              <label htmlFor="whatsapp">WhatsApp:</label>
-              <InputMask
-                mask="(99) 99999-9999"
-                type="text"
-                id="whatsapp"
-                name="whatsapp"
-                value={socialLinks.whatsapp}
-                onChange={handleSocialLinkChange}
-                placeholder="(11) 99999-9999 (opcional)"
-              />
-            </div>
-          </div>
-        </div>
+         <h3>Redes Sociais</h3>
+        <input
+          type="url"
+          name="instagram"
+          placeholder="Link do Instagram"
+          value={socialLinks.instagram}
+          onChange={handleSocialLinksChange}
+        />
+        <input
+          type="url"
+          name="facebook"
+          placeholder="Link do Facebook"
+          value={socialLinks.facebook}
+          onChange={handleSocialLinksChange}
+        />
+        <input
+          type="url"
+          name="whatsapp"
+          placeholder="Link do WhatsApp (com https://wa.me/)"
+          value={socialLinks.whatsapp}
+          onChange={handleSocialLinksChange}
+        />
 
         {/* Horário de funcionamento de segunda a sexta */}
         <div className="hours-section">

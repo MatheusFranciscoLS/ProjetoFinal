@@ -211,8 +211,9 @@ const AdminDashboard = () => {
                 {businesses.map((business) => (
                   <div
                     key={business.id}
-                    className={`card ${selectedBusiness?.id === business.id ? "expanded" : ""
-                      }`}
+                    className={`card ${
+                      selectedBusiness?.id === business.id ? "expanded" : ""
+                    }`}
                   >
                     <div className="card-content">
                       {/* Nome do Negócio */}
@@ -220,7 +221,8 @@ const AdminDashboard = () => {
 
                       {/* CNPJ do Negócio */}
                       <p className="business-cnpj">
-                        <strong>CNPJ:</strong> {formatCNPJ(business.cnpj) || "Não informado"}
+                        <strong>CNPJ:</strong>{" "}
+                        {formatCNPJ(business.cnpj) || "Não informado"}
                       </p>
 
                       {/* Imagens do Negócio */}
@@ -281,7 +283,9 @@ const AdminDashboard = () => {
                           onClick={() => verifyCNPJ(business.cnpj, business.id)}
                           disabled={isProcessing === business.id}
                         >
-                          {isProcessing === business.id ? 'Verificando...' : 'Verificar CNPJ'}
+                          {isProcessing === business.id
+                            ? "Verificando..."
+                            : "Verificar CNPJ"}
                         </button>
 
                         {/* Exibe as informações do CNPJ */}
@@ -298,14 +302,45 @@ const AdminDashboard = () => {
                               </button>
                             </div>
                             <div className="cnpj-details">
-                              <p><strong>Razão Social:</strong> {business.cnpjInfo.nome}</p>
-                              <p><strong>Nome Fantasia:</strong> {business.cnpjInfo.fantasia}</p>
-                              <p><strong>Situação:</strong> {business.cnpjInfo.situacao_cadastral}</p>
-                              <p><strong>Simples Nacional:</strong> {business.cnpjInfo.opcao_pelo_simples ? 'Sim' : 'Não'}</p>
-                              <p><strong>MEI:</strong> {business.cnpjInfo.opcao_pelo_mei ? 'Sim' : 'Não'}</p>
-                              <p><strong>Natureza Jurídica:</strong> {business.cnpjInfo.natureza_juridica}</p>
-                              <p><strong>Porte:</strong> {business.cnpjInfo.porte}</p>
-                              <p><strong>Capital Social:</strong> R$ {business.cnpjInfo.capital_social?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
+                              <p>
+                                <strong>Razão Social:</strong>{" "}
+                                {business.cnpjInfo.nome}
+                              </p>
+                              <p>
+                                <strong>Nome Fantasia:</strong>{" "}
+                                {business.cnpjInfo.fantasia}
+                              </p>
+                              <p>
+                                <strong>Situação:</strong>{" "}
+                                {business.cnpjInfo.situacao_cadastral}
+                              </p>
+                              <p>
+                                <strong>Simples Nacional:</strong>{" "}
+                                {business.cnpjInfo.opcao_pelo_simples
+                                  ? "Sim"
+                                  : "Não"}
+                              </p>
+                              <p>
+                                <strong>MEI:</strong>{" "}
+                                {business.cnpjInfo.opcao_pelo_mei
+                                  ? "Sim"
+                                  : "Não"}
+                              </p>
+                              <p>
+                                <strong>Natureza Jurídica:</strong>{" "}
+                                {business.cnpjInfo.natureza_juridica}
+                              </p>
+                              <p>
+                                <strong>Porte:</strong>{" "}
+                                {business.cnpjInfo.porte}
+                              </p>
+                              <p>
+                                <strong>Capital Social:</strong> R${" "}
+                                {business.cnpjInfo.capital_social?.toLocaleString(
+                                  "pt-BR",
+                                  { minimumFractionDigits: 2 }
+                                )}
+                              </p>
                             </div>
                           </div>
                         )}
@@ -354,8 +389,9 @@ const AdminDashboard = () => {
               </p>
 
               {/* CNPJ do Negócio */}
-              <p >
-                <strong>CNPJ:</strong> {selectedBusiness.cnpj || "Não informado"}
+              <p>
+                <strong>CNPJ:</strong>{" "}
+                {selectedBusiness.cnpj || "Não informado"}
               </p>
 
               {/* Outros detalhes */}
@@ -375,11 +411,46 @@ const AdminDashboard = () => {
                 <strong>E-mail:</strong> {selectedBusiness.email}
               </p>
               <p>
+<<<<<<< HEAD
                 <strong>Horário de Funcionamento:</strong> 
                 {selectedBusiness.horarioDeFuncionamento ? (
                   <>
                     <p>Abertura: {selectedBusiness.horarioDeFuncionamento.abertura}</p>
                     <p>Fechamento: {selectedBusiness.horarioDeFuncionamento.fechamento}</p>
+=======
+                <strong>Horário de Funcionamento:</strong>
+                {selectedBusiness?.horarioDeFuncionamento ? (
+                  <>
+                    {/* Horário de Funcionamento de Segunda a Sexta */}
+                    <p>
+                      <strong>Segunda a Sexta:</strong>{" "}
+                      {selectedBusiness.horarioDeFuncionamento.segundaAsexta
+                        ?.open || "Não disponível"}{" "}
+                      -{" "}
+                      {selectedBusiness.horarioDeFuncionamento.sabado?.close ||
+                        "Não disponível"}
+                    </p>
+
+                    {/* Horário de Funcionamento de Sábado */}
+                    <p>
+                      <strong>Sábado:</strong>{" "}
+                      {selectedBusiness.horarioDeFuncionamento.sabado?.open ||
+                        "Não disponível"}{" "}
+                      -{" "}
+                      {selectedBusiness.horarioDeFuncionamento.sabado?.close ||
+                        "Não disponível"}
+                    </p>
+
+                    {/* Horário de Funcionamento de Domingo */}
+                    <p>
+                      <strong>Domingo:</strong>{" "}
+                      {selectedBusiness.horarioDeFuncionamento.domingo?.open ||
+                        "Não disponível"}{" "}
+                      -{" "}
+                      {selectedBusiness.horarioDeFuncionamento.domingo?.close ||
+                        "Não disponível"}
+                    </p>
+>>>>>>> 480342fee9c64a716725b68423ae5f01248a5289
                   </>
                 ) : (
                   "Não disponível"
@@ -390,7 +461,9 @@ const AdminDashboard = () => {
               {/* Botão de Verificar CNPJ */}
               <button
                 className="verify-cnpj"
-                onClick={() => verifyCNPJ(selectedBusiness.cnpj, selectedBusiness.id)}
+                onClick={() =>
+                  verifyCNPJ(selectedBusiness.cnpj, selectedBusiness.id)
+                }
               >
                 Verificar CNPJ
               </button>
