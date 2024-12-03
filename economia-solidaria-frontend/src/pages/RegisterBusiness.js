@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "../firebase"; // Certifique-se de importar o 'db'
-import { getAuth } from "firebase/auth"; // Para pegar o UID do usuário autenticado
+import { db } from "../firebase";
+import { getAuth } from "firebase/auth";
+import InputMask from "react-input-mask";
+import { FaInstagram, FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { validateForm, validateImageFile } from "../components/validation";
 import "../styles/registerbusiness.css";
-import { validateForm } from "../components/validation"; // Importe a função de validação
-import InputMask from "react-input-mask"; //
-
 
 const RegisterBusiness = () => {
   const [businessName, setBusinessName] = useState("");
@@ -14,112 +14,63 @@ const RegisterBusiness = () => {
   const [businessDescription, setBusinessDescription] = useState("");
   const [category, setCategory] = useState("");
   const [address, setAddress] = useState("");
-  const [telefone, setTelefone] = useState(""); // Telefone fixo
-  const [cellphone, setCellphone] = useState(""); // Celular
+  const [telefone, setTelefone] = useState("");
+  const [cellphone, setCellphone] = useState("");
   const [email, setEmail] = useState("");
-  const [weekdaysHours, setWeekdaysHours] = useState({ open: "", close: "" }); // Segunda a sexta
-  const [saturdayHours, setSaturdayHours] = useState({ open: "", close: "" }); // Sábado
-  const [sundayHours, setSundayHours] = useState({ open: "", close: "" }); // Domingo
+  const [weekdaysHours, setWeekdaysHours] = useState({ open: "", close: "" });
+  const [saturdayHours, setSaturdayHours] = useState({ open: "", close: "", closed: true });
+  const [sundayHours, setSundayHours] = useState({ open: "", close: "", closed: true });
+  const [showWeekend, setShowWeekend] = useState(false);
   const [images, setImages] = useState([]);
   const [cnDoc, setCnDoc] = useState(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [socialLinks, setSocialLinks] = useState({
     instagram: "",
     facebook: "",
-    whatsapp: "",
+    whatsapp: ""
+  });
+  const [showSocialInputs, setShowSocialInputs] = useState({
+    instagram: false,
+    facebook: false,
+    whatsapp: false
   });
 
   const navigate = useNavigate();
-
   const auth = getAuth();
   const user = auth.currentUser;
-  const userUid = user ? user.uid : null;
 
   const handleSocialLinkChange = (e) => {
     const { name, value } = e.target;
-    setSocialLinks((prevLinks) => ({ ...prevLinks, [name]: value }));
+    setSocialLinks(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const resizeImage = (file, maxWidth = 1024, maxHeight = 1024) => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        img.src = e.target.result;
-      };
-
-      reader.onerror = reject;
-
-      reader.readAsDataURL(file);
-
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-
-        let width = img.width;
-        let height = img.height;
-
-        // Calcula a escala para redimensionar a imagem mantendo a proporção
-        if (width > height) {
-          if (width > maxWidth) {
-            height = (height * maxWidth) / width;
-            width = maxWidth;
-          }
-        } else {
-          if (height > maxHeight) {
-            width = (width * maxHeight) / height;
-            height = maxHeight;
-          }
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-        ctx.drawImage(img, 0, 0, width, height);
-
-        canvas.toBlob(
-          (blob) => {
-            resolve(blob);
-          },
-          file.type,
-          0.8
-        ); // Compressão de 80%
-      };
-    });
-  };
-
-  const handleImageUpload = async (e) => {
+  const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-
-    // Verifica se a quantidade total de imagens será maior que 6
+    
     if (files.length + images.length > 6) {
-      setError("Você pode enviar no máximo 6 imagens do seu negócio.");
+      setError("Você pode enviar no máximo 6 imagens");
       return;
     }
 
-    // Verifica se algum arquivo excede o tamanho de 10MB
-    const invalidFiles = files.filter((file) => file.size > 10 * 1024 * 1024);
-    if (invalidFiles.length > 0) {
-      setError("Cada imagem deve ter no máximo 10 MB.");
+    // Validar cada imagem
+    const invalidImages = files.filter(file => !validateImageFile(file).isValid);
+    if (invalidImages.length > 0) {
+      setError("Uma ou mais imagens são inválidas. Use apenas JPG, PNG ou GIF com tamanho máximo de 5MB.");
       return;
     }
 
-    // Redimensiona as imagens antes de adicionar
-    const resizedImages = await Promise.all(
-      files.map((file) => resizeImage(file))
-    );
-
-    // Atualiza o estado com as imagens redimensionadas
-    setImages((prevImages) => [...prevImages, ...resizedImages]);
-    setError(""); // Limpa a mensagem de erro
+    setImages(prev => [...prev, ...files]);
+    setError("");
   };
 
   const removeImage = (index) => {
     setImages(images.filter((_, i) => i !== index));
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -156,11 +107,20 @@ const RegisterBusiness = () => {
     }
 
     try {
-      // Processa as imagens para base64
+      if (!termsAccepted) {
+        setError("Você precisa aceitar os termos e condições.");
+        return;
+      }
+
+      if (!user) {
+        setError("Você precisa estar logado para cadastrar um negócio.");
+        return;
+      }
+
       const imageBase64Promises = images.map(async (image) => {
         const reader = new FileReader();
         return new Promise((resolve, reject) => {
-          reader.onloadend = () => resolve(reader.result); // Salva o resultado em base64
+          reader.onloadend = () => resolve(reader.result);
           reader.onerror = reject;
           reader.readAsDataURL(image);
         });
@@ -168,8 +128,7 @@ const RegisterBusiness = () => {
 
       const imageBase64 = await Promise.all(imageBase64Promises);
 
-      // Envia os dados para o Firestore
-      const businessData = {
+      const formData = {
         nome: businessName,
         cnpj: businessCNPJ,
         descricao: businessDescription,
@@ -184,20 +143,26 @@ const RegisterBusiness = () => {
           domingo: sundayHours,
         },
         imagens: imageBase64,
-        comprovante: cnDoc.name,
-        userId: userUid,
+        comprovante: cnDoc?.name,
+        userId: user.uid,
         status: "pendente",
-        redesSociais: {
-          instagram: socialLinks.instagram || "",
-          facebook: socialLinks.facebook || "",
-          whatsapp: socialLinks.whatsapp ? socialLinks.whatsapp.replace(/[^\d]/g, "") : ""
-        },
+        redesSociais: socialLinks
       };
 
-      await addDoc(collection(db, "negocios_pendentes"), businessData);
+      // Validar o formulário
+      const validation = validateForm(formData);
+      if (!validation.isValid) {
+        const errorMessages = Object.values(validation.errors);
+        setError(errorMessages.join('\n'));
+        setLoading(false);
+        return;
+      }
+
+      // Enviar para o Firestore
+      await addDoc(collection(db, "negocios_pendentes"), formData);
 
       alert("Cadastro enviado, aguardando aprovação do admin!");
-      navigate("/"); // Após o envio, redireciona o usuário para a home
+      navigate("/");
     } catch (err) {
       console.error("Erro ao cadastrar negócio:", err);
       setError("Erro ao cadastrar o negócio. Tente novamente.");
@@ -220,7 +185,7 @@ const RegisterBusiness = () => {
         />
 
         <InputMask
-          mask="99.999.999/9999-99" // Máscara para CNPJ
+          mask="99.999.999/9999-99"
           placeholder="CNPJ"
           value={businessCNPJ}
           onChange={(e) => setBusinessCNPJ(e.target.value)}
@@ -259,18 +224,16 @@ const RegisterBusiness = () => {
           required
         />
 
-        {/* Telefone Fixo */}
         <InputMask
-          mask="(99) 9999-9999" // Máscara para telefone fixo
+          mask="(99) 9999-9999"
           placeholder="Telefone Fixo"
           value={telefone}
           onChange={(e) => setTelefone(e.target.value)}
           required
         />
 
-        {/* Celular */}
         <InputMask
-          mask="(99) 99999-9999" // Máscara para celular
+          mask="(99) 99999-9999"
           placeholder="Celular (Opcional)"
           value={cellphone}
           onChange={(e) => setCellphone(e.target.value)}
@@ -283,87 +246,176 @@ const RegisterBusiness = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+
         <h3>Redes Sociais</h3>
-        <input
-          type="url"
-          name="instagram"
-          placeholder="Link do Instagram"
-          value={socialLinks.instagram}
-          onChange={handleSocialLinkChange}
-        />
-        <input
-          type="url"
-          name="facebook"
-          placeholder="Link do Facebook"
-          value={socialLinks.facebook}
-          onChange={handleSocialLinkChange}
-        />
-        <input
-          type="url"
-          name="whatsapp"
-          placeholder="Link do WhatsApp (https://api.whatsapp/ ou https://wa.me/)"
-          value={socialLinks.whatsapp}
-          onChange={handleSocialLinkChange}
-        />
+        <div className="social-icons">
+          <div className="social-icon-wrapper">
+            <FaInstagram 
+              className={`social-icon ${showSocialInputs.instagram ? 'active' : ''}`}
+              onClick={() => setShowSocialInputs({
+                ...showSocialInputs,
+                instagram: !showSocialInputs.instagram
+              })}
+            />
+            {showSocialInputs.instagram && (
+              <input
+                type="url"
+                name="instagram"
+                placeholder="Link do Instagram"
+                value={socialLinks.instagram}
+                onChange={handleSocialLinkChange}
+                className="social-input"
+              />
+            )}
+          </div>
+
+          <div className="social-icon-wrapper">
+            <FaFacebook 
+              className={`social-icon ${showSocialInputs.facebook ? 'active' : ''}`}
+              onClick={() => setShowSocialInputs({
+                ...showSocialInputs,
+                facebook: !showSocialInputs.facebook
+              })}
+            />
+            {showSocialInputs.facebook && (
+              <input
+                type="url"
+                name="facebook"
+                placeholder="Link do Facebook"
+                value={socialLinks.facebook}
+                onChange={handleSocialLinkChange}
+                className="social-input"
+              />
+            )}
+          </div>
+
+          <div className="social-icon-wrapper">
+            <FaWhatsapp 
+              className={`social-icon ${showSocialInputs.whatsapp ? 'active' : ''}`}
+              onClick={() => setShowSocialInputs({
+                ...showSocialInputs,
+                whatsapp: !showSocialInputs.whatsapp
+              })}
+            />
+            {showSocialInputs.whatsapp && (
+              <input
+                type="url"
+                name="whatsapp"
+                placeholder="Link do WhatsApp (https://api.whatsapp/ ou https://wa.me/)"
+                value={socialLinks.whatsapp}
+                onChange={handleSocialLinkChange}
+                className="social-input"
+              />
+            )}
+          </div>
+        </div>
 
         {/* Horário de funcionamento de segunda a sexta */}
         <div className="hours-section">
           <h3>Horário de Funcionamento (Segunda a Sexta)</h3>
-          <input
-            type="time"
-            value={weekdaysHours.open}
-            onChange={(e) =>
-              setWeekdaysHours({ ...weekdaysHours, open: e.target.value })
-            }
-            required
-          />
-          <input
-            type="time"
-            value={weekdaysHours.close}
-            onChange={(e) =>
-              setWeekdaysHours({ ...weekdaysHours, close: e.target.value })
-            }
-            required
-          />
+          <div className="time-inputs">
+            <input
+              type="time"
+              value={weekdaysHours.open}
+              onChange={(e) =>
+                setWeekdaysHours({ ...weekdaysHours, open: e.target.value })
+              }
+              required
+            />
+            <span>até</span>
+            <input
+              type="time"
+              value={weekdaysHours.close}
+              onChange={(e) =>
+                setWeekdaysHours({ ...weekdaysHours, close: e.target.value })
+              }
+              required
+            />
+          </div>
         </div>
 
-        {/* Horário de funcionamento de sábado */}
-        <div className="hours-section">
-          <h3>Horário de Funcionamento (Sábado)</h3>
-          <input
-            type="time"
-            value={saturdayHours.open}
-            onChange={(e) =>
-              setSaturdayHours({ ...saturdayHours, open: e.target.value })
-            }
-          />
-          <input
-            type="time"
-            value={saturdayHours.close}
-            onChange={(e) =>
-              setSaturdayHours({ ...saturdayHours, close: e.target.value })
-            }
-          />
+        <div className="weekend-toggle">
+          <label>
+            <input
+              type="checkbox"
+              checked={showWeekend}
+              onChange={(e) => setShowWeekend(e.target.checked)}
+            />
+            Funciona aos finais de semana?
+          </label>
         </div>
 
-        {/* Horário de funcionamento de domingo */}
-        <div className="hours-section">
-          <h3>Horário de Funcionamento (Domingo)</h3>
-          <input
-            type="time"
-            value={sundayHours.open}
-            onChange={(e) =>
-              setSundayHours({ ...sundayHours, open: e.target.value })
-            }
-          />
-          <input
-            type="time"
-            value={sundayHours.close}
-            onChange={(e) =>
-              setSundayHours({ ...sundayHours, close: e.target.value })
-            }
-          />
-        </div>
+        {showWeekend && (
+          <>
+            {/* Horário de funcionamento de sábado */}
+            <div className="hours-section">
+              <h3>Horário de Funcionamento (Sábado)</h3>
+              <div className="time-inputs">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={!saturdayHours.closed}
+                    onChange={(e) => setSaturdayHours({ ...saturdayHours, closed: !e.target.checked })}
+                  />
+                  Aberto aos sábados
+                </label>
+                {!saturdayHours.closed && (
+                  <>
+                    <input
+                      type="time"
+                      value={saturdayHours.open}
+                      onChange={(e) =>
+                        setSaturdayHours({ ...saturdayHours, open: e.target.value })
+                      }
+                    />
+                    <span>até</span>
+                    <input
+                      type="time"
+                      value={saturdayHours.close}
+                      onChange={(e) =>
+                        setSaturdayHours({ ...saturdayHours, close: e.target.value })
+                      }
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Horário de funcionamento de domingo */}
+            <div className="hours-section">
+              <h3>Horário de Funcionamento (Domingo)</h3>
+              <div className="time-inputs">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={!sundayHours.closed}
+                    onChange={(e) => setSundayHours({ ...sundayHours, closed: !e.target.checked })}
+                  />
+                  Aberto aos domingos
+                </label>
+                {!sundayHours.closed && (
+                  <>
+                    <input
+                      type="time"
+                      value={sundayHours.open}
+                      onChange={(e) =>
+                        setSundayHours({ ...sundayHours, open: e.target.value })
+                      }
+                    />
+                    <span>até</span>
+                    <input
+                      type="time"
+                      value={sundayHours.close}
+                      onChange={(e) =>
+                        setSundayHours({ ...sundayHours, close: e.target.value })
+                      }
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="upload-instructions">
           <label htmlFor="businessImages">
@@ -389,8 +441,8 @@ const RegisterBusiness = () => {
                     alt={`preview ${index}`}
                     className="image-item"
                   />
-
                   <button
+                    type="button"
                     className="remove-image"
                     onClick={() => removeImage(index)}
                   >
@@ -401,13 +453,6 @@ const RegisterBusiness = () => {
             </div>
           )}
         </div>
-
-        {error && error.includes("Você pode enviar no máximo 6 imagens") && (
-          <div className="error">{error}</div>
-        )}
-        {error && error.includes("Pelo menos uma imagem") && (
-          <div className="error">{error}</div>
-        )}
 
         <div className="upload-instructions">
           <label htmlFor="cnDoc">
@@ -422,15 +467,17 @@ const RegisterBusiness = () => {
           />
         </div>
 
-        {error && !error.includes("Você pode enviar no máximo 6 imagens") && (
-          <div className="error">{error}</div>
+        {error && (
+          <div className="error">
+            {error.split('\n').map((err, index) => (
+              <p key={index}>{err}</p>
+            ))}
+          </div>
         )}
 
         {loading && <div className="loading">Carregando...</div>}
 
         <div className="terms-container">
-          {" "}
-          {/* Corrigido para manter a classe correta */}
           <input
             type="checkbox"
             id="terms"

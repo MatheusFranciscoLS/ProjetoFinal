@@ -92,6 +92,48 @@
   }
 }
 
+/* Estilos para o endereço */
+.endereco-container {
+  margin: 15px 0;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.endereco-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.endereco-link:hover {
+  background-color: #e9ecef;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.map-icon {
+  color: #dc3545;
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.endereco-link:hover .map-icon {
+  transform: scale(1.2);
+}
+
+.endereco-link span {
+  flex: 1;
+  color: #495057;
+}
+
 /* Responsividade */
 
 /* Para telas menores que 1024px (tablets e dispositivos menores) */

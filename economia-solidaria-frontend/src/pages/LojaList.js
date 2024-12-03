@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import "../styles/lojasList.css";
 
@@ -23,11 +23,19 @@ const LojasList = () => {
           querySnapshot.docs.map(async (docSnapshot) => {
             const lojaData = { id: docSnapshot.id, ...docSnapshot.data() };
             
-            // Buscar o plano do usuário dono da loja
+            // Buscar o plano atualizado do usuário
             if (lojaData.userId) {
               const userDoc = await getDoc(doc(db, "users", lojaData.userId));
               if (userDoc.exists()) {
-                lojaData.plano = userDoc.data().plano || "gratuito";
+                const userData = userDoc.data();
+                // Atualizar o plano da loja se o plano do usuário mudou
+                if (userData.plano !== lojaData.plano) {
+                  await setDoc(doc(db, "lojas", lojaData.id), {
+                    ...lojaData,
+                    plano: userData.plano || "gratuito"
+                  });
+                  lojaData.plano = userData.plano || "gratuito";
+                }
               } else {
                 lojaData.plano = "gratuito";
               }

@@ -36,7 +36,7 @@ const EditBusinessModal = ({ business, onClose, onSave }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const businessRef = doc(db, "lojas", business.id);
+      const businessRef = doc(db, business.collection, business.id);
       await updateDoc(businessRef, {
         nome: businessName,
         cnpj: businessCNPJ,
@@ -127,7 +127,6 @@ const EditBusinessModal = ({ business, onClose, onSave }) => {
       </div>
     </div>
   );
-  
 };
 
 const MyBusinesses = () => {
@@ -148,13 +147,27 @@ const MyBusinesses = () => {
     }
 
     try {
-      const q = query(collection(db, "lojas"), where("userId", "==", user.uid));
-      const querySnapshot = await getDocs(q);
-      const userBusinesses = querySnapshot.docs.map((doc) => ({
+      // Buscar negócios aprovados da coleção "lojas"
+      const lojasQuery = query(collection(db, "lojas"), where("userId", "==", user.uid));
+      const lojasSnapshot = await getDocs(lojasQuery);
+      const lojasAprovadas = lojasSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
+        collection: "lojas"
       }));
-      setBusinesses(userBusinesses);
+
+      // Buscar negócios pendentes da coleção "negocios_pendentes"
+      const pendentesQuery = query(collection(db, "negocios_pendentes"), where("userId", "==", user.uid));
+      const pendentesSnapshot = await getDocs(pendentesQuery);
+      const negociosPendentes = pendentesSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        collection: "negocios_pendentes"
+      }));
+
+      // Combinar os resultados
+      const todosNegocios = [...lojasAprovadas, ...negociosPendentes];
+      setBusinesses(todosNegocios);
     } catch (error) {
       console.error("Erro ao buscar negócios do usuário:", error);
       setError("Ocorreu um erro ao carregar seus negócios. Tente novamente mais tarde.");
@@ -168,17 +181,33 @@ const MyBusinesses = () => {
   }, [user]);
 
   const handleEdit = (business) => {
-    setEditingBusiness(business); // Abre o modal com os dados do negócio
+    // Verificar se o negócio pode ser editado (apenas se estiver aprovado)
+    if (business.collection === "negocios_pendentes") {
+      alert("Não é possível editar um negócio que ainda está em análise.");
+      return;
+    }
+    setEditingBusiness(business);
   };
 
   const handleCloseModal = () => {
     setEditingBusiness(null); // Fecha o modal
   };
 
-  const handleSaveChanges = () => {
-    // Recarrega os dados dos negócios após salvar
-    setEditingBusiness(null);
-    fetchBusinesses(); // Atualiza a lista de negócios
+  const handleSaveChanges = async () => {
+    if (!editingBusiness) return;
+
+    try {
+      const businessRef = doc(db, editingBusiness.collection, editingBusiness.id);
+      await updateDoc(businessRef, {
+        ...editingBusiness,
+        lastUpdated: new Date().toISOString()
+      });
+      setEditingBusiness(null);
+      fetchBusinesses(); // Atualiza a lista de negócios
+    } catch (error) {
+      console.error("Erro ao salvar alterações:", error);
+      alert("Erro ao salvar as alterações. Tente novamente.");
+    }
   };
 
   if (loading) {
