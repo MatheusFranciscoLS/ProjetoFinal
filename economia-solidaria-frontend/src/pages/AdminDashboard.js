@@ -79,10 +79,15 @@ const AdminDashboard = () => {
       if (businessSnapshot.exists()) {
         const businessData = businessSnapshot.data();
 
-        // Atualiza o status do negócio
+        // Buscar o plano do usuário
+        const userDoc = await getDoc(doc(db, "users", businessData.userId));
+        const userPlan = userDoc.exists() ? userDoc.data().plano || "gratuito" : "gratuito";
+
+        // Atualiza o status do negócio e adiciona o plano
         await setDoc(businessRef, {
           ...businessData,
           status: approved ? "aprovado" : "negado",
+          plano: userPlan // Adiciona o plano do usuário
         });
 
         if (approved) {
@@ -90,6 +95,7 @@ const AdminDashboard = () => {
           await setDoc(newBusinessRef, {
             ...businessData,
             status: "aprovado",
+            plano: userPlan // Adiciona o plano do usuário
           });
           await deleteDoc(businessRef);
           setFeedbackMessage("Negócio aprovado e movido para 'lojas'.");
@@ -125,8 +131,6 @@ const AdminDashboard = () => {
       console.error('CNPJ não informado');
       return;
     }
-
-
 
     const cleanCNPJ = cnpj.replace(/[^\d]+/g, '');
     if (cleanCNPJ.length !== 14) {
@@ -371,16 +375,16 @@ const AdminDashboard = () => {
                 <strong>E-mail:</strong> {selectedBusiness.email}
               </p>
               <p>
-  <strong>Horário de Funcionamento:</strong> 
-  {selectedBusiness.horarioDeFuncionamento ? (
-    <>
-      <p>Abertura: {selectedBusiness.horarioDeFuncionamento.abertura}</p>
-      <p>Fechamento: {selectedBusiness.horarioDeFuncionamento.fechamento}</p>
-    </>
-  ) : (
-    "Não disponível"
-  )}
-</p>
+                <strong>Horário de Funcionamento:</strong> 
+                {selectedBusiness.horarioDeFuncionamento ? (
+                  <>
+                    <p>Abertura: {selectedBusiness.horarioDeFuncionamento.abertura}</p>
+                    <p>Fechamento: {selectedBusiness.horarioDeFuncionamento.fechamento}</p>
+                  </>
+                ) : (
+                  "Não disponível"
+                )}
+              </p>
 
               {/* Botões de ação */}
               {/* Botão de Verificar CNPJ */}

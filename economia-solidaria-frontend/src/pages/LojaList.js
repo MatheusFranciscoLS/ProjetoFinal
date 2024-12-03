@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import "../styles/lojasList.css";
+
+const defaultLojaImage = "default-image.jpg";
 
 const LojasList = () => {
   const [lojas, setLojas] = useState([]);
@@ -15,8 +17,28 @@ const LojasList = () => {
   useEffect(() => {
     const fetchLojas = async () => {
       try {
+        // Buscar todas as lojas aprovadas
         const querySnapshot = await getDocs(collection(db, "lojas"));
-        const lojasData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const lojasData = await Promise.all(
+          querySnapshot.docs.map(async (docSnapshot) => {
+            const lojaData = { id: docSnapshot.id, ...docSnapshot.data() };
+            
+            // Buscar o plano do usuário dono da loja
+            if (lojaData.userId) {
+              const userDoc = await getDoc(doc(db, "users", lojaData.userId));
+              if (userDoc.exists()) {
+                lojaData.plano = userDoc.data().plano || "gratuito";
+              } else {
+                lojaData.plano = "gratuito";
+              }
+            } else {
+              lojaData.plano = "gratuito";
+            }
+            
+            return lojaData;
+          })
+        );
+        
         setLojas(lojasData);
       } catch (error) {
         console.error("Erro ao carregar lojas:", error);
@@ -30,17 +52,37 @@ const LojasList = () => {
   }, []);
 
   const filtrarLojas = () => {
-    return lojas.filter((loja) => {
-      const nomeFiltrado = loja.nome.toLowerCase().includes(filtroNome.toLowerCase());
-      const categoriaFiltrada = filtroCategoria
-        ? loja.categoria?.toLowerCase().includes(filtroCategoria.toLowerCase())
-        : true;
-      return nomeFiltrado && categoriaFiltrada;
-    });
+    return lojas
+      .filter((loja) => {
+        const nomeFiltrado = loja.nome?.toLowerCase().includes(filtroNome.toLowerCase());
+        const categoriaFiltrada = filtroCategoria
+          ? loja.categoria?.toLowerCase().includes(filtroCategoria.toLowerCase())
+          : true;
+        return nomeFiltrado && categoriaFiltrada;
+      })
+      .sort((a, b) => {
+        // Definir prioridade dos planos
+        const prioridadePlano = {
+          premium: 1,
+          essencial: 2,
+          gratuito: 3
+        };
+
+        // Obter prioridade de cada loja (default para gratuito se não tiver plano)
+        const prioridadeA = prioridadePlano[a.plano || "gratuito"];
+        const prioridadeB = prioridadePlano[b.plano || "gratuito"];
+
+        // Ordenar primeiro por plano
+        if (prioridadeA !== prioridadeB) {
+          return prioridadeA - prioridadeB;
+        }
+
+        // Se planos forem iguais, ordenar por nome
+        return a.nome?.localeCompare(b.nome || "");
+      });
   };
 
   const lojasFiltradas = filtrarLojas();
-
   const indexOfLastLoja = paginaAtual * lojasPorPagina;
   const indexOfFirstLoja = indexOfLastLoja - lojasPorPagina;
   const lojasPaginas = lojasFiltradas.slice(indexOfFirstLoja, indexOfLastLoja);
@@ -49,11 +91,51 @@ const LojasList = () => {
     setPaginaAtual(novaPagina);
   };
 
+  const renderLoja = (loja) => {
+    const planoClass = loja.plano ? `loja-${loja.plano.toLowerCase()}` : 'loja-gratuito';
+    const planoBadgeText = {
+      'premium': 'Premium',
+      'essencial': 'Essencial',
+      'gratuito': 'Gratuito'
+    }[loja.plano?.toLowerCase() || 'gratuito'];
+
+    return (
+      <Link to={`/loja/${loja.id}`} key={loja.id} className={`loja-card ${planoClass}`}>
+        {planoBadgeText && <span className="plano-badge">{planoBadgeText}</span>}
+        <img 
+          src={loja.imagens?.[0] || defaultLojaImage} 
+          alt={loja.nome} 
+          className="loja-img"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = defaultLojaImage;
+          }}
+        />
+        <div className="loja-info">
+          <h3>{loja.nome}</h3>
+          <p>{loja.descricao?.substring(0, 100)}{loja.descricao?.length > 100 ? '...' : ''}</p>
+          <p className="loja-categoria">{loja.categoria || 'Categoria não especificada'}</p>
+        </div>
+      </Link>
+    );
+  };
+
+  const renderLoadingSkeletons = () => {
+    return Array(6).fill().map((_, index) => (
+      <div key={`skeleton-${index}`} className="loja-card skeleton">
+        <div className="loja-img-placeholder"></div>
+        <div className="loja-info-placeholder">
+          <div className="loja-title-placeholder"></div>
+          <div className="loja-description-placeholder"></div>
+        </div>
+      </div>
+    ));
+  };
+
   return (
     <div className="container">
       <h2>Lista de Lojas</h2>
 
-      {/* Filtros */}
       <div className="filters">
         <input
           type="text"
@@ -82,35 +164,14 @@ const LojasList = () => {
 
       <div className="lojas-list">
         {loading ? (
-          Array(12).fill().map((_, idx) => (
-            <div className="loja-card" key={idx}>
-              <div className="loja-img-placeholder"></div>
-              <div className="loja-info-placeholder">
-                <div className="loja-title-placeholder"></div>
-                <div className="loja-description-placeholder"></div>
-              </div>
-            </div>
-          ))
+          renderLoadingSkeletons()
         ) : lojasPaginas.length === 0 ? (
           <p>Não há lojas que correspondem aos filtros.</p>
         ) : (
-          lojasPaginas.map((loja) => (
-            <Link to={`/loja/${loja.id}`} key={loja.id} className="loja-card">
-              <img
-                src={loja.imagens?.[0] || "default-image.jpg"}
-                alt={loja.nome}
-                className="loja-img"
-              />
-              <div className="loja-info">
-                <h3>{loja.nome}</h3>
-                <p>{loja.descricao}</p>
-              </div>
-            </Link>
-          ))
+          lojasPaginas.map((loja) => renderLoja(loja))
         )}
       </div>
 
-      {/* Controles de paginação */}
       <div className="pagination">
         <button
           onClick={() => handleChangePage(paginaAtual - 1)}
