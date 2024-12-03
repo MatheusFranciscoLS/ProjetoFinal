@@ -35,13 +35,6 @@ h2 {
   width: 48%;
 }
 
-@media (max-width: 768px) {
-  .filter-input, .filter-select {
-    width: 100%; /* Filtros ocupam toda a largura em telas pequenas */
-    margin-bottom: 10px;
-  }
-}
-
 /* Estilo para a lista de lojas (grid) */
 .lojas-list {
   display: grid;
@@ -50,46 +43,80 @@ h2 {
   margin-bottom: 30px;
 }
 
-@media (max-width: 1024px) {
-  .lojas-list {
-    grid-template-columns: repeat(3, 1fr); /* 3 colunas em telas médias */
-  }
-}
-
-@media (max-width: 768px) {
-  .lojas-list {
-    grid-template-columns: repeat(2, 1fr); /* 2 colunas em telas pequenas */
-  }
-}
-
-@media (max-width: 480px) {
-  .lojas-list {
-    grid-template-columns: 1fr; /* 1 coluna em telas muito pequenas */
-  }
-}
-
-/* Estilo para o card de cada loja */
+/* Estilo base para o card de cada loja */
 .loja-card {
   background-color: #fff;
   border-radius: 8px;
   overflow: hidden;
   text-align: center;
   padding: 15px;
-  transition: transform 0.3s ease-in-out;
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  text-decoration: none; /* Garantir que o card não tenha sublinhado */
+  text-decoration: none;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* Estilos específicos para cada plano */
+.loja-premium {
+  border: 3px solid #FFD700;
+  background: linear-gradient(to bottom, #fffdf0, #fff);
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.loja-essencial {
+  border: 3px solid #7db8ff;
+  background: linear-gradient(to bottom, #f0f8ff, #fff);
+  transform: scale(1.01);
+}
+
+.loja-gratuito {
+  border: 1px solid #e0e0e0;
+}
+
+/* Badge de plano */
+.plano-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.loja-premium .plano-badge {
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  color: #000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.loja-essencial .plano-badge {
+  background: linear-gradient(45deg, #7db8ff, #4a90e2);
+  color: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.loja-gratuito .plano-badge {
+  background: #f0f0f0;
+  color: #666;
+}
+
+/* Efeito hover para todos os cards */
 .loja-card:hover {
-  transform: translateY(-5px); /* Efeito de hover */
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
 .loja-img {
   width: 100%;
   height: 180px;
   object-fit: cover;
+  border-radius: 4px;
 }
 
 .loja-info {
@@ -108,65 +135,57 @@ h2 {
   color: #555;
 }
 
-.loja-info-placeholder {
-  margin-top: 12px;
-  width: 100%;
+.loja-categoria {
+  margin-top: 10px !important;
+  font-size: 12px !important;
+  color: #888 !important;
+  text-transform: uppercase;
 }
 
-/* Estilos de placeholders para carregamento */
-.loja-img-placeholder,
-.loja-title-placeholder,
-.loja-description-placeholder {
-  background-color: #e0e0e0;
-  border-radius: 4px;
+/* Skeleton loading */
+.skeleton {
+  animation: pulse 1.5s infinite;
 }
 
 .loja-img-placeholder {
   width: 100%;
-  height: 200px;
-  animation: placeholderShimmer 1.5s infinite;
+  height: 180px;
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+.loja-info-placeholder {
+  padding: 15px;
 }
 
 .loja-title-placeholder {
-  width: 80%;
-  height: 20px;
-  margin-bottom: 8px;
-  animation: placeholderShimmer 1.5s infinite;
+  height: 24px;
+  width: 70%;
+  background: #e0e0e0;
+  margin-bottom: 10px;
+  border-radius: 4px;
 }
 
 .loja-description-placeholder {
-  width: 60%;
   height: 16px;
-  animation: placeholderShimmer 1.5s infinite;
+  width: 90%;
+  background: #e0e0e0;
+  border-radius: 4px;
 }
 
-@keyframes placeholderShimmer {
+@keyframes pulse {
   0% {
-    background-position: -200%;
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
   }
   100% {
-    background-position: 200%;
+    opacity: 1;
   }
 }
 
-/* Estilo do botão "Ver mais" */
-.btn-ver-mais {
-  padding: 8px 16px;
-  background-color: #3498db;
-  color: white;
-  border-radius: 4px;
-  text-decoration: none;
-  text-align: center;
-  display: inline-block;
-  margin-top: 10px;
-  font-size: 1rem; /* Ajuste de tamanho de fonte para telas menores */
-}
-
-.btn-ver-mais:hover {
-  background-color: #2980b9;
-}
-
-/* Estilo para os controles de paginação */
+/* Paginação */
 .pagination {
   display: flex;
   justify-content: center;
@@ -176,107 +195,85 @@ h2 {
 }
 
 .pagination button {
-  padding: 10px 20px;
-  background-color: #3498db;
-  color: white;
+  padding: 8px 16px;
+  font-size: 14px;
   border: none;
   background: #f0f0f0;
   border-radius: 4px;
   cursor: pointer;
-  margin: 0 10px;
-  font-size: 1rem; /* Tamanho de fonte adequado */
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #e0e0e0;
 }
 
 .pagination button:disabled {
-  background-color: #bbb;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .pagination span {
-  font-size: 1rem;
-  margin: 0 10px;
-  color: #333;
+  font-size: 14px;
+  color: #666;
 }
 
 /* Responsividade */
-
-/* Para telas menores que 1024px (tablets e dispositivos médios) */
 @media (max-width: 1024px) {
   .container {
-    padding: 15px; /* Menos padding em telas médias */
+    padding: 15px;
   }
 
   h2 {
-    font-size: 1.8rem; /* Ajusta o tamanho do título */
+    font-size: 1.8rem;
   }
 
   .filters {
-    flex-direction: column; /* Empilha os filtros em telas menores */
+    flex-direction: column;
     align-items: flex-start;
   }
 
   .filter-input, .filter-select {
-    width: 100%; /* Filtros ocupam 100% da largura */
+    width: 100%;
   }
 
   .lojas-list {
-    grid-template-columns: repeat(3, 1fr); /* 3 colunas em telas médias */
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-/* Para telas menores que 768px (smartphones e dispositivos pequenos) */
 @media (max-width: 768px) {
   h2 {
-    font-size: 1.6rem; /* Ajuste no tamanho da fonte do título */
-  }
-
-  .filters {
-    flex-direction: column; /* Filtros empilhados */
-    justify-content: center;
-  }
-
-  .filter-input, .filter-select {
-    width: 100%; /* Filtros ocupam 100% da largura */
-    margin-bottom: 10px;
+    font-size: 1.6rem;
   }
 
   .lojas-list {
-    grid-template-columns: repeat(2, 1fr); /* 2 colunas em telas menores */
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .loja-card {
-    padding: 10px; /* Reduz o padding do card */
-  }
-
-  .btn-ver-mais {
-    padding: 8px 14px; /* Ajuste no tamanho do botão */
-    font-size: 0.9rem; /* Reduz o tamanho da fonte no botão */
+    padding: 10px;
   }
 }
 
-/* Para telas menores que 480px (smartphones muito pequenos) */
 @media (max-width: 480px) {
   h2 {
-    font-size: 1.4rem; /* Reduz o tamanho do título */
+    font-size: 1.4rem;
   }
 
   .lojas-list {
-    grid-template-columns: 1fr; /* 1 coluna em telas pequenas */
+    grid-template-columns: 1fr;
   }
 
   .loja-img {
-    height: 180px; /* Reduz a altura das imagens */
+    height: 160px;
   }
 
   .loja-info h3 {
-    font-size: 1rem; /* Reduz o tamanho do título no card */
+    font-size: 1rem;
   }
 
   .loja-info p {
-    font-size: 0.9rem; /* Reduz o tamanho da descrição */
-  }
-
-  .pagination button {
-    padding: 8px 16px; /* Reduz o tamanho do botão de paginação */
+    font-size: 0.9rem;
   }
 }
