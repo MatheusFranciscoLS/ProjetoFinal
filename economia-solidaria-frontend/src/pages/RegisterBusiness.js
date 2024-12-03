@@ -20,6 +20,9 @@ const RegisterBusiness = () => {
   const [weekdaysHours, setWeekdaysHours] = useState({ open: "", close: "" });
   const [saturdayHours, setSaturdayHours] = useState({ open: "", close: "", closed: true });
   const [sundayHours, setSundayHours] = useState({ open: "", close: "", closed: true });
+  const [lunchBreak, setLunchBreak] = useState(false);
+  const [lunchStart, setLunchStart] = useState("");
+  const [lunchEnd, setLunchEnd] = useState("");
   const [showWeekend, setShowWeekend] = useState(false);
   const [images, setImages] = useState([]);
   const [cnDoc, setCnDoc] = useState(null);
@@ -78,24 +81,29 @@ const RegisterBusiness = () => {
     setError("");
 
     // Criar objeto com todos os dados do formulário
-    const formData = {
-      businessName,
-      businessCNPJ,
-      businessDescription,
-      category,
-      address,
-      telefone,
-      cellphone: cellphone ? cellphone : null,
-      email,
-      images,
-      cnDoc,
-      horarioDeFuncionamento: {
-        segundaAsexta: weekdaysHours,
-        sabado: saturdayHours,
-        domingo: sundayHours,
-      },
-      socialLinks,
-    };
+const formData = {
+  businessName,
+  businessCNPJ,
+  businessDescription,
+  category,
+  address,
+  telefone,
+  cellphone: cellphone ? cellphone : null,
+  email,
+  images,
+  cnDoc,
+  horarioDeFuncionamento: {
+    segundaAsexta: weekdaysHours,
+    sabado: saturdayHours,
+    domingo: sundayHours,
+    lunchBreak: {
+      isClosed: lunchBreak,
+      start: lunchStart,
+      end: lunchEnd,
+    },
+  },
+  socialLinks,
+};
 
     // Validar formulário
     const { isValid, errors } = validateForm(formData);
@@ -250,12 +258,16 @@ const RegisterBusiness = () => {
         <h3>Redes Sociais</h3>
         <div className="social-icons">
           <div className="social-icon-wrapper">
-            <FaInstagram 
-              className={`social-icon ${showSocialInputs.instagram ? 'active' : ''}`}
-              onClick={() => setShowSocialInputs({
-                ...showSocialInputs,
-                instagram: !showSocialInputs.instagram
-              })}
+            <FaInstagram
+              className={`social-icon ${
+                showSocialInputs.instagram ? "active" : ""
+              }`}
+              onClick={() =>
+                setShowSocialInputs({
+                  ...showSocialInputs,
+                  instagram: !showSocialInputs.instagram,
+                })
+              }
             />
             {showSocialInputs.instagram && (
               <input
@@ -270,12 +282,16 @@ const RegisterBusiness = () => {
           </div>
 
           <div className="social-icon-wrapper">
-            <FaFacebook 
-              className={`social-icon ${showSocialInputs.facebook ? 'active' : ''}`}
-              onClick={() => setShowSocialInputs({
-                ...showSocialInputs,
-                facebook: !showSocialInputs.facebook
-              })}
+            <FaFacebook
+              className={`social-icon ${
+                showSocialInputs.facebook ? "active" : ""
+              }`}
+              onClick={() =>
+                setShowSocialInputs({
+                  ...showSocialInputs,
+                  facebook: !showSocialInputs.facebook,
+                })
+              }
             />
             {showSocialInputs.facebook && (
               <input
@@ -290,12 +306,16 @@ const RegisterBusiness = () => {
           </div>
 
           <div className="social-icon-wrapper">
-            <FaWhatsapp 
-              className={`social-icon ${showSocialInputs.whatsapp ? 'active' : ''}`}
-              onClick={() => setShowSocialInputs({
-                ...showSocialInputs,
-                whatsapp: !showSocialInputs.whatsapp
-              })}
+            <FaWhatsapp
+              className={`social-icon ${
+                showSocialInputs.whatsapp ? "active" : ""
+              }`}
+              onClick={() =>
+                setShowSocialInputs({
+                  ...showSocialInputs,
+                  whatsapp: !showSocialInputs.whatsapp,
+                })
+              }
             />
             {showSocialInputs.whatsapp && (
               <input
@@ -334,6 +354,36 @@ const RegisterBusiness = () => {
           </div>
         </div>
 
+        <div className="lunch-break-toggle">
+          <label>
+            <input
+              type="checkbox"
+              checked={lunchBreak}
+              onChange={(e) => setLunchBreak(e.target.checked)}
+            />
+            Fecha para o almoço?
+          </label>
+        </div>
+
+        {lunchBreak && (
+          <div className="lunch-break-hours">
+            <label>
+              Horário de fechamento para o almoço:
+              <input
+                type="time"
+                value={lunchStart}
+                onChange={(e) => setLunchStart(e.target.value)}
+              />
+              até
+              <input
+                type="time"
+                value={lunchEnd}
+                onChange={(e) => setLunchEnd(e.target.value)}
+              />
+            </label>
+          </div>
+        )}
+
         <div className="weekend-toggle">
           <label>
             <input
@@ -355,7 +405,12 @@ const RegisterBusiness = () => {
                   <input
                     type="checkbox"
                     checked={!saturdayHours.closed}
-                    onChange={(e) => setSaturdayHours({ ...saturdayHours, closed: !e.target.checked })}
+                    onChange={(e) =>
+                      setSaturdayHours({
+                        ...saturdayHours,
+                        closed: !e.target.checked,
+                      })
+                    }
                   />
                   Aberto aos sábados
                 </label>
@@ -365,7 +420,10 @@ const RegisterBusiness = () => {
                       type="time"
                       value={saturdayHours.open}
                       onChange={(e) =>
-                        setSaturdayHours({ ...saturdayHours, open: e.target.value })
+                        setSaturdayHours({
+                          ...saturdayHours,
+                          open: e.target.value,
+                        })
                       }
                     />
                     <span>até</span>
@@ -373,7 +431,10 @@ const RegisterBusiness = () => {
                       type="time"
                       value={saturdayHours.close}
                       onChange={(e) =>
-                        setSaturdayHours({ ...saturdayHours, close: e.target.value })
+                        setSaturdayHours({
+                          ...saturdayHours,
+                          close: e.target.value,
+                        })
                       }
                     />
                   </>
@@ -389,7 +450,12 @@ const RegisterBusiness = () => {
                   <input
                     type="checkbox"
                     checked={!sundayHours.closed}
-                    onChange={(e) => setSundayHours({ ...sundayHours, closed: !e.target.checked })}
+                    onChange={(e) =>
+                      setSundayHours({
+                        ...sundayHours,
+                        closed: !e.target.checked,
+                      })
+                    }
                   />
                   Aberto aos domingos
                 </label>
@@ -407,7 +473,10 @@ const RegisterBusiness = () => {
                       type="time"
                       value={sundayHours.close}
                       onChange={(e) =>
-                        setSundayHours({ ...sundayHours, close: e.target.value })
+                        setSundayHours({
+                          ...sundayHours,
+                          close: e.target.value,
+                        })
                       }
                     />
                   </>
@@ -469,7 +538,7 @@ const RegisterBusiness = () => {
 
         {error && (
           <div className="error">
-            {error.split('\n').map((err, index) => (
+            {error.split("\n").map((err, index) => (
               <p key={index}>{err}</p>
             ))}
           </div>
