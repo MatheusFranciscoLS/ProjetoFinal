@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #74b9ff, #d0fff894);
+    background-color: var(--bg-color); /* Cor de fundo baseada no tema */
     font-family: 'Roboto', sans-serif;
     padding: 20px;
     box-sizing: border-box;
@@ -13,7 +13,7 @@
 
 /* Formulário */
 .register-business-form {
-    background: #fff;
+    background-color: var(--card-bg-color); /* Cor de fundo do cartão */
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -26,7 +26,7 @@
 
 /* Título */
 .register-business-form h2 {
-    color: #0984e3;
+    color: var(--text-color); /* Cor do texto baseada no tema */
     font-size: 30px;
     margin-bottom: 20px;
     text-align: center;
@@ -41,6 +41,8 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 16px;
+    background-color: var(--card-bg-color); /* Fundo do campo baseado no tema */
+    color: var(--text-color); /* Cor do texto baseada no tema */
     width: 100%;
     box-sizing: border-box;
     transition: border-color 0.3s, box-shadow 0.3s ease;
@@ -51,8 +53,8 @@
 .register-business-form textarea:focus,
 .register-business-form select:focus {
     outline: none;
-    border-color: #0984e3;
-    box-shadow: 0 0 6px rgba(9, 132, 227, 0.5);
+    border-color: var(--button-bg-color); /* Cor do botão como destaque */
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.5); /* Tom verde similar ao botão */
 }
 
 /* Upload de imagens */
@@ -70,11 +72,11 @@
 
 /* Estilo das imagens com tamanho fixo */
 .image-item {
-    width: 150px; /* Largura fixa */
-    height: 150px; /* Altura fixa */
-    object-fit: cover; /* Garante que a imagem seja redimensionada sem distorção */
-    margin: 5px; /* Espaçamento entre as imagens */
-    border-radius: 8px; /* Bordas arredondadas */
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin: 5px;
+    border-radius: 8px;
 }
 
 /* Estilo do botão de remoção (X vermelho) */
@@ -83,7 +85,7 @@
     top: -10px;
     right: 5px;
     background-color: rgba(255, 0, 0, 0.7);
-    color: white;
+    color: var(--text-color); /* Cor do texto baseada no tema */
     border: none;
     border-radius: 50%;
     font-size: 16px;
@@ -101,7 +103,7 @@
     background-color: rgba(255, 0, 0, 1);
 }
 
-/* Container para termos e condições (horizontal) */
+/* Container para termos e condições */
 .terms-container {
     display: flex;
     align-items: center;
@@ -121,12 +123,12 @@
 /* Estilo do texto dos termos */
 .terms-container label {
     font-size: 14px;
-    color: #555;
+    color: var(--text-color); /* Cor do texto baseada no tema */
 }
 
 /* Estilo do link dos termos */
 .terms-link {
-    color: #0984e3;
+    color: var(--button-bg-color); /* Cor baseada no botão */
     text-decoration: none;
 }
 
@@ -136,8 +138,8 @@
 
 /* Estilo do botão */
 button {
-    background: #0984e3;
-    color: #fff;
+    background-color: var(--button-bg-color); /* Fundo do botão baseado no tema */
+    color: var(--text-color); /* Cor do texto baseada no tema */
     font-size: 18px;
     border: none;
     padding: 14px;
@@ -150,13 +152,13 @@ button {
 
 /* Hover no botão */
 button:hover {
-    background: #74b9ff;
+    background-color: var(--button-hover-bg-color); /* Hover baseado no tema */
     transform: scale(1.05);
 }
 
 /* Botão desabilitado */
 button:disabled {
-    background: #b2bec3;
+    background-color: #b2bec3;
     cursor: not-allowed;
 }
 
@@ -181,11 +183,6 @@ button:disabled {
         font-size: 16px;
         padding: 12px;
     }
-
-    .image-preview img {
-        max-width: 80px;
-        max-height: 80px;
-    }
 }
 
 /* Estilo do TimePicker */
@@ -195,12 +192,14 @@ button:disabled {
     border-radius: 8px;
     border: 1px solid #ddd;
     font-size: 16px;
+    background-color: var(--card-bg-color); /* Fundo baseado no tema */
+    color: var(--text-color); /* Texto baseado no tema */
     transition: border-color 0.3s, box-shadow 0.3s ease;
 }
 
 /* Foco no TimePicker */
 .react-time-picker:focus {
     outline: none;
-    border-color: #0984e3;
-    box-shadow: 0 0 6px rgba(9, 132, 227, 0.5);
+    border-color: var(--button-bg-color); /* Cor de foco baseada no botão */
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
 }
