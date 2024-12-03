@@ -199,6 +199,20 @@
     font-weight: 500;
 }
 
+.lunch-break-toggle {
+    margin: 24px 0;
+    padding: 16px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.lunch-break-toggle:hover {
+    border-color: var(--button-bg-color);
+    background-color: #f8f9fa;
+}
+
 .weekend-toggle {
     margin: 24px 0;
     padding: 16px;
