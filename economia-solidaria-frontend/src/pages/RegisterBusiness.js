@@ -134,15 +134,16 @@ const RegisterBusiness = () => {
       category,
       address,
       telefone,
+      cellphone: cellphone ? cellphone : null,
       email,
       images,
       cnDoc,
       horarioDeFuncionamento: {
         segundaAsexta: weekdaysHours,
         sabado: saturdayHours,
-        domingo: sundayHours
+        domingo: sundayHours,
       },
-      socialLinks
+      socialLinks,
     };
 
     // Validar formulário
