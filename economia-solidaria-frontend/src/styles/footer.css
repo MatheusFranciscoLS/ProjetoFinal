@@ -1,41 +1,71 @@
 /* Estilos para o Footer */
 .footer {
   text-align: center;
-  padding: 20px;
-  background-color: #007bff; /* Azul mais escuro */
-  color: white; /* Texto branco */
-  border-top: 1px solid #333; /* Separador */
-  width: 100%; /* Garante que ocupa toda a largura */
-  font-size: 14px;
+  padding: 1.5rem;
+  background-color: #007bff;
+  background-image: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  font-size: 0.9rem;
   font-weight: 400;
-  position: relative; /* Usado para layout flexível */
+  position: relative;
   bottom: 0;
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .footer-nav {
   display: flex;
-  justify-content: center; /* Alinha os links ao centro */
-  gap: 20px; /* Espaçamento entre os links */
-  margin-bottom: 10px; /* Espaço entre os links e o texto */
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .footer-link {
-  color: white;
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
-  font-size: 16px;
+  font-size: 0.95rem;
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 15px;
+}
+
+.footer-link i {
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
 }
 
 /* Efeito de hover para os links */
 .footer-link:hover {
-  color: #ffdd57; /* Amarelo para hover */
+  color: #ffdd57;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.footer-link:hover i {
+  transform: scale(1.1);
 }
 
 /* Responsividade: links no footer em telas pequenas */
 @media (max-width: 768px) {
+  .footer {
+    padding: 1rem;
+  }
+  
   .footer-nav {
-    flex-direction: column; /* Empilhar os links verticalmente em telas pequenas */
-    gap: 10px;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .footer-link {
+    width: 100%;
+    justify-content: center;
+    padding: 0.5rem 1rem;
   }
 }
