@@ -6,7 +6,7 @@ import { getAuth } from "firebase/auth";
 import InputMask from "react-input-mask";
 import { FaInstagram, FaFacebook, FaWhatsapp } from 'react-icons/fa';
 import { validateForm } from "../components/validation";
-import "../styles/editBusiness.css";
+import "../styles/editbusiness.css";
 
 const EditBusiness = () => {
   const { id } = useParams();
