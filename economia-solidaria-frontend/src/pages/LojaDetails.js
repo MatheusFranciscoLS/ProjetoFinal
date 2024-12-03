@@ -121,7 +121,9 @@ const LojaDetails = () => {
             )}
             {loja.redesSociais?.whatsapp && (
               <a
-                href={`https://wa.me/${loja.redesSociais.whatsapp}`}
+                href={`https://api.whatsapp.com/send/?phone=${loja.redesSociais.whatsapp
+                  .replace(/\D/g, "")
+                  .replace(/^1/, "")}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
