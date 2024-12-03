@@ -151,7 +151,10 @@ const LojaDetails = () => {
       </p>
 
       <p>
-        <strong>Telefone:</strong> {loja.telefone}
+        <strong>Telefone:</strong> {loja.telefoneFixo}
+      </p>
+      <p>
+        <strong>Celular:</strong> {loja.telefoneCelular}
       </p>
       <p>
         <strong>Email:</strong> {loja.email}

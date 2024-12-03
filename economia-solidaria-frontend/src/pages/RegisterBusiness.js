@@ -4,7 +4,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase"; // Certifique-se de importar o 'db'
 import { getAuth } from "firebase/auth"; // Para pegar o UID do usuário autenticado
 import "../styles/registerbusiness.css";
-
+import { validateForm } from "../components/validation"; // Importe a função de validação
 import InputMask from "react-input-mask"; //
 
 
@@ -14,7 +14,7 @@ const RegisterBusiness = () => {
   const [businessDescription, setBusinessDescription] = useState("");
   const [category, setCategory] = useState("");
   const [address, setAddress] = useState("");
-  const [landline, setLandline] = useState(""); // Telefone fixo
+  const [telefone, setTelefone] = useState(""); // Telefone fixo
   const [cellphone, setCellphone] = useState(""); // Celular
   const [email, setEmail] = useState("");
   const [weekdaysHours, setWeekdaysHours] = useState({ open: "", close: "" }); // Segunda a sexta
@@ -120,63 +120,6 @@ const RegisterBusiness = () => {
     setImages(images.filter((_, i) => i !== index));
   };
 
-  const validateForm = (formData) => {
-    const errors = {};
-
-    if (!formData.businessName) {
-      errors.businessName = "O nome do negócio é obrigatório.";
-    }
-
-    if (!formData.businessCNPJ) {
-      errors.businessCNPJ = "O CNPJ é obrigatório.";
-    }
-
-    if (!formData.businessDescription) {
-      errors.businessDescription = "A descrição do negócio é obrigatória.";
-    }
-
-    if (!formData.category) {
-      errors.category = "A categoria é obrigatória.";
-    }
-
-    if (!formData.address) {
-      errors.address = "O endereço é obrigatório.";
-    }
-
-    if (!formData.landline) {
-      errors.landline = "O telefone fixo é obrigatório.";
-    }
-
-    if (!formData.email) {
-      errors.email = "O e-mail é obrigatório.";
-    }
-
-    if (formData.images.length === 0) {
-      errors.images = "Pelo menos uma imagem é obrigatória.";
-    }
-
-    if (!formData.cnDoc) {
-      errors.cnDoc = "O comprovante do Simples Nacional é obrigatório.";
-    }
-
-    if (!formData.horarioDeFuncionamento.segundaAsexta.open || !formData.horarioDeFuncionamento.segundaAsexta.close) {
-      errors.horarioDeFuncionamento = "O horário de funcionamento de segunda a sexta é obrigatório.";
-    }
-
-    if (!formData.horarioDeFuncionamento.sabado.open || !formData.horarioDeFuncionamento.sabado.close) {
-      errors.horarioDeFuncionamento = "O horário de funcionamento de sábado é obrigatório.";
-    }
-
-    if (!formData.horarioDeFuncionamento.domingo.open || !formData.horarioDeFuncionamento.domingo.close) {
-      errors.horarioDeFuncionamento = "O horário de funcionamento de domingo é obrigatório.";
-    }
-
-    if (!formData.socialLinks.instagram || !formData.socialLinks.facebook || !formData.socialLinks.whatsapp) {
-      errors.socialLinks = "As redes sociais são obrigatórias.";
-    }
-
-    return { isValid: Object.keys(errors).length === 0, errors };
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -190,7 +133,7 @@ const RegisterBusiness = () => {
       businessDescription,
       category,
       address,
-      landline,
+      telefone,
       email,
       images,
       cnDoc,
@@ -231,7 +174,7 @@ const RegisterBusiness = () => {
         descricao: businessDescription,
         categoria: category,
         endereco: address,
-        telefoneFixo: landline,
+        telefoneFixo: telefone,
         telefoneCelular: cellphone,
         email,
         horarioDeFuncionamento: {
@@ -319,8 +262,8 @@ const RegisterBusiness = () => {
         <InputMask
           mask="(99) 9999-9999" // Máscara para telefone fixo
           placeholder="Telefone Fixo"
-          value={landline}
-          onChange={(e) => setLandline(e.target.value)}
+          value={telefone}
+          onChange={(e) => setTelefone(e.target.value)}
           required
         />
 
@@ -339,27 +282,27 @@ const RegisterBusiness = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-         <h3>Redes Sociais</h3>
+        <h3>Redes Sociais</h3>
         <input
           type="url"
           name="instagram"
           placeholder="Link do Instagram"
           value={socialLinks.instagram}
-          onChange={(e) => setSocialLinks({ ...socialLinks, instagram: e.target.value })}
+          onChange={handleSocialLinkChange}
         />
         <input
           type="url"
           name="facebook"
           placeholder="Link do Facebook"
           value={socialLinks.facebook}
-          onChange={(e) => setSocialLinks({ ...socialLinks, facebook: e.target.value })}
+          onChange={handleSocialLinkChange}
         />
         <input
           type="url"
           name="whatsapp"
           placeholder="Link do WhatsApp (https://api.whatsapp/ ou https://wa.me/)"
           value={socialLinks.whatsapp}
-          onChange={(e) => setSocialLinks({ ...socialLinks, whatsapp: e.target.value })}
+          onChange={handleSocialLinkChange}
         />
 
         {/* Horário de funcionamento de segunda a sexta */}
@@ -458,10 +401,9 @@ const RegisterBusiness = () => {
           )}
         </div>
 
-        {error &&
-          error.includes("Você pode enviar no máximo 6 imagens") && (
-            <div className="error">{error}</div>
-          )}
+        {error && error.includes("Você pode enviar no máximo 6 imagens") && (
+          <div className="error">{error}</div>
+        )}
         {error && error.includes("Pelo menos uma imagem") && (
           <div className="error">{error}</div>
         )}
@@ -479,10 +421,9 @@ const RegisterBusiness = () => {
           />
         </div>
 
-        {error &&
-          !error.includes("Você pode enviar no máximo 6 imagens") && (
-            <div className="error">{error}</div>
-          )}
+        {error && !error.includes("Você pode enviar no máximo 6 imagens") && (
+          <div className="error">{error}</div>
+        )}
 
         {loading && <div className="loading">Carregando...</div>}
 

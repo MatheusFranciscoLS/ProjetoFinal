@@ -9,13 +9,26 @@ export const validateForm = (formData) => {
   }
 
   // Validação do CNPJ
-  if (!formData.businessCNPJ || !/^\d{14}$/.test(formData.businessCNPJ.replace(/[^\d]+/g, ''))) {
-    errors.businessCNPJ = "CNPJ inválido. Deve conter 14 dígitos";
+  if (!formData.businessCNPJ || !cnpj.isValid(formData.businessCNPJ)) {
+    errors.businessCNPJ = "CNPJ inválido.";
   }
 
-  // Validação do telefone
-  if (!formData.landline || !/^\(\d{2}\) \d{5}-\d{4}$/.test(formData.landline)) {
-    errors.landline = "Telefone inválido. Use o formato (99) 99999-9999";
+  // Validação do telefone fixo
+  if (
+    formData.telefoneFixo &&
+    !/^\(\d{2}\) \d{4}-\d{4}$/.test(formData.telefoneFixo)
+  ) {
+    errors.telefoneFixo =
+      "Telefone fixo inválido. Use o formato (99) 9999-9999";
+  }
+
+  // Validação do telefone celular
+  if (
+    formData.telefoneCelular &&
+    !/^\(\d{2}\) \d{5}-\d{4}$/.test(formData.c)
+  ) {
+    errors.telefoneCelular =
+      "Telefone celular inválido. Use o formato (99) 99999-9999";
   }
 
   // Validação do email
@@ -27,14 +40,14 @@ export const validateForm = (formData) => {
   // Validação de imagens
   if (formData.images) {
     const maxSize = 5 * 1024 * 1024; // 5MB
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
 
-    formData.images.forEach((img, index) => {
+    formData.images.forEach((img) => {
       if (!allowedTypes.includes(img.type)) {
-        errors[`imagem${index}`] = "Formato de imagem inválido. Use JPG, JPEG ou PNG";
+        errors.images = "Formato de imagem inválido. Use JPG, JPEG ou PNG";
       }
       if (img.size > maxSize) {
-        errors[`imagem${index}`] = "Imagem muito grande. Tamanho máximo: 5MB";
+        errors.images = "Imagem muito grande. Tamanho máximo: 5MB";
       }
     });
   }
@@ -42,25 +55,28 @@ export const validateForm = (formData) => {
   // Validação dos horários de funcionamento
   if (formData.horarioDeFuncionamento) {
     const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
-    const diasSemana = ['segundaAsexta', 'sabado', 'domingo'];
+    const diasSemana = ["segundaAsexta", "sabado", "domingo"];
 
-    diasSemana.forEach(dia => {
+    diasSemana.forEach((dia) => {
       const horarios = formData.horarioDeFuncionamento[dia];
       if (horarios) {
         if (horarios.open && !timeRegex.test(horarios.open)) {
-          errors[`horario_${dia}_open`] = "Horário de abertura inválido. Use o formato HH:MM";
+          errors[`horario_${dia}_open`] =
+            "Horário de abertura inválido. Use o formato HH:MM";
         }
         if (horarios.close && !timeRegex.test(horarios.close)) {
-          errors[`horario_${dia}_close`] = "Horário de fechamento inválido. Use o formato HH:MM";
+          errors[`horario_${dia}_close`] =
+            "Horário de fechamento inválido. Use o formato HH:MM";
         }
         if (horarios.open && horarios.close) {
-          const [openHour, openMin] = horarios.open.split(':').map(Number);
-          const [closeHour, closeMin] = horarios.close.split(':').map(Number);
+          const [openHour, openMin] = horarios.open.split(":").map(Number);
+          const [closeHour, closeMin] = horarios.close.split(":").map(Number);
           const openTime = openHour * 60 + openMin;
           const closeTime = closeHour * 60 + closeMin;
-          
+
           if (closeTime <= openTime) {
-            errors[`horario_${dia}`] = "Horário de fechamento deve ser após o horário de abertura";
+            errors[`horario_${dia}`] =
+              "Horário de fechamento deve ser após o horário de abertura";
           }
         }
       }
@@ -72,28 +88,35 @@ export const validateForm = (formData) => {
     const { instagram, facebook, whatsapp } = formData.socialLinks;
 
     // Validação do Instagram
-    if (instagram && !instagram.startsWith('https://www.instagram.com/')) {
-      errors.instagram = "Link do Instagram inválido. Use o formato https://www.instagram.com/seu_perfil";
+    if (instagram && !/^https:\/\/www\.instagram\.com\//.test(instagram)) {
+      errors.instagram =
+        "Link do Instagram inválido. Use o formato https://www.instagram.com/seu_perfil";
     }
 
     // Validação do Facebook
-    if (facebook && !facebook.startsWith('https://www.facebook.com/')) {
-      errors.facebook = "Link do Facebook inválido. Use o formato https://www.facebook.com/sua_pagina";
+    if (facebook && !/^https:\/\/www\.facebook\.com\//.test(facebook)) {
+      errors.facebook =
+        "Link do Facebook inválido. Use o formato https://www.facebook.com/sua_pagina";
     }
 
     // Validação do WhatsApp
-    if (whatsapp && !whatsapp.startsWith('https://wa.me/')) {
-      errors.whatsapp = "Link do WhatsApp inválido. Use o formato https://wa.me/seu_numero";
+    if (whatsapp && !/^https:\/\/wa\.me\//.test(whatsapp)) {
+      errors.whatsapp =
+        "Link do WhatsApp inválido. Use o formato https://wa.me/seu_numero";
     }
   }
 
   // Validação da descrição
-  if (!formData.businessDescription || formData.businessDescription.trim().length < 10) {
-    errors.businessDescription = "A descrição deve ter pelo menos 10 caracteres";
+  if (
+    !formData.businessDescription ||
+    formData.businessDescription.trim().length < 10
+  ) {
+    errors.businessDescription =
+      "A descrição deve ter pelo menos 10 caracteres";
   }
 
   // Validação da categoria
-  if (!formData.category || formData.category.trim() === '') {
+  if (!formData.category || formData.category.trim() === "") {
     errors.category = "Selecione uma categoria";
   }
 
@@ -104,40 +127,43 @@ export const validateForm = (formData) => {
 
   return {
     isValid: Object.keys(errors).length === 0,
-    errors
+    errors,
   };
 };
 
 export const formatCNPJ = (cnpj) => {
-  const cleanCNPJ = cnpj.replace(/[^\d]+/g, '');
-  return cleanCNPJ.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+  const cleanCNPJ = cnpj.replace(/[^\d]+/g, "");
+  return cleanCNPJ.replace(
+    /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+    "$1.$2.$3/$4-$5"
+  );
 };
 
 export const formatPhone = (phone) => {
-  const cleanPhone = phone.replace(/[^\d]+/g, '');
-  return cleanPhone.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+  const cleanPhone = phone.replace(/[^\d]+/g, "");
+  return cleanPhone.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
 };
 
 export const validateImageFile = (file) => {
   const maxSize = 5 * 1024 * 1024; // 5MB
-  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+  const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
 
   if (!allowedTypes.includes(file.type)) {
     return {
       isValid: false,
-      error: "Formato de arquivo inválido. Use JPG, JPEG ou PNG"
+      error: "Formato de arquivo inválido. Use JPG, JPEG ou PNG",
     };
   }
 
   if (file.size > maxSize) {
     return {
       isValid: false,
-      error: "Arquivo muito grande. Tamanho máximo: 5MB"
+      error: "Arquivo muito grande. Tamanho máximo: 5MB",
     };
   }
 
   return {
     isValid: true,
-    error: null
+    error: null,
   };
 };
