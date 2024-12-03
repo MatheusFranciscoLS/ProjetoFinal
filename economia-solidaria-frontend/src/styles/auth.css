@@ -1,25 +1,85 @@
-
-
 /* auth.css */
+
+/* Tema Claro */
+.light-theme .auth-container {
+  background: linear-gradient(135deg, #74b9ff, #0984e3);
+}
+
+.light-theme form {
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+.light-theme form input {
+  border-color: #ddd;
+}
+
+.light-theme form input:focus {
+  border-color: #0984e3;
+  box-shadow: 0 0 5px rgba(9, 132, 227, 0.5);
+}
+
+.light-theme form button {
+  background: #0984e3;
+}
+
+.light-theme form button:hover {
+  background: #74b9ff;
+}
+
+.light-theme .error {
+  color: #f44336; /* Erro no tema claro */
+}
+
+/* Tema Escuro */
+.dark-theme .auth-container {
+  background: linear-gradient(135deg, #2b2b2b, #1e1e1e);
+}
+
+.dark-theme form {
+  background: #2b2b2b;
+  border: 1px solid #555;
+}
+
+.dark-theme form input {
+  border-color: #555;
+}
+
+.dark-theme form input:focus {
+  border-color: #0984e3;
+  box-shadow: 0 0 5px rgba(9, 132, 227, 0.5);
+}
+
+.dark-theme form button {
+  background: #6b8e23; /* Verde escuro para o tema escuro */
+}
+
+.dark-theme form button:hover {
+  background: #556b2f;
+}
+
+.dark-theme .error {
+  color: #ff6347; /* Cor de erro no tema escuro */
+}
+
+/* Estilos gerais */
 .auth-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: linear-gradient(135deg, #74b9ff, #0984e3);
   font-family: 'Roboto', sans-serif;
 }
 
 .auth-container h2 {
-  color: #fff;
+  color: var(--text-color);
   margin-bottom: 20px;
   font-size: 28px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 form {
-  background: #fff;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
@@ -32,19 +92,15 @@ form {
 form input {
   margin-bottom: 15px;
   padding: 12px;
-  border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 16px;
 }
 
 form input:focus {
   outline: none;
-  border-color: #0984e3;
-  box-shadow: 0 0 5px rgba(9, 132, 227, 0.5);
 }
 
 form button {
-  background: #0984e3;
   color: #fff;
   font-size: 18px;
   border: none;
@@ -59,7 +115,6 @@ form button:hover {
 }
 
 .error {
-  color: #d63031;
   font-size: 14px;
   margin-bottom: 10px;
   text-align: center;
