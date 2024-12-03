@@ -101,82 +101,123 @@ const Review = ({ lojaId }) => {
   };
 
   return (
-    <div>
-      <div className="accordion">
-        <div className="accordion-item">
-          <h3
-            className="accordion-header"
-            onClick={() => handleAccordionToggle("reviews")}
-          >
-            {showReviews ? "Ocultar Avaliações" : "Ver Avaliações"}
-            <span
-              className={`accordion-icon ${activeIndex === "reviews" ? "rotate" : ""}`}
-            >
-              &#9660;
-            </span>
-          </h3>
-          {activeIndex === "reviews" && (
-            <div className="accordion-content">
-              <h2>Avaliações</h2>
-              {reviews.length === 0 ? (
-                <p>Nenhuma avaliação encontrada.</p>
-              ) : (
-                reviews.map((review) => (
-                  <div key={review.id} className="review-item">
-                    <p><strong>Avaliação:</strong> {review.rating} ★</p>
-                    <p><strong>Comentário:</strong> {review.comment}</p>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-        </div>
-
-        <div className="accordion-item">
-          <h3
-            className="accordion-header"
-            onClick={() => handleAccordionToggle("form")}
-          >
-            {showForm ? "Ocultar Formulário" : "Fazer Avaliação"}
-            <span
-              className={`accordion-icon ${activeIndex === "form" ? "rotate" : ""}`}
-            >
-              &#9660;
-            </span>
-          </h3>
-          {activeIndex === "form" && (
-            <div className="accordion-content">
-              <form onSubmit={handleSubmit}>
-                <h2>Deixe sua Avaliação</h2>
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
-                {successMessage && <p className="success-message">{successMessage}</p>}
-                <div className="rating">
-                  <label>Avaliação:</label>
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      className={`star ${star <= rating ? "active" : ""}`}
-                      onClick={() => setRating(star)}
-                    >
-                      ★
-                    </button>
-                  ))}
-                </div>
-                <textarea
-                  placeholder="Deixe seu comentário aqui..."
-                  value={comment}
-                  onChange={handleCommentChange}
-                  required
-                ></textarea>
-                <button class='avaliacao' type="submit" disabled={isSubmitDisabled}>
-                  Enviar Avaliação
-                </button>
-              </form>
-            </div>
-          )}
-        </div>
+    <div className="avaliacao-container">
+      <div className="avaliacao-header">
+        <h2>Avaliações do Negócio</h2>
+        <p>Escolha uma opção abaixo:</p>
       </div>
+
+      <div className="avaliacao-buttons">
+        <button 
+          className={`toggle-btn ${activeIndex === 'form' ? 'active' : ''}`}
+          onClick={() => handleAccordionToggle('form')}
+        >
+          <span className="btn-icon">✏️</span>
+          <span className="btn-text">
+            {activeIndex === 'form' ? 'Fechar Formulário' : 'Fazer uma Avaliação'}
+          </span>
+        </button>
+
+        <button 
+          className={`toggle-btn ${activeIndex === 'reviews' ? 'active' : ''}`}
+          onClick={() => handleAccordionToggle('reviews')}
+        >
+          <span className="btn-icon">📋</span>
+          <span className="btn-text">
+            {activeIndex === 'reviews' ? 'Fechar Avaliações' : 'Ver Todas as Avaliações'}
+          </span>
+        </button>
+      </div>
+
+      {activeIndex === 'form' && (
+        <div className="avaliacao-form">
+          <h3>Deixe sua Avaliação</h3>
+          <form onSubmit={handleSubmit}>
+            <div className="rating-container">
+              <label>Quantas estrelas você dá para este negócio?</label>
+              <div className="rating">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    className={`star ${rating >= star ? 'active' : ''}`}
+                    onClick={() => setRating(star)}
+                  >
+                    ★
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="comment-field">
+              <label>Conte sua experiência:</label>
+              <textarea
+                value={comment}
+                onChange={handleCommentChange}
+                placeholder="Compartilhe sua experiência com este negócio..."
+                rows="4"
+              />
+            </div>
+
+            {errorMessage && (
+              <div className="message error-message">
+                {errorMessage}
+              </div>
+            )}
+
+            {successMessage && (
+              <div className="message success-message">
+                {successMessage}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={isSubmitDisabled}
+            >
+              {isSubmitDisabled ? 'Preencha todos os campos' : 'Enviar Avaliação'}
+            </button>
+          </form>
+        </div>
+      )}
+
+      {activeIndex === 'reviews' && (
+        <div className="reviews-section">
+          {reviews.length > 0 ? (
+            <div className="reviews-list">
+              <h3>Avaliações dos Clientes</h3>
+              {reviews.map((review) => (
+                <div key={review.id} className="review-item">
+                  <div className="review-header">
+                    <div className="review-rating">
+                      {'★'.repeat(review.rating)}
+                      {'☆'.repeat(5 - review.rating)}
+                    </div>
+                    <div className="review-date">
+                      {review.createdAt?.toDate().toLocaleDateString()}
+                    </div>
+                  </div>
+                  <div className="review-comment">
+                    {review.comment}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="no-reviews">
+              <p>Ainda não há avaliações para este negócio.</p>
+              <p>Seja o primeiro a avaliar!</p>
+              <button 
+                className="toggle-btn"
+                onClick={() => handleAccordionToggle('form')}
+              >
+                Fazer uma Avaliação
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
