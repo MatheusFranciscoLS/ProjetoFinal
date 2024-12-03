@@ -120,11 +120,96 @@ const RegisterBusiness = () => {
     setImages(images.filter((_, i) => i !== index));
   };
 
+  const validateForm = (formData) => {
+    const errors = {};
+
+    if (!formData.businessName) {
+      errors.businessName = "O nome do negócio é obrigatório.";
+    }
+
+    if (!formData.businessCNPJ) {
+      errors.businessCNPJ = "O CNPJ é obrigatório.";
+    }
+
+    if (!formData.businessDescription) {
+      errors.businessDescription = "A descrição do negócio é obrigatória.";
+    }
+
+    if (!formData.category) {
+      errors.category = "A categoria é obrigatória.";
+    }
+
+    if (!formData.address) {
+      errors.address = "O endereço é obrigatório.";
+    }
+
+    if (!formData.landline) {
+      errors.landline = "O telefone fixo é obrigatório.";
+    }
+
+    if (!formData.email) {
+      errors.email = "O e-mail é obrigatório.";
+    }
+
+    if (formData.images.length === 0) {
+      errors.images = "Pelo menos uma imagem é obrigatória.";
+    }
+
+    if (!formData.cnDoc) {
+      errors.cnDoc = "O comprovante do Simples Nacional é obrigatório.";
+    }
+
+    if (!formData.horarioDeFuncionamento.segundaAsexta.open || !formData.horarioDeFuncionamento.segundaAsexta.close) {
+      errors.horarioDeFuncionamento = "O horário de funcionamento de segunda a sexta é obrigatório.";
+    }
+
+    if (!formData.horarioDeFuncionamento.sabado.open || !formData.horarioDeFuncionamento.sabado.close) {
+      errors.horarioDeFuncionamento = "O horário de funcionamento de sábado é obrigatório.";
+    }
+
+    if (!formData.horarioDeFuncionamento.domingo.open || !formData.horarioDeFuncionamento.domingo.close) {
+      errors.horarioDeFuncionamento = "O horário de funcionamento de domingo é obrigatório.";
+    }
+
+    if (!formData.socialLinks.instagram || !formData.socialLinks.facebook || !formData.socialLinks.whatsapp) {
+      errors.socialLinks = "As redes sociais são obrigatórias.";
+    }
+
+    return { isValid: Object.keys(errors).length === 0, errors };
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
-    setError(""); // Limpa as mensagens de erro antes do envio
+    setError("");
+
+    // Criar objeto com todos os dados do formulário
+    const formData = {
+      businessName,
+      businessCNPJ,
+      businessDescription,
+      category,
+      address,
+      landline,
+      email,
+      images,
+      cnDoc,
+      horarioDeFuncionamento: {
+        segundaAsexta: weekdaysHours,
+        sabado: saturdayHours,
+        domingo: sundayHours
+      },
+      socialLinks
+    };
+
+    // Validar formulário
+    const { isValid, errors } = validateForm(formData);
+
+    if (!isValid) {
+      setError(Object.values(errors).join('\n'));
+      setLoading(false);
+      return;
+    }
 
     try {
       // Processa as imagens para base64
