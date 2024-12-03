@@ -81,38 +81,31 @@ const RegisterBusiness = () => {
     setError("");
 
     // Criar objeto com todos os dados do formulário
-const formData = {
-  businessName,
-  businessCNPJ,
-  businessDescription,
-  category,
-  address,
-  telefone,
-  cellphone: cellphone ? cellphone : null,
-  email,
-  images,
-  cnDoc,
-  horarioDeFuncionamento: {
-    segundaAsexta: weekdaysHours,
-    sabado: saturdayHours,
-    domingo: sundayHours,
-    lunchBreak: {
-      isClosed: lunchBreak,
-      start: lunchStart,
-      end: lunchEnd,
-    },
-  },
-  socialLinks,
-};
-
-    // Validar formulário
-    const { isValid, errors } = validateForm(formData);
-
-    if (!isValid) {
-      setError(Object.values(errors).join('\n'));
-      setLoading(false);
-      return;
-    }
+    const formData = {
+      nome: businessName,
+      cnpj: businessCNPJ,
+      descricao: businessDescription,
+      categoria: category,
+      endereco: address,
+      telefoneFixo: telefone,
+      telefoneCelular: cellphone,
+      email,
+      horarioDeFuncionamento: {
+        segundaAsexta: weekdaysHours,
+        sabado: saturdayHours,
+        domingo: sundayHours,
+        lunchBreak: {
+          isClosed: lunchBreak,
+          start: lunchStart,
+          end: lunchEnd,
+        }
+      },
+      imagens: images,
+      comprovante: cnDoc,
+      userId: user.uid,
+      status: "pendente",
+      redesSociais: socialLinks
+    };
 
     try {
       if (!termsAccepted) {
@@ -125,6 +118,7 @@ const formData = {
         return;
       }
 
+      // Convert images to base64
       const imageBase64Promises = images.map(async (image) => {
         const reader = new FileReader();
         return new Promise((resolve, reject) => {
@@ -136,38 +130,27 @@ const formData = {
 
       const imageBase64 = await Promise.all(imageBase64Promises);
 
-      const formData = {
-        nome: businessName,
-        cnpj: businessCNPJ,
-        descricao: businessDescription,
-        categoria: category,
-        endereco: address,
-        telefoneFixo: telefone,
-        telefoneCelular: cellphone,
-        email,
-        horarioDeFuncionamento: {
-          segundaAsexta: weekdaysHours,
-          sabado: saturdayHours,
-          domingo: sundayHours,
-        },
-        imagens: imageBase64,
-        comprovante: cnDoc?.name,
-        userId: user.uid,
-        status: "pendente",
-        redesSociais: socialLinks
-      };
-
       // Validar o formulário
       const validation = validateForm(formData);
       if (!validation.isValid) {
-        const errorMessages = Object.values(validation.errors);
+        const errorMessages = Object.entries(validation.errors)
+          .map(([field, message]) => message)
+          .filter(message => message);
+        
         setError(errorMessages.join('\n'));
         setLoading(false);
         return;
       }
 
+      // Prepare final data for Firestore
+      const firestoreData = {
+        ...formData,
+        imagens: imageBase64,
+        comprovante: cnDoc?.name
+      };
+
       // Enviar para o Firestore
-      await addDoc(collection(db, "negocios_pendentes"), formData);
+      await addDoc(collection(db, "negocios_pendentes"), firestoreData);
 
       alert("Cadastro enviado, aguardando aprovação do admin!");
       navigate("/");
@@ -233,7 +216,7 @@ const formData = {
         />
 
         <InputMask
-          mask="(99) 9999-9999"
+          mask="(99) 99999-9999"
           placeholder="Telefone Fixo"
           value={telefone}
           onChange={(e) => setTelefone(e.target.value)}
