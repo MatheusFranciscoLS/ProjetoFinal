@@ -4,7 +4,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase"; // Certifique-se de importar o 'db'
 import { getAuth } from "firebase/auth"; // Para pegar o UID do usuário autenticado
 import "../styles/registerbusiness.css";
-import { validateForm } from "../components/validation"; // Importe a função de validação
+
 import InputMask from "react-input-mask"; //
 
 
@@ -145,15 +145,7 @@ const RegisterBusiness = () => {
       socialLinks
     };
 
-    // Validar formulário
-    const { isValid, errors } = validateForm(formData);
-
-    if (!isValid) {
-      setError(Object.values(errors).join('\n'));
-      setLoading(false);
-      return;
-    }
-
+   
     try {
       // Processa as imagens para base64
       const imageBase64Promises = images.map(async (image) => {
