@@ -1,31 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase"; // Certifique-se de que o Firebase está configurado corretamente
-import Avaliacao from "./Avaliacao"; // Componente de avaliação
-import "../styles/lojaDetails.css"; // Importar estilos
+import { db } from "../firebase";
+import { getAuth } from "firebase/auth";
+import Avaliacao from "../components/Avaliacao";
+import "../styles/lojaDetails.css";
 import { Link } from "react-router-dom";
-import { FaInstagram, FaFacebook, FaWhatsapp, FaMapMarkerAlt } from "react-icons/fa";
+import { FaInstagram, FaFacebook, FaWhatsapp, FaMapMarkerAlt, FaCrown } from "react-icons/fa";
 
 const LojaDetails = () => {
-  const { id } = useParams(); // Obtém o ID da loja da URL
+  const { id } = useParams();
   const [loja, setLoja] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0); // Estado para controlar a imagem atual do carrossel
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isOwner, setIsOwner] = useState(false);
+  const auth = getAuth();
 
   useEffect(() => {
     const fetchLoja = async () => {
       try {
-        // Referência ao documento no Firestore
         const docRef = doc(db, "lojas", id);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
           const lojaData = docSnap.data();
-
-          // Remover o campo 'comprovante', se existir
           const { comprovante, ...lojaSemComprovante } = lojaData;
           setLoja(lojaSemComprovante);
+          
+          // Verifica se o usuário atual é o dono da loja
+          const currentUser = auth.currentUser;
+          if (currentUser) {
+            setIsOwner(currentUser.uid === lojaData.userId);
+          }
         } else {
           console.log("Loja não encontrada.");
         }
@@ -37,7 +43,7 @@ const LojaDetails = () => {
     };
 
     fetchLoja();
-  }, [id]);
+  }, [id, auth]);
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -77,23 +83,32 @@ const LojaDetails = () => {
 
       {/* Carrossel de Imagens */}
       <div className="carrossel">
-        {loja.imagens?.length > 1 && (
-          <button className="carrossel-btn" onClick={handlePrevImage}>
-            &#10094;
-          </button>
-        )}
+        {loja.imagens && loja.imagens.length > 0 ? (
+          <>
+            {loja.plano !== 'gratuito' && loja.imagens.length > 1 && (
+              <button className="carrossel-btn prev-btn" onClick={handlePrevImage}>
+                &#10094;
+              </button>
+            )}
 
-        {/* Exibe a imagem atual do carrossel ou o placeholder */}
-        <img
-          src={loja.imagens?.[currentImageIndex] || "default-image.jpg"}
-          alt={`Imagem da loja ${loja.nome}`}
-          className="loja-img"
-        />
+            <div className="carrossel-image-container">
+              <img
+                src={loja.imagens[currentImageIndex]}
+                alt={`Imagem ${currentImageIndex + 1} da loja ${loja.nome}`}
+                className="carrossel-image"
+              />
+            </div>
 
-        {loja.imagens?.length > 1 && (
-          <button className="carrossel-btn" onClick={handleNextImage}>
-            &#10095;
-          </button>
+            {loja.plano !== 'gratuito' && loja.imagens.length > 1 && (
+              <button className="carrossel-btn next-btn" onClick={handleNextImage}>
+                &#10095;
+              </button>
+            )}
+          </>
+        ) : (
+          <div className="loja-img-placeholder">
+            <span>Sem imagem disponível</span>
+          </div>
         )}
       </div>
 
@@ -101,10 +116,13 @@ const LojaDetails = () => {
       <p>
         <strong>Descrição:</strong> {loja.descricao}
       </p>
-      <p>
-        <strong>
-          {" "}
-          <h3>Redes Sociais</h3>
+
+      {/* Redes Sociais - Mostrar apenas para planos pagos */}
+      {loja.plano !== 'gratuito' ? (
+        <div className="social-media-section">
+          <div className="social-media-header">
+            <h3>Redes Sociais</h3>
+          </div>
           <div className="social-links">
             {loja.redesSociais?.instagram && (
               <a
@@ -140,8 +158,17 @@ const LojaDetails = () => {
               </a>
             )}
           </div>
-        </strong>
-      </p>
+        </div>
+      ) : isOwner ? (
+        <div className="upgrade-message">
+          <FaCrown className="crown-icon" />
+          <p>Atualize para um plano mais avançado e mostre suas redes sociais para pessoas interessadas no seu negócio!</p>
+          <Link to="/plans-details" className="upgrade-button">
+            Ver Planos
+          </Link>
+        </div>
+      ) : null}
+
       <div className="endereco-container">
         <strong>Endereço:</strong>
         <div

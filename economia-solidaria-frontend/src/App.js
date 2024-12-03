@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Sobre from "./pages/Sobre";
 import Contato from "./pages/Contato";
-import Avaliacao from "./pages/Avaliacao";
+import Avaliacao from "./components/Avaliacao"; // Atualizado para components
 import LojasList from "./pages/LojaList"; // Importação de LojasList
 import LojaDetails from "./pages/LojaDetails"; // Importação de LojaDetails
 import EditBusiness from "./pages/EditBusiness"; // Importação de EditBusiness
