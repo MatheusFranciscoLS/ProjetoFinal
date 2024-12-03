@@ -4,7 +4,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase"; // Certifique-se de importar o 'db'
 import { getAuth } from "firebase/auth"; // Para pegar o UID do usuário autenticado
 import "../styles/registerbusiness.css";
-import { validateForm } from "../components/validation"; // Importa a função de validação
+
 import InputMask from "react-input-mask"; //
 
 
@@ -37,7 +37,7 @@ const RegisterBusiness = () => {
   const user = auth.currentUser;
   const userUid = user ? user.uid : null;
 
-  const handleSocialLinksChange = (e) => {
+  const handleSocialLinkChange = (e) => {
     const { name, value } = e.target;
     setSocialLinks((prevLinks) => ({ ...prevLinks, [name]: value }));
   };
@@ -120,31 +120,11 @@ const RegisterBusiness = () => {
     setImages(images.filter((_, i) => i !== index));
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  // Chama a função de validação
-  const validationError = validateForm({
-    businessName,
-    businessCNPJ,
-    businessDescription,
-    category,
-    address,
-    landline,
-    email,
-    images,
-    cnDoc,
-    termsAccepted,
-  });
-
-  if (validationError) {
-    setError(validationError); // Exibe a mensagem de erro detalhada
-    return; // Interrompe o envio se houver erro
-  }
-
-  setLoading(true);
-  setError(""); // Limpa as mensagens de erro antes do envio
-
+    setLoading(true);
+    setError(""); // Limpa as mensagens de erro antes do envio
 
     try {
       // Processa as imagens para base64
@@ -160,14 +140,14 @@ const handleSubmit = async (e) => {
       const imageBase64 = await Promise.all(imageBase64Promises);
 
       // Envia os dados para o Firestore
-      await addDoc(collection(db, "negocios_pendentes"), {
+      const businessData = {
         nome: businessName,
         cnpj: businessCNPJ,
         descricao: businessDescription,
         categoria: category,
         endereco: address,
-        telefoneFixo: landline, // Telefone fixo
-        telefoneCelular: cellphone, // Telefone celular
+        telefoneFixo: landline,
+        telefoneCelular: cellphone,
         email,
         horarioDeFuncionamento: {
           segundaAsexta: weekdaysHours,
@@ -175,11 +155,17 @@ const handleSubmit = async (e) => {
           domingo: sundayHours,
         },
         imagens: imageBase64,
-        comprovante: cnDoc.name, // Salva o nome do arquivo do comprovante
-        userId: userUid, // Adiciona o UID do usuário
-        status: "pendente", // Definindo o status como "pendente"
-        redesSociais: socialLinks,
-      });
+        comprovante: cnDoc.name,
+        userId: userUid,
+        status: "pendente",
+        redesSociais: {
+          instagram: socialLinks.instagram || "",
+          facebook: socialLinks.facebook || "",
+          whatsapp: socialLinks.whatsapp ? socialLinks.whatsapp.replace(/[^\d]/g, "") : ""
+        },
+      };
+
+      await addDoc(collection(db, "negocios_pendentes"), businessData);
 
       alert("Cadastro enviado, aguardando aprovação do admin!");
       navigate("/"); // Após o envio, redireciona o usuário para a home
@@ -259,7 +245,6 @@ const handleSubmit = async (e) => {
           placeholder="Celular (Opcional)"
           value={cellphone}
           onChange={(e) => setCellphone(e.target.value)}
-          
         />
 
         <input
@@ -275,25 +260,25 @@ const handleSubmit = async (e) => {
           name="instagram"
           placeholder="Link do Instagram"
           value={socialLinks.instagram}
-          onChange={handleSocialLinksChange}
+          onChange={(e) => setSocialLinks({ ...socialLinks, instagram: e.target.value })}
         />
         <input
           type="url"
           name="facebook"
           placeholder="Link do Facebook"
           value={socialLinks.facebook}
-          onChange={handleSocialLinksChange}
+          onChange={(e) => setSocialLinks({ ...socialLinks, facebook: e.target.value })}
         />
         <input
           type="url"
           name="whatsapp"
           placeholder="Link do WhatsApp (com https://wa.me/)"
           value={socialLinks.whatsapp}
-          onChange={handleSocialLinksChange}
+          onChange={(e) => setSocialLinks({ ...socialLinks, whatsapp: e.target.value })}
         />
 
- {/* Horário de funcionamento de segunda a sexta */}
- <div className="hours-section">
+        {/* Horário de funcionamento de segunda a sexta */}
+        <div className="hours-section">
           <h3>Horário de Funcionamento (Segunda a Sexta)</h3>
           <input
             type="time"
@@ -322,7 +307,6 @@ const handleSubmit = async (e) => {
             onChange={(e) =>
               setSaturdayHours({ ...saturdayHours, open: e.target.value })
             }
-            
           />
           <input
             type="time"
@@ -330,7 +314,6 @@ const handleSubmit = async (e) => {
             onChange={(e) =>
               setSaturdayHours({ ...saturdayHours, close: e.target.value })
             }
-            
           />
         </div>
 
@@ -343,7 +326,6 @@ const handleSubmit = async (e) => {
             onChange={(e) =>
               setSundayHours({ ...sundayHours, open: e.target.value })
             }
-            
           />
           <input
             type="time"
@@ -351,10 +333,8 @@ const handleSubmit = async (e) => {
             onChange={(e) =>
               setSundayHours({ ...sundayHours, close: e.target.value })
             }
-            
           />
         </div>
-
 
         <div className="upload-instructions">
           <label htmlFor="businessImages">
