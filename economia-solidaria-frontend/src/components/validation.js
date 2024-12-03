@@ -158,7 +158,7 @@ export const validateForm = (formData) => {
   const telefoneFixo = formData.telefoneFixo ? formData.telefoneFixo.replace(/\D/g, "") : "";
   const telefoneCelular = formData.telefoneCelular ? formData.telefoneCelular.replace(/\D/g, "") : "";
 
-  if ((!telefoneFixo || telefoneFixo.length !== 11) && (!telefoneCelular || telefoneCelular.length !== 11)) {
+  if ((!telefoneFixo || telefoneFixo.length !== 10) && (!telefoneCelular || telefoneCelular.length !== 11)) {
     errors.telefone = "Pelo menos um telefone válido é obrigatório.";
   }
 

@@ -216,7 +216,7 @@ const RegisterBusiness = () => {
         />
 
         <InputMask
-          mask="(99) 99999-9999"
+          mask="(99) 9999-9999"
           placeholder="Telefone Fixo"
           value={telefone}
           onChange={(e) => setTelefone(e.target.value)}
