@@ -117,49 +117,52 @@ const LojaDetails = () => {
         <strong>Descrição:</strong> {loja.descricao}
       </p>
 
-      {/* Redes Sociais - Mostrar apenas para planos pagos */}
-      {loja.plano !== 'gratuito' ? (
-        <div className="social-media-section">
-          <div className="social-media-header">
-            <h3>Redes Sociais</h3>
+      {/* Redes Sociais - Mostrar apenas para planos pagos e quando houver redes sociais cadastradas */}
+      {loja.plano !== 'gratuito' && loja.redesSociais && (
+        Object.values(loja.redesSociais).some(value => value) ? (
+          <div className="social-media-section">
+            <div className="social-media-header">
+              <h3>Redes Sociais</h3>
+            </div>
+            <div className="social-links">
+              {loja.redesSociais?.instagram && (
+                <a
+                  href={loja.redesSociais.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaInstagram size={30} />
+                </a>
+              )}
+              {loja.redesSociais?.facebook && (
+                <a
+                  href={loja.redesSociais.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaFacebook size={30} />
+                </a>
+              )}
+              {loja.redesSociais?.whatsapp && (
+                <a
+                  href={
+                    loja.redesSociais.whatsapp.startsWith("https://wa.me/")
+                      ? loja.redesSociais.whatsapp
+                      : `https://api.whatsapp.com/send/?phone=${loja.redesSociais.whatsapp
+                          .replace(/\D/g, "")
+                          .replace(/^1/, "")}`
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaWhatsapp size={30} />
+                </a>
+              )}
+            </div>
           </div>
-          <div className="social-links">
-            {loja.redesSociais?.instagram && (
-              <a
-                href={loja.redesSociais.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaInstagram size={30} />
-              </a>
-            )}
-            {loja.redesSociais?.facebook && (
-              <a
-                href={loja.redesSociais.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaFacebook size={30} />
-              </a>
-            )}
-            {loja.redesSociais?.whatsapp && (
-              <a
-                href={
-                  loja.redesSociais.whatsapp.startsWith("https://wa.me/")
-                    ? loja.redesSociais.whatsapp
-                    : `https://api.whatsapp.com/send/?phone=${loja.redesSociais.whatsapp
-                        .replace(/\D/g, "")
-                        .replace(/^1/, "")}`
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaWhatsapp size={30} />
-              </a>
-            )}
-          </div>
-        </div>
-      ) : isOwner ? (
+        ) : null
+      )}
+      {loja.plano === 'gratuito' && isOwner && (
         <div className="upgrade-message">
           <FaCrown className="crown-icon" />
           <p>Atualize para um plano mais avançado e mostre suas redes sociais para pessoas interessadas no seu negócio!</p>
@@ -167,7 +170,7 @@ const LojaDetails = () => {
             Ver Planos
           </Link>
         </div>
-      ) : null}
+      )}
 
       <div className="endereco-container">
         <strong>Endereço:</strong>

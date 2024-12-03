@@ -147,8 +147,12 @@ const MyBusinesses = () => {
     }
 
     try {
-      // Buscar negócios aprovados da coleção "lojas"
-      const lojasQuery = query(collection(db, "lojas"), where("userId", "==", user.uid));
+      // Buscar apenas negócios aprovados da coleção "lojas"
+      const lojasQuery = query(
+        collection(db, "lojas"), 
+        where("userId", "==", user.uid),
+        where("status", "==", "aprovado")
+      );
       const lojasSnapshot = await getDocs(lojasQuery);
       const lojasAprovadas = lojasSnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -156,18 +160,7 @@ const MyBusinesses = () => {
         collection: "lojas"
       }));
 
-      // Buscar negócios pendentes da coleção "negocios_pendentes"
-      const pendentesQuery = query(collection(db, "negocios_pendentes"), where("userId", "==", user.uid));
-      const pendentesSnapshot = await getDocs(pendentesQuery);
-      const negociosPendentes = pendentesSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        collection: "negocios_pendentes"
-      }));
-
-      // Combinar os resultados
-      const todosNegocios = [...lojasAprovadas, ...negociosPendentes];
-      setBusinesses(todosNegocios);
+      setBusinesses(lojasAprovadas);
     } catch (error) {
       console.error("Erro ao buscar negócios do usuário:", error);
       setError("Ocorreu um erro ao carregar seus negócios. Tente novamente mais tarde.");

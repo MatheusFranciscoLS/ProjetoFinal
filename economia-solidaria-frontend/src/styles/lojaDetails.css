@@ -137,6 +137,11 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.map-icon {
+  color: red;
+  margin-right: 8px;
+}
+
 /* Estilos para a seção de redes sociais */
 .social-media-section {
   margin: 25px 0;
