@@ -50,8 +50,7 @@ const App = () => {
         <Route path="/admin-gerenciamento" element={<AdminNegocios />} />
         <Route path="/edit-business/:id" element={<EditBusiness />} />
         <Route path="/meus-negocios" element={<MyBusinesses />} /> {/* Atualizado para MeusNegocios */}
-        <Route path="/editar-negocio/:businessId" element={<EditBusiness />} />
-        
+
         {/* Rota de perfil */}
         <Route path="/perfil" element={<Profile />} /> {/* Página de Perfil */}
         <Route path="/plans-details" element={<PlansDetails />} />

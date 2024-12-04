@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
-import { db } from '../firebase';
-import '../styles/mybusinesses.css';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { db } from "../firebase";
+import "../styles/mybusinesses.css";
 
 const SkeletonCard = () => (
   <div className="business-card skeleton">
@@ -24,32 +24,30 @@ const MyBusinesses = () => {
   const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editingBusiness, setEditingBusiness] = useState(null);
   const navigate = useNavigate();
   const auth = getAuth();
   const user = auth.currentUser;
 
   const fetchBusinesses = async () => {
     if (!user) {
-      setError('Você precisa estar logado para ver seus negócios');
+      setError("Você precisa estar logado para ver seus negócios");
       setLoading(false);
       return;
     }
 
     try {
-      const q = query(
-        collection(db, 'lojas'),
-        where('userId', '==', user.uid)
-      );
+      const q = query(collection(db, "lojas"), where("userId", "==", user.uid));
       const querySnapshot = await getDocs(q);
-      const businessesData = querySnapshot.docs.map(doc => ({
+      const businessesData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
       setBusinesses(businessesData);
     } catch (err) {
-      console.error('Erro ao buscar negócios do usuário:', err);
-      setError('Ocorreu um erro ao carregar seus negócios. Tente novamente mais tarde.');
+      console.error("Erro ao buscar negócios do usuário:", err);
+      setError(
+        "Ocorreu um erro ao carregar seus negócios. Tente novamente mais tarde."
+      );
     } finally {
       setLoading(false);
     }
@@ -59,28 +57,9 @@ const MyBusinesses = () => {
     fetchBusinesses();
   }, [user]);
 
-  const handleEdit = (business) => {
-    setEditingBusiness(business);
-  };
-
-  const handleCloseModal = () => {
-    setEditingBusiness(null);
-  };
-
-  const handleSaveChanges = async (e) => {
-    e.preventDefault();
-    try {
-      const businessRef = doc(db, 'lojas', editingBusiness.id);
-      await updateDoc(businessRef, {
-        ...editingBusiness,
-        lastUpdated: new Date().toISOString()
-      });
-      setEditingBusiness(null);
-      await fetchBusinesses();
-    } catch (error) {
-      console.error('Erro ao salvar alterações:', error);
-      alert('Erro ao salvar as alterações. Tente novamente.');
-    }
+  const handleEdit = (businessId) => {
+    // Redireciona para a página de edição do negócio
+    navigate(`/edit-business/${businessId}`);
   };
 
   if (loading) {
@@ -113,7 +92,9 @@ const MyBusinesses = () => {
             <div className="error-message">
               <h2>Erro</h2>
               <p>{error}</p>
-              <Link to="/" className="error-button">Voltar para Home</Link>
+              <Link to="/" className="error-button">
+                Voltar para Home
+              </Link>
             </div>
           </div>
         ) : businesses.length > 0 ? (
@@ -128,10 +109,16 @@ const MyBusinesses = () => {
                 <h3>{business.nome}</h3>
                 <p className="business-category">{business.categoria}</p>
                 <p className="business-status">
-                  Status: <span className={`status-${business.status}`}>{business.status}</span>
+                  Status:{" "}
+                  <span className={`status-${business.status}`}>
+                    {business.status}
+                  </span>
                 </p>
                 <div className="business-actions">
-                  <button className="edit-button" onClick={() => handleEdit(business)}>
+                  <button
+                    className="edit-button"
+                    onClick={() => handleEdit(business.id)}
+                  >
                     Editar
                   </button>
                   <Link to={`/loja/${business.id}`} className="view-button">
@@ -150,116 +137,6 @@ const MyBusinesses = () => {
           </div>
         )}
       </div>
-
-      {editingBusiness && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Editar Loja</h2>
-            <form onSubmit={handleSaveChanges}>
-              <label>
-                Nome:
-                <input
-                  type="text"
-                  value={editingBusiness.nome}
-                  onChange={(e) =>
-                    setEditingBusiness({ ...editingBusiness, nome: e.target.value })
-                  }
-                />
-              </label>
-              <label>
-                CNPJ:
-                <input
-                  type="text"
-                  value={editingBusiness.cnpj}
-                  onChange={(e) =>
-                    setEditingBusiness({ ...editingBusiness, cnpj: e.target.value })
-                  }
-                />
-              </label>
-              <label>
-                Descrição:
-                <textarea
-                  value={editingBusiness.descricao}
-                  onChange={(e) =>
-                    setEditingBusiness({
-                      ...editingBusiness,
-                      descricao: e.target.value,
-                    })
-                  }
-                />
-              </label>
-              <label>
-                Categoria:
-                <input
-                  type="text"
-                  value={editingBusiness.categoria}
-                  onChange={(e) =>
-                    setEditingBusiness({
-                      ...editingBusiness,
-                      categoria: e.target.value,
-                    })
-                  }
-                />
-              </label>
-              <label>
-                Endereço:
-                <input
-                  type="text"
-                  value={editingBusiness.endereco}
-                  onChange={(e) =>
-                    setEditingBusiness({
-                      ...editingBusiness,
-                      endereco: e.target.value,
-                    })
-                  }
-                />
-              </label>
-              <label>
-                Telefone:
-                <input
-                  type="text"
-                  value={editingBusiness.telefone}
-                  onChange={(e) =>
-                    setEditingBusiness({
-                      ...editingBusiness,
-                      telefone: e.target.value,
-                    })
-                  }
-                />
-              </label>
-              <label>
-                E-mail:
-                <input
-                  type="email"
-                  value={editingBusiness.email}
-                  onChange={(e) =>
-                    setEditingBusiness({ ...editingBusiness, email: e.target.value })
-                  }
-                />
-              </label>
-              <label>
-                Horário de Funcionamento:
-                <input
-                  type="text"
-                  value={editingBusiness.horarioDeFuncionamento}
-                  onChange={(e) =>
-                    setEditingBusiness({
-                      ...editingBusiness,
-                      horarioDeFuncionamento: e.target.value,
-                    })
-                  }
-                />
-              </label>
-              <div className="modal-buttons">
-                <button type="submit">Salvar</button>
-                <button type="button" onClick={handleCloseModal}>
-                  Cancelar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
