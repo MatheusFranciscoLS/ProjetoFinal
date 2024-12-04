@@ -604,7 +604,7 @@ const RegisterBusiness = () => {
               </div>
             </div>
           </>
-        )}
+        )}z
 
         <div className="upload-instructions">
           <label htmlFor="businessImages">
