@@ -38,7 +38,7 @@ const PlansDetails = () => {
         "O plano Premium inclui funcionalidades avançadas, suporte prioritário e acesso a todos os recursos da plataforma. Ideal para quem busca mais eficiência e benefícios exclusivos.",
       price: "89",
       period: "/mês",
-      maxBusinesses: 3,
+      maxBusinesses: "*",
       maxImages: 6,
       showSocial: true,
     },
@@ -106,7 +106,9 @@ const PlansDetails = () => {
         {plans.map((plan, index) => (
           <div
             key={index}
-            className={`pack_card ${currentPlan === plan.name ? "active-plan" : ""}`} // Adiciona uma classe CSS para destacar o plano ativo
+            className={`pack_card ${
+              currentPlan === plan.name ? "active-plan" : ""
+            }`} // Adiciona uma classe CSS para destacar o plano ativo
           >
             <div className="banner">
               {plan.name === "Premium" && (
@@ -135,11 +137,18 @@ const PlansDetails = () => {
               )}
             </div>
             <div className="features">
-              <p>Negócios permitidos: {plan.maxBusinesses}</p>
-              <p>Imagens permitidas: {plan.maxImages}</p>
               <p>
-                Redes sociais exibidas: {plan.showSocial ? "Sim" : "Não"}
+                Negócios permitidos:{" "}
+                {plan.maxBusinesses === "*" ? "Ilimitados" : plan.maxBusinesses}
               </p>
+              <p>Imagens permitidas: {plan.maxImages}</p>
+              <p>Redes sociais exibidas: {plan.showSocial ? "Sim" : "Não"}</p>
+              {plan.name === "Premium" && (
+                <p className="premium-warning">
+                  <strong>Atenção:</strong> O valor será cobrado por CNPJ
+                  cadastrado.
+                </p>
+              )}
             </div>
           </div>
         ))}
