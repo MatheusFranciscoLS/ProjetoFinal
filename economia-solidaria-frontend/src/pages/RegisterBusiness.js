@@ -162,7 +162,7 @@ const RegisterBusiness = () => {
       await addDoc(collection(db, "negocios_pendentes"), firestoreData);
 
       alert("Cadastro enviado, aguardando aprovação do admin!");
-      navigate("/");
+      navigate("/plans-details");
     } catch (err) {
       console.error("Erro ao cadastrar negócio:", err);
       setError("Erro ao cadastrar o negócio. Tente novamente.");
@@ -604,7 +604,7 @@ const RegisterBusiness = () => {
               </div>
             </div>
           </>
-        )}
+        )}z
 
         <div className="upload-instructions">
           <label htmlFor="businessImages">
