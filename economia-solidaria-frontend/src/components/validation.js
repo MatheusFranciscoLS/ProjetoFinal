@@ -8,14 +8,15 @@ export const validateImageFile = (file) => {
   if (!allowedTypes.includes(file.type)) {
     return {
       isValid: false,
-      error: "Formato de arquivo inválido. Use JPG, JPEG ou PNG",
+      error:
+        "O formato do arquivo é inválido. Por favor, utilize arquivos nos formatos JPG, JPEG ou PNG.",
     };
   }
 
   if (file.size > maxSize) {
     return {
       isValid: false,
-      error: "Arquivo muito grande. Tamanho máximo: 5MB",
+      error: "O arquivo é muito grande. O tamanho máximo permitido é de 5MB.",
     };
   }
 
@@ -47,67 +48,14 @@ const validateTime = (time) => {
   return timeRegex.test(time);
 };
 
-// Validação de horário de almoço
-const validateLunchBreak = (lunchBreak, businessHours) => {
-  if (!lunchBreak || lunchBreak.isClosed) return { isValid: true };
-
-  const { start, end } = lunchBreak;
-
-  if (!start || !end) {
-    return { isValid: false, error: "Horário de almoço deve ter início e fim" };
-  }
-
-  if (!validateTime(start) || !validateTime(end)) {
-    return { isValid: false, error: "Horário de almoço inválido" };
-  }
-
-  const [startHour, startMinute] = start.split(":").map(Number);
-  const [endHour, endMinute] = end.split(":").map(Number);
-  const startTime = startHour * 60 + startMinute;
-  const endTime = endHour * 60 + endMinute;
-
-  if (endTime <= startTime) {
-    return {
-      isValid: false,
-      error: "Horário de fim do almoço deve ser depois do início",
-    };
-  }
-
-  // Validar se o horário de almoço está dentro do horário de funcionamento
-  if (businessHours && !businessHours.closed) {
-    const [businessOpenHour, businessOpenMinute] = businessHours.open
-      .split(":")
-      .map(Number);
-    const [businessCloseHour, businessCloseMinute] = businessHours.close
-      .split(":")
-      .map(Number);
-    const businessOpenTime = businessOpenHour * 60 + businessOpenMinute;
-    const businessCloseTime = businessCloseHour * 60 + businessCloseMinute;
-
-    if (startTime < businessOpenTime) {
-      return {
-        isValid: false,
-        error:
-          "Horário de início do almoço deve ser depois do horário de abertura",
-      };
-    }
-
-    if (endTime > businessCloseTime) {
-      return {
-        isValid: false,
-        error:
-          "Horário de fim do almoço deve ser antes do horário de fechamento",
-      };
-    }
-  }
-
-  return { isValid: true };
-};
-
 // Validação de horário de funcionamento
 const validateBusinessHours = (hours) => {
   if (!hours)
-    return { isValid: false, error: "Horário de funcionamento é obrigatório" };
+    return {
+      isValid: false,
+      error:
+        "O horário de funcionamento é obrigatório. Por favor, preencha os horários de abertura e fechamento.",
+    };
 
   const { open, close, closed } = hours;
 
@@ -118,12 +66,15 @@ const validateBusinessHours = (hours) => {
   if (!open || !close) {
     return {
       isValid: false,
-      error: "Horário de abertura e fechamento são obrigatórios",
+      error: "Os campos de horário de abertura e fechamento são obrigatórios.",
     };
   }
 
   if (!validateTime(open) || !validateTime(close)) {
-    return { isValid: false, error: "Horário inválido" };
+    return {
+      isValid: false,
+      error: "Os horários informados são inválidos. Verifique o formato.",
+    };
   }
 
   const [openHour, openMinute] = open.split(":").map(Number);
@@ -134,7 +85,8 @@ const validateBusinessHours = (hours) => {
   if (closeTime <= openTime) {
     return {
       isValid: false,
-      error: "Horário de fechamento deve ser depois do horário de abertura",
+      error:
+        "O horário de fechamento deve ser posterior ao horário de abertura.",
     };
   }
 
@@ -145,52 +97,61 @@ const validateBusinessHours = (hours) => {
 export const validateForm = (formData) => {
   const errors = {};
 
-  // Validar nome do negócio
+  // Validação de nome do negócio
   if (!formData.nome || formData.nome.trim() === "") {
-    errors.nome = "O nome do negócio é obrigatório.";
+    errors.nome =
+      "Por favor, insira o nome do negócio. Ele deve ter pelo menos 5 caracteres.";
   } else if (formData.nome.trim().length < 5) {
-    errors.nome = "O nome do negócio deve ter pelo menos 5 caracteres.";
+    errors.nome =
+      "Por favor, insira o nome do negócio. Ele deve ter pelo menos 5 caracteres.";
   }
 
-  // Validar CNPJ
+  // Validação de CNPJ
   if (!formData.cnpj || !cnpj.isValid(formData.cnpj)) {
-    errors.cnpj = "O CNPJ é obrigatório e deve ser válido.";
+    errors.cnpj =
+      "O CNPJ informado é inválido. Certifique-se de fornecer um CNPJ válido.";
   }
 
-  // Validar descrição
+  // Validação de descrição
   if (!formData.descricao || formData.descricao.trim() === "") {
-    errors.descricao = "A descrição é obrigatória.";
+    errors.descricao =
+      "A descrição do seu negócio é obrigatória e deve conter ao menos duas palavras.";
   } else if (formData.descricao.split(" ").length < 2) {
-    errors.descricao = "A descrição deve ter pelo menos 2 palavras.";
+    errors.descricao =
+      "A descrição do seu negócio é obrigatória e deve conter ao menos duas palavras.";
   }
 
-  // Validar categoria
+  // Validação de categoria
   if (!formData.categoria || formData.categoria.trim() === "") {
-    errors.categoria = "A categoria é obrigatória.";
+    errors.categoria =
+      "A categoria do negócio é obrigatória. Por favor, selecione uma opção.";
   }
 
-  // Validar endereço
+  // Validação de endereço
   if (!formData.endereco || formData.endereco.trim() === "") {
-    errors.endereco = "O endereço é obrigatório.";
+    errors.endereco =
+      "O endereço do seu negócio é obrigatório. Por favor, forneça o endereço completo.";
   }
 
-  // Validar telefone fixo
+  // Validação de telefone fixo
   const telefoneFixo = formData.telefoneFixo
     ? formData.telefoneFixo.replace(/\D/g, "")
     : "";
   if (!telefoneFixo || telefoneFixo.length !== 10) {
-    errors.telefoneFixo = "Telefone fixo obrigatório e deve ser válido.";
+    errors.telefoneFixo =
+      "Por favor, informe um número de telefone fixo válido, incluindo o DDD (ex: 11 1234-5678).";
   }
 
-  // Validar celular (opcional e válido)
+  // Validação de celular (opcional e válido)
   const telefoneCelular = formData.telefoneCelular
     ? formData.telefoneCelular.replace(/\D/g, "")
     : "";
   if (telefoneCelular && telefoneCelular.length !== 11) {
-    errors.telefoneCelular = "Telefone celular, se informado, deve ser válido.";
+    errors.telefoneCelular =
+      "Caso tenha informado um número de celular, ele deve ser válido e incluir o DDD (ex: 11 91234-5678).";
   }
 
-  // Validar horário de funcionamento
+  // Validação de horário de funcionamento
   if (formData.horarioDeFuncionamento) {
     const diasSemana = ["segundaAsexta", "sabado", "domingo"];
     diasSemana.forEach((dia) => {
@@ -204,18 +165,20 @@ export const validateForm = (formData) => {
     });
   }
 
-  // Validar imagens (mínimo 2 imagens)
+  // Validação de imagens (mínimo 2 imagens)
   if (
     !formData.imagens ||
     !Array.isArray(formData.imagens) ||
     formData.imagens.length < 2
   ) {
-    errors.imagens = "Pelo menos duas imagens são obrigatórias.";
+    errors.imagens =
+      "Por favor, envie pelo menos duas imagens do seu negócio. Imagens com boa resolução são recomendadas.";
   }
 
-  // Validar comprovante
+  // Validação de comprovante
   if (!formData.comprovante || !(formData.comprovante instanceof File)) {
-    errors.comprovante = "O comprovante do Simples Nacional é obrigatório.";
+    errors.comprovante =
+      "O comprovante do Simples Nacional é obrigatório para concluir o cadastro. Por favor, anexe o documento.";
   }
 
   return {
