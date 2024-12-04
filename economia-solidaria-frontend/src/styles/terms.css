@@ -1,44 +1,107 @@
+/* Container principal */
+.terms-container {
+  font-family: 'Roboto', sans-serif;
+  padding: 40px;
+  max-width: 800px;  /* Limitar a largura para centralizar melhor */
+  margin: 0 auto;   /* Centraliza horizontalmente */
+  background-color: #f7f7f7;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Sombra suave ao redor do container */
+  border-radius: 8px; /* Bordas arredondadas para suavizar a aparência */
+  display: flex;
+  flex-direction: column;  /* Organiza os elementos em uma coluna */
+  align-items: center;     /* Alinha os itens no centro */
+  justify-content: flex-start;
+  min-height: 100vh;       /* Garante que ocupe toda a altura da tela */
+}
+
 /* Estilo do título principal */
 .terms-header h1 {
-    font-size: 2.5em;
-    text-align: center;
-    margin-bottom: 20px;
+  font-size: 2.8em;
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Estilo do parágrafo de introdução */
+.terms-header p {
+  text-align: center;
+  font-size: 1.2em;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 30px;  /* Espaço abaixo da introdução */
+}
+
+/* Estilo dos subtítulos */
+h2 {
+  font-size: 1.8em;
+  color: #2980b9;
+  margin-top: 30px;
+  font-weight: bold;
+}
+
+/* Estilo dos parágrafos */
+p {
+  font-size: 1.1em;
+  color: #333;
+  margin-bottom: 20px;
+  line-height: 1.8;
+  width: 100%;  /* Para garantir que o texto ocupe toda a largura do container */
+  text-align: justify; /* Justifica o texto */
+}
+
+/* Estilo do link de voltar */
+.terms-footer {
+  text-align: center;
+  margin-top: 40px;
+  width: 100%;
+}
+
+.back-button {
+  display: inline-block;
+  padding: 14px 25px;
+  font-size: 1.1em;
+  color: #fff;
+  background-color: #2980b9;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.back-button:hover {
+  background-color: #3498db;
+}
+
+.back-button:active {
+  background-color: #2980b9;
+}
+
+/* Estilo responsivo */
+@media (max-width: 768px) {
+  .terms-container {
+    padding: 20px;
   }
-  
-  /* Estilo dos subtítulos */
+
+  .terms-header h1 {
+    font-size: 2.2em;
+  }
+
+  .terms-header p {
+    font-size: 1.1em;
+  }
+
   h2 {
-    margin-top: 30px;
-    font-size: 1.8em;
-    color: #2c3e50;
+    font-size: 1.6em;
   }
-  
-  /* Estilo dos parágrafos */
+
   p {
-    font-size: 1.1em;
-    color: #333;
-    margin-bottom: 20px;
+    font-size: 1em;
   }
-  
-  /* Botão de voltar */
+
   .back-button {
-    display: inline-block;
     padding: 12px 20px;
-    font-size: 1.1em;
-    color: #fff;
-    background-color: #2980b9;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
-    display: block;
-    text-align: center;
+    font-size: 1em;
   }
-  
-  .back-button:hover {
-    background-color: #3498db;
-  }
-  
-  .back-button:active {
-    background-color: #2980b9;
-  }
-  
+}
