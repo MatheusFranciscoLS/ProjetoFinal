@@ -17,37 +17,34 @@ const LojasList = () => {
   useEffect(() => {
     const fetchLojas = async () => {
       try {
-        // Buscar todas as lojas aprovadas
         const querySnapshot = await getDocs(collection(db, "lojas"));
-        const lojasData = await Promise.all(
-          querySnapshot.docs.map(async (docSnapshot) => {
-            const lojaData = { id: docSnapshot.id, ...docSnapshot.data() };
+        const lojasData = querySnapshot.docs.map(docSnapshot => {
+          const lojaData = { id: docSnapshot.id, ...docSnapshot.data() };
+          return {
+            ...lojaData,
+            plano: lojaData.plano || "gratuito" // Use plan from business data or default to "gratuito"
+          };
+        });
 
-            // Buscar o plano atualizado do usuário
-            if (lojaData.userId) {
-              const userDoc = await getDoc(doc(db, "users", lojaData.userId));
-              if (userDoc.exists()) {
-                const userData = userDoc.data();
-                // Atualizar o plano da loja se o plano do usuário mudou
-                if (userData.plano !== lojaData.plano) {
-                  await setDoc(doc(db, "lojas", lojaData.id), {
-                    ...lojaData,
-                    plano: userData.plano || "gratuito"
-                  });
-                  lojaData.plano = userData.plano || "gratuito";
-                }
-              } else {
-                lojaData.plano = "gratuito";
-              }
-            } else {
-              lojaData.plano = "gratuito";
-            }
+        // Sort businesses by plan priority
+        const lojasOrdenadas = lojasData.sort((a, b) => {
+          const prioridadePlano = {
+            premium: 1,
+            essencial: 2,
+            gratuito: 3
+          };
 
-            return lojaData;
-          })
-        );
+          const prioridadeA = prioridadePlano[a.plano?.toLowerCase() || "gratuito"];
+          const prioridadeB = prioridadePlano[b.plano?.toLowerCase() || "gratuito"];
 
-        setLojas(lojasData);
+          if (prioridadeA !== prioridadeB) {
+            return prioridadeA - prioridadeB;
+          }
+
+          return a.nome?.localeCompare(b.nome || "");
+        });
+
+        setLojas(lojasOrdenadas);
       } catch (error) {
         console.error("Erro ao carregar lojas:", error);
         setLojas([]);

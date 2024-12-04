@@ -3,7 +3,7 @@ import InputMask from "react-input-mask"; // Importando o React Input Mask
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase"; // Certifique-se de exportar o db do Firebase
 import { useNavigate } from "react-router-dom"; // Hook de navegação
-import { doc, setDoc } from "firebase/firestore"; // Importando o Firestore
+import { doc, setDoc, serverTimestamp } from "firebase/firestore"; // Importando o Firestore
 import "../styles/auth.css";
 
 const Register = () => {
@@ -45,12 +45,13 @@ const Register = () => {
 
       // Salvar os dados do usuário no Firestore
       await setDoc(doc(db, "users", user.uid), {
-        email: user.email,
         nome: name,
+        email: user.email,
         phone: phone.replace(/[^\d]/g, ""), // Armazena apenas os números no banco
         address: address || "", // Caso o endereço não seja informado, será salvo como string vazia
         tipo: "comum", // Inicialmente, o tipo será "comum"
-        plano: "gratuito", // Adicionando o plano padrão como "gratuito"
+        plano: "negocios_pendentes", // Adicionando o plano padrão como "negocios_pendentes"
+        createdAt: serverTimestamp(),
       });
 
       // Usuário cadastrado com sucesso
