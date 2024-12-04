@@ -609,7 +609,7 @@ const RegisterBusiness = () => {
         <div className="upload-instructions">
           <label htmlFor="businessImages">
             <strong>
-              Carregue imagens do seu negócio (Obrigatório 2 imagens e máximo de 6)
+              Carregue imagens do seu negócio (máximo de 6 imagens)
             </strong>
           </label>
           <input
