@@ -204,20 +204,6 @@ export const validateForm = (formData) => {
     });
   }
 
-  // Validar imagens (mínimo 2 imagens)
-  if (
-    !formData.imagens ||
-    !Array.isArray(formData.imagens) ||
-    formData.imagens.length < 2
-  ) {
-    errors.imagens = "Pelo menos duas imagens são obrigatórias.";
-  }
-
-  // Validar comprovante
-  if (!formData.comprovante || !(formData.comprovante instanceof File)) {
-    errors.comprovante = "O comprovante do Simples Nacional é obrigatório.";
-  }
-
   return {
     isValid: Object.keys(errors).length === 0,
     errors,
