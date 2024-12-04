@@ -5,7 +5,7 @@ import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import InputMask from "react-input-mask";
 import { FaInstagram, FaFacebook, FaWhatsapp } from 'react-icons/fa';
-import { validateForm } from "../components/validation";
+import { validateForm } from "../components/validationEdit";
 import "../styles/editbusiness.css";
 
 const EditBusiness = () => {
@@ -15,12 +15,15 @@ const EditBusiness = () => {
   const [businessDescription, setBusinessDescription] = useState("");
   const [category, setCategory] = useState("");
   const [categories] = useState([
-    "Artesanato",
-    "Alimentação",
-    "Vestuário",
+    "Restaurante",
+    "Loja",
     "Serviços",
-    "Agricultura Familiar",
-    "Outros"
+    "Artesanato",
+    "Beleza e Estética",
+    "Educação e Cursos",
+    "Saúde e Bem-estar",
+   " Esportes e Lazer",
+    "Outro"
   ]);
   const [address, setAddress] = useState("");
   const [telefone, setTelefone] = useState("");
@@ -33,7 +36,6 @@ const EditBusiness = () => {
   const [lunchStart, setLunchStart] = useState("");
   const [lunchEnd, setLunchEnd] = useState("");
   const [showWeekend, setShowWeekend] = useState(false);
-  const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [socialLinks, setSocialLinks] = useState({
