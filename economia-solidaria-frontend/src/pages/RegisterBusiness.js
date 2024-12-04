@@ -65,28 +65,24 @@ const RegisterBusiness = () => {
 
         // Buscar plano do usuário
         const userDoc = await getDoc(doc(db, "users", user.uid));
-        const userData = userDoc.data();
-        const userPlan = userData?.plan || "Gratuito";
-
-        // Verificar se usuário já tem loja
-        const storesQuery = query(
-          collection(db, "lojas"),
-          where("userId", "==", user.uid)
-        );
-        const storesSnapshot = await getDocs(storesQuery);
-        const hasExistingStore = !storesSnapshot.empty;
-
-        // Apenas bloqueia se for plano gratuito E já tiver uma loja
-        if (userPlan === "Gratuito" && hasExistingStore) {
-          setUpgradeMessage("Você já possui um negócio cadastrado. Para cadastrar mais negócios, faça upgrade para o plano premium.");
-          setHasAccess(false);
-          setLoading(false);
+        if (!userDoc.exists()) {
+          setError("Erro ao carregar informações do usuário.");
           return;
         }
 
-        // Se for Premium OU não tiver loja ainda, permite acesso
-        setHasAccess(true);
-        setLoading(false);
+        const userData = userDoc.data();
+        const userPlan = userData.plano || "Gratuito"; // Usando o mesmo campo 'plano' do PlansDetails
+        console.log("Plano do usuário:", userPlan);
+
+        // Somente Premium tem acesso
+        if (userPlan === "Premium") {
+          setHasAccess(true);
+          setLoading(false);
+        } else {
+          setUpgradeMessage(`Seu plano atual (${userPlan}) não permite cadastrar negócios. Faça upgrade para o plano Premium para ter acesso a esta funcionalidade.`);
+          setHasAccess(false);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Erro ao verificar acesso do usuário:", error);
         navigate("/");
@@ -94,36 +90,6 @@ const RegisterBusiness = () => {
     };
 
     checkUserAccess();
-  }, [navigate, auth]);
-
-  useEffect(() => {
-    const checkUserPlanAndStore = async () => {
-      try {
-        const user = auth.currentUser;
-        if (!user) {
-          navigate("/login");
-          return;
-        }
-
-        // Buscar plano do usuário
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        const userData = userDoc.data();
-        setUserPlan(userData?.plan || "Gratuito");
-
-        // Verificar se usuário já tem loja
-        const storesQuery = query(
-          collection(db, "lojas"),
-          where("userId", "==", user.uid)
-        );
-        const storesSnapshot = await getDocs(storesQuery);
-        const hasExistingStore = !storesSnapshot.empty;
-        setHasStore(hasExistingStore);
-      } catch (error) {
-        console.error("Erro ao verificar plano e lojas do usuário:", error);
-      }
-    };
-
-    checkUserPlanAndStore();
   }, [navigate, auth]);
 
   useEffect(() => {
@@ -307,9 +273,9 @@ const RegisterBusiness = () => {
           <p>{upgradeMessage}</p>
           <button 
             className="upgrade-button"
-            onClick={() => navigate("/upgrade")}
+            onClick={() => navigate("/plans-details")}
           >
-            Fazer Upgrade
+            Ver Planos Disponíveis
           </button>
         </div>
       </div>
