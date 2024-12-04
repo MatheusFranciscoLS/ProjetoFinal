@@ -26,19 +26,9 @@ const PlansDetails = () => {
       name: "Essencial",
       description:
         "O plano Essencial oferece recursos básicos para utilizar a plataforma sem custos adicionais. Ideal para usuários iniciantes ou para quem deseja uma solução simples e prática.",
-      price: "19",
+      price: "39",
       period: "/mês",
       maxBusinesses: 1,
-      maxImages: 6,
-      showSocial: true,
-    },
-    {
-      name: "Avançado",
-      description:
-        "O plano Avançado oferece mais recursos, permitindo gerenciar dois negócios e mais imagens, com redes sociais exibidas.",
-      price: "29",
-      period: "/mês",
-      maxBusinesses: 2,
       maxImages: 6,
       showSocial: true,
     },
@@ -46,19 +36,9 @@ const PlansDetails = () => {
       name: "Premium",
       description:
         "O plano Premium inclui funcionalidades avançadas, suporte prioritário e acesso a todos os recursos da plataforma. Ideal para quem busca mais eficiência e benefícios exclusivos.",
-      price: "49",
+      price: "89",
       period: "/mês",
       maxBusinesses: 3,
-      maxImages: 6,
-      showSocial: true,
-    },
-    {
-      name: "Elite",
-      description:
-        "O plano Elite oferece todos os recursos da plataforma, com suporte exclusivo e até 5 negócios cadastrados. Ideal para empresas que buscam máxima flexibilidade e controle.",
-      price: "99",
-      period: "/mês",
-      maxBusinesses: 5,
       maxImages: 6,
       showSocial: true,
     },
