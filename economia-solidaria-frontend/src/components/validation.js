@@ -165,14 +165,14 @@ export const validateForm = (formData) => {
     });
   }
 
-  // Validação de imagens (mínimo 2 imagens)
+  // Validação de imagens (mínimo 1 imagens)
   if (
     !formData.imagens ||
     !Array.isArray(formData.imagens) ||
-    formData.imagens.length < 2
+    formData.imagens.length < 1
   ) {
     errors.imagens =
-      "Por favor, envie pelo menos duas imagens do seu negócio. Imagens com boa resolução são recomendadas.";
+      "Por favor, envie pelo menos uma imagens do seu negócio. Imagens com boa resolução são recomendadas.";
   }
 
   // Validação de comprovante
