@@ -18,6 +18,16 @@
   margin-top: 20px;
 }
 
+.premium-note {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  /* Letras menores */
+  color: rgba(0, 0, 0, 1);
+  /* Cor semitransparente */
+  text-align: center;
+  line-height: 1.4;
+}
+
 .pack_card {
   position: relative;
   display: flex;

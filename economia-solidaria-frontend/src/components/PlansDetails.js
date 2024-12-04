@@ -38,7 +38,7 @@ const PlansDetails = () => {
         "O plano Premium inclui funcionalidades avançadas, suporte prioritário e acesso a todos os recursos da plataforma. Ideal para quem busca mais eficiência e benefícios exclusivos.",
       price: "89",
       period: "/mês",
-      maxBusinesses: "*",
+      maxBusinesses: "Ilimitado*",
       maxImages: 6,
       showSocial: true,
     },
@@ -137,22 +137,21 @@ const PlansDetails = () => {
               )}
             </div>
             <div className="features">
-              <p>
-                Negócios permitidos:{" "}
-                {plan.maxBusinesses === "*" ? "Ilimitados" : plan.maxBusinesses}
-              </p>
+              <p>Negócios permitidos: {plan.maxBusinesses}</p>
               <p>Imagens permitidas: {plan.maxImages}</p>
               <p>Redes sociais exibidas: {plan.showSocial ? "Sim" : "Não"}</p>
-              {plan.name === "Premium" && (
-                <p className="premium-warning">
-                  <strong>Atenção:</strong> O valor será cobrado por CNPJ
-                  cadastrado.
-                </p>
-              )}
             </div>
           </div>
         ))}
       </div>
+      {/* Nota em letras miúdas */}
+      <div className="premium-note">
+        <p>
+          * O plano <strong>Premium</strong> aplica o valor mensal por cada CNPJ
+          cadastrado. Consulte os Termos de Serviço para mais detalhes.
+        </p>
+      </div>
+
       <button onClick={() => navigate("/perfil")} className="back-button">
         Voltar ao Perfil
       </button>
