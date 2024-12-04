@@ -148,6 +148,8 @@ export const validateForm = (formData) => {
   // Validar nome do negócio
   if (!formData.nome || formData.nome.trim() === "") {
     errors.nome = "O nome do negócio é obrigatório.";
+  } else if (formData.nome.trim().length < 5) {
+    errors.nome = "O nome do negócio deve ter pelo menos 5 caracteres.";
   }
 
   // Validar CNPJ
@@ -158,6 +160,8 @@ export const validateForm = (formData) => {
   // Validar descrição
   if (!formData.descricao || formData.descricao.trim() === "") {
     errors.descricao = "A descrição é obrigatória.";
+  } else if (formData.descricao.split(" ").length < 2) {
+    errors.descricao = "A descrição deve ter pelo menos 2 palavras.";
   }
 
   // Validar categoria
@@ -170,19 +174,20 @@ export const validateForm = (formData) => {
     errors.endereco = "O endereço é obrigatório.";
   }
 
-  // Validar telefone
+  // Validar telefone fixo
   const telefoneFixo = formData.telefoneFixo
     ? formData.telefoneFixo.replace(/\D/g, "")
     : "";
+  if (!telefoneFixo || telefoneFixo.length !== 10) {
+    errors.telefoneFixo = "Telefone fixo obrigatório e deve ser válido.";
+  }
+
+  // Validar celular (opcional e válido)
   const telefoneCelular = formData.telefoneCelular
     ? formData.telefoneCelular.replace(/\D/g, "")
     : "";
-
-  if (
-    (!telefoneFixo || telefoneFixo.length !== 10) &&
-    (!telefoneCelular || telefoneCelular.length !== 11)
-  ) {
-    errors.telefone = "Pelo menos um telefone válido é obrigatório.";
+  if (telefoneCelular && telefoneCelular.length !== 11) {
+    errors.telefoneCelular = "Telefone celular, se informado, deve ser válido.";
   }
 
   // Validar horário de funcionamento
@@ -198,21 +203,6 @@ export const validateForm = (formData) => {
       }
     });
   }
-
-  // Validar horário de almoço
-  if (formData.horarioDeFuncionamento?.lunchBreak) {
-    const { start, end, isClosed } = formData.horarioDeFuncionamento.lunchBreak;
-    if (isClosed && start && end) {
-      const result = validateLunchBreak(
-        formData.horarioDeFuncionamento.lunchBreak,
-        formData.horarioDeFuncionamento.segundaAsexta
-      );
-      if (!result.isValid) {
-        errors.lunchBreak = result.error;
-      }
-    }
-  }
-
 
   return {
     isValid: Object.keys(errors).length === 0,

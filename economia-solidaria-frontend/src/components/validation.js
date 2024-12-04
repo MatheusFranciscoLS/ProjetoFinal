@@ -54,40 +54,49 @@ const validateLunchBreak = (lunchBreak, businessHours) => {
   const { start, end } = lunchBreak;
 
   if (!start || !end) {
-    return { isValid: false, error: 'Horário de almoço deve ter início e fim' };
+    return { isValid: false, error: "Horário de almoço deve ter início e fim" };
   }
 
   if (!validateTime(start) || !validateTime(end)) {
-    return { isValid: false, error: 'Horário de almoço inválido' };
+    return { isValid: false, error: "Horário de almoço inválido" };
   }
 
-  const [startHour, startMinute] = start.split(':').map(Number);
-  const [endHour, endMinute] = end.split(':').map(Number);
+  const [startHour, startMinute] = start.split(":").map(Number);
+  const [endHour, endMinute] = end.split(":").map(Number);
   const startTime = startHour * 60 + startMinute;
   const endTime = endHour * 60 + endMinute;
 
   if (endTime <= startTime) {
-    return { isValid: false, error: 'Horário de fim do almoço deve ser depois do início' };
+    return {
+      isValid: false,
+      error: "Horário de fim do almoço deve ser depois do início",
+    };
   }
 
   // Validar se o horário de almoço está dentro do horário de funcionamento
   if (businessHours && !businessHours.closed) {
-    const [businessOpenHour, businessOpenMinute] = businessHours.open.split(':').map(Number);
-    const [businessCloseHour, businessCloseMinute] = businessHours.close.split(':').map(Number);
+    const [businessOpenHour, businessOpenMinute] = businessHours.open
+      .split(":")
+      .map(Number);
+    const [businessCloseHour, businessCloseMinute] = businessHours.close
+      .split(":")
+      .map(Number);
     const businessOpenTime = businessOpenHour * 60 + businessOpenMinute;
     const businessCloseTime = businessCloseHour * 60 + businessCloseMinute;
 
     if (startTime < businessOpenTime) {
-      return { 
-        isValid: false, 
-        error: 'Horário de início do almoço deve ser depois do horário de abertura' 
+      return {
+        isValid: false,
+        error:
+          "Horário de início do almoço deve ser depois do horário de abertura",
       };
     }
 
     if (endTime > businessCloseTime) {
-      return { 
-        isValid: false, 
-        error: 'Horário de fim do almoço deve ser antes do horário de fechamento' 
+      return {
+        isValid: false,
+        error:
+          "Horário de fim do almoço deve ser antes do horário de fechamento",
       };
     }
   }
@@ -97,29 +106,36 @@ const validateLunchBreak = (lunchBreak, businessHours) => {
 
 // Validação de horário de funcionamento
 const validateBusinessHours = (hours) => {
-  if (!hours) return { isValid: false, error: 'Horário de funcionamento é obrigatório' };
-  
+  if (!hours)
+    return { isValid: false, error: "Horário de funcionamento é obrigatório" };
+
   const { open, close, closed } = hours;
-  
+
   if (closed) {
     return { isValid: true };
   }
 
   if (!open || !close) {
-    return { isValid: false, error: 'Horário de abertura e fechamento são obrigatórios' };
+    return {
+      isValid: false,
+      error: "Horário de abertura e fechamento são obrigatórios",
+    };
   }
 
   if (!validateTime(open) || !validateTime(close)) {
-    return { isValid: false, error: 'Horário inválido' };
+    return { isValid: false, error: "Horário inválido" };
   }
 
-  const [openHour, openMinute] = open.split(':').map(Number);
-  const [closeHour, closeMinute] = close.split(':').map(Number);
+  const [openHour, openMinute] = open.split(":").map(Number);
+  const [closeHour, closeMinute] = close.split(":").map(Number);
   const openTime = openHour * 60 + openMinute;
   const closeTime = closeHour * 60 + closeMinute;
 
   if (closeTime <= openTime) {
-    return { isValid: false, error: 'Horário de fechamento deve ser depois do horário de abertura' };
+    return {
+      isValid: false,
+      error: "Horário de fechamento deve ser depois do horário de abertura",
+    };
   }
 
   return { isValid: true };
@@ -132,6 +148,8 @@ export const validateForm = (formData) => {
   // Validar nome do negócio
   if (!formData.nome || formData.nome.trim() === "") {
     errors.nome = "O nome do negócio é obrigatório.";
+  } else if (formData.nome.trim().length < 5) {
+    errors.nome = "O nome do negócio deve ter pelo menos 5 caracteres.";
   }
 
   // Validar CNPJ
@@ -142,6 +160,8 @@ export const validateForm = (formData) => {
   // Validar descrição
   if (!formData.descricao || formData.descricao.trim() === "") {
     errors.descricao = "A descrição é obrigatória.";
+  } else if (formData.descricao.split(" ").length < 2) {
+    errors.descricao = "A descrição deve ter pelo menos 2 palavras.";
   }
 
   // Validar categoria
@@ -154,12 +174,20 @@ export const validateForm = (formData) => {
     errors.endereco = "O endereço é obrigatório.";
   }
 
-  // Validar telefone
-  const telefoneFixo = formData.telefoneFixo ? formData.telefoneFixo.replace(/\D/g, "") : "";
-  const telefoneCelular = formData.telefoneCelular ? formData.telefoneCelular.replace(/\D/g, "") : "";
+  // Validar telefone fixo
+  const telefoneFixo = formData.telefoneFixo
+    ? formData.telefoneFixo.replace(/\D/g, "")
+    : "";
+  if (!telefoneFixo || telefoneFixo.length !== 10) {
+    errors.telefoneFixo = "Telefone fixo obrigatório e deve ser válido.";
+  }
 
-  if ((!telefoneFixo || telefoneFixo.length !== 10) && (!telefoneCelular || telefoneCelular.length !== 11)) {
-    errors.telefone = "Pelo menos um telefone válido é obrigatório.";
+  // Validar celular (opcional e válido)
+  const telefoneCelular = formData.telefoneCelular
+    ? formData.telefoneCelular.replace(/\D/g, "")
+    : "";
+  if (telefoneCelular && telefoneCelular.length !== 11) {
+    errors.telefoneCelular = "Telefone celular, se informado, deve ser válido.";
   }
 
   // Validar horário de funcionamento
@@ -176,32 +204,22 @@ export const validateForm = (formData) => {
     });
   }
 
-  // Validar horário de almoço
-  if (formData.horarioDeFuncionamento?.lunchBreak) {
-    const { start, end, isClosed } = formData.horarioDeFuncionamento.lunchBreak;
-    if (isClosed && start && end) {
-      const result = validateLunchBreak(
-        formData.horarioDeFuncionamento.lunchBreak,
-        formData.horarioDeFuncionamento.segundaAsexta
-      );
-      if (!result.isValid) {
-        errors.lunchBreak = result.error;
-      }
-    }
-  }
-
-  // Validar imagens
-  if (!formData.imagens || !Array.isArray(formData.imagens) || formData.imagens.length === 0) {
-    errors.imagens = 'Pelo menos uma imagem é obrigatória.';
+  // Validar imagens (mínimo 2 imagens)
+  if (
+    !formData.imagens ||
+    !Array.isArray(formData.imagens) ||
+    formData.imagens.length < 2
+  ) {
+    errors.imagens = "Pelo menos duas imagens são obrigatórias.";
   }
 
   // Validar comprovante
   if (!formData.comprovante || !(formData.comprovante instanceof File)) {
-    errors.comprovante = 'O comprovante do Simples Nacional é obrigatório.';
+    errors.comprovante = "O comprovante do Simples Nacional é obrigatório.";
   }
 
   return {
     isValid: Object.keys(errors).length === 0,
-    errors
+    errors,
   };
 };
