@@ -76,7 +76,7 @@ const RegisterBusiness = () => {
         const storesSnapshot = await getDocs(storesQuery);
         const hasExistingStore = !storesSnapshot.empty;
 
-        // Se tiver plano gratuito e já tiver uma loja
+        // Apenas bloqueia se for plano gratuito E já tiver uma loja
         if (userPlan === "Gratuito" && hasExistingStore) {
           setUpgradeMessage("Você já possui um negócio cadastrado. Para cadastrar mais negócios, faça upgrade para o plano premium.");
           setHasAccess(false);
@@ -84,7 +84,7 @@ const RegisterBusiness = () => {
           return;
         }
 
-        // Se chegou até aqui, usuário tem acesso
+        // Se for Premium OU não tiver loja ainda, permite acesso
         setHasAccess(true);
         setLoading(false);
       } catch (error) {
