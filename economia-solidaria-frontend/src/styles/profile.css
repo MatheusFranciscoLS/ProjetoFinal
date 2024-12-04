@@ -10,12 +10,12 @@
 
 /* Tema Escuro */
 .dark-theme {
-  --bg-color: #1e1e1e;
-  --text-color: #f9f9f9;
-  --card-bg-color: #2b2b2b;
-  --button-bg-color: #6b8e23;
-  --button-hover-bg-color: #556b2f;
-  --error-color: #ff6347;
+  --bg-color: #1a1a1a;
+  --text-color: #e2e8f0;
+  --card-bg-color: #242424;
+  --button-bg-color: #4CAF50;
+  --button-hover-bg-color: #45a049;
+  --error-color: #dc3545;
 }
 
 /* Estilos gerais */
@@ -30,8 +30,9 @@ body {
 
 /* Container principal do perfil */
 .profile-container {
-  padding: 20px; /* Padding reduzido */
-  max-width: 1200px;
+  min-height: calc(100vh - 60px);
+  padding: 2rem;
+  max-width: 800px;
   margin: 0 auto;
   background-color: var(--card-bg-color);
   border-radius: 8px; /* Cantos um pouco mais afiados */
@@ -115,6 +116,66 @@ body {
   cursor: pointer;
   font-size: 1rem; /* Tamanho reduzido */
   color: var(--text-color);
+}
+
+[data-theme='dark'] .profile-container {
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+[data-theme='dark'] .profile-card {
+  background: var(--dark-card-bg);
+  box-shadow: 0 4px 12px var(--dark-shadow);
+  border: 1px solid var(--dark-border);
+}
+
+[data-theme='dark'] .info-group label {
+  color: var(--dark-text);
+}
+
+[data-theme='dark'] .info-group input,
+[data-theme='dark'] .info-group textarea {
+  background: var(--dark-input-bg);
+  border-color: var(--dark-border);
+  color: var(--dark-text);
+}
+
+[data-theme='dark'] .info-group input:focus,
+[data-theme='dark'] .info-group textarea:focus {
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+[data-theme='dark'] .save-button,
+[data-theme='dark'] .delete-button {
+  opacity: 0.9;
+}
+
+[data-theme='dark'] .save-button:hover,
+[data-theme='dark'] .delete-button:hover {
+  opacity: 1;
+}
+
+[data-theme='dark'] .theme-toggle {
+  background: var(--dark-card-bg);
+  border-color: var(--dark-border);
+  box-shadow: 0 2px 8px var(--dark-shadow);
+}
+
+[data-theme='dark'] .theme-toggle:hover {
+  box-shadow: 0 4px 12px var(--dark-shadow);
+}
+
+[data-theme='dark'] .loading-spinner {
+  border-color: var(--dark-border);
+  border-top-color: var(--primary);
+}
+
+[data-theme='dark'] .error-message {
+  color: #ff6b6b;
+}
+
+[data-theme='dark'] .success-message {
+  color: #69db7c;
 }
 
 /* Responsividade */

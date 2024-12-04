@@ -165,22 +165,6 @@ export const validateForm = (formData) => {
     });
   }
 
-  // Validação de imagens (mínimo 1 imagens)
-  if (
-    !formData.imagens ||
-    !Array.isArray(formData.imagens) ||
-    formData.imagens.length < 1
-  ) {
-    errors.imagens =
-      "Por favor, envie pelo menos uma imagens do seu negócio. Imagens com boa resolução são recomendadas.";
-  }
-
-  // Validação de comprovante
-  if (!formData.comprovante || !(formData.comprovante instanceof File)) {
-    errors.comprovante =
-      "O comprovante do Simples Nacional é obrigatório para concluir o cadastro. Por favor, anexe o documento.";
-  }
-
   return {
     isValid: Object.keys(errors).length === 0,
     errors,

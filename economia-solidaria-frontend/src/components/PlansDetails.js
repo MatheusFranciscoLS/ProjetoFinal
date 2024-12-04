@@ -8,29 +8,59 @@ const PlansDetails = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [currentPlan, setCurrentPlan] = useState(""); // Armazena o plano atual do usuário
+  const [businessCount, setBusinessCount] = useState(0); // Armazena o número de negócios do usuário
   const navigate = useNavigate();
 
   const plans = [
-    {
-      name: "Essencial",
-      description:
-        "O plano Essencial oferece recursos básicos para utilizar a plataforma sem custos adicionais. Ideal para usuários iniciantes ou para quem deseja uma solução simples e prática.",
-      price: "19",
-      period: "/mês",
-    },
-    {
-      name: "Premium",
-      description:
-        "O plano Premium inclui funcionalidades avançadas, suporte prioritário e acesso a todos os recursos da plataforma. Ideal para quem busca mais eficiência e benefícios exclusivos.",
-      price: "29",
-      period: "/mês",
-    },
     {
       name: "Gratuito",
       description:
         "O plano Gratuito é a versão básica da plataforma, com recursos limitados. Perfeito para quem está começando a utilizar a plataforma.",
       price: "0",
       period: "Gratuito",
+      maxBusinesses: 1,
+      maxImages: 1,
+      showSocial: false,
+    },
+    {
+      name: "Essencial",
+      description:
+        "O plano Essencial oferece recursos básicos para utilizar a plataforma sem custos adicionais. Ideal para usuários iniciantes ou para quem deseja uma solução simples e prática.",
+      price: "19",
+      period: "/mês",
+      maxBusinesses: 1,
+      maxImages: 6,
+      showSocial: true,
+    },
+    {
+      name: "Avançado",
+      description:
+        "O plano Avançado oferece mais recursos, permitindo gerenciar dois negócios e mais imagens, com redes sociais exibidas.",
+      price: "29",
+      period: "/mês",
+      maxBusinesses: 2,
+      maxImages: 6,
+      showSocial: true,
+    },
+    {
+      name: "Premium",
+      description:
+        "O plano Premium inclui funcionalidades avançadas, suporte prioritário e acesso a todos os recursos da plataforma. Ideal para quem busca mais eficiência e benefícios exclusivos.",
+      price: "49",
+      period: "/mês",
+      maxBusinesses: 3,
+      maxImages: 6,
+      showSocial: true,
+    },
+    {
+      name: "Elite",
+      description:
+        "O plano Elite oferece todos os recursos da plataforma, com suporte exclusivo e até 5 negócios cadastrados. Ideal para empresas que buscam máxima flexibilidade e controle.",
+      price: "99",
+      period: "/mês",
+      maxBusinesses: 5,
+      maxImages: 6,
+      showSocial: true,
     },
   ];
 
@@ -46,7 +76,9 @@ const PlansDetails = () => {
 
         const userDoc = await getDoc(doc(db, "users", currentUser.uid));
         if (userDoc.exists()) {
-          setCurrentPlan(userDoc.data().plano || ""); // Obtém o plano atual do usuário
+          const userData = userDoc.data();
+          setCurrentPlan(userData.plano || ""); // Obtém o plano atual do usuário
+          setBusinessCount(userData.businessCount || 0); // Obtém o número de negócios do usuário
         } else {
           setError("Erro ao carregar informações do usuário.");
         }
@@ -94,9 +126,7 @@ const PlansDetails = () => {
         {plans.map((plan, index) => (
           <div
             key={index}
-            className={`pack_card ${
-              currentPlan === plan.name ? "active-plan" : ""
-            }`} // Adiciona uma classe CSS para destacar o plano ativo
+            className={`pack_card ${currentPlan === plan.name ? "active-plan" : ""}`} // Adiciona uma classe CSS para destacar o plano ativo
           >
             <div className="banner">
               {plan.name === "Premium" && (
@@ -123,6 +153,13 @@ const PlansDetails = () => {
                   Escolher {plan.name}
                 </button>
               )}
+            </div>
+            <div className="features">
+              <p>Negócios permitidos: {plan.maxBusinesses}</p>
+              <p>Imagens permitidas: {plan.maxImages}</p>
+              <p>
+                Redes sociais exibidas: {plan.showSocial ? "Sim" : "Não"}
+              </p>
             </div>
           </div>
         ))}

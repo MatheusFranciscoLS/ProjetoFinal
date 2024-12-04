@@ -77,6 +77,21 @@
   overflow: hidden;
 }
 
+.card .business-name {
+    display: flex;
+      flex-direction: column;
+      /* Garante que o conteúdo será empilhado */
+      justify-content: center;
+      /* Centraliza verticalmente */
+      align-items: center;
+      /* Centraliza horizontalmente */
+      text-align: center;
+      /* Garante que o texto dentro do card fique centralizado */
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 0;
+}
+
 .card:hover {
   transform: scale(1.03);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -129,6 +144,7 @@
 /* Botões */
 .card-buttons button {
   flex: 1;
+  margin-top: 10px;
   margin-left: 5px;
   padding: 8px 10px;
   border: none;
@@ -143,6 +159,11 @@
 .card-buttons button:hover {
   background-color: #0056b3;
   opacity: 0.9;
+}
+
+.close{
+  background-color: #007bff;
+  color: white;
 }
 
 /* Feedback */
@@ -168,6 +189,7 @@
 /* Miniaturas de imagens */
 .business-images {
   margin-top: 10px;
+  margin-left: 10px;
 }
 
 .image-thumbnails {
@@ -227,17 +249,20 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   position: relative;
+  text-align: center; /* Centraliza as informações do CNPJ */
 }
 
 .cnpj-info h4 {
   margin-bottom: 10px;
   color: #333;
   font-size: 1.1em;
+  text-align: center; /* Centraliza o título */
 }
 
 .cnpj-details {
   display: grid;
   gap: 8px;
+  text-align: center; /* Centraliza as informações do CNPJ */
 }
 
 .cnpj-details p {
@@ -272,7 +297,7 @@
 
 .cnpj-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Centraliza o título */
   align-items: center;
   margin-bottom: 10px;
   padding-right: 25px;
@@ -282,6 +307,7 @@
   margin: 0;
   font-size: 1em;
   color: #333;
+  text-align: center; /* Centraliza o título */
 }
 
 .close-button {
@@ -344,94 +370,12 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
   .card-grid {
     grid-template-columns: 1fr;
   }
 
-  .card {
-    padding: 10px;
+  .cnpj-info {
+    text-align: center; /* Centraliza as informações em telas menores */
   }
-
-  .card-buttons button {
-    font-size: 0.7em;
-    padding: 6px 8px;
-  }
-
-  .image-thumbnail {
-    width: 35px;
-    height: 35px;
-  }
-
-  .business-details {
-    width: 100%;
-    padding: 10px;
-  }
-
-  .modal-image {
-    max-width: 95%;
-    max-height: 95%;
-  }
-}
-
-/* Alinhamento à esquerda e ajuste de espaçamento */
-.cnpj-details {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Alinha os elementos à esquerda */
-  padding: 10px;
-  margin-top: 10px;
-}
-
-.cnpj-details p {
-  margin: 8px 0; /* Espaçamento entre os parágrafos */
-  font-size: 0.95em;
-  color: #666;
-}
-
-.cnpj-details strong {
-  color: #333;
-  margin-right: 5px;
-}
-
-/* Ajuste geral de layout para manter tudo organizado */
-.cnpj-details p {
-  text-align: left; /* Alinha o texto à esquerda */
-}
-
-.cnpj-header h4 {
-  text-align: center; /* Centraliza o texto do título */
-  width: 100%; /* Garante que o h4 ocupe toda a largura disponível */
-}
-
-.align-left {
-  text-align: left;
-}
-
-.align-left {
-  text-align: left;
-  margin: 5px 0; /* Adiciona um pequeno espaçamento entre as linhas */
-}
-
-.details-container p {
-  text-align: left;
-  font-size: 1em;
-  color: #333;
-  margin-bottom: 10px; /* Espaço entre os parágrafos */
-}
-
-.details-container strong {
-  font-weight: bold;
-  color: #555; /* Cor do texto forte */
-}
-.business-cnpj {
-  text-align: left; /* Alinha o texto à esquerda */
-  margin: 5px 0; /* Adiciona espaçamento entre as linhas */
-  font-size: 1em; /* Define o tamanho da fonte */
-  color: #333; /* Cor do texto */
-}
-
-.business-cnpj strong {
-  font-weight: bold; /* Deixa o texto forte (rótulo) em negrito */
-  color: #555; /* Cor para o rótulo */
 }

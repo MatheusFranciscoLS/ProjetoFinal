@@ -1,194 +1,389 @@
 /* Estilo para o contêiner principal */
-.businesses-container {
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  max-width: 900px;
-  margin: 30px auto;
-  font-family: Arial, sans-serif;
-  width: 100%; /* Garante que o contêiner ocupe 100% da largura em telas menores */
-}
-
-/* Título principal */
-.businesses-container h2 {
-  font-size: 26px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* Estilo para o texto de carregamento */
-.loading-text {
-  text-align: center;
-  font-size: 18px;
-  color: #888;
-}
-
-/* Estilo para mensagens de erro */
-.error-text {
-  text-align: center;
-  font-size: 18px;
-  color: #e74c3c;
-  font-weight: bold;
-}
-
-/* Estilo para a mensagem de 'sem negócios' */
-.no-businesses-text {
-  text-align: center;
-  font-size: 18px;
-  color: #7f8c8d;
-}
-
-/* Estilo para a lista de negócios */
-.business-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-/* Estilo para cada item de negócio */
-.business-item {
-  background-color: #ffffff;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.3s ease;
-}
-
-/* Efeito hover para os itens */
-.business-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Nome do negócio */
-.business-name {
-  font-size: 22px;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 8px;
-}
-
-/* Status do negócio */
-.business-status {
-  font-size: 16px;
-  color: #7f8c8d;
-}
-
-/* Estilo para o conteúdo do modal */
-#modalContent {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  width: 600px; /* Aumenta a largura do modal */
-  max-width: 90%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  max-height: 90vh; /* A altura máxima foi ajustada */
-  overflow-y: auto; /* Adiciona barra de rolagem se o conteúdo exceder a altura */
+.my-businesses-container {
+  min-height: calc(100vh - 60px);
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  margin: 0 auto; /* Centra o modal na tela */
 }
 
-/* Estilo para o título do modal */
-#modalContent h2 {
-  font-size: 26px;
-  margin-bottom: 15px;
-  color: #333;
+/* Cabeçalho */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #eee;
+}
+
+.header-section h1 {
+  font-size: 2rem;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.add-business-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.add-business-button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+/* Grid de negócios */
+.businesses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: auto;
+  flex: 1;
+}
+
+/* Card de negócio */
+.business-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.business-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.business-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  background-color: #f5f5f5;
+}
+
+.business-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.business-content {
+  padding: 1.5rem;
+}
+
+.business-content h3 {
+  font-size: 1.25rem;
+  color: #2c3e50;
+  margin: 0 0 0.5rem 0;
+}
+
+.business-category {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.business-status {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.status-aprovado {
+  color: #4CAF50;
+  font-weight: 500;
+}
+
+.status-pendente {
+  color: #f39c12;
+  font-weight: 500;
+}
+
+.status-negado {
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+.business-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.edit-button,
+.view-button {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
   text-align: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-/* Estilo para o formulário */
-#modalContent form label {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 5px;
-  color: #555;
-}
-
-#modalContent form input,
-#modalContent form textarea {
-  width: calc(100% - 10px);
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-  resize: none;
-}
-
-#modalContent form button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  background-color: #3498db;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-#modalContent form button:hover {
-  background-color: #2980b9;
-}
-
-#modalContent form button[type="button"] {
-  background-color: #e74c3c;
-}
-
-#modalContent form button[type="button"]:hover {
-  background-color: #c0392b;
-}
-
-/* Botões de edição */
 .edit-button {
-  background-color: #3498db;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 10px;
+  background-color: #2196F3;
+  color: white;
 }
 
 .edit-button:hover {
-  background-color: #2980b9;
+  background-color: #1976D2;
+}
+
+.view-button {
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  border: 1px solid #dee2e6;
+}
+
+.view-button:hover {
+  background-color: #e9ecef;
+}
+
+/* Modal de edição */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-content h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-content label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.modal-content input,
+.modal-content textarea {
+  padding: 0.8rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.modal-content textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 0.8rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-buttons button[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.modal-buttons button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.modal-buttons button[type="button"] {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #2c3e50;
+}
+
+.modal-buttons button[type="button"]:hover {
+  background-color: #e9ecef;
+}
+
+/* Mensagem de sem negócios */
+.no-businesses {
+  text-align: center;
+  padding: 3rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  grid-column: 1 / -1;
+}
+
+.no-businesses p {
+  color: #666;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.register-link {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.register-link:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
 }
 
 /* Responsividade */
 @media (max-width: 768px) {
-  /* Ajuste no contêiner principal para telas menores */
-  .businesses-container {
-    padding: 15px;
-    max-width: 100%;
+  .my-businesses-container {
+    padding: 1rem;
   }
 
-  /* Ajuste no tamanho do modal para telas menores */
-  #modalContent {
+  .header-section {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .add-business-button {
     width: 100%;
-    max-width: 100%;
+    justify-content: center;
   }
 
-  /* Reduzir o tamanho do título */
-  .businesses-container h2 {
-    font-size: 22px;
+  .businesses-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
-  /* Ajustes nos inputs do modal */
-  #modalContent form input,
-  #modalContent form textarea {
-    font-size: 12px;
+  .modal-content {
+    padding: 1.5rem;
+    margin: 1rem;
   }
 
-  /* Ajuste nos botões */
-  #modalContent form button,
-  .edit-button {
-    font-size: 14px;
-    padding: 8px 12px;
+  .business-actions {
+    flex-direction: column;
   }
+
+  .modal-buttons {
+    flex-direction: column;
+  }
+}
+
+/* Loading Skeleton */
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.skeleton {
+  background: #f6f7f8;
+  background-image: linear-gradient(
+    to right,
+    #f6f7f8 0%,
+    #edeef1 20%,
+    #f6f7f8 40%,
+    #f6f7f8 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 800px 104px;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 200px;
+  background: #eee;
+}
+
+.skeleton-content {
+  padding: 1.5rem;
+}
+
+.skeleton-title {
+  width: 80%;
+  height: 24px;
+  background: #eee;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.skeleton-text {
+  width: 90%;
+  height: 16px;
+  background: #eee;
+  margin-bottom: 0.8rem;
+  border-radius: 4px;
+}
+
+.skeleton-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.skeleton-button {
+  flex: 1;
+  height: 36px;
+  background: #eee;
+  border-radius: 6px;
 }

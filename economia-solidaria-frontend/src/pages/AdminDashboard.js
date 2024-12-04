@@ -92,10 +92,13 @@ const AdminDashboard = () => {
 
         if (approved) {
           const newBusinessRef = doc(db, "lojas", businessId);
+          // Garantir que o plano do usuário seja corretamente atribuído
+          const userData = userDoc.exists() ? userDoc.data() : { plano: "gratuito" };
           await setDoc(newBusinessRef, {
             ...businessData,
             status: "aprovado",
-            plano: userPlan // Adiciona o plano do usuário
+            plano: userData.plano || "gratuito",
+            userId: businessData.userId // Garantir que o userId seja mantido
           });
           await deleteDoc(businessRef);
           setFeedbackMessage("Negócio aprovado e movido para 'lojas'.");
@@ -405,7 +408,10 @@ const AdminDashboard = () => {
                 <strong>Endereço:</strong> {selectedBusiness.endereco}
               </p>
               <p>
-                <strong>Telefone:</strong> {selectedBusiness.telefone}
+                <strong>Telefone:</strong> {selectedBusiness.telefoneFixo}
+              </p>
+              <p>
+                <strong>Celular:</strong> {selectedBusiness.telefoneCelular}
               </p>
               <p>
                 <strong>E-mail:</strong> {selectedBusiness.email}
@@ -417,25 +423,31 @@ const AdminDashboard = () => {
                     {/* Horário de Funcionamento de Segunda a Sexta */}
                     <p>
                       <strong>Segunda a Sexta:</strong>{" "}
-                      {selectedBusiness.horarioDeFuncionamento.segundaAsexta?.open || "Não disponível"}{" "}
+                      {selectedBusiness.horarioDeFuncionamento.segundaAsexta
+                        ?.open || "Não disponível"}{" "}
                       -{" "}
-                      {selectedBusiness.horarioDeFuncionamento.segundaAsexta?.close || "Não disponível"}
+                      {selectedBusiness.horarioDeFuncionamento.segundaAsexta
+                        ?.close || "Não disponível"}
                     </p>
 
                     {/* Horário de Funcionamento de Sábado */}
                     <p>
                       <strong>Sábado:</strong>{" "}
-                      {selectedBusiness.horarioDeFuncionamento.sabado?.open || "Não disponível"}{" "}
+                      {selectedBusiness.horarioDeFuncionamento.sabado?.open ||
+                        "Não disponível"}{" "}
                       -{" "}
-                      {selectedBusiness.horarioDeFuncionamento.sabado?.close || "Não disponível"}
+                      {selectedBusiness.horarioDeFuncionamento.sabado?.close ||
+                        "Não disponível"}
                     </p>
 
                     {/* Horário de Funcionamento de Domingo */}
                     <p>
                       <strong>Domingo:</strong>{" "}
-                      {selectedBusiness.horarioDeFuncionamento.domingo?.open || "Não disponível"}{" "}
+                      {selectedBusiness.horarioDeFuncionamento.domingo?.open ||
+                        "Não disponível"}{" "}
                       -{" "}
-                      {selectedBusiness.horarioDeFuncionamento.domingo?.close || "Não disponível"}
+                      {selectedBusiness.horarioDeFuncionamento.domingo?.close ||
+                        "Não disponível"}
                     </p>
                   </>
                 ) : (
@@ -483,7 +495,12 @@ const AdminDashboard = () => {
               >
                 {isProcessing === selectedBusiness.id ? "Negando..." : "Negar"}
               </button>
-              <button onClick={() => setSelectedBusiness(null)}>Fechar</button>
+              <button
+                className="close"
+                onClick={() => setSelectedBusiness(null)}
+              >
+                Fechar
+              </button>
             </div>
           </div>
         )}

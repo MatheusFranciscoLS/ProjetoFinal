@@ -1,17 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { collection, getDocs, doc, deleteDoc, setDoc } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  collection,
+  getDocs,
+  deleteDoc,
+  setDoc,
+  doc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import "../styles/AdminNegocios.css";
+
+const SkeletonCard = () => (
+  <div className="business-card skeleton">
+    <div className="skeleton-image"></div>
+    <div className="skeleton-content">
+      <div className="skeleton-title"></div>
+      <div className="skeleton-text"></div>
+      <div className="skeleton-text"></div>
+      <div className="skeleton-actions">
+        <div className="skeleton-button"></div>
+        <div className="skeleton-button"></div>
+      </div>
+    </div>
+  </div>
+);
 
 const AdminNegocios = () => {
   const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterCategory, setFilterCategory] = useState("todos");
   const [sortOrder, setSortOrder] = useState("alfabetica");
-  const [editBusiness, setEditBusiness] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12; // 4x3 grid
-  const [editSuccess, setEditSuccess] = useState(false); // Novo estado para controle de sucesso de edição
+  const itemsPerPage = 12;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBusinesses = async () => {
@@ -30,15 +51,19 @@ const AdminNegocios = () => {
     };
 
     fetchBusinesses();
-  }, [editSuccess]); // Adicionando editSuccess para refazer o fetch após edição
+  }, []);
 
   const handleDelete = async (businessId) => {
-    const confirm = window.confirm("Tem certeza de que deseja deletar este negócio?");
+    const confirm = window.confirm(
+      "Tem certeza de que deseja deletar este negócio?"
+    );
     if (!confirm) return;
 
     try {
       await deleteDoc(doc(db, "lojas", businessId));
-      setBusinesses((prev) => prev.filter((business) => business.id !== businessId));
+      setBusinesses((prev) =>
+        prev.filter((business) => business.id !== businessId)
+      );
       alert("Negócio deletado com sucesso!");
     } catch (err) {
       console.error("Erro ao deletar negócio:", err);
@@ -46,29 +71,18 @@ const AdminNegocios = () => {
     }
   };
 
-  const handleSave = async (updatedBusiness) => {
-    try {
-      const businessRef = doc(db, "lojas", updatedBusiness.id);
-      await setDoc(businessRef, updatedBusiness);
-      setBusinesses((prev) =>
-        prev.map((business) =>
-          business.id === updatedBusiness.id ? updatedBusiness : business
-        )
-      );
-      setEditBusiness(null);
-      setEditSuccess(true); // Marcar como sucesso após edição
-      alert("Negócio atualizado com sucesso!");
-    } catch (err) {
-      console.error("Erro ao atualizar negócio:", err);
-      alert("Erro ao atualizar negócio.");
-    }
+  const handleEdit = (businessId) => {
+    // Redireciona para a página de edição do negócio
+    navigate(`/edit-business/${businessId}`);
   };
 
   const sortedAndFilteredBusinesses = () => {
     let filtered = businesses;
 
     if (filterCategory !== "todos") {
-      filtered = filtered.filter((business) => business.categoria === filterCategory);
+      filtered = filtered.filter(
+        (business) => business.categoria === filterCategory
+      );
     }
 
     return filtered.sort((a, b) => {
@@ -85,7 +99,9 @@ const AdminNegocios = () => {
     currentPage * itemsPerPage
   );
 
-  const totalPages = Math.ceil(sortedAndFilteredBusinesses().length / itemsPerPage);
+  const totalPages = Math.ceil(
+    sortedAndFilteredBusinesses().length / itemsPerPage
+  );
 
   return (
     <div className="admin-gerenciamento">
@@ -126,14 +142,24 @@ const AdminNegocios = () => {
       <div className="business-list">
         {loading
           ? Array.from({ length: itemsPerPage }).map((_, index) => (
-              <div key={index} className="skeleton-card"></div>
+              <SkeletonCard key={index} />
             ))
           : displayedBusinesses.map((business) => (
               <div key={business.id} className="business-card">
-                <h3>{business.nome || "Nome do negócio"}</h3>
-                <p><strong>Categoria:</strong> {business.categoria || "Sem categoria"}</p>
-                <div className="business-actions">
-                  <button onClick={() => setEditBusiness(business)}>Editar</button>
+                <div className="card-header">
+                  <h3>{business.nome || "Nome do negócio"}</h3>
+                  <p className="category">
+                    <strong>Categoria:</strong>{" "}
+                    {business.categoria || "Sem categoria"}
+                  </p>
+                </div>
+                <div className="card-body">
+
+                </div>
+                <div className="card-footer">
+                  <button onClick={() => handleEdit(business.id)}>
+                    Editar
+                  </button>
                   <button
                     className="delete-button"
                     onClick={() => handleDelete(business.id)}
@@ -143,7 +169,9 @@ const AdminNegocios = () => {
                 </div>
               </div>
             ))}
-        {displayedBusinesses.length === 0 && !loading && <p>Nenhum negócio encontrado.</p>}
+        {displayedBusinesses.length === 0 && !loading && (
+          <p>Nenhum negócio encontrado.</p>
+        )}
       </div>
 
       {/* Pagination Controls */}
@@ -158,92 +186,15 @@ const AdminNegocios = () => {
           Página {currentPage} de {totalPages}
         </span>
         <button
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
           disabled={currentPage === totalPages}
         >
           Próxima
         </button>
       </div>
-
-      {editBusiness && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            {/* Aviso de sucesso de edição */}
-            {editSuccess && <div className="edit-success-message">Negócio editado com sucesso!</div>}
-
-            <EditBusinessForm
-              business={editBusiness}
-              onCancel={() => setEditBusiness(null)}
-              onSave={handleSave}
-            />
-          </div>
-        </div>
-      )}
     </div>
-  );
-};
-
-const EditBusinessForm = ({ business, onCancel, onSave }) => {
-  const [formData, setFormData] = useState({ ...business });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(formData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="edit-form">
-      <label>
-        Nome:
-        <input
-          type="text"
-          name="nome"
-          value={formData.nome}
-          onChange={handleChange}
-          placeholder="Nome do negócio"
-        />
-      </label>
-      <label>
-        Categoria:
-        <input
-          type="text"
-          name="categoria"
-          value={formData.categoria}
-          onChange={handleChange}
-          placeholder="Categoria"
-        />
-      </label>
-      <label>
-        Descrição:
-        <textarea
-          name="descricao"
-          value={formData.descricao || ""}
-          onChange={handleChange}
-          placeholder="Descrição do negócio"
-        ></textarea>
-      </label>
-      <label>
-        Endereço:
-        <input
-          type="text"
-          name="endereco"
-          value={formData.endereco || ""}
-          onChange={handleChange}
-          placeholder="Endereço"
-        />
-      </label>
-      <div className="edit-form-actions">
-        <button type="submit">Salvar</button>
-        <button type="button" onClick={onCancel}>
-          Cancelar
-        </button>
-      </div>
-    </form>
   );
 };
 

@@ -173,3 +173,291 @@ textarea {
     padding: 6px;
   }
 }
+
+/* Novos estilos para a avaliação */
+
+.avaliacao-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.avaliacao-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.avaliacao-header h2 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 1.8em;
+}
+
+.avaliacao-header p {
+  color: #666;
+  font-size: 1.1em;
+}
+
+.avaliacao-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+/* Botões de alternância */
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.toggle-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.btn-icon {
+  font-size: 1.2em;
+}
+
+/* Formulário de Avaliação */
+.avaliacao-form {
+  background-color: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  margin: 20px 0;
+  animation: slideIn 0.3s ease-out;
+}
+
+.avaliacao-form h3 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.4em;
+}
+
+.rating-container {
+  margin: 20px 0;
+}
+
+.rating-container label {
+  display: block;
+  margin-bottom: 10px;
+  color: #495057;
+  font-weight: 500;
+}
+
+/* Sistema de estrelas */
+.rating {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.star {
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: #ddd;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0 5px;
+}
+
+.star:hover,
+.star.active {
+  color: #ffd700;
+  transform: scale(1.1);
+}
+
+/* Campo de comentário */
+.comment-field {
+  margin: 20px 0;
+}
+
+.comment-field label {
+  display: block;
+  margin-bottom: 10px;
+  color: #495057;
+  font-weight: 500;
+}
+
+.comment-field textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1em;
+  resize: vertical;
+  min-height: 100px;
+  transition: border-color 0.3s ease;
+}
+
+.comment-field textarea:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+/* Mensagens */
+.message {
+  text-align: center;
+  padding: 12px;
+  margin: 15px 0;
+  border-radius: 8px;
+  font-size: 0.95em;
+}
+
+.error-message {
+  background-color: #fff5f5;
+  color: #e53e3e;
+  border: 1px solid #feb2b2;
+}
+
+.success-message {
+  background-color: #f0fff4;
+  color: #38a169;
+  border: 1px solid #9ae6b4;
+}
+
+/* Lista de avaliações */
+.reviews-section {
+  margin-top: 20px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.reviews-section h3 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.4em;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.review-item {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.review-rating {
+  color: #ffd700;
+  font-size: 1.2em;
+}
+
+.review-date {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.review-comment {
+  color: #2c3e50;
+  line-height: 1.5;
+}
+
+/* Mensagem quando não há avaliações */
+.no-reviews {
+  text-align: center;
+  padding: 30px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.no-reviews p {
+  color: #666;
+  margin: 10px 0;
+}
+
+.no-reviews p:first-child {
+  font-size: 1.1em;
+  color: #2c3e50;
+}
+
+/* Botão de enviar */
+.submit-button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.submit-button:disabled {
+  background-color: #cbd5e0;
+  cursor: not-allowed;
+}
+
+/* Animações */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .avaliacao-container {
+    padding: 15px;
+  }
+
+  .avaliacao-buttons {
+    flex-direction: column;
+  }
+
+  .toggle-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .star {
+    font-size: 28px;
+  }
+
+  .review-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+}

@@ -5,186 +5,206 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  opacity: 0;
-  animation: fadeIn 0.3s forwards;
 }
 
 .modal-content {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 40px;
-  width: 100%;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
   max-width: 600px;
-  max-height: 80%;
+  width: 90%;
+  max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  font-family: 'Roboto', sans-serif;
-  transition: max-height 0.3s ease-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Título */
-h2 {
-  text-align: center;
-  font-size: 28px;
+.modal-content h2 {
   color: #333;
-  margin-bottom: 24px;
-  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
-/* Estilo para cada grupo de entrada */
-.input-group {
-  margin-bottom: 24px;
-  display: flex;
-  flex-direction: column; /* Garante que os campos fiquem organizados verticalmente */
+.modal-content h3 {
+  color: #444;
+  margin: 1.5rem 0 1rem;
+  font-size: 1.1rem;
 }
 
-/* Estilo para o label */
-.input-group label {
-  font-weight: 500;
-  margin-bottom: 8px;
+.modal-content h4 {
   color: #555;
-  font-size: 16px;
-  display: block;
-  text-align: left; /* Garante que o texto do label fique alinhado à esquerda */
+  margin: 1rem 0 0.5rem;
+  font-size: 1rem;
 }
 
-/* Estilos uniformes para campos de texto */
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
 .input-group input,
 .input-group textarea {
   width: 100%;
-  padding: 14px;
-  border-radius: 8px;
+  padding: 0.5rem;
   border: 1px solid #ddd;
-  font-size: 16px;
-  color: #333;
-  background-color: #f9f9f9;
-  box-sizing: border-box; /* Garante que o padding não afete o tamanho do campo */
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-  margin-top: 4px; /* Dá um pequeno espaço entre o label e o campo */
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
-/* Estilos ao focar nos campos */
-.input-group input:focus,
-.input-group textarea:focus {
-  border-color: #007bff;
-  background-color: #fff;
-  outline: none;
-}
-
-/* Estilos para o campo de texto */
 .input-group textarea {
+  min-height: 100px;
   resize: vertical;
-  min-height: 120px; /* Tamanho mínimo para o textarea */
 }
 
-/* Placeholder de campos */
-.input-group input::placeholder,
-.input-group textarea::placeholder {
-  color: #aaa;
+.input-group input.filled {
+  background-color: #f8f9fa;
+  border-color: #0d6efd;
 }
 
-/* Botões */
+.input-group input.filled::placeholder {
+  color: #6c757d;
+}
+
+.social-media-section,
+.working-hours-section {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.working-hours-group {
+  margin-bottom: 1.5rem;
+}
+
+.hours-input-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.hours-input-group .input-group {
+  flex: 1;
+}
+
 .buttons {
   display: flex;
-  justify-content: space-between;
-  gap: 12px; /* Espaçamento entre os botões */
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
 }
 
-.buttons .btn {
-  padding: 14px 28px;
-  font-size: 16px;
+.btn {
+  padding: 0.5rem 1.5rem;
   border: none;
+  border-radius: 4px;
+  font-size: 1rem;
   cursor: pointer;
-  border-radius: 8px;
-  width: 45%; /* Ajusta para ocupar 45% do espaço e manter os botões alinhados */
-  transition: background-color 0.3s, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-.buttons .btn.primary {
-  background-color: #007bff;
-  color: #fff;
-  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+.btn.primary {
+  background-color: #4CAF50;
+  color: white;
 }
 
-.buttons .btn.primary:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4);
+.btn.primary:hover {
+  background-color: #45a049;
 }
 
-/* Botão Secundário */
-.buttons .btn.secondary {
-  background-color: #f0f0f0;
-  color: #333;
+.btn.secondary {
+  background-color: #f8f9fa;
   border: 1px solid #ddd;
+  color: #333;
 }
 
-.buttons .btn.secondary:hover {
-  background-color: #ddd;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.btn.secondary:hover {
+  background-color: #e9ecef;
 }
 
-/* Animação de fade-in para o modal */
-@keyframes fadeIn {
-  from {
-      opacity: 0;
-  }
-  to {
-      opacity: 1;
-  }
+.business-hours-display {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsividade */
+.business-hours-display h3 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 8px;
+}
+
+.hours-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hours-line {
+  padding: 8px 12px;
+  background-color: white;
+  border-radius: 4px;
+  border-left: 4px solid #0d6efd;
+  font-size: 1em;
+  line-height: 1.4;
+}
+
+.hours-line:nth-child(1) {
+  border-left-color: #0d6efd; /* Azul para dias de semana */
+}
+
+.hours-line:nth-child(2) {
+  border-left-color: #ffc107; /* Amarelo para almoço */
+}
+
+.hours-line:nth-child(3) {
+  border-left-color: #198754; /* Verde para sábado */
+}
+
+.hours-line:nth-child(4) {
+  border-left-color: #dc3545; /* Vermelho para domingo */
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .modal-content {
-      max-width: 90%;
-      padding: 30px;
+    width: 95%;
+    padding: 1rem;
   }
 
-  h2 {
-      font-size: 24px;
-  }
-
-  /* Ajuste no input e textarea para telas menores */
-  .input-group input,
-  .input-group textarea {
-      font-size: 14px;
-      padding: 12px;
-  }
-
-  .buttons .btn {
-      font-size: 14px;
-      padding: 12px 24px;
-      width: 48%; /* Ajusta para o botão ocupar mais largura em telas menores */
+  .hours-input-group {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }
 
-@media (max-width: 480px) {
-  .modal-content {
-      max-width: 100%;
-      padding: 20px;
-  }
+/* Scrollbar styling */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
 
-  h2 {
-      font-size: 20px;
-  }
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
 
-  /* Ajusta os campos de entrada para telas pequenas */
-  .input-group input,
-  .input-group textarea {
-      font-size: 14px;
-      padding: 10px;
-  }
+.modal-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
 
-  .buttons .btn {
-      font-size: 14px;
-      padding: 10px 18px;
-      width: 100%; /* Botões ocupam 100% da largura em telas muito pequenas */
-  }
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Sobre from "./pages/Sobre";
 import Contato from "./pages/Contato";
-import Avaliacao from "./pages/Avaliacao";
+import Avaliacao from "./components/Avaliacao"; // Atualizado para components
 import LojasList from "./pages/LojaList"; // Importação de LojasList
 import LojaDetails from "./pages/LojaDetails"; // Importação de LojaDetails
 import EditBusiness from "./pages/EditBusiness"; // Importação de EditBusiness
@@ -50,8 +50,7 @@ const App = () => {
         <Route path="/admin-gerenciamento" element={<AdminNegocios />} />
         <Route path="/edit-business/:id" element={<EditBusiness />} />
         <Route path="/meus-negocios" element={<MyBusinesses />} /> {/* Atualizado para MeusNegocios */}
-        <Route path="/editar-negocio/:businessId" element={<EditBusiness />} />
-        
+
         {/* Rota de perfil */}
         <Route path="/perfil" element={<Profile />} /> {/* Página de Perfil */}
         <Route path="/plans-details" element={<PlansDetails />} />
