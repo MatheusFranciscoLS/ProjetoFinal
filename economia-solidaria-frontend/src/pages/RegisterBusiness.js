@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import InputMask from "react-input-mask";
@@ -9,6 +9,11 @@ import { validateForm, validateImageFile } from "../components/validation";
 import "../styles/registerbusiness.css";
 
 const RegisterBusiness = () => {
+  const navigate = useNavigate();
+  const auth = getAuth();
+  const [hasAccess, setHasAccess] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [upgradeMessage, setUpgradeMessage] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [businessCNPJ, setBusinessCNPJ] = useState("");
   const [businessDescription, setBusinessDescription] = useState("");
@@ -27,7 +32,6 @@ const RegisterBusiness = () => {
   const [images, setImages] = useState([]);
   const [cnDoc, setCnDoc] = useState(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [socialLinks, setSocialLinks] = useState({
     instagram: "",
@@ -46,12 +50,92 @@ const RegisterBusiness = () => {
   const [uf, setUf] = useState("");
   const [numero, setNumero] = useState("");
   const [complemento, setComplemento] = useState("");
-  const [loadingCep, setLoadingCep] = useState(false);
   const [errorCep, setErrorCep] = useState("");
+  const [userPlan, setUserPlan] = useState("");
+  const [hasStore, setHasStore] = useState(false);
 
-  const navigate = useNavigate();
-  const auth = getAuth();
-  const user = auth.currentUser;
+  useEffect(() => {
+    const checkUserAccess = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user) {
+          navigate("/login");
+          return;
+        }
+
+        // Buscar plano do usuário
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        const userData = userDoc.data();
+        const userPlan = userData?.plan || "Gratuito";
+
+        // Verificar se usuário já tem loja
+        const storesQuery = query(
+          collection(db, "lojas"),
+          where("userId", "==", user.uid)
+        );
+        const storesSnapshot = await getDocs(storesQuery);
+        const hasExistingStore = !storesSnapshot.empty;
+
+        // Se tiver plano gratuito e já tiver uma loja
+        if (userPlan === "Gratuito" && hasExistingStore) {
+          setUpgradeMessage("Você já possui um negócio cadastrado. Para cadastrar mais negócios, faça upgrade para o plano premium.");
+          setHasAccess(false);
+          setLoading(false);
+          return;
+        }
+
+        // Se chegou até aqui, usuário tem acesso
+        setHasAccess(true);
+        setLoading(false);
+      } catch (error) {
+        console.error("Erro ao verificar acesso do usuário:", error);
+        navigate("/");
+      }
+    };
+
+    checkUserAccess();
+  }, [navigate, auth]);
+
+  useEffect(() => {
+    const checkUserPlanAndStore = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user) {
+          navigate("/login");
+          return;
+        }
+
+        // Buscar plano do usuário
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        const userData = userDoc.data();
+        setUserPlan(userData?.plan || "Gratuito");
+
+        // Verificar se usuário já tem loja
+        const storesQuery = query(
+          collection(db, "lojas"),
+          where("userId", "==", user.uid)
+        );
+        const storesSnapshot = await getDocs(storesQuery);
+        const hasExistingStore = !storesSnapshot.empty;
+        setHasStore(hasExistingStore);
+      } catch (error) {
+        console.error("Erro ao verificar plano e lojas do usuário:", error);
+      }
+    };
+
+    checkUserPlanAndStore();
+  }, [navigate, auth]);
+
+  useEffect(() => {
+    const atualizarEnderecoCompleto = () => {
+      if (logradouro) {
+        const enderecoCompleto = `${logradouro}${numero ? `, ${numero}` : ""}${complemento ? `, ${complemento}` : ""}, ${bairro}, ${cidade} - ${uf}`;
+        setAddress(enderecoCompleto);
+      }
+    };
+
+    atualizarEnderecoCompleto();
+  }, [logradouro, numero, complemento, bairro, cidade, uf]);
 
   const handleSocialLinkChange = (e) => {
     const { name, value } = e.target;
@@ -86,35 +170,7 @@ const RegisterBusiness = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
-
-    // Criar objeto com todos os dados do formulário
-    const formData = {
-      nome: businessName,
-      cnpj: businessCNPJ,
-      descricao: businessDescription,
-      categoria: category,
-      endereco: address,
-      telefoneFixo: telefone,
-      telefoneCelular: cellphone,
-      email,
-      horarioDeFuncionamento: {
-        segundaAsexta: weekdaysHours,
-        sabado: saturdayHours,
-        domingo: sundayHours,
-        lunchBreak: {
-          isClosed: lunchBreak,
-          start: lunchStart,
-          end: lunchEnd,
-        }
-      },
-      imagens: images,
-      comprovante: cnDoc,
-      userId: user.uid,
-      status: "pendente",
-      redesSociais: socialLinks
-    };
 
     try {
       if (!termsAccepted) {
@@ -122,8 +178,14 @@ const RegisterBusiness = () => {
         return;
       }
 
-      if (!user) {
+      if (!auth.currentUser) {
         setError("Você precisa estar logado para cadastrar um negócio.");
+        return;
+      }
+
+      // Verificar restrições do plano gratuito
+      if (userPlan === "Gratuito" && hasStore) {
+        setError("Seu plano gratuito permite cadastrar apenas 1 negócio. Faça upgrade para cadastrar mais.");
         return;
       }
 
@@ -139,6 +201,33 @@ const RegisterBusiness = () => {
 
       const imageBase64 = await Promise.all(imageBase64Promises);
 
+      // Criar objeto com todos os dados do formulário
+      const formData = {
+        nome: businessName,
+        cnpj: businessCNPJ,
+        descricao: businessDescription,
+        categoria: category,
+        endereco: address,
+        telefoneFixo: telefone,
+        telefoneCelular: cellphone,
+        email,
+        horarioDeFuncionamento: {
+          segundaAsexta: weekdaysHours,
+          sabado: saturdayHours,
+          domingo: sundayHours,
+          lunchBreak: {
+            isClosed: lunchBreak,
+            start: lunchStart,
+            end: lunchEnd,
+          }
+        },
+        imagens: images,
+        comprovante: cnDoc,
+        userId: auth.currentUser.uid,
+        status: "pendente",
+        redesSociais: socialLinks
+      };
+
       // Validar o formulário
       const validation = validateForm(formData);
       if (!validation.isValid) {
@@ -147,7 +236,6 @@ const RegisterBusiness = () => {
           .filter(message => message);
         
         setError(errorMessages.join('\n'));
-        setLoading(false);
         return;
       }
 
@@ -166,8 +254,6 @@ const RegisterBusiness = () => {
     } catch (err) {
       console.error("Erro ao cadastrar negócio:", err);
       setError("Erro ao cadastrar o negócio. Tente novamente.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -178,7 +264,6 @@ const RegisterBusiness = () => {
       return;
     }
 
-    setLoadingCep(true);
     setErrorCep("");
     
     try {
@@ -202,21 +287,34 @@ const RegisterBusiness = () => {
     } catch (error) {
       console.error("Erro ao buscar CEP:", error);
       setErrorCep("Erro ao buscar CEP. Tente novamente.");
-    } finally {
-      setLoadingCep(false);
     }
   };
 
-  const atualizarEnderecoCompleto = () => {
-    if (logradouro) {
-      const enderecoCompleto = `${logradouro}${numero ? `, ${numero}` : ""}${complemento ? `, ${complemento}` : ""}, ${bairro}, ${cidade} - ${uf}`;
-      setAddress(enderecoCompleto);
-    }
-  };
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loader"></div>
+        <p>Verificando acesso...</p>
+      </div>
+    );
+  }
 
-  useEffect(() => {
-    atualizarEnderecoCompleto();
-  }, [logradouro, numero, complemento, bairro, cidade, uf]);
+  if (!hasAccess) {
+    return (
+      <div className="upgrade-message-container">
+        <div className="upgrade-message">
+          <h2>Acesso Restrito</h2>
+          <p>{upgradeMessage}</p>
+          <button 
+            className="upgrade-button"
+            onClick={() => navigate("/upgrade")}
+          >
+            Fazer Upgrade
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="register-business-page">
@@ -287,7 +385,6 @@ const RegisterBusiness = () => {
                 />
               )}
             </InputMask>
-            {loadingCep && <span className="loading-cep">Buscando CEP...</span>}
             {errorCep && <span className="error-cep">{errorCep}</span>}
           </div>
 
@@ -604,7 +701,7 @@ const RegisterBusiness = () => {
               </div>
             </div>
           </>
-        )}z
+        )}
 
         <div className="upload-instructions">
           <label htmlFor="businessImages">
@@ -664,8 +761,6 @@ const RegisterBusiness = () => {
           </div>
         )}
 
-        {loading && <div className="loading">Carregando...</div>}
-
         <div className="terms-container">
           <input
             type="checkbox"
@@ -679,8 +774,8 @@ const RegisterBusiness = () => {
           </label>
         </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Enviando..." : "Cadastrar Negócio"}
+        <button type="submit">
+          Cadastrar Negócio
         </button>
       </form>
     </div>

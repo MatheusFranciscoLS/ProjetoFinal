@@ -6,152 +6,170 @@
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .register-business-form {
+}
+
+/* Formulário */
+.register-business-form {
     width: 100%;
-  }
-  
-  /* Seções do formulário */
-  .form-section {
+    background-color: var(--card-bg-color);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Título */
+.register-business-form h2 {
+    color: var(--text-color);
+    font-size: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Seções do formulário */
+.form-section {
     margin-bottom: 2rem;
     padding: 2rem;
     background: #f8f9fa;
     border-radius: 8px;
-  }
-  
-  .form-section h3 {
+}
+
+.form-section h3 {
     color: #2c3e50;
     margin-bottom: 1.5rem;
     font-size: 1.4rem;
     border-bottom: 2px solid #e9ecef;
     padding-bottom: 0.5rem;
-  }
-  
-  /* Grid para campos em duas colunas */
-  .form-row {
+}
+
+/* Grid para campos em duas colunas */
+.form-row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
     margin-bottom: 1.5rem;
-  }
-  
-  /* Grupos de formulário */
-  .form-group {
+}
+
+/* Grupos de formulário */
+.form-group {
     margin-bottom: 1.2rem;
-  }
-  
-  .form-group label {
+}
+
+.form-group label {
     display: block;
     margin-bottom: 0.5rem;
     color: #495057;
     font-weight: 500;
     font-size: 0.95rem;
-  }
-  
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
     width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: all 0.2s ease-in-out;
-    background-color: #fff;
-    height: 42px;
-  }
-  
-  .form-group textarea {
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s ease;
+}
+
+.form-group textarea {
     height: auto;
     min-height: 100px;
     resize: vertical;
-  }
-  
-  /* Campos de endereço */
-  .address-section {
+}
+
+/* Campos de endereço */
+.address-section {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-  }
-  
-  .cep-row {
+}
+
+.cep-row {
     max-width: 200px;
-  }
-  
-  .address-fields {
+}
+
+.address-fields {
     display: grid;
     grid-template-columns: 3fr 1fr;
     gap: 2rem;
-  }
-  
-  /* Grupo do logradouro e número */
-  .logradouro-group {
+}
+
+/* Grupo do logradouro e número */
+.logradouro-group {
     display: flex;
     gap: 1rem;
     align-items: flex-start;
-  }
-  
-  .logradouro-group .form-group:first-child {
+}
+
+.logradouro-group .form-group:first-child {
     flex: 1;
-  }
-  
-  .logradouro-group .form-group:last-child {
+}
+
+.logradouro-group .form-group:last-child {
     width: 80px;
     flex-shrink: 0;
-  }
-  
-  .logradouro-group .form-group:last-child input {
+}
+
+.logradouro-group .form-group:last-child input {
     width: 80px !important;
     text-align: center;
-  }
-  
-  /* Campos da segunda linha do endereço */
-  .address-fields-2 {
+}
+
+/* Campos da segunda linha do endereço */
+.address-fields-2 {
     display: grid;
     grid-template-columns: 1.5fr 1.5fr 80px;
     gap: 2rem;
-  }
-  
-  /* Estados dos campos */
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
-    border-color: #4a90e2;
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+/* Estados dos campos */
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
-  }
-  
-  .form-group input:disabled {
+    border-color: var(--button-bg-color);
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
+}
+
+.form-group input:disabled {
     background-color: #f8f9fa;
     cursor: not-allowed;
-  }
-  
-  /* Mensagens de feedback */
-  .loading-cep {
+}
+
+/* Mensagens de feedback */
+.loading-cep {
     color: #4a90e2;
     font-size: 0.9rem;
     margin-top: 0.5rem;
-  }
-  
-  .error-message {
+}
+
+.error-message {
     color: #dc3545;
     font-size: 0.9rem;
     margin-top: 0.5rem;
     padding: 0.5rem;
     background-color: rgba(220, 53, 69, 0.1);
     border-radius: 4px;
-  }
-  
-  /* Botões */
-  .form-buttons {
+}
+
+/* Botões */
+.form-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 2rem;
-  }
-  
-  .form-buttons button {
+}
+
+.form-buttons button {
     padding: 0.8rem 1.5rem;
     border: none;
     border-radius: 6px;
@@ -159,78 +177,198 @@
     cursor: pointer;
     transition: all 0.2s ease;
     min-width: 120px;
-  }
-  
-  button[type="submit"] {
-    background-color: #4a90e2;
-    color: white;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #357abd;
-  }
-  
-  button[type="button"] {
+}
+
+button[type="submit"] {
+    background-color: var(--button-bg-color);
+    color: var(--text-color);
+}
+
+button[type="submit"]:hover {
+    background-color: var(--button-hover-bg-color);
+}
+
+button[type="button"] {
     background-color: #6c757d;
     color: white;
-  }
-  
-  button[type="button"]:hover {
+}
+
+button[type="button"]:hover {
     background-color: #5a6268;
-  }
-  
-  /* Responsividade */
-  @media (max-width: 992px) {
+}
+
+/* Upload de imagens */
+.image-preview {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Container de cada imagem */
+.image-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* Estilo das imagens com tamanho fixo */
+.image-item {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin: 5px;
+    border-radius: 8px;
+}
+
+/* Estilo do botão de remoção (X vermelho) */
+.remove-image {
+    position: absolute;
+    top: -10px;
+    right: 5px;
+    background-color: rgba(255, 0, 0, 0.7);
+    color: var(--text-color);
+    border: none;
+    border-radius: 50%;
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover no "X" */
+.remove-image:hover {
+    background-color: rgba(255, 0, 0, 1);
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
     .form-row {
-      grid-template-columns: 1fr;
+        grid-template-columns: 1fr;
     }
     
     .address-fields {
-      grid-template-columns: 1fr;
+        grid-template-columns: 1fr;
     }
     
     .address-fields-2 {
-      grid-template-columns: 1fr 1fr 80px;
+        grid-template-columns: 1fr 1fr 80px;
     }
-  }
-  
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     .register-business-container {
-      margin: 1rem;
-      padding: 1rem;
+        margin: 1rem;
+        padding: 1rem;
     }
   
     .form-section {
-      padding: 1rem;
+        padding: 1rem;
     }
   
     .address-fields-2 {
-      grid-template-columns: 1fr;
+        grid-template-columns: 1fr;
     }
   
     .form-buttons {
-      flex-direction: column;
+        flex-direction: column;
     }
   
     .form-buttons button {
-      width: 100%;
+        width: 100%;
     }
-  }
-  
-  /* Campos com máscara */
-  input[type="tel"],
-  input[type="email"],
-  input[type="text"] {
+}
+
+/* Campos com máscara */
+input[type="tel"],
+input[type="email"],
+input[type="text"] {
     width: 100%;
-  }
-  
-  /* Remover spinners de campos numéricos */
-  input[type="number"]::-webkit-outer-spin-button,
-  input[type="number"]::-webkit-inner-spin-button {
+}
+
+/* Remover spinners de campos numéricos */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-  }
-  
-  input[type="number"] {
+}
+
+input[type="number"] {
     -moz-appearance: textfield;
+}
+
+/* Loading container */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 20px;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid var(--button-bg-color);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
   }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.upgrade-message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  padding: 20px;
+}
+
+.upgrade-message {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+.upgrade-message h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.upgrade-message p {
+  color: #666;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.upgrade-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.upgrade-button:hover {
+  background-color: #45a049;
+}
