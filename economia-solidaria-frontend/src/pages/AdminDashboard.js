@@ -495,7 +495,12 @@ const AdminDashboard = () => {
               >
                 {isProcessing === selectedBusiness.id ? "Negando..." : "Negar"}
               </button>
-              <button onClick={() => setSelectedBusiness(null)}>Fechar</button>
+              <button
+                className="close"
+                onClick={() => setSelectedBusiness(null)}
+              >
+                Fechar
+              </button>
             </div>
           </div>
         )}
