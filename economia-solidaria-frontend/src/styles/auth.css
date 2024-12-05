@@ -120,6 +120,16 @@ form button:hover {
   text-align: center;
 }
 
+.info-message {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
 @media (max-width: 768px) {
   .auth-container {
     padding: 20px;
