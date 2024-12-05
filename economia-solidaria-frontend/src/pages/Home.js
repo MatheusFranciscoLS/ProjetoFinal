@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Link } from 'react-router-dom';
-import '../styles/Home.css';
+import '../styles/home.css';
 
 const Home = () => {
   const [businesses, setBusinesses] = useState([]);

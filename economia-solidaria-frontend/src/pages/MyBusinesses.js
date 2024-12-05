@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
-import "../styles/MyBusinesses.css";
+import "../styles/mybusinesses.css";
 
 const SkeletonCard = () => (
   <div className="business-card skeleton">
