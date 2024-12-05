@@ -26,8 +26,7 @@ const LojaDetails = () => {
           const lojaData = docSnap.data();
           const { comprovante, ...lojaSemComprovante } = lojaData;
           setLoja(lojaSemComprovante);
-          
-          // Verifica se o usuário atual é o dono da loja
+
           const currentUser = auth.currentUser;
           if (currentUser) {
             setIsOwner(currentUser.uid === lojaData.userId);
@@ -62,6 +61,10 @@ const LojaDetails = () => {
     window.open(mapsUrl, '_blank');
   };
 
+  const handleImageError = (event) => {
+    event.target.src = "/path/to/placeholder.jpg"; // Substitua pelo caminho de sua imagem de fallback
+  };
+
   if (loading) {
     return (
       <div className="loja-details-overlay">
@@ -84,27 +87,39 @@ const LojaDetails = () => {
       {/* Carrossel de Imagens */}
       <div className="carrossel">
         {loja.imagens && loja.imagens.length > 0 ? (
-          <>
-            {loja.plano !== 'gratuito' && loja.imagens.length > 1 && (
-              <button className="carrossel-btn prev-btn" onClick={handlePrevImage}>
-                &#10094;
-              </button>
-            )}
-
+          loja.plano === 'gratuito' ? (
             <div className="carrossel-image-container">
               <img
-                src={loja.imagens[currentImageIndex]}
-                alt={`Imagem ${currentImageIndex + 1} da loja ${loja.nome}`}
+                src={loja.imagens[0]}
+                alt={`Imagem 1 da loja ${loja.nome}`}
                 className="carrossel-image"
+                onError={handleImageError}
               />
             </div>
+          ) : (
+            <>
+              {loja.imagens.length > 1 && (
+                <button className="carrossel-btn prev-btn" onClick={handlePrevImage}>
+                  &#10094;
+                </button>
+              )}
 
-            {loja.plano !== 'gratuito' && loja.imagens.length > 1 && (
-              <button className="carrossel-btn next-btn" onClick={handleNextImage}>
-                &#10095;
-              </button>
-            )}
-          </>
+              <div className="carrossel-image-container">
+                <img
+                  src={loja.imagens[currentImageIndex]}
+                  alt={`Imagem ${currentImageIndex + 1} da loja ${loja.nome}`}
+                  className="carrossel-image"
+                  onError={handleImageError}
+                />
+              </div>
+
+              {loja.imagens.length > 1 && (
+                <button className="carrossel-btn next-btn" onClick={handleNextImage}>
+                  &#10095;
+                </button>
+              )}
+            </>
+          )
         ) : (
           <div className="loja-img-placeholder">
             <span>Sem imagem disponível</span>
@@ -112,20 +127,23 @@ const LojaDetails = () => {
         )}
       </div>
 
+      {/* Debug logging */}
+      {console.log('Plano da loja:', loja?.plano)}
+      {console.log('Imagens da loja:', loja?.imagens)}
+      {console.log('Índice da imagem atual:', currentImageIndex)}
+
       {/* Detalhes da Loja */}
       <p>
         <strong>Descrição:</strong> {loja.descricao}
       </p>
 
-      {/* Redes Sociais - Mostrar apenas para planos pagos e quando houver redes sociais cadastradas */}
+      {/* Redes Sociais */}
       {loja.plano !== 'Gratuito' && loja.redesSociais && (
         Object.values(loja.redesSociais).some(value => value) ? (
           <div className="social-media-section">
-            <div className="social-media-header">
-              <h3>Redes Sociais</h3>
-            </div>
+            <h3>Redes Sociais</h3>
             <div className="social-links">
-              {loja.redesSociais?.instagram && (
+              {loja.redesSociais.instagram && (
                 <a
                   href={loja.redesSociais.instagram}
                   target="_blank"
@@ -134,7 +152,7 @@ const LojaDetails = () => {
                   <FaInstagram size={30} />
                 </a>
               )}
-              {loja.redesSociais?.facebook && (
+              {loja.redesSociais.facebook && (
                 <a
                   href={loja.redesSociais.facebook}
                   target="_blank"
@@ -143,15 +161,9 @@ const LojaDetails = () => {
                   <FaFacebook size={30} />
                 </a>
               )}
-              {loja.redesSociais?.whatsapp && (
+              {loja.redesSociais.whatsapp && (
                 <a
-                  href={
-                    loja.redesSociais.whatsapp.startsWith("https://wa.me/")
-                      ? loja.redesSociais.whatsapp
-                      : `https://api.whatsapp.com/send/?phone=${loja.redesSociais.whatsapp
-                          .replace(/\D/g, "")
-                          .replace(/^1/, "")}`
-                  }
+                  href={`https://wa.me/${loja.redesSociais.whatsapp.replace(/\D/g, "")}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -165,13 +177,14 @@ const LojaDetails = () => {
       {loja.plano === 'Gratuito' && isOwner && (
         <div className="upgrade-message">
           <FaCrown className="crown-icon" />
-          <p>Atualize para um plano mais avançado e mostre suas redes sociais para pessoas interessadas no seu negócio!</p>
+          <p>Atualize para um plano mais avançado e mostre suas redes sociais!</p>
           <Link to="/plans-details" className="upgrade-button">
             Ver Planos
           </Link>
         </div>
       )}
 
+      {/* Endereço */}
       <div className="endereco-container">
         <strong>Endereço:</strong>
         <div
@@ -200,24 +213,21 @@ const LojaDetails = () => {
           <>
             <p>
               <strong>Segunda a Sexta:</strong>{" "}
-              {loja.horarioDeFuncionamento.segundaAsexta?.open && 
-               loja.horarioDeFuncionamento.segundaAsexta?.close ? (
-                `${loja.horarioDeFuncionamento.segundaAsexta.open} às ${loja.horarioDeFuncionamento.segundaAsexta.close}`
-              ) : "Não disponível"}
+              {loja.horarioDeFuncionamento.segundaAsexta?.open ? 
+              `${loja.horarioDeFuncionamento.segundaAsexta.open} às ${loja.horarioDeFuncionamento.segundaAsexta.close}` 
+              : "Fechado"}
             </p>
             <p>
               <strong>Sábado:</strong>{" "}
-              {loja.horarioDeFuncionamento.sabado?.open && 
-               loja.horarioDeFuncionamento.sabado?.close ? (
-                `${loja.horarioDeFuncionamento.sabado.open} às ${loja.horarioDeFuncionamento.sabado.close}`
-              ) : "Não disponível"}
+              {loja.horarioDeFuncionamento.sabado?.open ? 
+              `${loja.horarioDeFuncionamento.sabado.open} às ${loja.horarioDeFuncionamento.sabado.close}` 
+              : "Fechado"}
             </p>
             <p>
               <strong>Domingo:</strong>{" "}
-              {loja.horarioDeFuncionamento.domingo?.open && 
-               loja.horarioDeFuncionamento.domingo?.close ? (
-                `${loja.horarioDeFuncionamento.domingo.open} às ${loja.horarioDeFuncionamento.domingo.close}`
-              ) : "Não disponível"}
+              {loja.horarioDeFuncionamento.domingo?.open ? 
+              `${loja.horarioDeFuncionamento.domingo.open} às ${loja.horarioDeFuncionamento.domingo.close}` 
+              : "Fechado"}
             </p>
           </>
         ) : (
@@ -225,10 +235,7 @@ const LojaDetails = () => {
         )}
       </div>
 
-      {/* Espaço para avaliações */}
-      <div style={{ marginTop: "50px" }}></div>
-
-      {/* Seção de avaliação */}
+      {/* Avaliação */}
       <div className="avaliacao-section">
         <Avaliacao lojaId={id} />
       </div>

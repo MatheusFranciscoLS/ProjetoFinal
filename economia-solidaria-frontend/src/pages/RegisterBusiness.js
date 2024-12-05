@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import InputMask from "react-input-mask";
@@ -64,10 +64,56 @@ const RegisterBusiness = () => {
   });
   const [loadingCep, setLoadingCep] = useState(false);
   const [errorCep, setErrorCep] = useState("");
+  const [isEligible, setIsEligible] = useState(true);
 
   const navigate = useNavigate();
   const auth = getAuth();
   const user = auth.currentUser;
+
+  useEffect(() => {
+    const checkUserEligibility = async () => {
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+
+          // Verifica se o usuário já possui um negócio
+          const businessQuery = query(collection(db, "businesses"), where("userId", "==", user.uid));
+          const businessSnapshot = await getDocs(businessQuery);
+
+          if (!userData.plano || userData.plano !== "premium" || !businessSnapshot.empty) {
+            // Redireciona ou exibe uma mensagem de erro se o usuário não for elegível
+            setError("Para acessar o registro de negócios, é necessário ter um plano premium. Por favor, atualize seu plano.");
+            setIsEligible(false);
+          } else {
+            setIsEligible(true);
+          }
+        } else {
+          setError("Erro ao verificar o plano do usuário.");
+          setIsEligible(false);
+        }
+      } catch (error) {
+        console.error("Erro ao verificar elegibilidade do usuário:", error);
+        setError("Erro ao verificar elegibilidade. Tente novamente.");
+        setIsEligible(false);
+      }
+    };
+
+    checkUserEligibility();
+  }, [user, navigate]);
+
+  if (!isEligible) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div style={{ textAlign: 'center', padding: '20px', border: '1px solid #ccc', borderRadius: '10px', backgroundColor: '#f9f9f9' }}>
+          <h2>Acesso Restrito</h2>
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   // Form field update handlers
   const updateFormField = (section, field, value) => {
@@ -273,7 +319,7 @@ const RegisterBusiness = () => {
         <section className="form-section">
           <h2>Informações de Contato</h2>
           <div className="form-group">
-            <label htmlFor="telefone">Telefone Fixo</label>
+            <label htmlFor="telefone">Telefone Fixo*</label>
             <InputMask
               mask="(99) 9999-9999"
               id="telefone"
