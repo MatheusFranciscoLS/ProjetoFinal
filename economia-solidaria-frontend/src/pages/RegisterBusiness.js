@@ -271,7 +271,9 @@ const RegisterBusiness = () => {
               type="text"
               id="businessName"
               value={formData.business.name}
-              onChange={(e) => updateFormField("business", "name", e.target.value)}
+              onChange={(e) =>
+                updateFormField("business", "name", e.target.value)
+              }
               placeholder="Nome do seu negócio"
               required
             />
@@ -283,7 +285,9 @@ const RegisterBusiness = () => {
               mask="99.999.999/9999-99"
               id="businessCNPJ"
               value={formData.business.cnpj}
-              onChange={(e) => updateFormField("business", "cnpj", e.target.value)}
+              onChange={(e) =>
+                updateFormField("business", "cnpj", e.target.value)
+              }
               placeholder="00.000.000/0000-00"
               required
             />
@@ -331,7 +335,9 @@ const RegisterBusiness = () => {
               type="email"
               id="businessEmail"
               value={formData.business.email}
-              onChange={(e) => updateFormField("business", "email", e.target.value)}
+              onChange={(e) =>
+                updateFormField("business", "email", e.target.value)
+              }
               placeholder="E-mail para contato"
               required
             />
@@ -347,7 +353,9 @@ const RegisterBusiness = () => {
               mask="(99) 9999-9999"
               id="telefone"
               value={formData.contact.telefone}
-              onChange={(e) => updateFormField("contact", "telefone", e.target.value)}
+              onChange={(e) =>
+                updateFormField("contact", "telefone", e.target.value)
+              }
               placeholder="(00) 0000-0000"
             />
           </div>
@@ -358,7 +366,9 @@ const RegisterBusiness = () => {
               mask="(99) 99999-9999"
               id="cellphone"
               value={formData.contact.cellphone}
-              onChange={(e) => updateFormField("contact", "cellphone", e.target.value)}
+              onChange={(e) =>
+                updateFormField("contact", "cellphone", e.target.value)
+              }
               placeholder="(00) 00000-0000"
             />
           </div>
@@ -396,7 +406,9 @@ const RegisterBusiness = () => {
               type="text"
               id="logradouro"
               value={formData.address.logradouro}
-              onChange={(e) => updateFormField("address", "logradouro", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "logradouro", e.target.value)
+              }
               placeholder="Logradouro"
               required
             />
@@ -408,7 +420,9 @@ const RegisterBusiness = () => {
               type="text"
               id="bairro"
               value={formData.address.bairro}
-              onChange={(e) => updateFormField("address", "bairro", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "bairro", e.target.value)
+              }
               placeholder="Bairro"
               required
             />
@@ -420,7 +434,9 @@ const RegisterBusiness = () => {
               type="text"
               id="cidade"
               value={formData.address.cidade}
-              onChange={(e) => updateFormField("address", "cidade", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "cidade", e.target.value)
+              }
               placeholder="Cidade"
               required
             />
@@ -445,7 +461,9 @@ const RegisterBusiness = () => {
               type="text"
               id="numero"
               value={formData.address.numero}
-              onChange={(e) => updateFormField("address", "numero", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "numero", e.target.value)
+              }
               placeholder="Número"
               required
             />
@@ -457,7 +475,9 @@ const RegisterBusiness = () => {
               type="text"
               id="complemento"
               value={formData.address.complemento}
-              onChange={(e) => updateFormField("address", "complemento", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "complemento", e.target.value)
+              }
               placeholder="Complemento"
             />
           </div>
@@ -498,7 +518,7 @@ const RegisterBusiness = () => {
           <div className="form-group">
             <label>Sábado</label>
             <div className="time-inputs">
-              <label>
+              <div className="checkbox-with-label">
                 <input
                   type="checkbox"
                   checked={!formData.hours.saturday.closed}
@@ -509,8 +529,8 @@ const RegisterBusiness = () => {
                     })
                   }
                 />
-                Aberto aos sábados
-              </label>
+                <label>Aberto aos sábados</label>
+              </div>
               {!formData.hours.saturday.closed && (
                 <>
                   <input
@@ -542,7 +562,7 @@ const RegisterBusiness = () => {
           <div className="form-group">
             <label>Domingo</label>
             <div className="time-inputs">
-              <label>
+              <div className="checkbox-with-label">
                 <input
                   type="checkbox"
                   checked={!formData.hours.sunday.closed}
@@ -553,8 +573,8 @@ const RegisterBusiness = () => {
                     })
                   }
                 />
-                Aberto aos domingos
-              </label>
+                <label>Aberto aos domingos</label>
+              </div>
               {!formData.hours.sunday.closed && (
                 <>
                   <input
@@ -586,7 +606,7 @@ const RegisterBusiness = () => {
           <div className="form-group">
             <label>Intervalo para Almoço</label>
             <div className="time-inputs">
-              <label>
+              <div className="checkbox-with-label">
                 <input
                   type="checkbox"
                   checked={formData.hours.lunch.enabled}
@@ -597,8 +617,8 @@ const RegisterBusiness = () => {
                     })
                   }
                 />
-                Fecha para o almoço
-              </label>
+                <label>Fecha para o almoço</label>
+              </div>
               {formData.hours.lunch.enabled && (
                 <>
                   <input
@@ -650,7 +670,9 @@ const RegisterBusiness = () => {
                   name="instagram"
                   placeholder="Link do Instagram"
                   value={formData.social.instagram}
-                  onChange={(e) => handleSocialLinkChange("instagram", e.target.value)}
+                  onChange={(e) =>
+                    handleSocialLinkChange("instagram", e.target.value)
+                  }
                   className="social-input"
                 />
               )}
@@ -674,7 +696,9 @@ const RegisterBusiness = () => {
                   name="facebook"
                   placeholder="Link do Facebook"
                   value={formData.social.facebook}
-                  onChange={(e) => handleSocialLinkChange("facebook", e.target.value)}
+                  onChange={(e) =>
+                    handleSocialLinkChange("facebook", e.target.value)
+                  }
                   className="social-input"
                 />
               )}
@@ -698,7 +722,9 @@ const RegisterBusiness = () => {
                   name="whatsapp"
                   placeholder="Link do WhatsApp (https://api.whatsapp/ ou https://wa.me/)"
                   value={formData.social.whatsapp}
-                  onChange={(e) => handleSocialLinkChange("whatsapp", e.target.value)}
+                  onChange={(e) =>
+                    handleSocialLinkChange("whatsapp", e.target.value)
+                  }
                   className="social-input"
                 />
               )}
@@ -754,7 +780,9 @@ const RegisterBusiness = () => {
               type="file"
               id="cnDoc"
               accept="application/pdf"
-              onChange={(e) => updateFormField("media", "cnDoc", e.target.files[0])}
+              onChange={(e) =>
+                updateFormField("media", "cnDoc", e.target.files[0])
+              }
               required
             />
           </div>
@@ -782,11 +810,7 @@ const RegisterBusiness = () => {
 
         {/* Submit Button */}
         <div className="form-actions">
-          <button
-            type="submit"
-            className="submit-button"
-            disabled={loading}
-          >
+          <button type="submit" className="submit-button" disabled={loading}>
             {loading ? "Cadastrando..." : "Cadastrar Negócio"}
           </button>
         </div>
