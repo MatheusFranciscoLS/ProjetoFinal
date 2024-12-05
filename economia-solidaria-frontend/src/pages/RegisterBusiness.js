@@ -491,9 +491,10 @@ const RegisterBusiness = () => {
           </div>
 
           <div className="form-group">
-            <label>Sábado</label>
+          
             <div className="time-inputs">
               <label>
+                Aberto aos sábados
                 <input
                   type="checkbox"
                   checked={!formData.hours.saturday.closed}
@@ -504,7 +505,6 @@ const RegisterBusiness = () => {
                     })
                   }
                 />
-                Aberto aos sábados
               </label>
               {formData.hours.saturday.closed ? null : (
                 <div className="saturday-hours">
@@ -535,9 +535,10 @@ const RegisterBusiness = () => {
           </div>
 
           <div className="form-group">
-            <label>Domingo</label>
+          
             <div className="time-inputs">
               <label>
+                Aberto aos domingos
                 <input
                   type="checkbox"
                   checked={!formData.hours.sunday.closed}
@@ -548,7 +549,6 @@ const RegisterBusiness = () => {
                     })
                   }
                 />
-                Aberto aos domingos
               </label>
               {!formData.hours.sunday.closed && (
                 <>
@@ -579,9 +579,10 @@ const RegisterBusiness = () => {
           </div>
 
           <div className="form-group">
-            <label>Intervalo para Almoço</label>
+           
             <div className="time-inputs">
               <label>
+                Fecha para o almoço
                 <input
                   type="checkbox"
                   checked={formData.hours.lunch.enabled}
@@ -592,7 +593,6 @@ const RegisterBusiness = () => {
                     })
                   }
                 />
-                Fecha para o almoço
               </label>
               {formData.hours.lunch.enabled && (
                 <>
