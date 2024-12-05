@@ -50,7 +50,7 @@ const Register = () => {
         phone: phone.replace(/[^\d]/g, ""), // Armazena apenas os números no banco
         address: address || "", // Caso o endereço não seja informado, será salvo como string vazia
         tipo: "comum", // Inicialmente, o tipo será "comum"
-        plano: "negocios_pendentes", // Adicionando o plano padrão como "negocios_pendentes"
+        plano: "Gratuito", // Definindo o plano padrão como "Gratuito"
         createdAt: serverTimestamp(),
       });
 

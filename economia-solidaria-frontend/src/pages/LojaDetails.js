@@ -118,7 +118,7 @@ const LojaDetails = () => {
       </p>
 
       {/* Redes Sociais - Mostrar apenas para planos pagos e quando houver redes sociais cadastradas */}
-      {loja.plano !== 'gratuito' && loja.redesSociais && (
+      {loja.plano !== 'Gratuito' && loja.redesSociais && (
         Object.values(loja.redesSociais).some(value => value) ? (
           <div className="social-media-section">
             <div className="social-media-header">
@@ -162,7 +162,7 @@ const LojaDetails = () => {
           </div>
         ) : null
       )}
-      {loja.plano === 'gratuito' && isOwner && (
+      {loja.plano === 'Gratuito' && isOwner && (
         <div className="upgrade-message">
           <FaCrown className="crown-icon" />
           <p>Atualize para um plano mais avançado e mostre suas redes sociais para pessoas interessadas no seu negócio!</p>
