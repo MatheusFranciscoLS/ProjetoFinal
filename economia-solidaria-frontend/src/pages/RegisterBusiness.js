@@ -65,6 +65,7 @@ const RegisterBusiness = () => {
   const [loadingCep, setLoadingCep] = useState(false);
   const [errorCep, setErrorCep] = useState("");
   const [isEligible, setIsEligible] = useState(true);
+  const [loadingEligibility, setLoadingEligibility] = useState(true);
 
   const navigate = useNavigate();
   const auth = getAuth();
@@ -72,19 +73,28 @@ const RegisterBusiness = () => {
 
   useEffect(() => {
     const checkUserEligibility = async () => {
+      setLoadingEligibility(true);
       try {
+        console.log("Fetching user document...");
         const userDocRef = doc(db, "users", user.uid);
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
+          console.log("User document found.");
           const userData = userDocSnap.data();
 
-          // Verifica se o usuário já possui um negócio
+          console.log("User Data:", userData);
+          console.log("Checking business count...");
           const businessQuery = query(collection(db, "businesses"), where("userId", "==", user.uid));
           const businessSnapshot = await getDocs(businessQuery);
 
-          if (!userData.plano || userData.plano !== "premium" || !businessSnapshot.empty) {
-            // Redireciona ou exibe uma mensagem de erro se o usuário não for elegível
+          console.log("Business Snapshot Empty:", businessSnapshot.empty);
+
+          if (!userData.plano || userData.plano !== "Premium" || !businessSnapshot.empty) {
+            console.log("User is not eligible:", {
+              plano: userData.plano,
+              businessCount: businessSnapshot.size
+            });
             setError("Para acessar o registro de negócios, é necessário ter um plano premium. Por favor, atualize seu plano.");
             setIsEligible(false);
           } else {
@@ -98,16 +108,29 @@ const RegisterBusiness = () => {
         console.error("Erro ao verificar elegibilidade do usuário:", error);
         setError("Erro ao verificar elegibilidade. Tente novamente.");
         setIsEligible(false);
+      } finally {
+        setLoadingEligibility(false);
       }
     };
 
     checkUserEligibility();
   }, [user, navigate]);
 
+  if (loadingEligibility) {
+    return (
+      <div className="skeleton-loader">
+        <div className="skeleton-title"></div>
+        <div className="skeleton-text"></div>
+        <div className="skeleton-text"></div>
+        <div className="skeleton-button"></div>
+      </div>
+    );
+  }
+
   if (!isEligible) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <div style={{ textAlign: 'center', padding: '20px', border: '1px solid #ccc', borderRadius: '10px', backgroundColor: '#f9f9f9' }}>
+      <div className="error-message-container">
+        <div className="error-message">
           <h2>Acesso Restrito</h2>
           <p>{error}</p>
         </div>

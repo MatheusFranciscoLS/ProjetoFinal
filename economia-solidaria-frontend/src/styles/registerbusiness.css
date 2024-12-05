@@ -260,6 +260,36 @@
   margin-top: 1rem;
 }
 
+/* Container da mensagem de erro */
+.error-message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f9f9f9;
+}
+
+/* Estilo da mensagem de erro */
+.error-message {
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Título da mensagem de erro */
+.error-message h2 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Conteúdo da mensagem de erro */
+.error-message p {
+  color: #666;
+}
+
 /* Carregamento do CEP */
 .loading-cep {
   color: #3498db;
@@ -272,6 +302,39 @@
   color: #e74c3c;
   font-size: 0.9rem;
   margin-left: 0.5rem;
+}
+
+/* Skeleton loader styles */
+.skeleton-loader {
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.skeleton-title {
+  width: 60%;
+  height: 20px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+}
+
+.skeleton-text {
+  width: 80%;
+  height: 15px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+}
+
+.skeleton-button {
+  width: 40%;
+  height: 30px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
 }
 
 /* Responsividade */
