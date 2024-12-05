@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../styles/terms.css"; // Se você tiver um arquivo de estilo para essa página
+import "../styles/terms.css"; // Importa o arquivo de estilo
 
 const Terms = () => {
   return (
-    <div>
+    <div className="terms-container">
       <header className="terms-header">
         <h1>Termos e Condições</h1>
         <p>
@@ -49,7 +49,7 @@ const Terms = () => {
         </p>
       </section>
 
-      <div>
+      <div className="terms-footer">
         <Link to="/" className="back-button">Voltar para a Página Inicial</Link>
       </div>
     </div>

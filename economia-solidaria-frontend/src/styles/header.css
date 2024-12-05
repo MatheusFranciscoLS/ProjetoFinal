@@ -10,18 +10,26 @@
   position: relative;
 }
 
+/* Logo */
 .logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #fff;
   text-decoration: none;
+  color: white;
 }
 
+.logo-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Navegação */
 .nav {
   display: flex;
   align-items: center;
 }
 
+/* Links de navegação */
 .nav-link {
   margin-right: 20px;
   text-decoration: none;
@@ -31,59 +39,54 @@
 }
 
 .nav-link:hover {
-  color: #ff9800; /* Cor do hover nos links */
+  color: #ff9800; /* Cor ao passar o mouse */
 }
 
+/* Informações do usuário */
 .user-info {
   display: flex;
   align-items: center;
 }
 
+/* Nome do usuário */
 .user-name {
   margin-right: 20px;
   font-size: 16px;
 }
 
+/* Ações do usuário */
 .user-actions {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 10px; /* Espaço entre os botões e links */
+  gap: 10px; /* Espaço entre os ícones */
 }
 
-.logout-button {
-  background-color: #f44336; /* Cor do botão de logout */
-  color: white;
+/* Ícones de perfil e logout */
+.icon-link,
+.icon-button {
+  background: none;
   border: none;
-  padding: 4px 10px;
+  color: white;
   cursor: pointer;
-  font-size: 16px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-  margin-bottom: 15px;
+  padding: 5px;
+  font-size: 18px;
+  transition: transform 0.3s, color 0.3s ease;
 }
 
-.logout-button:hover {
-  background-color: #e53935; /* Cor do botão ao passar o mouse */
+.icon-link:hover,
+.icon-button:hover {
+  color: #ff9800;
+  transform: scale(1.2); /* Aumenta o tamanho ao passar o mouse */
 }
 
-/* Estilo para o link de perfil */
-.nav-link {
-  font-size: 14px;
-  background-color: transparent;
-  color: white; /* Cor do link de perfil */
-  padding: 5px 10px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+/* Botão de logout - estilização adicional (opcional) */
+.icon-button {
+  font-size: 18px;
 }
 
-.nav-link:hover {
-  background-color: #e3f2fd; /* Cor do link ao passar o mouse */
-}
-
-/* Menu Hambúrguer */
+/* Menu hambúrguer */
 .hamburger-menu {
-  display: none; /* Escondido em telas maiores */
+  display: none; /* Esconde em telas maiores */
   cursor: pointer;
   flex-direction: column;
   justify-content: space-between;
@@ -110,6 +113,11 @@
   transform: rotate(-45deg) translateY(-7px);
 }
 
+/* Menu aberto */
+.nav.open {
+  display: flex; /* Exibe o menu */
+}
+
 /* Responsividade */
 
 /* Para telas menores que 1024px (tablets e dispositivos menores) */
@@ -130,9 +138,9 @@
     font-size: 14px;
   }
 
-  .logout-button {
-    font-size: 14px;
-    padding: 4px 8px;
+  .icon-link,
+  .icon-button {
+    font-size: 16px;
   }
 }
 
@@ -145,7 +153,7 @@
   }
 
   .nav {
-    display: none; /* Esconde o menu */
+    display: none; /* Esconde o menu por padrão */
     flex-direction: column;
     align-items: flex-start;
     margin-top: 10px;
@@ -179,11 +187,9 @@
     align-items: flex-start;
   }
 
-  .logout-button {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    text-align: center;
+  .icon-link,
+  .icon-button {
+    font-size: 16px;
   }
 
   /* Exibe o botão de menu hambúrguer em dispositivos móveis */
@@ -210,8 +216,8 @@
     font-size: 12px;
   }
 
-  .logout-button {
-    font-size: 12px;
-    padding: 8px;
+  .icon-link,
+  .icon-button {
+    font-size: 14px;
   }
 }

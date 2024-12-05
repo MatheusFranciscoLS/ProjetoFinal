@@ -1,236 +1,315 @@
-/* Container principal */
+/* Estilo geral da página */
+.register-business-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  font-family: 'Roboto', sans-serif;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+/* Container do formulário */
 .register-business-container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Título do formulário */
+.register-title {
+  color: #2c3e50;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+/* Subtítulo do formulário */
+.register-subtitle {
+  color: #7f8c8d;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Formulário */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Seção do formulário */
+.form-section {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+/* Título da seção do formulário */
+.form-section h2 {
+  color: #2c3e50;
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #3498db;
+}
+
+/* Grupo de campos do formulário */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+/* Label do campo do formulário */
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #34495e;
+  font-weight: 500;
+}
+
+/* Campo do formulário */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Campo de texto do formulário */
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Campo do formulário em foco */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  outline: none;
+}
+
+/* Campos de horário */
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Campo de horário */
+.time-inputs input[type="time"] {
+  width: auto;
+}
+
+/* Texto de separação dos campos de horário */
+.time-inputs span {
+  color: #7f8c8d;
+}
+
+/* Ícones de mídia social */
+.social-icons {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Container do ícone de mídia social */
+.social-icon-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Ícone de mídia social */
+.social-icon {
+  font-size: 1.5rem;
+  color: #7f8c8d;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+/* Ícone de mídia social em foco */
+.social-icon:hover {
+  color: #3498db;
+}
+
+/* Ícone de mídia social ativo */
+.social-icon.active {
+  color: #3498db;
+}
+
+/* Campo de entrada de texto para mídia social */
+.social-input {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* Previsão de imagem */
+.image-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Container da imagem */
+.image-wrapper {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+
+/* Imagem */
+.image-item {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Botão de remoção da imagem */
+.remove-image {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e74c3c;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+/* Botão de remoção da imagem em foco */
+.remove-image:hover {
+  background: #fff;
+  color: #c0392b;
+}
+
+/* Ações do formulário */
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+/* Botão de envio do formulário */
+.submit-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* Botão de envio do formulário em foco */
+.submit-button:hover {
+  background-color: #2980b9;
+}
+
+/* Botão de envio do formulário desabilitado */
+.submit-button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Mensagem de erro */
+.error-message {
+  background-color: #fff3f3;
+  color: #e74c3c;
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 4px solid #e74c3c;
+  margin-top: 1rem;
+}
+
+/* Carregamento do CEP */
+.loading-cep {
+  color: #3498db;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+}
+
+/* Erro do CEP */
+.error-cep {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .register-business-container {
+    margin: 1rem;
+    padding: 1rem;
   }
-  
-  .register-business-form {
-    width: 100%;
-  }
-  
-  /* Seções do formulário */
+
   .form-section {
-    margin-bottom: 2rem;
-    padding: 2rem;
-    background: #f8f9fa;
-    border-radius: 8px;
+    padding: 1rem;
   }
-  
-  .form-section h3 {
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-    font-size: 1.4rem;
-    border-bottom: 2px solid #e9ecef;
-    padding-bottom: 0.5rem;
-  }
-  
-  /* Grid para campos em duas colunas */
-  .form-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Grupos de formulário */
-  .form-group {
-    margin-bottom: 1.2rem;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #495057;
-    font-weight: 500;
-    font-size: 0.95rem;
-  }
-  
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: all 0.2s ease-in-out;
-    background-color: #fff;
-    height: 42px;
-  }
-  
-  .form-group textarea {
-    height: auto;
-    min-height: 100px;
-    resize: vertical;
-  }
-  
-  /* Campos de endereço */
-  .address-section {
-    display: flex;
+
+  .time-inputs {
     flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .cep-row {
-    max-width: 200px;
-  }
-  
-  .address-fields {
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    gap: 2rem;
-  }
-  
-  /* Grupo do logradouro e número */
-  .logradouro-group {
-    display: flex;
-    gap: 1rem;
     align-items: flex-start;
   }
-  
-  .logradouro-group .form-group:first-child {
-    flex: 1;
-  }
-  
-  .logradouro-group .form-group:last-child {
-    width: 80px;
-    flex-shrink: 0;
-  }
-  
-  .logradouro-group .form-group:last-child input {
-    width: 80px !important;
-    text-align: center;
-  }
-  
-  /* Campos da segunda linha do endereço */
-  .address-fields-2 {
-    display: grid;
-    grid-template-columns: 1.5fr 1.5fr 80px;
-    gap: 2rem;
-  }
-  
-  /* Estados dos campos */
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
-    border-color: #4a90e2;
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
-    outline: none;
-  }
-  
-  .form-group input:disabled {
-    background-color: #f8f9fa;
-    cursor: not-allowed;
-  }
-  
-  /* Mensagens de feedback */
-  .loading-cep {
-    color: #4a90e2;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-  }
-  
-  .error-message {
-    color: #dc3545;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    background-color: rgba(220, 53, 69, 0.1);
-    border-radius: 4px;
-  }
-  
-  /* Botões */
-  .form-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-  
-  .form-buttons button {
-    padding: 0.8rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 120px;
-  }
-  
-  button[type="submit"] {
-    background-color: #4a90e2;
-    color: white;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #357abd;
-  }
-  
-  button[type="button"] {
-    background-color: #6c757d;
-    color: white;
-  }
-  
-  button[type="button"]:hover {
-    background-color: #5a6268;
-  }
-  
-  /* Responsividade */
-  @media (max-width: 992px) {
-    .form-row {
-      grid-template-columns: 1fr;
-    }
-    
-    .address-fields {
-      grid-template-columns: 1fr;
-    }
-    
-    .address-fields-2 {
-      grid-template-columns: 1fr 1fr 80px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .register-business-container {
-      margin: 1rem;
-      padding: 1rem;
-    }
-  
-    .form-section {
-      padding: 1rem;
-    }
-  
-    .address-fields-2 {
-      grid-template-columns: 1fr;
-    }
-  
-    .form-buttons {
-      flex-direction: column;
-    }
-  
-    .form-buttons button {
-      width: 100%;
-    }
-  }
-  
-  /* Campos com máscara */
-  input[type="tel"],
-  input[type="email"],
-  input[type="text"] {
+
+  .time-inputs input[type="time"] {
     width: 100%;
   }
-  
-  /* Remover spinners de campos numéricos */
-  input[type="number"]::-webkit-outer-spin-button,
-  input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+
+  .social-icons {
+    flex-wrap: wrap;
+    justify-content: center;
   }
-  
-  input[type="number"] {
-    -moz-appearance: textfield;
-  }
+}
+
+/* Estilo do checkbox */
+input[type="checkbox"] {
+  width: auto;
+  margin-right: 0.5rem;
+}
+
+/* Label do checkbox */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Estilo do input de arquivo */
+input[type="file"] {
+  padding: 0.5rem 0;
+}
+
+/* Instruções de upload */
+.upload-instructions {
+  margin-top: 1rem;
+}
+
+/* Título das instruções de upload */
+.upload-instructions strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #34495e;
+}

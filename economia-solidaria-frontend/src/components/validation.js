@@ -1,4 +1,21 @@
 import { cnpj } from "cpf-cnpj-validator";
+import { db } from "../firebase"; // Certifique-se de que o Firestore está configurado corretamente
+import { collection, query, where, getDocs } from "firebase/firestore";
+
+// Função para verificar se o CNPJ já existe no Firestore
+const checkIfCNPJExists = async (cnpjValue) => {
+  try {
+    const formattedCNPJ = cnpjValue.replace(/[^\d]/g, ""); // Remove caracteres não numéricos
+    const cnpjsRef = collection(db, "businesses"); // Nome da coleção onde os negócios estão armazenados
+    const q = query(cnpjsRef, where("cnpj", "==", formattedCNPJ));
+    const querySnapshot = await getDocs(q);
+
+    return !querySnapshot.empty; // Retorna `true` se encontrar um CNPJ
+  } catch (error) {
+    console.error("Erro ao verificar CNPJ:", error);
+    throw new Error("Erro ao verificar o CNPJ. Tente novamente.");
+  }
+};
 
 // Validação de imagens
 export const validateImageFile = (file) => {
@@ -94,7 +111,7 @@ const validateBusinessHours = (hours) => {
 };
 
 // Validação principal do formulário
-export const validateForm = (formData) => {
+export const validateForm = async (formData) => {
   const errors = {};
 
   // Validação de nome do negócio
@@ -107,9 +124,19 @@ export const validateForm = (formData) => {
   }
 
   // Validação de CNPJ
-  if (!formData.cnpj || !cnpj.isValid(formData.cnpj)) {
+if (!formData.cnpj || !cnpj.isValid(formData.cnpj)) {
     errors.cnpj =
       "O CNPJ informado é inválido. Certifique-se de fornecer um CNPJ válido.";
+  } else {
+    try {
+      const exists = await checkIfCNPJExists(formData.cnpj);
+      if (exists) {
+        errors.cnpj = "O CNPJ informado já está registrado na plataforma.";
+      }
+    } catch (error) {
+      errors.cnpj =
+        "Não foi possível verificar o CNPJ no momento. Tente novamente.";
+    }
   }
 
   // Validação de descrição
