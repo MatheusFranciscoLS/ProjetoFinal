@@ -30,10 +30,12 @@ const App = () => {
       <Routes>
         {/* Rotas públicas */}
         <Route path="/" element={<Home />} />
+        <Route path="/business-question" element={<BusinessQuestion />} />
         <Route path="/home" element={<Home />} />
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/contato" element={<Contato />} />
         <Route path="/avaliacao" element={<Avaliacao />} />
+
         <Route path="/terms" element={<Terms />} />
         <Route path="/lojas" element={<LojasList />} />
         <Route path="/loja/:id" element={<LojaDetails />} />
@@ -41,6 +43,7 @@ const App = () => {
         {/* Rotas de registro e login */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+
 
         {/* Rotas protegidas */}
         <Route path="/register-business" element={

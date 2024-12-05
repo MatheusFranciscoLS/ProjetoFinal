@@ -8,10 +8,7 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState("");
-  const [darkMode, setDarkMode] = useState(() => {
-    // Recupera o tema armazenado no localStorage
-    return localStorage.getItem("theme") === "dark";
-  });
+  const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
 
   // Carrega dados do usuário
@@ -42,15 +39,9 @@ const Profile = () => {
     fetchUserData();
   }, [navigate]);
 
-  const toggleTheme = () => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-    localStorage.setItem("theme", newDarkMode ? "dark" : "light");
-  };
-
   useEffect(() => {
-    document.body.className = darkMode ? "dark-theme" : "light-theme";
-  }, [darkMode]);
+    document.body.className = "light-theme";
+  }, []);
 
   // Função para formatar o número de telefone
   const formatPhone = (phone) => {
@@ -67,14 +58,22 @@ const Profile = () => {
   };
 
   if (!userData) {
-    return <div>Carregando...</div>;
+    return (
+      <div className="profile-container">
+        <div className="skeleton-profile">
+          <div className="skeleton-header"></div>
+          <div className="skeleton-item"></div>
+          <div className="skeleton-item"></div>
+          <div className="skeleton-item"></div>
+          <div className="skeleton-item"></div>
+          <div className="skeleton-item"></div>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="profile-container">
-      <button onClick={toggleTheme} className="theme-toggle-button">
-        {darkMode ? "Modo Claro" : "Modo Escuro"}
-      </button>
       <h2 className="profile-title">Perfil do Usuário</h2>
       {error && <p className="error">{error}</p>}
       <div className="profile-info">

@@ -56,7 +56,6 @@ const RegisterBusiness = () => {
   const [formData, setFormData] = useState(initialFormState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showWeekend, setShowWeekend] = useState(false);
   const [showSocialInputs, setShowSocialInputs] = useState({
     instagram: false,
     facebook: false,
@@ -80,22 +79,18 @@ const RegisterBusiness = () => {
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
-          console.log("User document found.");
           const userData = userDocSnap.data();
 
-          console.log("User Data:", userData);
-          console.log("Checking business count...");
-          const businessQuery = query(collection(db, "businesses"), where("userId", "==", user.uid));
+          console.log("Plano do usuário:", userData.plano);
+
+          // Verifica se o usuário já possui um negócio na coleção 'lojas'
+          const businessQuery = query(collection(db, "lojas"), where("userId", "==", user.uid));
           const businessSnapshot = await getDocs(businessQuery);
 
-          console.log("Business Snapshot Empty:", businessSnapshot.empty);
+          console.log("Usuário já possui negócio:", !businessSnapshot.empty);
 
-          if (!userData.plano || userData.plano !== "Premium" || !businessSnapshot.empty) {
-            console.log("User is not eligible:", {
-              plano: userData.plano,
-              businessCount: businessSnapshot.size
-            });
-            setError("Para acessar o registro de negócios, é necessário ter um plano premium. Por favor, atualize seu plano.");
+          if (!businessSnapshot.empty && userData.plano !== "Premium") {
+            setError("Você já possui um negócio registrado. Atualize para o plano Premium para registrar outro.");
             setIsEligible(false);
           } else {
             setIsEligible(true);
@@ -511,8 +506,8 @@ const RegisterBusiness = () => {
                 />
                 Aberto aos sábados
               </label>
-              {!formData.hours.saturday.closed && (
-                <>
+              {formData.hours.saturday.closed ? null : (
+                <div className="saturday-hours">
                   <input
                     type="time"
                     value={formData.hours.saturday.open}
@@ -534,7 +529,7 @@ const RegisterBusiness = () => {
                       })
                     }
                   />
-                </>
+                </div>
               )}
             </div>
           </div>

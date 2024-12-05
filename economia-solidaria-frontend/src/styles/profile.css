@@ -118,6 +118,26 @@ body {
   color: var(--text-color);
 }
 
+/* Estilo para o botão 'Saiba Mais sobre os Planos' */
+.info-button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 20px;
+  font-size: 1rem;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.info-button:hover {
+  background-color: #0056b3;
+}
+
 [data-theme='dark'] .profile-container {
   background-color: var(--dark-bg);
   color: var(--dark-text);

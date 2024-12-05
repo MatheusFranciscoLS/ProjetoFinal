@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
-import "../styles/MyBusinesses.css";
+import "../styles/mybusinesses.css";
 
 const SkeletonCard = () => (
   <div className="business-card skeleton">
@@ -19,6 +19,7 @@ const MyBusinesses = () => {
   const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userPlan, setUserPlan] = useState(null);
   const navigate = useNavigate();
   const auth = getAuth();
 
@@ -61,8 +62,23 @@ const MyBusinesses = () => {
       }
     };
 
+    const fetchUserPlan = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          setUserPlan(userData.plano);
+        }
+      }
+    };
+
     fetchBusinesses();
+    fetchUserPlan();
   }, [auth]);
+
+  const isPremiumUser = userPlan === "Premium";
 
   const handleEdit = (businessId) => {
     navigate(`/edit-business/${businessId}`);
@@ -97,9 +113,11 @@ const MyBusinesses = () => {
     <div className="my-businesses-container">
       <div className="header-section">
         <h1>Meus Negócios</h1>
-        <Link to="/register-business" className="add-business-button">
-          Adicionar Novo Negócio
-        </Link>
+        {isPremiumUser && (
+          <Link to="/register-business" className="add-business-button">
+            Adicionar Novo Negócio
+          </Link>
+        )}
       </div>
 
       <div className="businesses-grid">
