@@ -382,7 +382,11 @@ const RegisterBusiness = () => {
               placeholder="00000-000"
               required
             />
-            {loadingCep && <span className="loading-cep">Buscando CEP...</span>}
+            {loadingCep && (
+              <div className="skeleton-loader">
+                <div className="skeleton-text"></div>
+              </div>
+            )}
             {errorCep && <span className="error-cep">{errorCep}</span>}
           </div>
 
