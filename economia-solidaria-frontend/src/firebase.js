@@ -56,14 +56,6 @@ try {
   });
 
   // Configuração do emulador em ambiente de desenvolvimento
-  if (process.env.NODE_ENV === 'development') {
-    try {
-      connectAuthEmulator(auth, 'http://localhost:9099');
-      console.log('Conectado ao emulador de autenticação');
-    } catch (err) {
-      console.warn('Erro ao conectar ao emulador:', err);
-    }
-  }
 
 } catch (error) {
   console.error('Erro ao inicializar Firebase:', error);
