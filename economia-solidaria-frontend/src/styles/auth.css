@@ -74,16 +74,6 @@ form button:hover {
   color: var(--error-color);
 }
 
-.info-message {
-  background-color: #e3f2fd;
-  color: #1976d2;
-  padding: 10px;
-  border-radius: 4px;
-  margin-bottom: 20px;
-  text-align: center;
-  font-size: 14px;
-}
-
 /* Responsividade */
 @media (max-width: 768px) {
   .auth-container {
