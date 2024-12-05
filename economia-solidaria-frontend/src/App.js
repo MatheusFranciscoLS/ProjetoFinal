@@ -9,17 +9,19 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Sobre from "./pages/Sobre";
 import Contato from "./pages/Contato";
-import Avaliacao from "./components/Avaliacao"; // Atualizado para components
-import LojasList from "./pages/LojaList"; // Importação de LojasList
-import LojaDetails from "./pages/LojaDetails"; // Importação de LojaDetails
-import EditBusiness from "./pages/EditBusiness"; // Importação de EditBusiness
-import MyBusinesses from "./pages/MyBusinesses"; // Atualização para o novo nome
-import AdminDashboard from "./pages/AdminDashboard"; // Importação de AdminDashboard
-import AdminNegocios from "./pages/AdminNegocios"; // Importação de AdminDashboard
-import Terms from "./pages/Terms"; // Página de Termos e Condições
-import Profile from "./pages/Profile"; // Importação da página de Perfil
+import Avaliacao from "./components/Avaliacao";
+import LojasList from "./pages/LojaList";
+import LojaDetails from "./pages/LojaDetails";
+import EditBusiness from "./pages/EditBusiness";
+import MyBusinesses from "./pages/MyBusinesses";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminNegocios from "./pages/AdminNegocios";
+import Terms from "./pages/Terms";
+import Profile from "./pages/Profile";
 import PlansDetails from "./components/PlansDetails";
-import EnderecoDetails from "./pages/EnderecoDetails"; 
+import EnderecoDetails from "./pages/EnderecoDetails";
+import PrivateRoute from "./components/PrivateRoute";
+import AdminRoute from './components/AdminRoute';
 
 const App = () => {
   return (
@@ -32,28 +34,57 @@ const App = () => {
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/contato" element={<Contato />} />
         <Route path="/avaliacao" element={<Avaliacao />} />
-        <Route path="/terms" element={<Terms />} /> {/* Página de Termos e Condições */}
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/lojas" element={<LojasList />} />
+        <Route path="/loja/:id" element={<LojaDetails />} />
 
         {/* Rotas de registro e login */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
 
-        {/* Rotas de negócios */}
-        <Route path="/business-question" element={<BusinessQuestion />} />
-        <Route path="/register-business" element={<RegisterBusiness />} />
-        <Route path="/lojas" element={<LojasList />} />
-        <Route path="/loja/:id" element={<LojaDetails />} />
-        <Route path="/rota-endereco/:endereco" element={<EnderecoDetails />} />
+        {/* Rotas protegidas */}
+        <Route path="/register-business" element={
+          <PrivateRoute>
+            <RegisterBusiness />
+          </PrivateRoute>
+        } />
+        <Route path="/meus-negocios" element={
+          <PrivateRoute>
+            <MyBusinesses />
+          </PrivateRoute>
+        } />
+        <Route path="/edit-business/:id" element={
+          <PrivateRoute>
+            <EditBusiness />
+          </PrivateRoute>
+        } />
+        <Route path="/rota-endereco/:endereco" element={
+          <PrivateRoute>
+            <EnderecoDetails />
+          </PrivateRoute>
+        } />
+        <Route path="/perfil" element={
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        } />
+        <Route path="/plans-details" element={
+          <PrivateRoute>
+            <PlansDetails />
+          </PrivateRoute>
+        } />
 
         {/* Rotas administrativas */}
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/admin-gerenciamento" element={<AdminNegocios />} />
-        <Route path="/edit-business/:id" element={<EditBusiness />} />
-        <Route path="/meus-negocios" element={<MyBusinesses />} /> {/* Atualizado para MeusNegocios */}
-
-        {/* Rota de perfil */}
-        <Route path="/perfil" element={<Profile />} /> {/* Página de Perfil */}
-        <Route path="/plans-details" element={<PlansDetails />} />
+        <Route path="/admin-dashboard" element={
+          <AdminRoute>
+            <AdminDashboard />
+          </AdminRoute>
+        } />
+        <Route path="/admin-gerenciamento" element={
+          <AdminRoute>
+            <AdminNegocios />
+          </AdminRoute>
+        } />
       </Routes>
       <Footer />
     </Router>
