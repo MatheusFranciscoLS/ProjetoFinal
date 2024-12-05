@@ -4,7 +4,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import InputMask from "react-input-mask";
-import { FaInstagram, FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { FaInstagram, FaFacebook, FaWhatsapp } from "react-icons/fa";
 import { validateForm, validateImageFile } from "../components/validation";
 import "../styles/registerbusiness.css";
 
@@ -18,8 +18,16 @@ const RegisterBusiness = () => {
   const [cellphone, setCellphone] = useState("");
   const [email, setEmail] = useState("");
   const [weekdaysHours, setWeekdaysHours] = useState({ open: "", close: "" });
-  const [saturdayHours, setSaturdayHours] = useState({ open: "", close: "", closed: true });
-  const [sundayHours, setSundayHours] = useState({ open: "", close: "", closed: true });
+  const [saturdayHours, setSaturdayHours] = useState({
+    open: "",
+    close: "",
+    closed: true,
+  });
+  const [sundayHours, setSundayHours] = useState({
+    open: "",
+    close: "",
+    closed: true,
+  });
   const [lunchBreak, setLunchBreak] = useState(false);
   const [lunchStart, setLunchStart] = useState("");
   const [lunchEnd, setLunchEnd] = useState("");
@@ -32,12 +40,12 @@ const RegisterBusiness = () => {
   const [socialLinks, setSocialLinks] = useState({
     instagram: "",
     facebook: "",
-    whatsapp: ""
+    whatsapp: "",
   });
   const [showSocialInputs, setShowSocialInputs] = useState({
     instagram: false,
     facebook: false,
-    whatsapp: false
+    whatsapp: false,
   });
   const [cep, setCep] = useState("");
   const [logradouro, setLogradouro] = useState("");
@@ -55,28 +63,32 @@ const RegisterBusiness = () => {
 
   const handleSocialLinkChange = (e) => {
     const { name, value } = e.target;
-    setSocialLinks(prev => ({
+    setSocialLinks((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    
+
     if (files.length + images.length > 6) {
       setError("Você pode enviar no máximo 6 imagens");
       return;
     }
 
     // Validar cada imagem
-    const invalidImages = files.filter(file => !validateImageFile(file).isValid);
+    const invalidImages = files.filter(
+      (file) => !validateImageFile(file).isValid
+    );
     if (invalidImages.length > 0) {
-      setError("Uma ou mais imagens são inválidas. Use apenas JPG, PNG ou GIF com tamanho máximo de 5MB.");
+      setError(
+        "Uma ou mais imagens são inválidas. Use apenas JPG, PNG ou GIF com tamanho máximo de 5MB."
+      );
       return;
     }
 
-    setImages(prev => [...prev, ...files]);
+    setImages((prev) => [...prev, ...files]);
     setError("");
   };
 
@@ -107,13 +119,13 @@ const RegisterBusiness = () => {
           isClosed: lunchBreak,
           start: lunchStart,
           end: lunchEnd,
-        }
+        },
       },
       imagens: images,
       comprovante: cnDoc,
       userId: user.uid,
       status: "pendente",
-      redesSociais: socialLinks
+      redesSociais: socialLinks,
     };
 
     try {
@@ -144,9 +156,9 @@ const RegisterBusiness = () => {
       if (!validation.isValid) {
         const errorMessages = Object.entries(validation.errors)
           .map(([field, message]) => message)
-          .filter(message => message);
-        
-        setError(errorMessages.join('\n'));
+          .filter((message) => message);
+
+        setError(errorMessages.join("\n"));
         setLoading(false);
         return;
       }
@@ -155,7 +167,7 @@ const RegisterBusiness = () => {
       const firestoreData = {
         ...formData,
         imagens: imageBase64,
-        comprovante: cnDoc?.name
+        comprovante: cnDoc?.name,
       };
 
       // Enviar para o Firestore
@@ -172,17 +184,19 @@ const RegisterBusiness = () => {
   };
 
   const buscarCep = async (cepValue) => {
-    const cepLimpo = cepValue.replace(/\D/g, '');
-    
+    const cepLimpo = cepValue.replace(/\D/g, "");
+
     if (cepLimpo.length !== 8) {
       return;
     }
 
     setLoadingCep(true);
     setErrorCep("");
-    
+
     try {
-      const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+      const response = await fetch(
+        `https://viacep.com.br/ws/${cepLimpo}/json/`
+      );
       const data = await response.json();
 
       if (data.erro) {
@@ -194,11 +208,10 @@ const RegisterBusiness = () => {
       setBairro(data.bairro || "");
       setCidade(data.localidade || "");
       setUf(data.uf || "");
-      
+
       // Atualiza o endereço completo
       const enderecoCompleto = `${data.logradouro}, ${bairro}, ${cidade} - ${uf}`;
       setAddress(enderecoCompleto);
-      
     } catch (error) {
       console.error("Erro ao buscar CEP:", error);
       setErrorCep("Erro ao buscar CEP. Tente novamente.");
@@ -209,7 +222,9 @@ const RegisterBusiness = () => {
 
   const atualizarEnderecoCompleto = () => {
     if (logradouro) {
-      const enderecoCompleto = `${logradouro}${numero ? `, ${numero}` : ""}${complemento ? `, ${complemento}` : ""}, ${bairro}, ${cidade} - ${uf}`;
+      const enderecoCompleto = `${logradouro}${numero ? `, ${numero}` : ""}${
+        complemento ? `, ${complemento}` : ""
+      }, ${bairro}, ${cidade} - ${uf}`;
       setAddress(enderecoCompleto);
     }
   };
@@ -222,7 +237,6 @@ const RegisterBusiness = () => {
     <div className="register-business-page">
       <form className="register-business-form" onSubmit={handleSubmit}>
         <h2>Cadastro de Negócio</h2>
-
         <input
           type="text"
           placeholder="Nome do Negócio"
@@ -230,7 +244,6 @@ const RegisterBusiness = () => {
           onChange={(e) => setBusinessName(e.target.value)}
           required
         />
-
         <InputMask
           mask="99.999.999/9999-99"
           placeholder="CNPJ"
@@ -238,14 +251,12 @@ const RegisterBusiness = () => {
           onChange={(e) => setBusinessCNPJ(e.target.value)}
           required
         />
-
         <textarea
           placeholder="Descreva o seu negócio"
           value={businessDescription}
           onChange={(e) => setBusinessDescription(e.target.value)}
           required
         />
-
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
@@ -262,10 +273,9 @@ const RegisterBusiness = () => {
           <option value="esportes">Esportes e Lazer</option>
           <option value="outro">Outro</option>
         </select>
-
         <div className="endereco-section">
           <h3>Endereço</h3>
-          
+
           {/* CEP */}
           <div className="input-group">
             <InputMask
@@ -273,19 +283,13 @@ const RegisterBusiness = () => {
               value={cep}
               onChange={(e) => {
                 setCep(e.target.value);
-                if (e.target.value.replace(/\D/g, '').length === 8) {
+                if (e.target.value.replace(/\D/g, "").length === 8) {
                   buscarCep(e.target.value);
                 }
               }}
               placeholder="CEP"
             >
-              {(inputProps) => (
-                <input
-                  {...inputProps}
-                  type="text"
-                  required
-                />
-              )}
+              {(inputProps) => <input {...inputProps} type="text" required />}
             </InputMask>
             {loadingCep && <span className="loading-cep">Buscando CEP...</span>}
             {errorCep && <span className="error-cep">{errorCep}</span>}
@@ -346,12 +350,8 @@ const RegisterBusiness = () => {
           />
 
           {/* Campo de endereço completo (hidden) */}
-          <input
-            type="hidden"
-            value={address}
-          />
+          <input type="hidden" value={address} />
         </div>
-
         <InputMask
           mask="(99) 9999-9999"
           placeholder="Telefone Fixo"
@@ -359,14 +359,12 @@ const RegisterBusiness = () => {
           onChange={(e) => setTelefone(e.target.value)}
           required
         />
-
         <InputMask
           mask="(99) 99999-9999"
           placeholder="Celular (Opcional)"
           value={cellphone}
           onChange={(e) => setCellphone(e.target.value)}
         />
-
         <input
           type="email"
           placeholder="E-mail para Contato"
@@ -374,7 +372,6 @@ const RegisterBusiness = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-
         <h3>Redes Sociais</h3>
         <div className="social-icons">
           <div className="social-icon-wrapper">
@@ -449,7 +446,6 @@ const RegisterBusiness = () => {
             )}
           </div>
         </div>
-
         {/* Horário de funcionamento de segunda a sexta */}
         <div className="hours-section">
           <h3>Horário de Funcionamento (Segunda a Sexta)</h3>
@@ -473,7 +469,6 @@ const RegisterBusiness = () => {
             />
           </div>
         </div>
-
         <div className="lunch-break-toggle">
           <label>
             <input
@@ -484,7 +479,6 @@ const RegisterBusiness = () => {
             Fecha para o almoço?
           </label>
         </div>
-
         {lunchBreak && (
           <div className="lunch-break-hours">
             <label>
@@ -503,7 +497,6 @@ const RegisterBusiness = () => {
             </label>
           </div>
         )}
-
         <div className="weekend-toggle">
           <label>
             <input
@@ -514,7 +507,6 @@ const RegisterBusiness = () => {
             Funciona aos finais de semana?
           </label>
         </div>
-
         {showWeekend && (
           <>
             {/* Horário de funcionamento de sábado */}
@@ -605,7 +597,6 @@ const RegisterBusiness = () => {
             </div>
           </>
         )}
-
         <div className="upload-instructions">
           <label htmlFor="businessImages">
             <strong>
@@ -642,7 +633,6 @@ const RegisterBusiness = () => {
             </div>
           )}
         </div>
-
         <div className="upload-instructions">
           <label htmlFor="cnDoc">
             <strong>Comprovante do Simples Nacional</strong>
@@ -655,7 +645,6 @@ const RegisterBusiness = () => {
             required
           />
         </div>
-
         {error && (
           <div className="error">
             {error.split("\n").map((err, index) => (
@@ -663,10 +652,8 @@ const RegisterBusiness = () => {
             ))}
           </div>
         )}
-
         {loading && <div className="loading">Carregando...</div>}
-
-        <div className="terms-container">
+        <div className="termos-container">
           <input
             type="checkbox"
             id="terms"
@@ -675,10 +662,12 @@ const RegisterBusiness = () => {
             required
           />
           <label htmlFor="terms">
-            Aceito os <strong>termos e condições</strong>
+            Aceito os{" "}
+            <a href="/terms" target="_blank" rel="noopener noreferrer">
+              <strong>termos e condições</strong>
+            </a>
           </label>
         </div>
-
         <button type="submit" disabled={loading}>
           {loading ? "Enviando..." : "Cadastrar Negócio"}
         </button>
