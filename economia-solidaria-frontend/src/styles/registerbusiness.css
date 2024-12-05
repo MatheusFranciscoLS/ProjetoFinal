@@ -46,10 +46,9 @@
 /* Seção do formulário */
 .form-section {
   background: #f8f9fa;
-  padding: 2rem;
-  border-radius: 12px;
+  padding: 1.5rem;
+  border-radius: 8px;
   border: 1px solid #e9ecef;
-  margin-bottom: 2rem;
 }
 
 /* Título da seção do formulário */
@@ -63,16 +62,15 @@
 
 /* Grupo de campos do formulário */
 .form-group {
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
 }
 
 /* Label do campo do formulário */
 .form-group label {
   display: block;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   color: #34495e;
-  font-weight: bold;
-  font-size: 1.1rem;
+  font-weight: 500;
 }
 
 /* Campo do formulário */
@@ -118,53 +116,38 @@
   outline: none;
 }
 
-/* Estilo para a seção de horários de funcionamento */
+/* Campos de horário */
 .time-inputs {
   display: flex;
   align-items: center;
-  gap: 15px;
-  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .time-inputs label {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 1rem;
-  color: #2c3e50;
+  gap: 8px;
   cursor: pointer;
 }
 
 .time-inputs input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
   margin-right: 8px;
+}
+
+.time-inputs label span {
   cursor: pointer;
 }
 
+/* Campo de horário */
 .time-inputs input[type="time"] {
-  width: 120px;
-  padding: 8px;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  width: auto;
 }
 
-.time-inputs input[type="time"]:focus {
-  border-color: #3498db;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-  outline: none;
-}
-
+/* Texto de separação dos campos de horário */
 .time-inputs span {
-  margin: 0 5px;
-  font-size: 1rem;
   color: #7f8c8d;
-}
-
-.saturday-hours, .sunday-hours {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 /* Ícones de mídia social */
@@ -339,19 +322,9 @@
 }
 
 /* Skeleton loader styles */
-.skeleton-fullscreen {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f0f0f0;
-}
-
-.skeleton-form {
-  width: 80%;
-  max-width: 600px;
+.skeleton-loader {
   padding: 20px;
-  background-color: #ffffff;
+  background-color: #f0f0f0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -381,13 +354,6 @@
   border-radius: 4px;
 }
 
-.skeleton-input {
-  width: 80%;
-  height: 20px;
-  background-color: #e0e0e0;
-  border-radius: 4px;
-}
-
 /* Responsividade */
 @media (max-width: 768px) {
   .register-business-container {
@@ -396,7 +362,7 @@
   }
 
   .form-section {
-    padding: 1.5rem;
+    padding: 1rem;
   }
 
   .time-inputs {

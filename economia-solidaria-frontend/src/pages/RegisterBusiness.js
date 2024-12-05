@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc, doc, getDoc, query, where, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  doc,
+  getDoc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import InputMask from "react-input-mask";
@@ -56,6 +64,7 @@ const RegisterBusiness = () => {
   const [formData, setFormData] = useState(initialFormState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showWeekend, setShowWeekend] = useState(false);
   const [showSocialInputs, setShowSocialInputs] = useState({
     instagram: false,
     facebook: false,
@@ -79,18 +88,31 @@ const RegisterBusiness = () => {
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
+          console.log("User document found.");
           const userData = userDocSnap.data();
 
-          console.log("Plano do usuário:", userData.plano);
-
-          // Verifica se o usuário já possui um negócio na coleção 'lojas'
-          const businessQuery = query(collection(db, "lojas"), where("userId", "==", user.uid));
+          console.log("User Data:", userData);
+          console.log("Checking business count...");
+          const businessQuery = query(
+            collection(db, "businesses"),
+            where("userId", "==", user.uid)
+          );
           const businessSnapshot = await getDocs(businessQuery);
 
-          console.log("Usuário já possui negócio:", !businessSnapshot.empty);
+          console.log("Business Snapshot Empty:", businessSnapshot.empty);
 
-          if (!businessSnapshot.empty && userData.plano !== "Premium") {
-            setError("Você já possui um negócio registrado. Atualize para o plano Premium para registrar outro.");
+          if (
+            !userData.plano ||
+            userData.plano !== "Premium" ||
+            !businessSnapshot.empty
+          ) {
+            console.log("User is not eligible:", {
+              plano: userData.plano,
+              businessCount: businessSnapshot.size,
+            });
+            setError(
+              "Para acessar o registro de negócios, é necessário ter um plano premium. Por favor, atualize seu plano."
+            );
             setIsEligible(false);
           } else {
             setIsEligible(true);
@@ -157,7 +179,9 @@ const RegisterBusiness = () => {
       return;
     }
 
-    const invalidImages = files.filter((file) => !validateImageFile(file).isValid);
+    const invalidImages = files.filter(
+      (file) => !validateImageFile(file).isValid
+    );
     if (invalidImages.length > 0) {
       setError(
         "Uma ou mais imagens são inválidas. Use apenas JPG, PNG ou GIF com tamanho máximo de 5MB."
@@ -206,7 +230,6 @@ const RegisterBusiness = () => {
           uf: data.state || "",
         },
       }));
-
     } catch (error) {
       console.error("Erro ao buscar CEP:", error);
       setErrorCep("Erro ao buscar CEP. Tente novamente.");
@@ -266,7 +289,9 @@ const RegisterBusiness = () => {
               type="text"
               id="businessName"
               value={formData.business.name}
-              onChange={(e) => updateFormField("business", "name", e.target.value)}
+              onChange={(e) =>
+                updateFormField("business", "name", e.target.value)
+              }
               placeholder="Nome do seu negócio"
               required
             />
@@ -278,7 +303,9 @@ const RegisterBusiness = () => {
               mask="99.999.999/9999-99"
               id="businessCNPJ"
               value={formData.business.cnpj}
-              onChange={(e) => updateFormField("business", "cnpj", e.target.value)}
+              onChange={(e) =>
+                updateFormField("business", "cnpj", e.target.value)
+              }
               placeholder="00.000.000/0000-00"
               required
             />
@@ -326,7 +353,9 @@ const RegisterBusiness = () => {
               type="email"
               id="businessEmail"
               value={formData.business.email}
-              onChange={(e) => updateFormField("business", "email", e.target.value)}
+              onChange={(e) =>
+                updateFormField("business", "email", e.target.value)
+              }
               placeholder="E-mail para contato"
               required
             />
@@ -342,7 +371,9 @@ const RegisterBusiness = () => {
               mask="(99) 9999-9999"
               id="telefone"
               value={formData.contact.telefone}
-              onChange={(e) => updateFormField("contact", "telefone", e.target.value)}
+              onChange={(e) =>
+                updateFormField("contact", "telefone", e.target.value)
+              }
               placeholder="(00) 0000-0000"
             />
           </div>
@@ -353,7 +384,9 @@ const RegisterBusiness = () => {
               mask="(99) 99999-9999"
               id="cellphone"
               value={formData.contact.cellphone}
-              onChange={(e) => updateFormField("contact", "cellphone", e.target.value)}
+              onChange={(e) =>
+                updateFormField("contact", "cellphone", e.target.value)
+              }
               placeholder="(00) 00000-0000"
             />
           </div>
@@ -391,7 +424,9 @@ const RegisterBusiness = () => {
               type="text"
               id="logradouro"
               value={formData.address.logradouro}
-              onChange={(e) => updateFormField("address", "logradouro", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "logradouro", e.target.value)
+              }
               placeholder="Logradouro"
               required
             />
@@ -403,7 +438,9 @@ const RegisterBusiness = () => {
               type="text"
               id="bairro"
               value={formData.address.bairro}
-              onChange={(e) => updateFormField("address", "bairro", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "bairro", e.target.value)
+              }
               placeholder="Bairro"
               required
             />
@@ -415,7 +452,9 @@ const RegisterBusiness = () => {
               type="text"
               id="cidade"
               value={formData.address.cidade}
-              onChange={(e) => updateFormField("address", "cidade", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "cidade", e.target.value)
+              }
               placeholder="Cidade"
               required
             />
@@ -440,7 +479,9 @@ const RegisterBusiness = () => {
               type="text"
               id="numero"
               value={formData.address.numero}
-              onChange={(e) => updateFormField("address", "numero", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "numero", e.target.value)
+              }
               placeholder="Número"
               required
             />
@@ -452,7 +493,9 @@ const RegisterBusiness = () => {
               type="text"
               id="complemento"
               value={formData.address.complemento}
-              onChange={(e) => updateFormField("address", "complemento", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "complemento", e.target.value)
+              }
               placeholder="Complemento"
             />
           </div>
@@ -491,10 +534,9 @@ const RegisterBusiness = () => {
           </div>
 
           <div className="form-group">
-          
+            <label>Sábado</label>
             <div className="time-inputs">
-              <label>
-                Aberto aos sábados
+              <div className="checkbox-with-label">
                 <input
                   type="checkbox"
                   checked={!formData.hours.saturday.closed}
@@ -505,9 +547,10 @@ const RegisterBusiness = () => {
                     })
                   }
                 />
-              </label>
-              {formData.hours.saturday.closed ? null : (
-                <div className="saturday-hours">
+                <label>Aberto aos sábados</label>
+              </div>
+              {!formData.hours.saturday.closed && (
+                <>
                   <input
                     type="time"
                     value={formData.hours.saturday.open}
@@ -529,16 +572,15 @@ const RegisterBusiness = () => {
                       })
                     }
                   />
-                </div>
+                </>
               )}
             </div>
           </div>
 
           <div className="form-group">
-          
+            <label>Domingo</label>
             <div className="time-inputs">
-              <label>
-                Aberto aos domingos
+              <div className="checkbox-with-label">
                 <input
                   type="checkbox"
                   checked={!formData.hours.sunday.closed}
@@ -549,7 +591,8 @@ const RegisterBusiness = () => {
                     })
                   }
                 />
-              </label>
+                <label>Aberto aos domingos</label>
+              </div>
               {!formData.hours.sunday.closed && (
                 <>
                   <input
@@ -579,10 +622,9 @@ const RegisterBusiness = () => {
           </div>
 
           <div className="form-group">
-           
+            <label>Intervalo para Almoço</label>
             <div className="time-inputs">
-              <label>
-                Fecha para o almoço
+              <div className="checkbox-with-label">
                 <input
                   type="checkbox"
                   checked={formData.hours.lunch.enabled}
@@ -593,7 +635,8 @@ const RegisterBusiness = () => {
                     })
                   }
                 />
-              </label>
+                <label>Fecha para o almoço</label>
+              </div>
               {formData.hours.lunch.enabled && (
                 <>
                   <input
@@ -645,7 +688,9 @@ const RegisterBusiness = () => {
                   name="instagram"
                   placeholder="Link do Instagram"
                   value={formData.social.instagram}
-                  onChange={(e) => handleSocialLinkChange("instagram", e.target.value)}
+                  onChange={(e) =>
+                    handleSocialLinkChange("instagram", e.target.value)
+                  }
                   className="social-input"
                 />
               )}
@@ -669,7 +714,9 @@ const RegisterBusiness = () => {
                   name="facebook"
                   placeholder="Link do Facebook"
                   value={formData.social.facebook}
-                  onChange={(e) => handleSocialLinkChange("facebook", e.target.value)}
+                  onChange={(e) =>
+                    handleSocialLinkChange("facebook", e.target.value)
+                  }
                   className="social-input"
                 />
               )}
@@ -693,7 +740,9 @@ const RegisterBusiness = () => {
                   name="whatsapp"
                   placeholder="Link do WhatsApp (https://api.whatsapp/ ou https://wa.me/)"
                   value={formData.social.whatsapp}
-                  onChange={(e) => handleSocialLinkChange("whatsapp", e.target.value)}
+                  onChange={(e) =>
+                    handleSocialLinkChange("whatsapp", e.target.value)
+                  }
                   className="social-input"
                 />
               )}
@@ -749,7 +798,9 @@ const RegisterBusiness = () => {
               type="file"
               id="cnDoc"
               accept="application/pdf"
-              onChange={(e) => updateFormField("media", "cnDoc", e.target.files[0])}
+              onChange={(e) =>
+                updateFormField("media", "cnDoc", e.target.files[0])
+              }
               required
             />
           </div>
@@ -777,11 +828,7 @@ const RegisterBusiness = () => {
 
         {/* Submit Button */}
         <div className="form-actions">
-          <button
-            type="submit"
-            className="submit-button"
-            disabled={loading}
-          >
+          <button type="submit" className="submit-button" disabled={loading}>
             {loading ? "Cadastrando..." : "Cadastrar Negócio"}
           </button>
         </div>
