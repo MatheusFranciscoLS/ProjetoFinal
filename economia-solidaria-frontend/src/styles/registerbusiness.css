@@ -429,3 +429,29 @@ input[type="file"] {
 .checkbox-with-label label {
   cursor: pointer;
 }
+
+/* Termos e condições */
+.termos-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.termos-container input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.termos-container label {
+  cursor: pointer;
+}
+
+.termos-container a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.termos-container a:hover {
+  text-decoration: underline;
+}
