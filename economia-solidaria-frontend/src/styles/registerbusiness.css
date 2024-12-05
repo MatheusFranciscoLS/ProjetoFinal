@@ -11,369 +11,305 @@
   overflow: auto;
 }
 
-/* Formulário */
-.register-business-form {
-  width: 100%;
+/* Container do formulário */
+.register-business-container {
   max-width: 800px;
-  margin: 0 auto;
-  padding: 30px;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.register-business-form:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-}
-
-/* Título */
-.register-business-form h2 {
-  text-align: center;
+/* Título do formulário */
+.register-title {
   color: #2c3e50;
-  margin-bottom: 30px;
-  font-size: 2em;
-  font-weight: 600;
-  position: relative;
-  padding-bottom: 15px;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
 }
 
-.register-business-form h2::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background: var(--button-bg-color);
-  border-radius: 2px;
+/* Subtítulo do formulário */
+.register-subtitle {
+  color: #7f8c8d;
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-/* Campos do formulário */
+/* Formulário */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Seção do formulário */
+.form-section {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+/* Título da seção do formulário */
+.form-section h2 {
+  color: #2c3e50;
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #3498db;
+}
+
+/* Grupo de campos do formulário */
 .form-group {
-  margin-bottom: 24px;
+  margin-bottom: 1.25rem;
 }
 
+/* Label do campo do formulário */
 .form-group label {
   display: block;
-  margin-bottom: 8px;
-  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  color: #34495e;
   font-weight: 500;
-  font-size: 0.95em;
 }
 
-.register-business-form input[type="text"],
-.register-business-form input[type="email"],
-.register-business-form input[type="url"],
-.register-business-form input[type="time"],
-.register-business-form textarea,
-.register-business-form select {
+/* Campo do formulário */
+.form-group input,
+.form-group select,
+.form-group textarea {
   width: 100%;
-  padding: 12px 16px;
-  margin-bottom: 8px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  background-color: #f8f9fa;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.register-business-form input::placeholder,
-.register-business-form textarea::placeholder {
-  color: #adb5bd;
-}
-
-.register-business-form textarea {
-  height: 120px;
+/* Campo de texto do formulário */
+.form-group textarea {
+  min-height: 100px;
   resize: vertical;
-  line-height: 1.5;
 }
 
-/* Foco nos campos */
-.register-business-form input:focus,
-.register-business-form textarea:focus,
-.register-business-form select:focus {
+/* Campo do formulário em foco */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
   outline: none;
-  border-color: var(--button-bg-color);
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
-  background-color: #fff;
 }
 
-/* Upload de imagens */
+/* Campos de horário */
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Campo de horário */
+.time-inputs input[type="time"] {
+  width: auto;
+}
+
+/* Texto de separação dos campos de horário */
+.time-inputs span {
+  color: #7f8c8d;
+}
+
+/* Ícones de mídia social */
+.social-icons {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Container do ícone de mídia social */
+.social-icon-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Ícone de mídia social */
+.social-icon {
+  font-size: 1.5rem;
+  color: #7f8c8d;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+/* Ícone de mídia social em foco */
+.social-icon:hover {
+  color: #3498db;
+}
+
+/* Ícone de mídia social ativo */
+.social-icon.active {
+  color: #3498db;
+}
+
+/* Campo de entrada de texto para mídia social */
+.social-input {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* Previsão de imagem */
 .image-preview {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 16px;
-  margin-top: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-/* Container de cada imagem */
+/* Container da imagem */
 .image-wrapper {
   position: relative;
-  padding-top: 100%;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease;
+  aspect-ratio: 1;
 }
 
-.image-wrapper:hover {
-  transform: scale(1.02);
-}
-
-/* Estilo das imagens */
+/* Imagem */
 .image-item {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 12px;
 }
 
-/* Botão de remoção */
+/* Botão de remoção da imagem */
 .remove-image {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background-color: rgba(255, 255, 255, 0.9);
-  color: #dc3545;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
   border: none;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: #e74c3c;
+  font-weight: bold;
+  transition: background-color 0.2s;
 }
 
+/* Botão de remoção da imagem em foco */
 .remove-image:hover {
-  background-color: #dc3545;
-  color: white;
-  transform: scale(1.1);
+  background: #fff;
+  color: #c0392b;
 }
 
-/* Horários de funcionamento */
-.hours-section {
-  margin-bottom: 24px;
-  padding: 20px;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
-  background-color: #f8f9fa;
-  transition: border-color 0.3s ease;
-}
-
-.hours-section:hover {
-  border-color: var(--button-bg-color);
-}
-
-.hours-section h3 {
-  margin-bottom: 20px;
-  color: #2c3e50;
-  font-size: 1.1em;
-  font-weight: 600;
-}
-
-.time-inputs {
+/* Ações do formulário */
+.form-actions {
   display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
-.time-inputs input[type="time"] {
-  width: auto;
-  min-width: 120px;
-  margin-bottom: 0;
-}
-
-.time-inputs span {
-  color: #495057;
-  font-weight: 500;
-}
-
-.lunch-break-toggle {
-  margin: 24px 0;
-  padding: 16px;
-  background-color: #fff;
-  border-radius: 8px;
-  border: 2px solid #e0e0e0;
-  transition: all 0.3s ease;
-}
-
-.lunch-break-toggle:hover {
-  border-color: var(--button-bg-color);
-  background-color: #f8f9fa;
-}
-
-.weekend-toggle {
-  margin: 24px 0;
-  padding: 16px;
-  background-color: #fff;
-  border-radius: 8px;
-  border: 2px solid #e0e0e0;
-  transition: all 0.3s ease;
-}
-
-.weekend-toggle:hover {
-  border-color: var(--button-bg-color);
-  background-color: #f8f9fa;
-}
-
-/* Termos e condições */
-.termos-container {
-  display: flex;
-  align-items: center;
-  /* Alinha o checkbox e o texto na horizontal */
-  margin: 24px 0;
-  gap: 12px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-}
-
-.termos-container input[type="checkbox"] {
-  margin: 0;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-}
-
-.terms-container label {
-  color: #495057;
-  font-size: 0.95em;
-  line-height: 1.5;
-  margin: 0;
-  /* Remove qualquer margem extra */
-}
-
-.terms-link {
-  color: var(--button-bg-color);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.terms-link:hover {
-  color: #2c3e50;
-  text-decoration: underline;
-}
-
-/* Botão de envio */
-button {
-  width: 100%;
-  padding: 14px;
-  background-color: var(--button-bg-color);
+/* Botão de envio do formulário */
+.submit-button {
+  background-color: #3498db;
   color: white;
-  font-size: 1.1em;
-  font-weight: 600;
   border: none;
-  border-radius: 8px;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+  transition: background-color 0.2s;
 }
 
-button:hover:not(:disabled) {
-  background-color: var(--button-hover-bg-color);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.3);
+/* Botão de envio do formulário em foco */
+.submit-button:hover {
+  background-color: #2980b9;
 }
 
-button:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-button:disabled {
-  background-color: #e0e0e0;
+/* Botão de envio do formulário desabilitado */
+.submit-button:disabled {
+  background-color: #bdc3c7;
   cursor: not-allowed;
-  box-shadow: none;
-  color: #888;
+}
+
+/* Mensagem de erro */
+.error-message {
+  background-color: #fff3f3;
+  color: #e74c3c;
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 4px solid #e74c3c;
+  margin-top: 1rem;
+}
+
+/* Carregamento do CEP */
+.loading-cep {
+  color: #3498db;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+}
+
+/* Erro do CEP */
+.error-cep {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
 }
 
 /* Responsividade */
 @media (max-width: 768px) {
-  .register-business-page {
-    padding: 20px 16px;
+  .register-business-container {
+    margin: 1rem;
+    padding: 1rem;
   }
 
-  .register-business-form {
-    padding: 20px;
-  }
-
-  .register-business-form h2 {
-    font-size: 1.5em;
+  .form-section {
+    padding: 1rem;
   }
 
   .time-inputs {
     flex-direction: column;
-    align-items: stretch;
+    align-items: flex-start;
   }
 
   .time-inputs input[type="time"] {
     width: 100%;
   }
+
+  .social-icons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 
-/* Mensagens de erro */
-.error-message {
-  color: #dc3545;
-  font-size: 0.9em;
-  margin-top: 4px;
-  padding: 8px;
-  background-color: rgba(220, 53, 69, 0.1);
-  border-radius: 4px;
-  transition: all 0.3s ease;
+/* Estilo do checkbox */
+input[type="checkbox"] {
+  width: auto;
+  margin-right: 0.5rem;
 }
 
-/* Animação para elementos que aparecem/desaparecem */
-.fade-enter {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.fade-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 300ms, transform 300ms;
-}
-
-.fade-exit {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.fade-exit-active {
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 300ms, transform 300ms;
-}
-
-/* Ícones de mídia social */
-.social-media-icons {
+/* Label do checkbox */
+.checkbox-label {
   display: flex;
-  gap: 16px;
-  margin: 20px 0;
-}
-
-.social-icon {
-  font-size: 24px;
-  color: #495057;
+  align-items: center;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.social-icon:hover {
-  color: var(--button-bg-color);
-  transform: scale(1.2);
+/* Estilo do input de arquivo */
+input[type="file"] {
+  padding: 0.5rem 0;
 }
 
-.social-icon.active {
-  color: var(--button-bg-color);
+/* Instruções de upload */
+.upload-instructions {
+  margin-top: 1rem;
+}
+
+/* Título das instruções de upload */
+.upload-instructions strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #34495e;
 }
