@@ -124,6 +124,24 @@
   flex-wrap: wrap;
 }
 
+.time-inputs label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.time-inputs input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.time-inputs label span {
+  cursor: pointer;
+}
+
+/* Campo de horário */
 .time-inputs input[type="time"] {
   width: 80px;
   padding: 3px;
@@ -406,6 +424,10 @@ input[type="checkbox"] {
   display: flex;
   align-items: center;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
 }
 
 /* Estilo do input de arquivo */
@@ -423,4 +445,46 @@ input[type="file"] {
   display: block;
   margin-bottom: 0.5rem;
   color: #34495e;
+}
+
+/* Estilo da classe checkbox-with-label */
+.checkbox-with-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-with-label input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.checkbox-with-label label {
+  cursor: pointer;
+}
+
+/* Termos e condições */
+.termos-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.termos-container input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.termos-container label {
+  cursor: pointer;
+}
+
+.termos-container a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.termos-container a:hover {
+  text-decoration: underline;
 }
