@@ -120,8 +120,7 @@
 .time-inputs {
   display: flex;
   align-items: center;
-  gap: 5px;
-  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .time-inputs label {
@@ -143,22 +142,7 @@
 
 /* Campo de horário */
 .time-inputs input[type="time"] {
-  width: 80px;
-  padding: 3px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.time-inputs label {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.9rem;
-}
-
-.time-inputs span {
-  margin: 0 3px;
-  font-size: 0.9rem;
+  width: auto;
 }
 
 /* Texto de separação dos campos de horário */
@@ -338,19 +322,9 @@
 }
 
 /* Skeleton loader styles */
-.skeleton-fullscreen {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f0f0f0;
-}
-
-.skeleton-form {
-  width: 80%;
-  max-width: 600px;
+.skeleton-loader {
   padding: 20px;
-  background-color: #ffffff;
+  background-color: #f0f0f0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -376,13 +350,6 @@
 .skeleton-button {
   width: 40%;
   height: 30px;
-  background-color: #e0e0e0;
-  border-radius: 4px;
-}
-
-.skeleton-input {
-  width: 80%;
-  height: 20px;
   background-color: #e0e0e0;
   border-radius: 4px;
 }

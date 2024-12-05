@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc, doc, getDoc, query, where, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  doc,
+  getDoc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import InputMask from "react-input-mask";
@@ -56,7 +64,6 @@ const RegisterBusiness = () => {
   const [formData, setFormData] = useState(initialFormState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showWeekend, setShowWeekend] = useState(false);
   const [showSocialInputs, setShowSocialInputs] = useState({
     instagram: false,
     facebook: false,
@@ -80,22 +87,23 @@ const RegisterBusiness = () => {
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
-          console.log("User document found.");
           const userData = userDocSnap.data();
 
-          console.log("User Data:", userData);
-          console.log("Checking business count...");
-          const businessQuery = query(collection(db, "businesses"), where("userId", "==", user.uid));
+          console.log("Plano do usuário:", userData.plano);
+
+          // Verifica se o usuário já possui um negócio na coleção 'lojas'
+          const businessQuery = query(
+            collection(db, "lojas"),
+            where("userId", "==", user.uid)
+          );
           const businessSnapshot = await getDocs(businessQuery);
 
-          console.log("Business Snapshot Empty:", businessSnapshot.empty);
+          console.log("Usuário já possui negócio:", !businessSnapshot.empty);
 
-          if (!userData.plano || userData.plano !== "Premium" || !businessSnapshot.empty) {
-            console.log("User is not eligible:", {
-              plano: userData.plano,
-              businessCount: businessSnapshot.size
-            });
-            setError("Para acessar o registro de negócios, é necessário ter um plano premium. Por favor, atualize seu plano.");
+          if (!businessSnapshot.empty && userData.plano !== "Premium") {
+            setError(
+              "Você já possui um negócio registrado. Atualize para o plano Premium para registrar outro."
+            );
             setIsEligible(false);
           } else {
             setIsEligible(true);
@@ -162,7 +170,9 @@ const RegisterBusiness = () => {
       return;
     }
 
-    const invalidImages = files.filter((file) => !validateImageFile(file).isValid);
+    const invalidImages = files.filter(
+      (file) => !validateImageFile(file).isValid
+    );
     if (invalidImages.length > 0) {
       setError(
         "Uma ou mais imagens são inválidas. Use apenas JPG, PNG ou GIF com tamanho máximo de 5MB."
@@ -211,7 +221,6 @@ const RegisterBusiness = () => {
           uf: data.state || "",
         },
       }));
-
     } catch (error) {
       console.error("Erro ao buscar CEP:", error);
       setErrorCep("Erro ao buscar CEP. Tente novamente.");
@@ -647,7 +656,7 @@ const RegisterBusiness = () => {
             </div>
           </div>
         </section>
-
+        
         {/* Social Media Section */}
         <section className="form-section">
           <h2>Redes Sociais</h2>
