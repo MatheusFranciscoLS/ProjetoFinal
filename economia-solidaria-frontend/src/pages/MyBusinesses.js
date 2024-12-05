@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
-import "../styles/mybusinesses.css";
+import "../styles/myBusinesses.css";
 
 const SkeletonCard = () => (
   <div className="business-card skeleton">
@@ -159,6 +159,12 @@ const MyBusinesses = () => {
             </div>
           ))
         )}
+      </div>
+
+      <div className="cta-section">
+        <h2>Junte-se a Nós!</h2>
+        <p>Descubra como você pode contribuir para a economia solidária.</p>
+        <Link to="/register-business">Comece Agora</Link>
       </div>
     </div>
   );
