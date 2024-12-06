@@ -24,7 +24,7 @@
 }
 
 .footer-link {
-  color: rgba(255, 255, 255, 0.9);
+  color: #f1f1f1; /* Texto mais claro para melhorar a visibilidade */
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
@@ -43,13 +43,20 @@
 
 /* Efeito de hover para os links */
 .footer-link:hover {
-  color: #ffdd57;
-  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffdd57; /* Cor amarela para o hover */
+  background-color: rgba(255, 255, 255, 0.2); /* Fundo mais claro no hover */
   transform: translateY(-2px);
 }
 
 .footer-link:hover i {
   transform: scale(1.1);
+}
+
+/* Estilo para o texto do copyright */
+.footer p {
+  color: white; /* Define o texto do copyright como branco */
+  font-size: 0.8rem; /* Ajuste no tamanho, se necessário */
+  margin-top: 10px; /* Adiciona espaçamento para o texto do copyright */
 }
 
 /* Responsividade: links no footer em telas pequenas */
