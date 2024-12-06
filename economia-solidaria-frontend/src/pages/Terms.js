@@ -98,7 +98,7 @@ const Terms = () => {
         </div>
 
         <div className="terms-footer">
-          <p className="terms-update">Última atualização: Janeiro 2024</p>
+          <p className="terms-update">Última atualização: Novembro 2024</p>
           <Link to="/" className="terms-link">
             <FaArrowLeft />
             <span>Voltar para a Página Inicial</span>
