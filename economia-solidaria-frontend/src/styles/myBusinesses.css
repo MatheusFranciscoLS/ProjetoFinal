@@ -310,7 +310,7 @@
 }
 
 .cta-section a {
-  background-color: grey; /* Botão vermelho */
+  background-color: goldenrod; /* Botão vermelho */
   color: white; /* Texto do botão em branco */
   padding: 12px 25px;
   border-radius: 5px;
