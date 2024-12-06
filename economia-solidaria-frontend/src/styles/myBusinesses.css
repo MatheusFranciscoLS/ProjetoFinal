@@ -320,6 +320,7 @@
 
 .cta-section a:hover {
   background-color: black; /* Cor do botão em hover */
+  color: goldenrod;
 }
 
 
