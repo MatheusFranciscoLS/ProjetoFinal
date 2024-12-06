@@ -153,7 +153,7 @@ body {
 .cta-button:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-xl);
-  background: linear-gradient(to right, var(--background-paper), #f3f4f6);
+  background: black;
 }
 
 .icon-right {
