@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CnpjController;
+
+// Rota pública para verificação de CNPJ (temporariamente sem autenticação para teste)
+Route::get('/cnpj/{cnpj}', [CnpjController::class, 'verifyCNPJ']);
 
 // Rotas públicas de autenticação
 Route::post('/register', [AuthController::class, 'register']);
