@@ -6,12 +6,15 @@ import "../styles/home.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
-import { FaStar, FaStore, FaHandshake } from 'react-icons/fa';
+import { FaStar, FaStore, FaHandshake, FaSearch, FaArrowRight } from 'react-icons/fa';
+import { motion } from "framer-motion";
+import { BsArrowRight } from 'react-icons/bs';
+import { FiTrendingUp, FiUsers, FiShoppingBag } from 'react-icons/fi';
 
 // Componente para o cartão de cada loja
 const LojaCard = ({ loja, isPremium = false }) => {
   const { nome, descricao, imagens, id, categoria } = loja;
-  const cardClassName = `loja-card ${isPremium ? 'premium-card' : 'essential-card'}`;
+  const cardClassName = `${isPremium ? 'premium-card' : 'loja-card'}`;
   
   return (
     <Link to={`/loja/${id}`} className={cardClassName}>
@@ -46,6 +49,20 @@ const SkeletonCard = () => (
   </div>
 );
 
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6 }
+};
+
+const staggerChildren = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
 const Home = () => {
   const [lojas, setLojas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -55,16 +72,16 @@ const Home = () => {
   const carouselSettings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 800,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 5000,
     pauseOnHover: true,
     fade: true,
-    cssEase: 'linear',
-    prevArrow: <div className="slick-prev"><span>&lt;</span></div>,
-    nextArrow: <div className="slick-next"><span>&gt;</span></div>,
+    cssEase: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    prevArrow: <button className="slick-prev"><FaArrowRight className="prev-icon" /></button>,
+    nextArrow: <button className="slick-next"><FaArrowRight className="next-icon" /></button>,
   };
 
   const fetchLojas = async () => {
@@ -163,70 +180,151 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      {/* Hero Section */}
-      <section className="hero-section">
+      <motion.section
+        className="hero-section"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
         <div className="hero-content">
-          <h1>Economia Solidária</h1>
-          <p>Conectando negócios locais e fortalecendo nossa comunidade</p>
+          <motion.h1
+            className="hero-title"
+            variants={fadeInUp}
+            initial="initial"
+            animate="animate"
+          >
+            Economia Solidária
+          </motion.h1>
+          <motion.p
+            className="hero-subtitle"
+            variants={fadeInUp}
+            initial="initial"
+            animate="animate"
+            transition={{ delay: 0.2 }}
+          >
+            Conectando negócios sociais e fortalecendo nossa comunidade
+          </motion.p>
+          <motion.div
+            className="hero-cta"
+            variants={fadeInUp}
+            initial="initial"
+            animate="animate"
+            transition={{ delay: 0.4 }}
+          >
+            <Link to="/register-business" className="cta-button">
+              Cadastre seu Negócio
+              <BsArrowRight className="icon-right" />
+            </Link>
+            <Link to="/lojas" className="cta-button">
+              Explorar Lojas
+              <BsArrowRight className="icon-right" />
+            </Link>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Estatísticas */}
-      <section className="stats-section">
-        <div className="stat-item">
-          <FaStore className="stat-icon" />
+      <motion.section
+        className="stats-section"
+        variants={staggerChildren}
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true }}
+      >
+        <motion.div className="stat-item" variants={fadeInUp}>
+          <FiTrendingUp className="stat-icon" />
           <div className="stat-info">
             <h3>{lojas.length}</h3>
             <p>Negócios Cadastrados</p>
           </div>
-        </div>
-        <div className="stat-item">
-          <FaStar className="stat-icon" />
+        </motion.div>
+
+        <motion.div className="stat-item" variants={fadeInUp}>
+          <FiUsers className="stat-icon" />
           <div className="stat-info">
-            <h3>{lojasPremium.length}</h3>
-            <p>Negócios Premium</p>
+            <h3>+2000</h3>
+            <p>Usuários Ativos</p>
           </div>
-        </div>
-        <div className="stat-item">
-          <FaHandshake className="stat-icon" />
+        </motion.div>
+
+        <motion.div className="stat-item" variants={fadeInUp}>
+          <FiShoppingBag className="stat-icon" />
           <div className="stat-info">
-            <h3>{lojasEssential.length}</h3>
-            <p>Parcerias Essenciais</p>
+            <h3>+5000</h3>
+            <p>Produtos Disponíveis</p>
           </div>
+        </motion.div>
+      </motion.section>
+
+      <section className="premium-section">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="section-title">Destaques</h2>
+          <p className="section-subtitle">
+            Conheça nossos parceiros em destaque
+          </p>
+        </motion.div>
+
+        <div className="premium-carousel">
+          <Slider
+            {...{
+              ...carouselSettings,
+              slidesToShow: 4, // Aumentado para 4 slides já que os cards estão menores
+              slidesToScroll: 1,
+              infinite: true,
+              speed: 500,
+              autoplay: true,
+              autoplaySpeed: 3000,
+              responsive: [
+                {
+                  breakpoint: 1200,
+                  settings: {
+                    slidesToShow: 3,
+                  },
+                },
+                {
+                  breakpoint: 768,
+                  settings: {
+                    slidesToShow: 2,
+                  },
+                },
+                {
+                  breakpoint: 480,
+                  settings: {
+                    slidesToShow: 1,
+                  },
+                },
+              ],
+            }}
+          >
+            {lojasPremium.map((loja) => (
+              <motion.div
+                key={loja.id}
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <LojaCard loja={loja} isPremium={true} />
+              </motion.div>
+            ))}
+          </Slider>
         </div>
       </section>
 
-      {/* Seção Premium */}
-      {lojasPremium.length > 0 && (
-        <section className="premium-section">
-          <div className="section-header">
-            <h2>Destaques Premium</h2>
-            <p>Conheça nossos parceiros premium e suas ofertas exclusivas</p>
-          </div>
-          <Slider {...carouselSettings} className="premium-carousel">
-            {lojasPremium.map((loja) => (
-              <LojaCard key={loja.id} loja={loja} isPremium={true} />
-            ))}
-          </Slider>
-        </section>
-      )}
+      <section className="essential-section">
+        <div className="section-header">
+          <h2>Parceiros Essenciais</h2>
+          <p>Descubra mais negócios de qualidade em nossa rede</p>
+        </div>
+        <div className="essential-grid">
+          {lojasEssential.map((loja) => (
+            <LojaCard key={loja.id} loja={loja} isPremium={false} />
+          ))}
+        </div>
+      </section>
 
-      {/* Seção Essential */}
-      {lojasEssential.length > 0 && (
-        <section className="essential-section">
-          <div className="section-header">
-            <h2>Parceiros Essenciais</h2>
-            <p>Descubra mais negócios de qualidade em nossa rede</p>
-          </div>
-          <div className="essential-grid">
-            {lojasEssential.map((loja) => (
-              <LojaCard key={loja.id} loja={loja} isPremium={false} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* CTA Section */}
       <section className="cta-section">
         <div className="cta-content">
           <h2>Faça Parte da Nossa Rede</h2>
