@@ -232,37 +232,46 @@ const RegisterBusiness = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
-
     try {
-      // Validate form data
-      const validationResult = validateForm(formData);
-      if (!validationResult.isValid) {
-        setError(validationResult.error);
-        return;
-      }
-
-      // Prepare data for submission
       const businessData = {
-        ...formData,
+        nome: formData.business.name,
+        cnpj: formData.business.cnpj,
+        descricao: formData.business.description,
+        categoria: formData.business.category,
+        endereco: {
+          rua: formData.address.logradouro,
+          bairro: formData.address.bairro,
+          cidade: formData.address.cidade,
+          estado: formData.address.uf,
+          numero: formData.address.numero
+        },
+        telefone: formData.contact.telefone,
+        email: formData.business.email,
+        horarioDeFuncionamento: formData.hours,
+        imagens: formData.media.images.map(img => img instanceof File ? img.name : img),
+        comprovante: formData.media.cnDoc?.name,
         userId: user.uid,
-        createdAt: new Date(),
-        status: "pending",
+        status: "pendente",
+        createdAt: new Date().toISOString()
       };
-
-      // Submit to Firebase
-      const docRef = await addDoc(collection(db, "businesses"), businessData);
-
-      // Success - redirect to confirmation page
-      navigate(`/business-confirmation/${docRef.id}`);
-    } catch (error) {
-      setError("Erro ao cadastrar negócio. Por favor, tente novamente.");
-      console.error("Error submitting business:", error);
+  
+      console.log('Submitting business data:', businessData);
+      const docRef = await addDoc(collection(db, "negocios_pendentes"), businessData);
+      console.log('Document written with ID:', docRef.id);
+      
+      alert("Cadastro enviado, aguardando aprovação do admin!");
+      navigate("/plans-details");
+    } catch (err) {
+      console.error("Erro detalhado ao cadastrar negócio:", {
+        message: err.message,
+        code: err.code,
+        stack: err.stack
+      });
+      setError(`Erro ao cadastrar o negócio: ${err.message}`);
     } finally {
       setLoading(false);
     }
-  };
-
+  }; 
   return (
     <div className="register-business-container">
       <h1 className="register-title">Cadastro de Negócio</h1>
