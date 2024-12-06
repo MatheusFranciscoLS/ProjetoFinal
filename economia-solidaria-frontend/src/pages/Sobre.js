@@ -1,189 +1,201 @@
-import React, { useState } from "react";
-import "../styles/sobre.css";
-import { FaQuestionCircle, FaHandshake, FaLeaf, FaLightbulb, FaUsers, FaChevronDown } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import {
+  FaHandHoldingHeart,
+  FaUsers,
+  FaChartLine,
+  FaStoreAlt,
+  FaMapMarkedAlt,
+  FaHandshake,
+  FaShoppingCart,
+  FaCreditCard,
+  FaLightbulb,
+  FaLeaf,
+  FaQuestionCircle,
+  FaGlobe,
+  FaHeart,
+  FaComments
+} from 'react-icons/fa';
+import '../styles/sobre.css';
 
 const About = () => {
   const [activeIndex, setActiveIndex] = useState(null);
 
-  const handleAccordionToggle = (index) => {
-    setActiveIndex(activeIndex === index ? null : index);
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
+  const highlights = [
+    {
+      icon: <FaStoreAlt />,
+      title: "Comércio Local",
+      description: "Fortalecemos o comércio de Limeira, conectando produtores e consumidores da nossa cidade"
+    },
+    {
+      icon: <FaHandHoldingHeart />,
+      title: "Impacto Social",
+      description: "Contribuímos para o desenvolvimento econômico e social de Limeira através da economia solidária"
+    },
+    {
+      icon: <FaChartLine />,
+      title: "Crescimento Regional",
+      description: "Incentivamos o crescimento sustentável dos pequenos negócios limeirenses"
     }
-  };
+  ];
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
+  const stats = [
+    { 
+      icon: <FaUsers />, 
+      value: "100+", 
+      label: "Empreendedores",
+      description: "Pequenos negócios de Limeira em nossa plataforma"
+    },
+    { 
+      icon: <FaMapMarkedAlt />, 
+      value: "15+", 
+      label: "Bairros",
+      description: "Regiões de Limeira beneficiadas"
+    },
+    { 
+      icon: <FaHandshake />, 
+      value: "500+", 
+      label: "Parcerias",
+      description: "Conexões entre produtores e consumidores locais"
     }
-  };
+  ];
 
   const faqItems = [
     {
-      icon: <FaHandshake />,
-      question: "Como participar?",
-      answer: "É simples! Cadastre sua empresa na nossa plataforma e escolha o plano que melhor se adapta às suas necessidades para aumentar sua visibilidade."
+      icon: <FaShoppingCart />,
+      question: "Como participar do marketplace em Limeira?",
+      answer: "Cadastre seu negócio local, complete seu perfil com produtos ou serviços e comece a participar da rede de economia solidária de Limeira. Oferecemos suporte para maximizar sua visibilidade na cidade."
+    },
+    {
+      icon: <FaCreditCard />,
+      question: "Quais são as formas de pagamento?",
+      answer: "Aceitamos diversas formas de pagamento para facilitar as transações locais, incluindo cartões, transferências e até mesmo trocas diretas entre membros da comunidade limeirense."
     },
     {
       icon: <FaLightbulb />,
-      question: "Por que anunciar conosco?",
-      answer: "Somos uma plataforma acessível para pequenos empreendedores e prestadores de serviços que desejam aumentar sua visibilidade e atrair mais clientes locais."
-    },
-    {
-      icon: <FaUsers />,
-      question: "Como me destacar nos anúncios?",
-      answer: "O aplicativo é gratuito para todos, mas ao escolher um de nossos planos pagos, você poderá garantir maior destaque e visibilidade para o seu negócio."
+      question: "Como potencializar meu negócio local?",
+      answer: "Oferecemos ferramentas de gestão e capacitações específicas para o mercado de Limeira, ajudando seu negócio a crescer de forma sustentável dentro da economia local."
     },
     {
       icon: <FaLeaf />,
-      question: "Quais são os benefícios dos planos pagos?",
-      answer: "Os planos pagos oferecem vantagens como maior destaque nos resultados de busca, visibilidade em áreas exclusivas e funcionalidades personalizadas para ajudar a aumentar o alcance do seu negócio."
+      question: "Como funciona a sustentabilidade?",
+      answer: "Promovemos práticas sustentáveis em Limeira, incentivando a economia circular e o comércio justo. Nossos membros têm acesso a orientações para implementar iniciativas ecológicas."
     }
   ];
 
   const accordionItems = [
     {
-      icon: <FaHandshake />,
-      title: "Colaboração",
-      content: "Valorizamos a colaboração entre empreendedores locais, acreditando que, juntos, podemos fortalecer a economia da nossa cidade e apoiar um ao outro no crescimento dos negócios."
+      icon: <FaGlobe />,
+      title: "Economia Local",
+      content: "Fortalecemos a economia de Limeira através de uma rede de colaboração onde produtores, consumidores e prestadores de serviços se conectam diretamente, promovendo o desenvolvimento local."
     },
     {
       icon: <FaLeaf />,
       title: "Sustentabilidade",
-      content: "Promovemos práticas sustentáveis que visam não apenas o sucesso dos negócios, mas também o bem-estar do meio ambiente e o fortalecimento da economia local para as próximas gerações."
+      content: "Incentivamos práticas comerciais sustentáveis que beneficiam nossa cidade, preservando o meio ambiente e garantindo um futuro melhor para Limeira."
     },
     {
-      icon: <FaLightbulb />,
-      title: "Inovação",
-      content: "Acreditamos que a inovação deve ser acessível a todos os empreendedores, oferecendo soluções simples e eficazes que ajudem os pequenos negócios a se destacarem e se manterem competitivos."
+      icon: <FaComments />,
+      title: "Comunicação Local",
+      content: "Facilitamos o diálogo direto entre produtores e consumidores limeirenses, criando relações de confiança e fortalecendo os laços da nossa comunidade."
+    },
+    {
+      icon: <FaHeart />,
+      title: "Desenvolvimento Regional",
+      content: "Impulsionamos o crescimento da economia de Limeira através de ferramentas digitais e práticas que valorizam os pequenos negócios e produtores locais."
     },
     {
       icon: <FaUsers />,
-      title: "Inclusão",
-      content: "A plataforma promove a inclusão, garantindo que todos, independentemente do porte ou segmento, possam acessar oportunidades de crescimento no mercado local e beneficiar-se da economia solidária."
+      title: "Inclusão Social",
+      content: "Promovemos a inclusão de todos os setores da sociedade limeirense, garantindo oportunidades iguais e acesso justo ao mercado local para todos os empreendedores."
+    },
+    {
+      icon: <FaHandshake />,
+      title: "Parcerias Locais",
+      content: "Construímos uma rede sólida de parcerias entre empresas, instituições e comunidade de Limeira, fortalecendo o ecossistema empreendedor da cidade."
     }
   ];
 
   return (
-    <motion.div 
-      className="main-container"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <motion.div 
-        className="faq-box-container"
-        variants={itemVariants}
-      >
-        <div className="faq-box">
-          <FaQuestionCircle className="faq-icon" />
+    <div className="sobre-main-container">
+      <section className="sobre-hero-section">
+        <div className="sobre-hero-content">
+          <h1>Transformando o Comércio de Limeira</h1>
+          <p className="sobre-hero-text">
+            A <strong>Economia Solidária</strong> é uma plataforma que conecta 
+            empreendedores e consumidores de Limeira, fortalecendo o ecossistema 
+            de negócios local através de tecnologia e colaboração.
+          </p>
         </div>
-        <h2 className="faq-title">Dúvidas Frequentes</h2>
-        <motion.div 
-          className="faq-content"
-          variants={containerVariants}
-        >
-          {faqItems.map((item, index) => (
-            <motion.div 
-              key={index}
-              className="faq-item"
-              variants={itemVariants}
-              whileHover={{ x: 10, transition: { duration: 0.2 } }}
-            >
-              <h3>
-                <span className="faq-item-icon">{item.icon}</span>
-                {item.question}
-              </h3>
-              <p>{item.answer}</p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </motion.div>
+      </section>
 
-      <motion.div 
-        className="about-container"
-        variants={itemVariants}
-      >
-        <motion.h1 variants={itemVariants}>
-          Sobre Nós
-        </motion.h1>
-        <motion.p variants={itemVariants}>
-          Bem-vindo à <strong>Economia Solidária</strong>, uma plataforma que
-          promove a colaboração e fortalece os negócios locais. Nosso objetivo é
-          conectar empreendedores e consumidores para impulsionar a economia
-          compartilhada e o bem-estar da comunidade local.
-        </motion.p>
+      <section className="sobre-highlights-section">
+        {highlights.map((highlight, index) => (
+          <div key={index} className="sobre-highlight-card">
+            <div className="sobre-highlight-icon">{highlight.icon}</div>
+            <h3>{highlight.title}</h3>
+            <p>{highlight.description}</p>
+          </div>
+        ))}
+      </section>
 
-        <motion.h2 variants={itemVariants}>
-          <FaHandshake className="section-icon" /> Missão
-        </motion.h2>
-        <motion.p variants={itemVariants}>
-          Criamos um espaço digital inclusivo e sustentável, onde todos podem
-          colaborar de forma justa, promovendo a economia solidária nas
-          comunidades locais.
-        </motion.p>
+      <section className="sobre-stats-section">
+        {stats.map((stat, index) => (
+          <div key={index} className="sobre-stat-card">
+            <div className="sobre-stat-icon">{stat.icon}</div>
+            <h3 className="sobre-stat-number">{stat.value}</h3>
+            <p className="sobre-stat-label">{stat.label}</p>
+            <p>{stat.description}</p>
+          </div>
+        ))}
+      </section>
 
-        <motion.h2 variants={itemVariants}>
-          <FaLeaf className="section-icon" /> Valores
-        </motion.h2>
-        <motion.div 
-          className="accordion"
-          variants={containerVariants}
-        >
-          {accordionItems.map((item, index) => (
-            <motion.div
-              key={index}
-              className="accordion-item"
-              variants={itemVariants}
-              whileHover={{ x: 10, transition: { duration: 0.2 } }}
-            >
-              <div 
-                className="accordion-header" 
-                onClick={() => handleAccordionToggle(index)}
-              >
-                <div className="header-content">
-                  <span className="accordion-item-icon">{item.icon}</span>
-                  {item.title}
+      <section className="sobre-about-section">
+        <div className="sobre-mission-container">
+          <h2>
+            <FaHandshake className="sobre-section-icon" /> Nossa Missão
+          </h2>
+          <p className="sobre-mission-text">
+            Capacitamos empreendedores locais através de uma plataforma digital inovadora,
+            promovendo crescimento sustentável e fortalecendo laços comunitários. Nossa visão
+            é criar um ecossistema de negócios próspero e colaborativo.
+          </p>
+        </div>
+
+        <div className="sobre-values-container">
+          <h2>
+            <FaLeaf className="sobre-section-icon" /> Nossos Valores
+          </h2>
+          <div className="sobre-values-grid">
+            {accordionItems.map((item, index) => (
+              <div key={index} className="sobre-value-card">
+                <div className="sobre-value-header">
+                  <div className="sobre-value-icon">{item.icon}</div>
+                  <h3>{item.title}</h3>
                 </div>
-                <motion.div
-                  animate={{ rotate: activeIndex === index ? 180 : 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <FaChevronDown />
-                </motion.div>
+                <p>{item.content}</p>
               </div>
-              <AnimatePresence>
-                {activeIndex === index && (
-                  <motion.div
-                    className="accordion-content"
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                  >
-                    {item.content}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="sobre-faq-section">
+        <div className="sobre-faq-header">
+          <FaQuestionCircle className="sobre-faq-icon" />
+          <h2>Perguntas Frequentes</h2>
+        </div>
+        <div className="sobre-faq-grid">
+          {faqItems.map((item, index) => (
+            <div key={index} className="sobre-faq-card">
+              <div className="sobre-faq-card-icon">{item.icon}</div>
+              <h3>{item.question}</h3>
+              <p>{item.answer}</p>
+            </div>
           ))}
-        </motion.div>
-      </motion.div>
-    </motion.div>
+        </div>
+      </section>
+    </div>
   );
 };
 
