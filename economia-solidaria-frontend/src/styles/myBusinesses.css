@@ -289,36 +289,39 @@
 
 /* CTA Section */
 .cta-section {
-    background-color: #4A90E2; /* Azul suave */
-    color: white; /* Texto branco */
-    padding: 40px 20px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  background-color: #4A90E2; /* Azul suave */
+  color: white; /* Texto branco */
+  padding: 40px 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .cta-section h2 {
-    font-size: 28px;
-    margin-bottom: 15px;
+  font-size: 28px;
+  margin-bottom: 15px;
+  color: white; /* Garantir que o título esteja branco */
 }
 
 .cta-section p {
-    font-size: 18px;
-    margin-bottom: 25px;
+  font-size: 18px;
+  margin-bottom: 25px;
+  color: white; /* Garantir que o parágrafo esteja branco */
 }
 
 .cta-section a {
-    background-color: #ff5722; /* Botão vermelho */
-    color: white; /* Texto do botão em branco */
-    padding: 12px 25px;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
+  background-color: #ff5722; /* Botão vermelho */
+  color: white; /* Texto do botão em branco */
+  padding: 12px 25px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s;
 }
 
 .cta-section a:hover {
-    background-color: #e64a19; /* Cor do botão em hover */
+  background-color: #e64a19; /* Cor do botão em hover */
 }
+
 
 /* Responsividade */
 @media (max-width: 768px) {
