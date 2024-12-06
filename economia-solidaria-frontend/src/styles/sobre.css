@@ -1,198 +1,341 @@
-/* Container principal que engloba o conteúdo e o quadrado da lateral */
 .main-container {
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  padding: var(--spacing-xl) var(--spacing-md);
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-top: 50px;
-  padding: 20px;
+  gap: var(--spacing-xl);
+  max-width: 1400px;
+  margin: 0 auto;
   flex-wrap: wrap;
-  gap: 30px;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Estilo do quadrado lateral para Dúvidas Frequentes */
+.main-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.05), rgba(var(--secondary-rgb), 0.05));
+  z-index: -1;
+}
+
 .faq-box-container {
-  width: 20%;
-  padding: 20px;
-  background-color: #007bff;
-  color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex: 1;
+  min-width: 300px;
+  background: linear-gradient(145deg, #ffffff, #f9fafb);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: var(--spacing-xl);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.faq-box-container:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-xl);
 }
 
 .faq-box {
-  font-size: 40px;
-  text-align: center;
+  width: 70px;
+  height: 70px;
+  background: var(--primary-gradient);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.faq-box::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(255,255,255,0.2), transparent);
+  top: 0;
+  left: 0;
+}
+
+.faq-icon {
+  width: 35px;
+  height: 35px;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
 .faq-title {
-  font-size: 18px;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
   text-align: center;
-  margin-top: 10px;
+  margin-bottom: var(--spacing-xl);
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
 }
 
-/* Estilo do quadrado central para "Sobre Nós" */
-.about-container {
-  width: 70%;
-  padding: 30px;
-  background: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  font-family: Arial, sans-serif;
+.faq-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.faq-item {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  background: white;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+  transform: translateX(5px);
+  box-shadow: var(--shadow-md);
+}
+
+.faq-item h3 {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.faq-item p {
+  color: var(--text-secondary);
   line-height: 1.6;
-  flex-grow: 1;
-  min-width: 320px;
+  font-size: 1rem;
+  margin-left: calc(1.2rem + var(--spacing-xs));
 }
 
-/* Estilo do título principal */
+.faq-item-icon {
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+}
+
+.about-container {
+  flex: 2;
+  min-width: 300px;
+  background: linear-gradient(145deg, #ffffff, #f9fafb);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.1), rgba(var(--secondary-rgb), 0.1));
+  border-radius: 50%;
+  transform: translate(30%, -30%);
+  z-index: 0;
+}
+
 .about-container h1 {
-  font-size: 28px;
-  color: #007bff;
-  text-align: center;
-  margin-bottom: 20px;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  margin-bottom: var(--spacing-lg);
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
 }
 
-/* Estilo do título secundário */
 .about-container h2 {
-  font-size: 22px;
-  color: #333;
-  margin-top: 20px;
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  margin: var(--spacing-xl) 0 var(--spacing-md);
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
 }
 
 .about-container p {
-  font-size: 16px;
-  color: #555;
-  text-align: justify;
-  margin-bottom: 15px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-size: 1rem;
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  z-index: 1;
 }
 
-.about-container ul {
-  list-style: none;
-  padding: 0;
+.about-container strong {
+  color: var(--primary-color);
+  font-weight: 600;
 }
 
-.about-container ul li {
-  font-size: 16px;
-  color: #555;
-  background: #f0f0f0;
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 5px;
+.section-icon {
+  color: var(--primary-color);
+  font-size: 1.8rem;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
 }
 
-/* Estilo do acordeão */
 .accordion {
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+  position: relative;
+  z-index: 1;
 }
 
 .accordion-item {
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  border: 1px solid rgba(var(--primary-rgb), 0.1);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all var(--transition-base);
+  background: white;
+}
+
+.accordion-item:hover {
+  transform: translateX(5px);
+  box-shadow: var(--shadow-md);
 }
 
 .accordion-header {
-  font-size: 18px;
-  font-weight: bold;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: linear-gradient(145deg, #ffffff, #f9fafb);
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--primary-color);
   cursor: pointer;
-  border: none;
-  text-align: left;
-  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
 }
 
-.accordion-content {
-  padding: 10px;
-  background-color: #f4f4f4;
-  color: #555;
-  font-size: 16px;
-  border-top: 1px solid #ddd;
+.accordion-header:hover {
+  background: var(--bg-gradient-hover);
+}
+
+.accordion-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--primary-gradient);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.accordion-item:hover .accordion-header::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.accordion-item-icon {
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  margin-right: var(--spacing-xs);
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
 }
 
 .accordion-icon {
-  float: right;
-  transition: transform 0.3s ease;
+  font-size: 0.8rem;
+  transition: transform var(--transition-base);
+  color: var(--primary-color);
 }
 
 .accordion-icon.rotate {
   transform: rotate(180deg);
 }
 
-/* Responsividade para telas menores */
+.accordion-content {
+  padding: var(--spacing-lg);
+  background: white;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-size: 1rem;
+  border-top: 1px solid rgba(var(--primary-rgb), 0.1);
+  position: relative;
+}
+
+.accordion-content::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--primary-gradient);
+}
+
 @media (max-width: 1024px) {
-  .faq-box-container, .about-container {
-    width: 100%;
-    margin-bottom: 20px; /* Adiciona espaço entre os quadrados */
-  }
-
   .main-container {
     flex-direction: column;
-    /* Alinha os itens verticalmente em telas médias */
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .faq-box-container,
+  .about-container {
+    width: 100%;
+  }
+
+  .about-container::before {
+    width: 150px;
+    height: 150px;
   }
 }
 
-/* Responsividade para telas pequenas */
 @media (max-width: 768px) {
-  .faq-box-container, .about-container {
-    width: 100%;
-    margin-bottom: 20px; /* Adiciona espaço entre os quadrados */
-  }
-
   .main-container {
-    flex-direction: column;
-    /* Faz com que os elementos fiquem empilhados verticalmente */
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+
+  .faq-box-container,
+  .about-container {
+    padding: var(--spacing-lg);
+  }
+
+  .accordion-header {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .accordion-content {
+    padding: var(--spacing-md);
+  }
+
+  .faq-content p,
+  .about-container p,
+  .accordion-content {
+    font-size: 0.9rem;
   }
 
   .faq-box {
-    font-size: 35px; /* Ajusta o tamanho da fonte */
+    width: 60px;
+    height: 60px;
   }
 
-  .about-container h1 {
-    font-size: 24px; /* Ajusta o tamanho do título */
-  }
-
-  .about-container h2 {
-    font-size: 20px; /* Ajusta o tamanho do título secundário */
-  }
-
-  .about-container p {
-    font-size: 14px; /* Ajusta o tamanho da fonte do parágrafo */
-  }
-
-  .about-container ul li {
-    font-size: 14px; /* Ajusta o tamanho da fonte das listas */
-  }
-}
-
-/* Responsividade para telas muito pequenas (smartphones estreitos) */
-@media (max-width: 480px) {
-  .faq-box-container, .about-container {
-    padding: 15px; /* Reduz o padding em telas menores */
-  }
-
-  .faq-box {
-    font-size: 30px; /* Reduz o tamanho da fonte do ícone FAQ */
-  }
-
-  .about-container h1 {
-    font-size: 22px; /* Reduz o tamanho do título principal */
-  }
-
-  .about-container h2 {
-    font-size: 18px; /* Reduz o tamanho do título secundário */
-  }
-
-  .about-container p {
-    font-size: 12px; /* Ajusta o tamanho do parágrafo */
-  }
-
-  .about-container ul li {
-    font-size: 12px; /* Ajusta o tamanho das listas */
+  .faq-icon {
+    width: 30px;
+    height: 30px;
   }
 }
