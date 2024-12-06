@@ -1,251 +1,250 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { getAuth } from 'firebase/auth';
-import "../styles/AdminNegocios.css";
+import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { FiSearch, FiFilter, FiMapPin, FiPhone, FiMail, FiCheck, FiX, FiGrid, FiArrowDown } from 'react-icons/fi';
+import '../styles/AdminNegocios.css';
 
 const AdminNegocios = () => {
   const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editingBusiness, setEditingBusiness] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const auth = getAuth();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' ou 'desc'
 
   useEffect(() => {
     fetchBusinesses();
-  }, [auth]);
+  }, []);
 
   const fetchBusinesses = async () => {
-    if (!auth.currentUser) {
-      setError("Você precisa estar logado como administrador para acessar esta página");
-      setLoading(false);
-      return;
-    }
-
     try {
-      if (!db) {
-        throw new Error("Erro de conexão com o banco de dados");
-      }
-
-      const businessesRef = collection(db, "lojas");
-      const querySnapshot = await getDocs(businessesRef);
-      const businessesList = [];
-
-      querySnapshot.forEach((doc) => {
-        try {
-          if (!doc.exists()) return;
-
-          const data = doc.data();
-          if (!data) return;
-
-          businessesList.push({
-            id: doc.id,
-            nome: data?.nome || "Nome não disponível",
-            status: data?.status || "Status não definido",
-            cnpj: data?.cnpj || "CNPJ não informado",
-            endereco: data?.endereco || "Endereço não informado",
-            telefone: data?.telefone || "Telefone não informado",
-            email: data?.email || "Email não informado",
-            dataCriacao: data?.dataCriacao?.toDate()?.toLocaleDateString() || "Data não disponível"
-          });
-        } catch (docError) {
-          console.error("Erro ao processar documento:", docError);
-        }
-      });
-
+      setLoading(true);
+      const businessesCollection = collection(db, 'lojas');
+      const businessesSnapshot = await getDocs(businessesCollection);
+      const businessesList = businessesSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
       setBusinesses(businessesList);
       setError(null);
     } catch (err) {
-      console.error("Erro ao carregar negócios:", err);
-      setError("Erro ao carregar os dados. Por favor, tente novamente.");
+      setError('Erro ao carregar os negócios. Por favor, tente novamente mais tarde.');
+      console.error('Error fetching businesses:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleEdit = (business) => {
-    setEditingBusiness(business);
-    setShowModal(true);
-  };
-
-  const handleDelete = async (businessId) => {
-    if (window.confirm("Tem certeza que deseja excluir este negócio?")) {
-      try {
-        const businessRef = doc(db, "lojas", businessId);
-        await deleteDoc(businessRef);
-        setBusinesses(businesses.filter(b => b.id !== businessId));
-      } catch (error) {
-        console.error("Erro ao excluir negócio:", error);
-        alert("Erro ao excluir o negócio. Por favor, tente novamente.");
-      }
-    }
-  };
-
-  const handleUpdate = async (e) => {
-    e.preventDefault();
+  const handleApprove = async (businessId) => {
     try {
-      const businessRef = doc(db, "lojas", editingBusiness.id);
+      const businessRef = doc(db, 'lojas', businessId);
       await updateDoc(businessRef, {
-        nome: editingBusiness.nome,
-        status: editingBusiness.status,
-        cnpj: editingBusiness.cnpj,
-        endereco: editingBusiness.endereco,
-        telefone: editingBusiness.telefone,
-        email: editingBusiness.email
+        status: 'ativo'
       });
-
-      setBusinesses(businesses.map(b => 
-        b.id === editingBusiness.id ? editingBusiness : b
-      ));
-      setShowModal(false);
-    } catch (error) {
-      console.error("Erro ao atualizar negócio:", error);
-      alert("Erro ao atualizar o negócio. Por favor, tente novamente.");
+      await fetchBusinesses();
+    } catch (err) {
+      setError('Erro ao aprovar o negócio. Por favor, tente novamente.');
+      console.error('Error approving business:', err);
     }
   };
+
+  const handleReject = async (businessId) => {
+    try {
+      const businessRef = doc(db, 'lojas', businessId);
+      await updateDoc(businessRef, {
+        status: 'inativo'
+      });
+      await fetchBusinesses();
+    } catch (err) {
+      setError('Erro ao rejeitar o negócio. Por favor, tente novamente.');
+      console.error('Error rejecting business:', err);
+    }
+  };
+
+  const toggleSortOrder = () => {
+    setSortOrder(prevOrder => prevOrder === 'asc' ? 'desc' : 'asc');
+  };
+
+  const getFilteredAndSortedBusinesses = () => {
+    let filtered = businesses.filter(business => {
+      const matchesSearch = business.nome?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          business.cnpj?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          business.email?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || business.status === statusFilter;
+      const matchesCategory = categoryFilter === 'all' || business.categoria === categoryFilter;
+      return matchesSearch && matchesStatus && matchesCategory;
+    });
+
+    // Ordenação alfabética
+    filtered.sort((a, b) => {
+      const nameA = (a.nome || '').toLowerCase();
+      const nameB = (b.nome || '').toLowerCase();
+      return sortOrder === 'asc' 
+        ? nameA.localeCompare(nameB)
+        : nameB.localeCompare(nameA);
+    });
+
+    return filtered;
+  };
+
+  // Lista única de categorias dos negócios
+  const categories = ['all', ...new Set(businesses.map(b => b.categoria).filter(Boolean))];
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Carregando dados dos negócios...</p>
+      <div className="admin-page">
+        <div className="admin-header">
+          <h1>Gerenciamento de Negócios</h1>
+          <p>Carregando negócios...</p>
+        </div>
+        <div className="business-grid">
+          {[1, 2, 3, 4].map((_, index) => (
+            <div key={index} className="skeleton">
+              <div className="skeleton-image" />
+              <div className="skeleton-content">
+                <div className="skeleton-title" />
+                <div className="skeleton-text" />
+                <div className="skeleton-text" />
+                <div className="skeleton-text" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
 
-  if (error) {
-    return (
-      <div className="error-container">
-        <p className="error-message">{error}</p>
-        <button className="retry-button" onClick={() => window.location.reload()}>
-          Tentar Novamente
-        </button>
-      </div>
-    );
-  }
+  const filteredBusinesses = getFilteredAndSortedBusinesses();
 
   return (
-    <div className="admin-gerenciamento">
-      <div className="container">
+    <div className="admin-page">
+      <div className="admin-header">
         <h1>Gerenciamento de Negócios</h1>
-        
-        {businesses.length === 0 ? (
-          <p className="no-businesses">Nenhum negócio encontrado.</p>
-        ) : (
-          <div className="business-list">
-            {businesses.map((business) => (
-              <div key={business.id} className="business-card">
-                <h3>{business.nome}</h3>
-                <div className="business-info">
-                  <p><strong>Status:</strong> {business.status}</p>
-                  <p><strong>CNPJ:</strong> {business.cnpj}</p>
-                  <p><strong>Endereço:</strong> {business.endereco}</p>
-                  <p><strong>Telefone:</strong> {business.telefone}</p>
-                  <p><strong>Email:</strong> {business.email}</p>
-                  <p><strong>Data de Criação:</strong> {business.dataCriacao}</p>
-                </div>
-                <div className="business-actions">
-                  <button 
-                    className="edit"
-                    onClick={() => handleEdit(business)}
-                  >
-                    Editar
-                  </button>
-                  <button 
-                    className="delete-button"
-                    onClick={() => handleDelete(business.id)}
-                  >
-                    Excluir
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        <p>Gerencie os negócios cadastrados na plataforma</p>
       </div>
 
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Editar Negócio</h2>
-            <form className="edit-form" onSubmit={handleUpdate}>
-              <label>
-                Nome:
-                <input
-                  type="text"
-                  value={editingBusiness.nome}
-                  onChange={(e) => setEditingBusiness({
-                    ...editingBusiness,
-                    nome: e.target.value
-                  })}
-                />
-              </label>
-              <label>
-                Status:
-                <input
-                  type="text"
-                  value={editingBusiness.status}
-                  onChange={(e) => setEditingBusiness({
-                    ...editingBusiness,
-                    status: e.target.value
-                  })}
-                />
-              </label>
-              <label>
-                CNPJ:
-                <input
-                  type="text"
-                  value={editingBusiness.cnpj}
-                  onChange={(e) => setEditingBusiness({
-                    ...editingBusiness,
-                    cnpj: e.target.value
-                  })}
-                />
-              </label>
-              <label>
-                Endereço:
-                <input
-                  type="text"
-                  value={editingBusiness.endereco}
-                  onChange={(e) => setEditingBusiness({
-                    ...editingBusiness,
-                    endereco: e.target.value
-                  })}
-                />
-              </label>
-              <label>
-                Telefone:
-                <input
-                  type="text"
-                  value={editingBusiness.telefone}
-                  onChange={(e) => setEditingBusiness({
-                    ...editingBusiness,
-                    telefone: e.target.value
-                  })}
-                />
-              </label>
-              <label>
-                Email:
-                <input
-                  type="email"
-                  value={editingBusiness.email}
-                  onChange={(e) => setEditingBusiness({
-                    ...editingBusiness,
-                    email: e.target.value
-                  })}
-                />
-              </label>
-              <div className="edit-form-actions">
-                <button type="submit">Salvar</button>
-                <button type="button" onClick={() => setShowModal(false)}>
-                  Cancelar
-                </button>
-              </div>
-            </form>
-          </div>
+      {error && (
+        <div className="error-message">
+          {error}
         </div>
       )}
+
+      <div className="admin-controls">
+        <div className="search-bar">
+          <FiSearch className="search-icon" />
+          <input
+            type="text"
+            placeholder="Pesquisar negócios..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        <div className="filters">
+          <div className="filter-group">
+            <FiFilter className="filter-icon" />
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="all">Todos os status</option>
+              <option value="ativo">Ativos</option>
+              <option value="pendente">Pendentes</option>
+              <option value="inativo">Inativos</option>
+            </select>
+          </div>
+
+          <div className="filter-group">
+            <FiGrid className="filter-icon" />
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+            >
+              <option value="all">Todas as categorias</option>
+              {categories.map(category => 
+                category !== 'all' && (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                )
+              )}
+            </select>
+          </div>
+
+          <button 
+            className="sort-button"
+            onClick={toggleSortOrder}
+            title={`Ordenar ${sortOrder === 'asc' ? 'Decrescente' : 'Crescente'}`}
+          >
+            <FiArrowDown 
+              className={`sort-icon ${sortOrder === 'desc' ? 'sort-desc' : ''}`}
+            />
+            {sortOrder === 'asc' ? 'A-Z' : 'Z-A'}
+          </button>
+        </div>
+      </div>
+
+      <div className="business-grid">
+        {filteredBusinesses.length === 0 ? (
+          <div className="empty-state">
+            Nenhum negócio encontrado com os filtros atuais.
+          </div>
+        ) : (
+          filteredBusinesses.map(business => (
+            <div key={business.id} className="business-card">
+              <div className="business-image">
+                <img
+                  src={'https://via.placeholder.com/300x200?text=Sem+Imagem'}
+                  alt={business.nome}
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/300x200?text=Sem+Imagem';
+                  }}
+                />
+              </div>
+              <div className="business-content">
+                <div className="business-header">
+                  <h3>{business.nome}</h3>
+                  <span className={`status-badge ${business.status}`}>
+                    {business.status === 'ativo' && <FiCheck />}
+                    {business.status === 'pendente' && <FiFilter />}
+                    {business.status === 'inativo' && <FiX />}
+                    {business.status === 'ativo' ? 'Ativo' :
+                     business.status === 'pendente' ? 'Pendente' :
+                     'Inativo'}
+                  </span>
+                </div>
+                
+                <div className="business-info">
+                  <p><FiGrid />{business.categoria || 'Categoria não informada'}</p>
+                  <p><FiMapPin />{business.endereco || 'Endereço não informado'}</p>
+                  <p><FiPhone />{business.telefone || 'Telefone não informado'}</p>
+                  <p><FiMail />{business.email || 'Email não informado'}</p>
+                </div>
+
+                <div className="business-actions">
+                  {business.status !== 'ativo' && (
+                    <button
+                      className="approve-button"
+                      onClick={() => handleApprove(business.id)}
+                    >
+                      <FiCheck /> Aprovar
+                    </button>
+                  )}
+                  {business.status !== 'inativo' && (
+                    <button
+                      className="reject-button"
+                      onClick={() => handleReject(business.id)}
+                    >
+                      <FiX /> Rejeitar
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };

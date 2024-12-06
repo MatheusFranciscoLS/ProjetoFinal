@@ -1,78 +1,128 @@
 /* Estilos para o Footer */
 .footer {
-  text-align: center;
-  padding: 0.8rem;
-  background-color: #007bff;
-  background-image: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  background-color: var(--primary-color);
   color: white;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3rem 2rem 1.5rem;
   width: 100%;
-  font-size: 0.9rem;
-  font-weight: 400;
   position: relative;
-  bottom: 0;
-  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.footer-nav {
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.footer-section {
+  padding: 0 1rem;
+}
+
+.footer-section h3 {
+  color: white;
+  font-size: 1.2rem;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.footer-section h3::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 2px;
+  background-color: var(--accent-color, #ffdd57);
+}
+
+.footer-links {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.2rem;
-  margin-bottom: 0;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
 .footer-link {
-  color: #f1f1f1; /* Texto mais claro para melhorar a visibilidade */
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  font-size: 0.95rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.3rem 0.6rem;
-  border-radius: 15px;
+  transition: all 0.2s ease;
+  padding: 0.3rem 0;
 }
 
-.footer-link i {
-  font-size: 1rem;
-  transition: transform 0.2s ease;
-}
-
-/* Efeito de hover para os links */
 .footer-link:hover {
-  color: #ffdd57; /* Cor amarela para o hover */
-  background-color: rgba(255, 255, 255, 0.2); /* Fundo mais claro no hover */
-  transform: translateY(-2px);
+  color: white;
+  transform: translateX(5px);
 }
 
-.footer-link:hover i {
-  transform: scale(1.1);
+.footer-description {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  font-size: 0.95rem;
 }
 
-/* Estilo para o texto do copyright */
-.footer p {
-  color: white; /* Define o texto do copyright como branco */
-  font-size: 0.8rem; /* Ajuste no tamanho, se necessário */
-  margin-top: 10px; /* Adiciona espaçamento para o texto do copyright */
+.footer-contact {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
 }
 
-/* Responsividade: links no footer em telas pequenas */
+.footer-contact p {
+  margin: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
 @media (max-width: 768px) {
   .footer {
-    padding: 0.6rem;
+    padding: 2rem 1rem 1rem;
   }
-  
-  .footer-nav {
-    flex-direction: column;
-    gap: 0.5rem;
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
-  
-  .footer-link {
-    width: 100%;
-    justify-content: center;
-    padding: 0.3rem 0.8rem;
+
+  .footer-section {
+    padding: 0;
+    text-align: center;
+  }
+
+  .footer-section h3::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .footer-links {
+    align-items: center;
+  }
+
+  .footer-link:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 1.5rem 1rem 1rem;
+  }
+
+  .footer-bottom {
+    font-size: 0.85rem;
   }
 }

@@ -1,24 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Importe useNavigate
-import { auth, db } from "../firebase"; // Importe a configuração do Firebase
-import { signOut } from "firebase/auth"; // Para realizar o logout
-import { doc, getDoc } from "firebase/firestore"; // Para acessar dados do Firestore
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { auth, db } from "../firebase";
+import { signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { FaStore, FaUserPlus, FaSignInAlt, FaPlus, FaBriefcase, 
+         FaUserCog, FaCogs, FaSignOutAlt, FaUser, FaBars, FaTimes } from "react-icons/fa";
 import "../styles/header.css";
 
 const Header = () => {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para controlar o menu hambúrguer
-  const navigate = useNavigate(); // Hook para navegação
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
-        setUser(user); // Quando o usuário está autenticado
-
-        // Verificar se o usuário é admin, buscando o campo 'tipo' no Firestore
+        setUser(user);
         try {
-          const userDoc = await getDoc(doc(db, "users", user.uid)); // Supondo que o usuário esteja na coleção 'users'
+          const userDoc = await getDoc(doc(db, "users", user.uid));
           if (userDoc.exists()) {
             const userData = userDoc.data();
             setIsAdmin(userData.tipo === "admin");
@@ -27,94 +38,91 @@ const Header = () => {
           console.error("Erro ao verificar o papel do usuário:", error);
         }
       } else {
-        setUser(null); // Quando o usuário não está autenticado
-        setIsAdmin(false); // Resetar se o usuário não estiver autenticado
+        setUser(null);
+        setIsAdmin(false);
       }
     });
 
-    return unsubscribe; // Limpeza do listener quando o componente for desmontado
+    return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location]);
 
   const handleLogout = async () => {
     try {
-      await signOut(auth); // Realiza o logout
-      setUser(null); // Limpa o estado do usuário
-      setIsAdmin(false); // Limpa o estado de administrador
-      navigate("/"); // Redireciona para a página "Home"
+      await signOut(auth);
+      setUser(null);
+      setIsAdmin(false);
+      navigate("/");
     } catch (error) {
       console.error("Erro ao sair", error);
     }
   };
 
+  const NavLink = ({ to, icon: Icon, children }) => (
+    <Link to={to} className="nav-link" onClick={() => setIsMenuOpen(false)}>
+      <Icon className="nav-icon" />
+      <span>{children}</span>
+    </Link>
+  );
+
   return (
-    <header className="header">
-      <Link to="/" className="nav-link">
+    <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
+      <Link to="/" className="logo-link">
         <img
           src={require("../assets/brabo.jpg")}
           alt="Economia Solidária"
           className="logo"
-          style={{
-            width: "50px",
-            height: "50px",
-            borderRadius: "50%",
-            objectFit: "cover",
-          }}
         />
+        <span className="logo-text">Economia Solidária</span>
       </Link>
 
-      <div className="hamburger-menu" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-        <div className={`bar ${isMenuOpen ? "open" : ""}`}></div>
-        <div className={`bar ${isMenuOpen ? "open" : ""}`}></div>
-        <div className={`bar ${isMenuOpen ? "open" : ""}`}></div>
-      </div>
+      <button 
+        className={`hamburger-menu ${isMenuOpen ? 'open' : ''}`}
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        aria-label="Menu"
+      >
+        {isMenuOpen ? <FaTimes /> : <FaBars />}
+      </button>
 
-      <nav className={`nav ${isMenuOpen ? "open" : ""}`}>
-        <Link to="/lojas" className="nav-link">
-          Página da Loja
-        </Link>
-        {!user && (
-          <>
-            <Link to="/register" className="nav-link">
-              Cadastro
-            </Link>
-            <Link to="/login" className="nav-link">
-              Login
-            </Link>
-          </>
-        )}
+      <nav className={`nav ${isMenuOpen ? 'open' : ''}`}>
+        <div className="nav-links">
+          <NavLink to="/lojas" icon={FaStore}>Lojas</NavLink>
+          
+          {!user && (
+            <>
+              <NavLink to="/register" icon={FaUserPlus}>Cadastro</NavLink>
+              <NavLink to="/login" icon={FaSignInAlt}>Login</NavLink>
+            </>
+          )}
+
+          {user && (
+            <>
+              <NavLink to="/register-business" icon={FaPlus}>Cadastrar Loja</NavLink>
+              <NavLink to="/meus-negocios" icon={FaBriefcase}>Meus Negócios</NavLink>
+            </>
+          )}
+
+          {isAdmin && (
+            <>
+              <NavLink to="/admin-dashboard" icon={FaUserCog}>Painel Admin</NavLink>
+              <NavLink to="/admin-gerenciamento" icon={FaCogs}>Gerenciamento</NavLink>
+            </>
+          )}
+        </div>
+
         {user && (
-          <>
-            <Link to="/register-business" className="nav-link">
-              Cadastrar Loja
-            </Link>
-            <Link to="/meus-negocios" className="nav-link">
-              Meus Negócios
-            </Link>
-          </>
-        )}
-        {isAdmin && (
-          <>
-            <Link to="/admin-dashboard" className="nav-link">
-              Painel Administrativo
-            </Link>
-            <Link to="/admin-gerenciamento" className="nav-link">
-              Gerenciamento
-            </Link>
-          </>
-        )}
-        {user && (
-          <div className="user-info">
-            <span className="user-name">
-              Olá, {user.displayName || user.email}
-            </span>
-            <div className="user-actions">
-              <Link to="/perfil" className="nav-link">
-                Perfil
-              </Link>
-              <button className="logout-button" onClick={handleLogout}>
-                Sair
-              </button>
+          <div className="user-section">
+            <div className="user-info">
+              <FaUser className="user-icon" />
+              <span className="user-email">{user.email}</span>
             </div>
+            <button onClick={handleLogout} className="logout-button">
+              <FaSignOutAlt />
+              <span>Sair</span>
+            </button>
           </div>
         )}
       </nav>

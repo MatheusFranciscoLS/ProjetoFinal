@@ -1,79 +1,159 @@
 import React, { useState } from "react";
 import "../styles/contato.css";
+import { FaMapMarkerAlt, FaEnvelope, FaPhone, FaClock } from "react-icons/fa";
 
 const Contact = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [subject, setSubject] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
   const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSuccessMessage("Obrigado por entrar em contato! Responderemos em breve.");
-    setName("");
-    setEmail("");
-    setMessage("");
-    setSubject("");
+    setLoading(true);
+    
+    // Simular envio do formulário
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setSuccessMessage("Mensagem enviada com sucesso! Retornaremos em breve.");
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: ""
+      });
+    } catch (error) {
+      console.error("Erro ao enviar mensagem:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="contact-container">
-      <div className="contact-form">
-        <h2>Contato</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="name">Nome:</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
+    <div className="contact-page">
+      <div className="contact-header">
+        <h1>Entre em Contato</h1>
+        <p>Estamos aqui para ajudar e ouvir suas sugestões</p>
+      </div>
+
+      <div className="contact-container">
+        <div className="contact-info">
+          <h2>Informações de Contato</h2>
+          <div className="info-items">
+            <div className="info-item">
+              <FaMapMarkerAlt className="info-icon" />
+              <div>
+                <h3>Localização</h3>
+                <p>Limeira, São Paulo</p>
+              </div>
+            </div>
+            <div className="info-item">
+              <FaEnvelope className="info-icon" />
+              <div>
+                <h3>E-mail</h3>
+                <p>contato@economiasolidaria.com.br</p>
+              </div>
+            </div>
+            <div className="info-item">
+              <FaPhone className="info-icon" />
+              <div>
+                <h3>Telefone</h3>
+                <p>(19) 3444-5555</p>
+              </div>
+            </div>
+            <div className="info-item">
+              <FaClock className="info-icon" />
+              <div>
+                <h3>Horário de Atendimento</h3>
+                <p>Segunda a Sexta: 9h às 18h</p>
+              </div>
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="email">Email:</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="message">Mensagem:</label>
-            <textarea
-              id="message"
-              name="message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              required
-            ></textarea>
-          </div>
-          <div className="form-group">
-            <label htmlFor="subject">Motivo do contato:</label>
-            <select
-              id="subject"
-              name="subject"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              required
-            >
-              <option value="">Selecione o motivo do contato</option>
-              <option value="duvida">Dúvidas gerais sobre a plataforma</option>
-              <option value="feedback">Feedback para melhoria do site</option>
-              <option value="parceria">Interesse em parcerias ou colaborações</option>
-              <option value="problema">Relatar um problema ou erro técnico</option>
-              <option value="outro">Outras questões</option>
-            </select>
-          </div>
-          {successMessage && <p className="success-message">{successMessage}</p>}
-          <button type="submit">Enviar</button>
-        </form>
+        </div>
+
+        <div className="contact-form">
+          <h2>Envie sua Mensagem</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="name">Nome Completo</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                placeholder="Digite seu nome completo"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="email">E-mail</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                placeholder="Digite seu e-mail"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="subject">Assunto</label>
+              <select
+                id="subject"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Selecione o assunto</option>
+                <option value="duvida">Dúvidas sobre a plataforma</option>
+                <option value="sugestao">Sugestões de melhoria</option>
+                <option value="parceria">Proposta de parceria</option>
+                <option value="problema">Reportar problema</option>
+                <option value="outro">Outro assunto</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="message">Mensagem</label>
+              <textarea
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                required
+                placeholder="Digite sua mensagem"
+                rows="5"
+              ></textarea>
+            </div>
+
+            {successMessage && (
+              <div className="success-message">
+                {successMessage}
+              </div>
+            )}
+
+            <button type="submit" disabled={loading}>
+              {loading ? "Enviando..." : "Enviar Mensagem"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

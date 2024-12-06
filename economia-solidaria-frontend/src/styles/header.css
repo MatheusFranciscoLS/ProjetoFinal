@@ -3,221 +3,225 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #007bff; /* Azul mais escuro */
-  padding: 10px 20px;
+  background: var(--primary-color);
+  padding: 1rem 2rem;
   color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Logo */
-.logo {
+.logo-link {
+  display: flex;
+  align-items: center;
   text-decoration: none;
   color: white;
+  gap: 1rem;
 }
 
-.logo-img {
-  width: 50px;
-  height: 50px;
+.logo {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
-/* Navegação */
+.logo:hover {
+  transform: scale(1.1);
+}
+
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: block;
+}
+
 .nav {
   display: flex;
   align-items: center;
+  gap: 2rem;
 }
 
-/* Links de navegação */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 .nav-link {
-  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   text-decoration: none;
   color: white;
-  font-size: 16px;
-  transition: color 0.3s;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 .nav-link:hover {
-  color: #ff9800; /* Cor ao passar o mouse */
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
 
-/* Informações do usuário */
+.nav-icon {
+  font-size: 1.1rem;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding-left: 1.5rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 .user-info {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
 }
 
-/* Nome do usuário */
-.user-name {
-  margin-right: 20px;
-  font-size: 16px;
+.user-icon {
+  font-size: 1.2rem;
 }
 
-/* Ações do usuário */
-.user-actions {
+.user-email {
+  font-size: 0.9rem;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout-button {
   display: flex;
   align-items: center;
-  gap: 10px; /* Espaço entre os ícones */
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-/* Ícones de perfil e logout */
-.icon-link,
-.icon-button {
+.logout-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.hamburger-menu {
+  display: none;
   background: none;
   border: none;
   color: white;
+  font-size: 1.5rem;
   cursor: pointer;
-  padding: 5px;
-  font-size: 18px;
-  transition: transform 0.3s, color 0.3s ease;
+  padding: 0.5rem;
+  transition: transform 0.3s ease;
 }
 
-.icon-link:hover,
-.icon-button:hover {
-  color: #ff9800;
-  transform: scale(1.2); /* Aumenta o tamanho ao passar o mouse */
+.hamburger-menu:hover {
+  transform: scale(1.1);
 }
 
-/* Botão de logout - estilização adicional (opcional) */
-.icon-button {
-  font-size: 18px;
-}
-
-/* Menu hambúrguer */
-.hamburger-menu {
-  display: none; /* Esconde em telas maiores */
-  cursor: pointer;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 20px;
-  width: 25px;
-}
-
-.bar {
-  width: 100%;
-  height: 4px;
-  background-color: white;
-  transition: all 0.3s;
-}
-
-.bar.open:nth-child(1) {
-  transform: rotate(45deg) translateY(7px);
-}
-
-.bar.open:nth-child(2) {
-  opacity: 0;
-}
-
-.bar.open:nth-child(3) {
-  transform: rotate(-45deg) translateY(-7px);
-}
-
-/* Menu aberto */
-.nav.open {
-  display: flex; /* Exibe o menu */
-}
-
-/* Responsividade */
-
-/* Para telas menores que 1024px (tablets e dispositivos menores) */
 @media (max-width: 1024px) {
-  .header {
-    padding: 10px 15px;
+  .logo-text {
+    display: none;
   }
-
-  .logo {
-    font-size: 20px;
+  
+  .nav-link span {
+    display: none;
   }
-
+  
   .nav-link {
-    font-size: 14px;
+    padding: 0.5rem;
   }
-
-  .user-name {
-    font-size: 14px;
-  }
-
-  .icon-link,
-  .icon-button {
-    font-size: 16px;
+  
+  .nav-icon {
+    font-size: 1.3rem;
   }
 }
 
-/* Para telas menores que 768px (smartphones) */
 @media (max-width: 768px) {
   .header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 15px;
+    padding: 1rem;
   }
-
+  
+  .hamburger-menu {
+    display: block;
+  }
+  
   .nav {
-    display: none; /* Esconde o menu por padrão */
+    position: fixed;
+    top: 73px;
+    right: -100%;
     flex-direction: column;
     align-items: flex-start;
-    margin-top: 10px;
+    background: var(--primary-color);
+    width: 250px;
+    height: calc(100vh - 73px);
+    padding: 2rem;
+    transition: right 0.3s ease;
+  }
+  
+  .nav.open {
+    right: 0;
+  }
+  
+  .nav-links {
+    flex-direction: column;
+    align-items: flex-start;
     width: 100%;
   }
-
-  .nav.open {
-    display: flex; /* Exibe o menu quando o hambúrguer for clicado */
-  }
-
+  
   .nav-link {
-    margin-right: 0;
-    margin-bottom: 10px;
-    font-size: 14px;
+    width: 100%;
+    padding: 0.75rem;
   }
-
+  
+  .nav-link span {
+    display: inline;
+  }
+  
+  .user-section {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 0;
+    margin-top: 1rem;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    width: 100%;
+    gap: 1rem;
+  }
+  
   .user-info {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: 10px;
+    width: 100%;
   }
-
-  .user-name {
-    margin-right: 0;
-    margin-bottom: 10px;
-    font-size: 14px;
+  
+  .user-email {
+    max-width: 180px;
   }
-
-  .user-actions {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .icon-link,
-  .icon-button {
-    font-size: 16px;
-  }
-
-  /* Exibe o botão de menu hambúrguer em dispositivos móveis */
-  .hamburger-menu {
-    display: flex;
+  
+  .logout-button {
+    width: 100%;
+    justify-content: center;
   }
 }
 
-/* Para telas menores que 480px (smartphones muito pequenos) */
 @media (max-width: 480px) {
-  .logo {
-    font-size: 18px;
-  }
-
   .header {
-    padding: 10px;
+    padding: 0.75rem;
   }
-
-  .nav-link {
-    font-size: 12px;
-  }
-
-  .user-name {
-    font-size: 12px;
-  }
-
-  .icon-link,
-  .icon-button {
-    font-size: 14px;
+  
+  .nav {
+    width: 100%;
+    top: 64px;
+    height: calc(100vh - 64px);
   }
 }
