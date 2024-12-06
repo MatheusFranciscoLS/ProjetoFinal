@@ -1,95 +1,289 @@
-/* Ajuste na centralização da página */
+/* Variáveis de cores e estilos globais */
+:root {
+  --primary-color: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #3b82f6;
+  --success-color: #10b981;
+  --error-color: #ef4444;
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-light: #6b7280;
+  --background-light: #ffffff;
+  --background-gray: #f3f4f6;
+  --border-color: #e5e7eb;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --transition: all 0.2s ease-in-out;
+}
+
+/* Layout principal */
 .auth-container {
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  font-family: 'Roboto', sans-serif;
-  padding: 20px; /* Adicionando padding para espaçamento */
-  text-align: center; /* Centraliza o texto */
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--background-light) 0%, var(--background-gray) 100%);
 }
 
-/* Título */
-.auth-container h2 {
-  color: var(--text-color);
-  margin-bottom: 20px;
-  font-size: 28px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+.auth-content {
+  width: 100%;
+  max-width: 28rem;
+  background: var(--background-light);
+  padding: 2.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.5s ease-out;
 }
 
-/* Formulário */
-form {
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-content h2 {
+  color: var(--text-primary);
+  font-size: 1.875rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-form {
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  z-index: 1;
+  transition: var(--transition);
+}
+
+.input-with-icon:focus-within .input-icon {
+  color: var(--primary-color);
+}
+
+.input-with-icon input,
+.input-with-icon input[type="text"],
+.input-with-icon input[type="email"],
+.input-with-icon input[type="password"],
+.input-with-icon input.masked-input {
   width: 100%;
-  max-width: 400px;
-  margin: 0 auto; /* Garante que o formulário fique centralizado horizontalmente */
+  padding: 0.875rem 1rem 0.875rem 3rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+  color: var(--text-primary);
+  background-color: var(--background-light);
+  transition: var(--transition);
 }
 
-/* Entradas */
-form input {
-  margin-bottom: 15px;
-  padding: 12px;
-  border-radius: 5px;
-  font-size: 16px;
-  text-align: center; /* Centraliza o texto dentro do input */
-  width: 100%; /* Todos os inputs terão 100% da largura do formulário */
-  box-sizing: border-box; /* Garante que o padding e a borda não aumentem o tamanho total do input */
+.input-with-icon input:hover,
+.input-with-icon input[type="text"]:hover,
+.input-with-icon input[type="email"]:hover,
+.input-with-icon input[type="password"]:hover,
+.input-with-icon input.masked-input:hover {
+  border-color: var(--primary-light);
 }
 
-form input:focus {
+.input-with-icon input:focus,
+.input-with-icon input[type="text"]:focus,
+.input-with-icon input[type="email"]:focus,
+.input-with-icon input[type="password"]:focus,
+.input-with-icon input.masked-input:focus {
   outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
-/* Input máscara (telefone) */
-form .input-mask {
-  margin-bottom: 15px;
+.input-with-icon input::placeholder {
+  color: var(--text-light);
 }
 
-/* Botão */
-form button {
-  color: #fff;
-  font-size: 18px;
+.auth-button {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: var(--primary-color);
+  color: white;
   border: none;
-  padding: 12px;
-  border-radius: 5px;
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease;
-  width: 100%; /* Garante que o botão tenha largura total */
+  transition: var(--transition);
+  margin-top: 0.5rem;
 }
 
-form button:hover {
-  background: #74b9ff;
+.auth-button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
-/* Erro */
-.error {
-  font-size: 14px;
-  margin-bottom: 10px;
-  text-align: center;
+.auth-button:active {
+  transform: translateY(0);
+}
+
+.auth-button:disabled {
+  background-color: var(--text-light);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.error-message {
   color: var(--error-color);
+  font-size: 0.875rem;
+  margin-top: -0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: shake 0.5s ease-in-out;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  .auth-container {
-    padding: 20px;
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.success-message {
+  color: var(--success-color);
+  font-size: 0.875rem;
+  margin-top: -0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.info-message {
+  background-color: #dbeafe;
+  color: var(--primary-dark);
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.auth-link {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}
+
+.auth-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.auth-link a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.checkbox-group {
+  margin: 1rem 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.checkbox-label input[type="checkbox"]:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.checkbox-label input[type="checkbox"]:hover {
+  border-color: var(--primary-color);
+}
+
+.checkbox-label input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.checkbox-label span {
+  user-select: none;
+}
+
+.checkbox-label a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.checkbox-label a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .auth-content {
+    padding: 2rem;
   }
 
-  form {
-    padding: 20px;
-  }
-
-  form input {
-    font-size: 14px; /* Ajustando o tamanho da fonte para telas pequenas */
-  }
-
-  form button {
-    padding: 10px;
-    font-size: 16px;
+  .auth-content h2 {
+    font-size: 1.5rem;
   }
 }
