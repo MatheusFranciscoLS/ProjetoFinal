@@ -62,7 +62,7 @@ body {
 .home-container {
   width: 100%;
   min-height: 100vh;
-  padding-top: 80px;
+  padding-top: 0;
 }
 
 .container {
@@ -75,6 +75,7 @@ body {
 .hero-section {
   position: relative;
   min-height: 40vh;
+  margin-top: 0;
   background-image: linear-gradient(
     135deg,
     rgba(37, 99, 235, 0.95),
@@ -84,6 +85,7 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  padding-top: 80px;
 }
 
 .hero-section::before {

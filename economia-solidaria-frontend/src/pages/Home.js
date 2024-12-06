@@ -233,24 +233,24 @@ const Home = () => {
         <motion.div className="stat-item" variants={fadeInUp}>
           <FiTrendingUp className="stat-icon" />
           <div className="stat-info">
-            <h3>{lojas.length}</h3>
-            <p>Negócios Cadastrados</p>
-          </div>
-        </motion.div>
-
-        <motion.div className="stat-item" variants={fadeInUp}>
-          <FiUsers className="stat-icon" />
-          <div className="stat-info">
-            <h3>+2000</h3>
-            <p>Usuários Ativos</p>
+            <h3>+{Math.max(500, lojas.length * 3)}</h3>
+            <p>Clientes Impactados</p>
           </div>
         </motion.div>
 
         <motion.div className="stat-item" variants={fadeInUp}>
           <FiShoppingBag className="stat-icon" />
           <div className="stat-info">
-            <h3>+5000</h3>
-            <p>Produtos Disponíveis</p>
+            <h3>+{Math.max(50, lojas.length * 2)}</h3>
+            <p>Empreendedores Locais</p>
+          </div>
+        </motion.div>
+
+        <motion.div className="stat-item" variants={fadeInUp}>
+          <FiUsers className="stat-icon" />
+          <div className="stat-info">
+            <h3>+{Math.max(20, Math.floor(lojas.length / 2))}</h3>
+            <p>Comunidades Atendidas</p>
           </div>
         </motion.div>
       </motion.section>
