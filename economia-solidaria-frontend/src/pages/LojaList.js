@@ -119,6 +119,11 @@ const LojasList = () => {
         <div className="loja-info">
           <h3>{loja.nome}</h3>
           <p className="loja-categoria">{loja.categoria || 'Categoria não especificada'}</p>
+          <p className="loja-descricao">
+            {loja.descricao?.length > 100 
+              ? `${loja.descricao.substring(0, 100)}...` 
+              : loja.descricao || 'Descrição não disponível'}
+          </p>
         </div>
       </Link>
     );
