@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { collection, getDocs, doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { FiSearch } from "react-icons/fi";
 import "../styles/lojasList.css";
 
 const defaultLojaImage = "default-image.jpg";
@@ -144,13 +145,16 @@ const LojasList = () => {
       <h2>Lista de Lojas</h2>
 
       <div className="filters">
-        <input
-          type="text"
-          placeholder="Filtrar por nome"
-          value={filtroNome}
-          onChange={(e) => setFiltroNome(e.target.value)}
-          className="filter-input"
-        />
+        <div className="search-container">
+          <FiSearch className="search-icon" />
+          <input
+            type="text"
+            placeholder="Pesquisar por nome"
+            value={filtroNome}
+            onChange={(e) => setFiltroNome(e.target.value)}
+            className="filter-input"
+          />
+        </div>
         <select
           value={filtroCategoria}
           onChange={(e) => setFiltroCategoria(e.target.value)}
