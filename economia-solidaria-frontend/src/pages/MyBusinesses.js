@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
+import { FaEye } from "react-icons/fa";
 import "../styles/myBusinesses.css";
 
 const SkeletonCard = () => (
@@ -151,9 +152,12 @@ const MyBusinesses = () => {
                   >
                     Editar
                   </button>
-                  <Link to={`/loja/${business.id}`} className="view-button">
-                    Visualizar
-                  </Link>
+                  <button
+                    className="view-button"
+                    onClick={() => navigate(`/loja/${business.id}`)}
+                  >
+                    <FaEye style={{ marginRight: '5px' }} /> Visualizar
+                  </button>
                 </div>
               </div>
             </div>

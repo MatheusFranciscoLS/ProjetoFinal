@@ -38,6 +38,24 @@ const LojaCard = ({ loja, isPremium = false }) => {
   );
 };
 
+// Componente de card com imagem e nome embaixo
+const SimpleLojaCard = ({ loja }) => (
+  <div className="simple-loja-card">
+    <div className="card-image">
+      <img 
+        src={loja.imagens?.[0] || '/placeholder-image.jpg'} 
+        alt={loja.nome}
+        onError={(e) => {
+          e.target.src = '/placeholder-image.jpg';
+        }}
+      />
+    </div>
+    <div className="card-name">
+      <h3>{loja.nome}</h3>
+    </div>
+  </div>
+);
+
 const SkeletonCard = () => (
   <div className="loja-card skeleton">
     <div className="skeleton-image"></div>
@@ -67,6 +85,7 @@ const Home = () => {
   const [lojas, setLojas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [lojasEssentialDisplay, setLojasEssentialDisplay] = useState([]);
 
   // Configurações do carrossel
   const carouselSettings = {
@@ -145,10 +164,45 @@ const Home = () => {
 
   const lojasPremium = lojas
     .filter(loja => loja.plano?.toLowerCase() === "premium")
-    .sort(() => 0.5 - Math.random()) // Ordena aleatoriamente
-    .slice(0, 5); // Seleciona os primeiros 5
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 5);
 
-  const lojasEssential = lojas.filter(loja => loja.plano?.toLowerCase() === "essencial");
+  useEffect(() => {
+    const lojasEssential = lojas.filter(loja => loja.plano?.toLowerCase() === "essencial");
+    
+    // Função para embaralhar array
+    const shuffleArray = (array) => {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+
+    // Atualiza os cards a cada 5 segundos
+    const updateDisplayedCards = () => {
+      const shuffledLojas = shuffleArray(lojasEssential);
+      // Alterado para mostrar no máximo 2 lojas
+      const displayCount = Math.min(2, shuffledLojas.length);
+      setLojasEssentialDisplay(shuffledLojas.slice(0, displayCount));
+    };
+
+    // Primeira atualização
+    updateDisplayedCards();
+
+    // Configura o intervalo apenas se houver mais de 2 lojas
+    let interval;
+    if (lojasEssential.length > 2) {
+      interval = setInterval(updateDisplayedCards, 5000);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [lojas]);
 
   if (loading) {
     return (
@@ -319,8 +373,8 @@ const Home = () => {
           <p>Descubra mais negócios de qualidade em nossa rede</p>
         </div>
         <div className="essential-grid">
-          {lojasEssential.map((loja) => (
-            <LojaCard key={loja.id} loja={loja} isPremium={false} />
+          {lojasEssentialDisplay.map((loja) => (
+            <SimpleLojaCard key={loja.id} loja={loja} />
           ))}
         </div>
       </section>

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { collection, getDocs, doc, deleteDoc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
-import { FiPlus, FiEdit2, FiX, FiPackage, FiTag, FiCheck, FiClock } from "react-icons/fi";
+import { FiPlus, FiEdit2, FiX, FiPackage, FiTag, FiCheck, FiClock, FiTrash2 } from "react-icons/fi";
 import "../styles/AdminNegocios.css";
 
 // Componente do Skeleton
@@ -152,6 +152,10 @@ const AdminNegocios = () => {
     }));
   };
 
+  const handleStatusChange = (businessId, status) => {
+    // Implementação para alterar o status do negócio
+  };
+
   if (loading) {
     return (
       <div className="my-businesses-container">
@@ -234,7 +238,7 @@ const AdminNegocios = () => {
                     {business.status}
                   </span>
                 </p>
-                <div className="business-actions">
+                <div className="button-container">
                   <button
                     className="edit-button"
                     onClick={() => handleEdit(business.id)}
@@ -245,13 +249,7 @@ const AdminNegocios = () => {
                     className="delete-button"
                     onClick={() => handleConfirmDelete(business.id)}
                   >
-                    <FiX /> Excluir
-                  </button>
-                  <button
-                    className="verify-cnpj-button"
-                    onClick={() => handleVerifyCnpj(business.id)}
-                  >
-                    Verificar CNPJ
+                    <FiTrash2 /> Excluir
                   </button>
                 </div>
               </div>
