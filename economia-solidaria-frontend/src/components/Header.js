@@ -4,7 +4,7 @@ import { auth, db } from "../firebase";
 import { signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { FaStore, FaUserPlus, FaSignInAlt, FaPlus, FaBriefcase, 
-         FaUserCog, FaCogs, FaSignOutAlt, FaUser, FaBars, FaTimes } from "react-icons/fa";
+         FaUserCog, FaCogs, FaSignOutAlt, FaUser, FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 import "../styles/header.css";
 
 const Header = () => {
@@ -102,6 +102,7 @@ const Header = () => {
             <>
               <NavLink to="/register-business" icon={FaPlus}>Cadastrar Loja</NavLink>
               <NavLink to="/meus-negocios" icon={FaBriefcase}>Meus Negócios</NavLink>
+              <NavLink to="/perfil" icon={FaUserCircle}>Perfil</NavLink> {/* Novo link para "Perfil" */}
             </>
           )}
 

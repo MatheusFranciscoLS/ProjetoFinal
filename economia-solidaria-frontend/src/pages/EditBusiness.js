@@ -23,10 +23,41 @@ const EditBusiness = () => {
     status: ""
   });
 
+  const checkIfAdmin = async () => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      setError("Você precisa estar logado para editar um negócio.");
+      setLoading(false);
+      return false;
+    }
+
+    try {
+      const userDocRef = doc(db, "users", currentUser.uid);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        const adminRoles = ["admin", "administrador", "adm"];
+        const isAdmin = adminRoles.includes(userData.role?.toLowerCase()) || adminRoles.includes(userData.tipo?.toLowerCase());
+        return isAdmin;
+      } else {
+        setError("Usuário não encontrado ou sem permissões.");
+        setLoading(false);
+        return false;
+      }
+    } catch (err) {
+      console.error("Erro ao verificar administrador:", err);
+      setError("Erro ao verificar permissões. Por favor, tente novamente mais tarde.");
+      setLoading(false);
+      return false;
+    }
+  };
+
   useEffect(() => {
     const fetchBusiness = async () => {
-      if (!auth.currentUser) {
-        setError("Você precisa estar logado para editar um negócio");
+      const isAdmin = await checkIfAdmin();
+      if (!isAdmin) {
+        setError("Você não tem permissão para acessar esta página.");
         setLoading(false);
         return;
       }
@@ -38,55 +69,25 @@ const EditBusiness = () => {
       }
 
       try {
-        if (!db) {
-          throw new Error("Erro de conexão com o banco de dados");
+        const businessDocRef = doc(db, "lojas", id);
+        const businessDocSnap = await getDoc(businessDocRef);
+
+        if (businessDocSnap.exists()) {
+          setFormData(businessDocSnap.data());
+          setError(null);
+        } else {
+          setError("Negócio não encontrado.");
         }
-
-        const docRef = doc(db, "lojas", id);
-        const docSnap = await getDoc(docRef);
-
-        if (!docSnap.exists()) {
-          setError("Negócio não encontrado");
-          setLoading(false);
-          return;
-        }
-
-        const data = docSnap.data();
-        if (!data) {
-          setError("Dados do negócio não encontrados");
-          setLoading(false);
-          return;
-        }
-
-        // Verifica se o usuário atual é o dono do negócio
-        if (data.userId !== auth.currentUser.uid) {
-          setError("Você não tem permissão para editar este negócio");
-          setLoading(false);
-          return;
-        }
-
-        setFormData({
-          nome: data?.nome || "",
-          cnpj: data?.cnpj || "",
-          descricao: data?.descricao || "",
-          categoria: data?.categoria || "",
-          endereco: data?.endereco || "",
-          telefone: data?.telefone || "",
-          email: data?.email || "",
-          status: data?.status || "pendente"
-        });
-
-        setError(null);
       } catch (err) {
-        console.error("Erro ao carregar negócio:", err);
-        setError("Erro ao carregar dados do negócio. Por favor, tente novamente.");
+        console.error("Erro ao buscar dados do negócio:", err);
+        setError("Erro ao carregar os dados do negócio. Por favor, tente novamente mais tarde.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchBusiness();
-  }, [id, auth.currentUser]);
+  }, [auth, id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -101,12 +102,8 @@ const EditBusiness = () => {
     setLoading(true);
 
     try {
-      if (!db) {
-        throw new Error("Erro de conexão com o banco de dados");
-      }
-
-      const docRef = doc(db, "lojas", id);
-      await updateDoc(docRef, formData);
+      const businessDocRef = doc(db, "lojas", id);
+      await updateDoc(businessDocRef, formData);
       
       navigate("/meus-negocios");
     } catch (err) {
@@ -130,8 +127,8 @@ const EditBusiness = () => {
     return (
       <div className="error-container">
         <p className="error-message">{error}</p>
-        <button className="back-button" onClick={() => navigate("/meus-negocios")}>
-          Voltar para Meus Negócios
+        <button className="back-button" onClick={() => navigate(-1)}>
+          Voltar
         </button>
       </div>
     );
@@ -236,7 +233,7 @@ const EditBusiness = () => {
           <button
             type="button"
             className="cancel-button"
-            onClick={() => navigate("/meus-negocios")}
+            onClick={() => navigate(-1)} // Voltar para a página anterior
             disabled={loading}
           >
             Cancelar

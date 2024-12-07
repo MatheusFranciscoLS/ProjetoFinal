@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc, getDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
 import { FiPlus, FiEdit2, FiX, FiPackage, FiTag, FiCheck, FiClock } from "react-icons/fi";
 import "../styles/AdminNegocios.css";
@@ -21,13 +22,47 @@ const AdminNegocios = () => {
   const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [userPlan, setUserPlan] = useState(null);
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false); // Estado para verificar se o usuário é admin
   const navigate = useNavigate();
+  const auth = getAuth();
 
   useEffect(() => {
     const fetchData = async () => {
+      const currentUser = auth.currentUser;
+      if (!currentUser) {
+        setError("Você precisa estar logado para ver os negócios.");
+        setLoading(false);
+        return;
+      }
+
+      setUser(currentUser); // Define o usuário logado
+
       try {
-        // Fetch all businesses (without filtering by userId)
+        // Buscar dados do usuário na coleção "users" para verificar se ele é admin
+        const userDocRef = doc(db, "users", currentUser.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          console.log('Dados do usuário:', userData); // Verifique os dados retornados
+
+          // Verificação do papel de administrador nos campos 'role' e 'tipo'
+          const adminRoles = ["admin", "administrador", "adm"];
+          if (adminRoles.includes(userData.role?.toLowerCase()) || adminRoles.includes(userData.tipo?.toLowerCase())) {
+            setIsAdmin(true); // Se o papel do usuário for "admin", habilita o acesso
+          } else {
+            setError("Você não tem permissão para acessar esta página.");
+            setLoading(false);
+            return;
+          }
+        } else {
+          setError("Usuário não encontrado ou sem permissões.");
+          setLoading(false);
+          return;
+        }
+
+        // Após confirmar que o usuário é admin, buscamos os negócios
         const businessesRef = collection(db, "lojas");
         const querySnapshot = await getDocs(businessesRef);
 
@@ -44,6 +79,7 @@ const AdminNegocios = () => {
 
         setBusinesses(businessesData);
         setError(null);
+
       } catch (err) {
         console.error("Erro ao buscar dados:", err);
         setError("Erro ao carregar os negócios. Por favor, tente novamente mais tarde.");
@@ -53,7 +89,7 @@ const AdminNegocios = () => {
     };
 
     fetchData();
-  }, []);
+  }, [auth]);
 
   const getStatusIcon = (status) => {
     switch (status.toLowerCase()) {
@@ -109,18 +145,20 @@ const AdminNegocios = () => {
     );
   }
 
-  const isPremiumUser = userPlan === "Premium";
+  if (!isAdmin) {
+    return (
+      <div className="my-businesses-container">
+        <div className="error-message">
+          <h2>Acesso Negado</h2>
+          <p>Você não tem permissão para acessar esta página.</p>
+          <Link to="/" className="error-button">Voltar para Home</Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="my-businesses-container">
-      <div className="header-section">
-        <h1>Todas as Lojas</h1>
-        {isPremiumUser && (
-          <Link to="/register-business" className="add-business-button">
-            <FiPlus /> Adicionar Novo Negócio
-          </Link>
-        )}
-      </div>
+    
 
       <div className="businesses-grid">
         {businesses.length === 0 ? (
@@ -181,15 +219,7 @@ const AdminNegocios = () => {
           ))
         )}
       </div>
-
-      {!isPremiumUser && businesses.length > 0 && (
-        <div className="cta-section">
-          <h2>Expanda seus Negócios!</h2>
-          <p>Atualize para o plano Premium e cadastre mais negócios na plataforma.</p>
-          <Link to="/planos">Conhecer Planos</Link>
-        </div>
-      )}
-    </div>
+    
   );
 };
 

@@ -44,18 +44,6 @@ const LojaDetails = () => {
     fetchLoja();
   }, [id, auth]);
 
-  const handlePrevImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? loja.imagens.length - 1 : prevIndex - 1
-    );
-  };
-
-  const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === loja.imagens.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
   const openGoogleMaps = (endereco) => {
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}`;
     window.open(mapsUrl, '_blank');
@@ -88,6 +76,7 @@ const LojaDetails = () => {
       <div className="carrossel">
         {loja.imagens && loja.imagens.length > 0 ? (
           loja.plano === 'gratuito' ? (
+            // Exibe apenas a primeira imagem para plano gratuito, sem navegação
             <div className="carrossel-image-container">
               <img
                 src={loja.imagens[0]}
@@ -97,13 +86,8 @@ const LojaDetails = () => {
               />
             </div>
           ) : (
+            // Exibe o carrossel completo para planos pagos com navegação
             <>
-              {loja.imagens.length > 1 && (
-                <button className="carrossel-btn prev-btn" onClick={handlePrevImage}>
-                  &#10094;
-                </button>
-              )}
-
               <div className="carrossel-image-container">
                 <img
                   src={loja.imagens[currentImageIndex]}
@@ -112,12 +96,6 @@ const LojaDetails = () => {
                   onError={handleImageError}
                 />
               </div>
-
-              {loja.imagens.length > 1 && (
-                <button className="carrossel-btn next-btn" onClick={handleNextImage}>
-                  &#10095;
-                </button>
-              )}
             </>
           )
         ) : (
@@ -126,11 +104,6 @@ const LojaDetails = () => {
           </div>
         )}
       </div>
-
-      {/* Debug logging */}
-      {console.log('Plano da loja:', loja?.plano)}
-      {console.log('Imagens da loja:', loja?.imagens)}
-      {console.log('Índice da imagem atual:', currentImageIndex)}
 
       {/* Detalhes da Loja */}
       <p>
@@ -174,6 +147,7 @@ const LojaDetails = () => {
           </div>
         ) : null
       )}
+
       {loja.plano === 'Gratuito' && isOwner && (
         <div className="upgrade-message">
           <FaCrown className="crown-icon" />
