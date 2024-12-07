@@ -11,7 +11,7 @@ const EditBusiness = () => {
   const auth = getAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   const [formData, setFormData] = useState({
     nome: "",
     cnpj: "",
@@ -20,10 +20,12 @@ const EditBusiness = () => {
     endereco: "",
     telefone: "",
     email: "",
-    status: ""
+    status: "",
+    userId: ""  // Adicionando a referência ao usuário que criou o negócio
   });
 
-  const checkIfAdmin = async () => {
+  // Função que verifica se o usuário é o criador do negócio ou se é um administrador
+  const checkPermission = async () => {
     const currentUser = auth.currentUser;
     if (!currentUser) {
       setError("Você precisa estar logado para editar um negócio.");
@@ -32,22 +34,41 @@ const EditBusiness = () => {
     }
 
     try {
-      const userDocRef = doc(db, "users", currentUser.uid);
-      const userDocSnap = await getDoc(userDocRef);
+      const businessDocRef = doc(db, "lojas", id);
+      const businessDocSnap = await getDoc(businessDocRef);
 
-      if (userDocSnap.exists()) {
-        const userData = userDocSnap.data();
-        const adminRoles = ["admin", "administrador", "adm"];
-        const isAdmin = adminRoles.includes(userData.role?.toLowerCase()) || adminRoles.includes(userData.tipo?.toLowerCase());
-        return isAdmin;
+      if (businessDocSnap.exists()) {
+        const businessData = businessDocSnap.data();
+        const businessCreatorId = businessData.userId;  // Presumindo que você armazene o UID do criador do negócio
+        const userDocRef = doc(db, "users", currentUser.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          const adminRoles = ["admin", "administrador", "adm"];
+          const isAdmin = adminRoles.includes(userData.role?.toLowerCase()) || adminRoles.includes(userData.tipo?.toLowerCase());
+
+          // Permite editar se o usuário for o criador do negócio ou um administrador
+          if (isAdmin || currentUser.uid === businessCreatorId) {
+            return true;
+          } else {
+            setError("Você não tem permissão para editar este negócio.");
+            setLoading(false);
+            return false;
+          }
+        } else {
+          setError("Usuário não encontrado.");
+          setLoading(false);
+          return false;
+        }
       } else {
-        setError("Usuário não encontrado ou sem permissões.");
+        setError("Negócio não encontrado.");
         setLoading(false);
         return false;
       }
     } catch (err) {
-      console.error("Erro ao verificar administrador:", err);
-      setError("Erro ao verificar permissões. Por favor, tente novamente mais tarde.");
+      console.error("Erro ao verificar permissões:", err);
+      setError("Erro ao verificar permissões. Tente novamente.");
       setLoading(false);
       return false;
     }
@@ -55,12 +76,8 @@ const EditBusiness = () => {
 
   useEffect(() => {
     const fetchBusiness = async () => {
-      const isAdmin = await checkIfAdmin();
-      if (!isAdmin) {
-        setError("Você não tem permissão para acessar esta página.");
-        setLoading(false);
-        return;
-      }
+      const hasPermission = await checkPermission();
+      if (!hasPermission) return;
 
       if (!id) {
         setError("ID do negócio não fornecido");
@@ -73,7 +90,8 @@ const EditBusiness = () => {
         const businessDocSnap = await getDoc(businessDocRef);
 
         if (businessDocSnap.exists()) {
-          setFormData(businessDocSnap.data());
+          const businessData = businessDocSnap.data();
+          setFormData(businessData);
           setError(null);
         } else {
           setError("Negócio não encontrado.");
@@ -91,7 +109,7 @@ const EditBusiness = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -104,7 +122,7 @@ const EditBusiness = () => {
     try {
       const businessDocRef = doc(db, "lojas", id);
       await updateDoc(businessDocRef, formData);
-      
+
       navigate("/meus-negocios");
     } catch (err) {
       console.error("Erro ao atualizar negócio:", err);
@@ -137,7 +155,7 @@ const EditBusiness = () => {
   return (
     <div className="edit-business">
       <h1>Editar Negócio</h1>
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="nome">Nome do Negócio</label>
