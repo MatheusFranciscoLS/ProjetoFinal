@@ -192,7 +192,7 @@ const MyBusinesses = () => {
         <div className="cta-section">
           <h2>Expanda seus Negócios!</h2>
           <p>Atualize para o plano Premium e cadastre mais negócios na plataforma.</p>
-          <Link to="/planos">Conhecer Planos</Link>
+          <Link to="/plans-details">Conhecer Planos</Link>
         </div>
       )}
     </div>

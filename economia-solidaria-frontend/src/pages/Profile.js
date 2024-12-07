@@ -8,7 +8,6 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
 
   // Carrega dados do usuário
@@ -38,10 +37,6 @@ const Profile = () => {
 
     fetchUserData();
   }, [navigate]);
-
-  useEffect(() => {
-    document.body.className = "light-theme";
-  }, []);
 
   // Função para formatar o número de telefone
   const formatPhone = (phone) => {
