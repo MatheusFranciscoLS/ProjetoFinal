@@ -243,4 +243,59 @@
     background-color: #d0d0d0;
     border-radius: 4px;
   }
+  .delete-confirmation-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .modal-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .modal-actions button:first-child {
+    background-color: #f44336; /* Vermelho para o botão de excluir */
+    color: white;
+  }
+  
+  .modal-actions button:last-child {
+    background-color: #8bc34a; /* Verde para o botão de cancelar */
+    color: white;
+  }
+  
+  .modal-actions button:first-child:hover {
+    background-color: #e53935; /* Efeito hover para o botão de excluir */
+  }
+  
+  .modal-actions button:last-child:hover {
+    background-color: #66bb6a; /* Efeito hover para o botão de cancelar */
+  }
+  
+  /* Botão de excluir menor */
+  .modal-actions button:first-child {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
   

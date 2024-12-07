@@ -24,6 +24,8 @@ const LojaDetails = () => {
 
         if (docSnap.exists()) {
           const lojaData = docSnap.data();
+          console.log("Dados da loja:", lojaData); // Verifique os dados recebidos do Firebase
+
           const { comprovante, ...lojaSemComprovante } = lojaData;
           setLoja(lojaSemComprovante);
 
@@ -46,7 +48,7 @@ const LojaDetails = () => {
 
   const openGoogleMaps = (endereco) => {
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco)}`;
-    window.open(mapsUrl, '_blank');
+    window.open(mapsUrl, "_blank");
   };
 
   const handleImageError = (event) => {
@@ -75,19 +77,19 @@ const LojaDetails = () => {
       {/* Carrossel de Imagens */}
       <div className="carrossel">
         {loja.imagens && loja.imagens.length > 0 ? (
-          loja.plano === 'gratuito' ? (
-            // Exibe apenas a primeira imagem para plano gratuito, sem navegação
+          loja.plano?.toLowerCase() === "gratuito" ? (
+            // Plano gratuito - mostra apenas a primeira imagem
             <div className="carrossel-image-container">
               <img
                 src={loja.imagens[0]}
-                alt={`Imagem 1 da loja ${loja.nome}`}
+                alt={`Imagem da loja ${loja.nome}`}
                 className="carrossel-image"
                 onError={handleImageError}
               />
             </div>
           ) : (
-            // Exibe o carrossel completo para planos pagos com navegação
-            <>
+            // Outros planos - mostra carrossel com todas as imagens
+            <div className="carrossel-container">
               <div className="carrossel-image-container">
                 <img
                   src={loja.imagens[currentImageIndex]}
@@ -96,7 +98,36 @@ const LojaDetails = () => {
                   onError={handleImageError}
                 />
               </div>
-            </>
+              {loja.imagens.length > 1 && (
+                <div className="carrossel-controls">
+                  <button
+                    onClick={() => setCurrentImageIndex((prev) => 
+                      prev === 0 ? loja.imagens.length - 1 : prev - 1
+                    )}
+                    className="carrossel-button"
+                  >
+                    &#8249;
+                  </button>
+                  <button
+                    onClick={() => setCurrentImageIndex((prev) => 
+                      prev === loja.imagens.length - 1 ? 0 : prev + 1
+                    )}
+                    className="carrossel-button"
+                  >
+                    &#8250;
+                  </button>
+                </div>
+              )}
+              <div className="carrossel-dots">
+                {loja.imagens.map((_, index) => (
+                  <span
+                    key={index}
+                    className={`dot ${index === currentImageIndex ? 'active' : ''}`}
+                    onClick={() => setCurrentImageIndex(index)}
+                  />
+                ))}
+              </div>
+            </div>
           )
         ) : (
           <div className="loja-img-placeholder">
@@ -111,8 +142,8 @@ const LojaDetails = () => {
       </p>
 
       {/* Redes Sociais */}
-      {loja.plano !== 'Gratuito' && loja.redesSociais && (
-        Object.values(loja.redesSociais).some(value => value) ? (
+      {loja.plano !== "Gratuito" && loja.redesSociais && (
+        Object.values(loja.redesSociais).some((value) => value) && (
           <div className="social-media-section">
             <h3>Redes Sociais</h3>
             <div className="social-links">
@@ -145,10 +176,10 @@ const LojaDetails = () => {
               )}
             </div>
           </div>
-        ) : null
+        )
       )}
 
-      {loja.plano === 'Gratuito' && isOwner && (
+      {loja.plano === "Gratuito" && isOwner && (
         <div className="upgrade-message">
           <FaCrown className="crown-icon" />
           <p>Atualize para um plano mais avançado e mostre suas redes sociais!</p>
@@ -163,13 +194,20 @@ const LojaDetails = () => {
         <strong>Endereço:</strong>
         <div
           className="endereco-link"
-          onClick={() => openGoogleMaps(loja.endereco)}
+          onClick={() =>
+            openGoogleMaps(
+              `${loja.endereco.rua}, ${loja.endereco.numero}, ${loja.endereco.bairro}, ${loja.endereco.cidade} - ${loja.endereco.estado}`
+            )
+          }
         >
           <FaMapMarkerAlt className="map-icon" />
-          <span>{loja.endereco}</span>
+          <span>
+            {`${loja.endereco.rua}, ${loja.endereco.numero}, ${loja.endereco.bairro}, ${loja.endereco.cidade} - ${loja.endereco.estado}`}
+          </span>
         </div>
       </div>
 
+      {/* Telefones e Email */}
       <p>
         <strong>Telefone:</strong> {loja.telefoneFixo}
       </p>
@@ -179,34 +217,52 @@ const LojaDetails = () => {
       <p>
         <strong>Email:</strong> {loja.email}
       </p>
-      <p>
-        <strong>Horário de Funcionamento:</strong>
-      </p>
+
+      {/* Horário de Funcionamento */}
       <div className="horarios-funcionamento">
-        {loja.horarioDeFuncionamento ? (
-          <>
-            <p>
-              <strong>Segunda a Sexta:</strong>{" "}
-              {loja.horarioDeFuncionamento.segundaAsexta?.open ? 
-              `${loja.horarioDeFuncionamento.segundaAsexta.open} às ${loja.horarioDeFuncionamento.segundaAsexta.close}` 
-              : "Fechado"}
-            </p>
-            <p>
-              <strong>Sábado:</strong>{" "}
-              {loja.horarioDeFuncionamento.sabado?.open ? 
-              `${loja.horarioDeFuncionamento.sabado.open} às ${loja.horarioDeFuncionamento.sabado.close}` 
-              : "Fechado"}
-            </p>
-            <p>
-              <strong>Domingo:</strong>{" "}
-              {loja.horarioDeFuncionamento.domingo?.open ? 
-              `${loja.horarioDeFuncionamento.domingo.open} às ${loja.horarioDeFuncionamento.domingo.close}` 
-              : "Fechado"}
-            </p>
-          </>
-        ) : (
-          <p>Não disponível</p>
-        )}
+        <h3>Horário de Funcionamento</h3>
+        <>
+          <p>
+            <strong>Segunda a Sexta:</strong>{" "}
+            {loja.horarioDeFuncionamento?.weekdays?.open &&
+            loja.horarioDeFuncionamento?.weekdays?.close ? (
+              `${loja.horarioDeFuncionamento.weekdays.open} às ${loja.horarioDeFuncionamento.weekdays.close}`
+            ) : (
+              "Fechado"
+            )}
+            {loja.horarioDeFuncionamento?.lunch?.enabled && (
+              <span className="lunch-time">
+                {" "}
+                (Almoço: {loja.horarioDeFuncionamento.lunch.start} às{" "}
+                {loja.horarioDeFuncionamento.lunch.end})
+              </span>
+            )}
+          </p>
+
+          <p>
+            <strong>Sábado:</strong>{" "}
+            {loja.horarioDeFuncionamento?.saturday?.closed ? (
+              "Fechado"
+            ) : loja.horarioDeFuncionamento?.saturday?.open &&
+              loja.horarioDeFuncionamento?.saturday?.close ? (
+              `${loja.horarioDeFuncionamento.saturday.open} às ${loja.horarioDeFuncionamento.saturday.close}`
+            ) : (
+              "Fechado"
+            )}
+          </p>
+
+          <p>
+            <strong>Domingo:</strong>{" "}
+            {loja.horarioDeFuncionamento?.sunday?.closed ? (
+              "Fechado"
+            ) : loja.horarioDeFuncionamento?.sunday?.open &&
+              loja.horarioDeFuncionamento?.sunday?.close ? (
+              `${loja.horarioDeFuncionamento.sunday.open} às ${loja.horarioDeFuncionamento.sunday.close}`
+            ) : (
+              "Fechado"
+            )}
+          </p>
+        </>
       </div>
 
       {/* Avaliação */}

@@ -21,6 +21,7 @@
   margin-top: 20px;
 }
 
+
 @media (max-width: 1024px) {
   .card-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -75,18 +76,15 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
+  position: relative;
 }
 
 .card .business-name {
-    display: flex;
-      flex-direction: column;
-      /* Garante que o conteúdo será empilhado */
-      justify-content: center;
-      /* Centraliza verticalmente */
-      align-items: center;
-      /* Centraliza horizontalmente */
-      text-align: center;
-      /* Garante que o texto dentro do card fique centralizado */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   font-size: 1.2em;
   font-weight: bold;
   margin: 0;
@@ -142,10 +140,21 @@
 }
 
 /* Botões */
-.card-buttons button {
-  flex: 1;
+.card-buttons,
+.business-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
   margin-top: 10px;
-  margin-left: 5px;
+}
+
+.card-buttons button,
+.business-actions button {
+  flex: 0 1 auto !important;
+  width: auto !important;
+  min-width: fit-content !important;
+  white-space: nowrap !important;
   padding: 8px 10px;
   border: none;
   border-radius: 5px;
@@ -156,7 +165,8 @@
   transition: background-color 0.2s;
 }
 
-.card-buttons button:hover {
+.card-buttons button:hover,
+.business-actions button:hover {
   background-color: #0056b3;
   opacity: 0.9;
 }
@@ -249,7 +259,35 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   position: relative;
-  text-align: center; /* Centraliza as informações do CNPJ */
+  width: 100%;
+}
+
+.card.showing-cnpj .business-actions,
+.card.showing-cnpj .card-buttons {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.card.showing-cnpj {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.cnpj-details {
+  display: grid;
+  gap: 8px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.cnpj-details p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #666;
+  line-height: 1.4;
 }
 
 .cnpj-info h4 {
@@ -257,23 +295,6 @@
   color: #333;
   font-size: 1.1em;
   text-align: center; /* Centraliza o título */
-}
-
-.cnpj-details {
-  display: grid;
-  gap: 8px;
-  text-align: center; /* Centraliza as informações do CNPJ */
-}
-
-.cnpj-details p {
-  margin: 0;
-  font-size: 0.9em;
-  color: #666;
-}
-
-.cnpj-details strong {
-  color: #333;
-  margin-right: 5px;
 }
 
 .verify-cnpj {
@@ -338,6 +359,17 @@
 .close-button:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.3);
+}
+
+.business-card.showing-cnpj .verify-cnpj-button,
+.business-card.showing-cnpj button[class*="approve"],
+.business-card.showing-cnpj button[class*="deny"],
+.business-card.showing-cnpj button[class*="details"] {
+  display: none !important;
+}
+
+.business-card.showing-cnpj .business-actions button:not(.close-button) {
+  display: none !important;
 }
 
 /* Responsividade adicional */

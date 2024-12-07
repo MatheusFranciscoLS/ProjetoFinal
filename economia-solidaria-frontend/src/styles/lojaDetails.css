@@ -58,41 +58,104 @@
 .carrossel {
   position: relative;
   width: 100%;
-  margin: 0 auto 30px;
+  max-width: 800px;
+  margin: 20px auto;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.carrossel-btn {
+.carrossel-container {
+  position: relative;
+  width: 100%;
+}
+
+.carrossel-image-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* Aspect ratio 16:9 */
+  overflow: hidden;
+}
+
+.carrossel-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  animation: fadeIn 0.3s ease;
+}
+
+.carrossel-controls {
   position: absolute;
   top: 50%;
+  left: 0;
+  right: 0;
   transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.6);
-  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  pointer-events: none;
+}
+
+.carrossel-button {
+  background: rgba(255, 255, 255, 0.9);
   border: none;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  cursor: pointer;
-  z-index: 2;
+  font-size: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.carrossel-button:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.carrossel-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.carrossel-btn:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-  transform: translateY(-50%) scale(1.1);
+.dot.active {
+  background: white;
+  transform: scale(1.2);
 }
 
-.carrossel-btn:first-child {
-  left: 20px;
-}
-
-.carrossel-btn:last-child {
-  right: 20px;
+.loja-img-placeholder {
+  width: 100%;
+  height: 300px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 1.1em;
+  border-radius: 12px;
 }
 
 /* Placeholder para imagens */
@@ -108,6 +171,22 @@
 @keyframes placeholderShimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Estilos para o endereço */
@@ -230,17 +309,6 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Estilos para a seção de horários de funcionamento */

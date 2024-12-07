@@ -120,8 +120,8 @@ const Register = () => {
       
       // Aguarda 1.5 segundos antes de redirecionar
       setTimeout(() => {
-        navigate("/login", { 
-          state: { message: "Registro concluído! Faça login para continuar." }
+        navigate("/business-question", { 
+          state: { message: "Registro concluído! Responda algumas perguntas para continuar." }
         });
       }, 1500);
 

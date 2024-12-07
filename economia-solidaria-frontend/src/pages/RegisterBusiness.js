@@ -229,10 +229,27 @@ const RegisterBusiness = () => {
     }
   };
 
+  const convertToBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
+      const base64Images = await Promise.all(
+        formData.media.images.map(async (img) => {
+          if (img instanceof File) {
+            return await convertToBase64(img);
+          }
+          return img;
+        })
+      );
+
       const businessData = {
         nome: formData.business.name,
         cnpj: formData.business.cnpj,
@@ -243,35 +260,36 @@ const RegisterBusiness = () => {
           bairro: formData.address.bairro,
           cidade: formData.address.cidade,
           estado: formData.address.uf,
-          numero: formData.address.numero
+          numero: formData.address.numero,
         },
         telefone: formData.contact.telefone,
         email: formData.business.email,
         horarioDeFuncionamento: formData.hours,
-        imagens: formData.media.images.map(img => img instanceof File ? img.name : img),
+        imagens: base64Images,
         comprovante: formData.media.cnDoc?.name,
         userId: user.uid,
         status: "pendente",
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
-  
-      console.log('Submitting business data:', businessData);
+
+      console.log("Submitting business data:", businessData);
       const docRef = await addDoc(collection(db, "negocios_pendentes"), businessData);
-      console.log('Document written with ID:', docRef.id);
-      
+      console.log("Document written with ID:", docRef.id);
+
       alert("Cadastro enviado, aguardando aprovação do admin!");
       navigate("/plans-details");
     } catch (err) {
       console.error("Erro detalhado ao cadastrar negócio:", {
         message: err.message,
         code: err.code,
-        stack: err.stack
+        stack: err.stack,
       });
       setError(`Erro ao cadastrar o negócio: ${err.message}`);
     } finally {
       setLoading(false);
     }
-  }; 
+  };
+
   return (
     <div className="register-business-container">
       <h1 className="register-title">Cadastro de Negócio</h1>
@@ -665,7 +683,7 @@ const RegisterBusiness = () => {
             </div>
           </div>
         </section>
-        
+
         {/* Social Media Section */}
         <section className="form-section">
           <h2>Redes Sociais</h2>

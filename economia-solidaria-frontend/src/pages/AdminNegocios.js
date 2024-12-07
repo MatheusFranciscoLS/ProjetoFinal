@@ -6,6 +6,7 @@ import { db } from "../firebase";
 import { FiPlus, FiEdit2, FiX, FiPackage, FiTag, FiCheck, FiClock } from "react-icons/fi";
 import "../styles/AdminNegocios.css";
 
+// Componente do Skeleton
 const SkeletonCard = () => (
   <div className="business-card skeleton">
     <div className="skeleton-image"></div>
@@ -23,7 +24,10 @@ const AdminNegocios = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false); // Estado para verificar se o usuário é admin
+  const [isAdmin, setIsAdmin] = useState(false); 
+  const [isDeleting, setIsDeleting] = useState(false); // Controla a visibilidade do modal de exclusão
+  const [businessToDelete, setBusinessToDelete] = useState(null); // Armazena o id do negócio a ser excluído
+  const [showingCnpj, setShowingCnpj] = useState({});
   const navigate = useNavigate();
   const auth = getAuth();
 
@@ -36,53 +40,62 @@ const AdminNegocios = () => {
         return;
       }
 
-      setUser(currentUser); // Define o usuário logado
+      setUser(currentUser);
 
       try {
-        // Buscar dados do usuário na coleção "users" para verificar se ele é admin
         const userDocRef = doc(db, "users", currentUser.uid);
         const userDocSnap = await getDoc(userDocRef);
 
-        if (userDocSnap.exists()) {
-          const userData = userDocSnap.data();
-          console.log('Dados do usuário:', userData); // Verifique os dados retornados
-
-          // Verificação do papel de administrador nos campos 'role' e 'tipo'
-          const adminRoles = ["admin", "administrador", "adm"];
-          if (adminRoles.includes(userData.role?.toLowerCase()) || adminRoles.includes(userData.tipo?.toLowerCase())) {
-            setIsAdmin(true); // Se o papel do usuário for "admin", habilita o acesso
-          } else {
-            setError("Você não tem permissão para acessar esta página.");
-            setLoading(false);
-            return;
-          }
-        } else {
+        if (!userDocSnap.exists()) {
           setError("Usuário não encontrado ou sem permissões.");
           setLoading(false);
           return;
         }
 
-        // Após confirmar que o usuário é admin, buscamos os negócios
+        const userData = userDocSnap.data();
+        console.log('Dados do usuário:', userData); // Verifique os dados retornados
+
+        const adminRoles = ["admin", "administrador", "adm"];
+        if (adminRoles.includes(userData.role?.toLowerCase()) || adminRoles.includes(userData.tipo?.toLowerCase())) {
+          setIsAdmin(true);
+        } else {
+          setError("Você não tem permissão para acessar esta página.");
+          setLoading(false);
+          return;
+        }
+
         const businessesRef = collection(db, "lojas");
         const querySnapshot = await getDocs(businessesRef);
 
+        if (querySnapshot.empty) {
+          setError("Nenhum negócio encontrado.");
+        }
+
         const businessesData = querySnapshot.docs
-          .map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-            nome: doc.data()?.nome || "Nome não disponível",
-            categoria: doc.data()?.categoria || "Categoria não definida",
-            status: doc.data()?.status || "Pendente",
-            imagens: doc.data()?.imagens || []
-          }))
-          .sort((a, b) => b.createdAt?.toDate() - a.createdAt?.toDate());
+          .map(doc => {
+            const data = doc.data();
+            const createdAt = data?.createdAt;
+
+            const createdAtDate = createdAt && createdAt.toDate ? createdAt.toDate() : new Date();
+
+            return {
+              id: doc.id,
+              ...data,
+              nome: data?.nome || "Nome não disponível",
+              categoria: data?.categoria || "Categoria não definida",
+              status: data?.status || "Pendente",
+              imagens: data?.imagens || [],
+              createdAt: createdAtDate
+            };
+          })
+          .sort((a, b) => b.createdAt - a.createdAt);
 
         setBusinesses(businessesData);
         setError(null);
 
       } catch (err) {
         console.error("Erro ao buscar dados:", err);
-        setError("Erro ao carregar os negócios. Por favor, tente novamente mais tarde.");
+        setError(`Erro ao carregar os negócios. Detalhes: ${err.message || err}`);
       } finally {
         setLoading(false);
       }
@@ -108,14 +121,35 @@ const AdminNegocios = () => {
     navigate(`/edit-business/${businessId}`);
   };
 
-  const handleDelete = async (businessId) => {
+  const handleDelete = async () => {
     try {
-      await deleteDoc(doc(db, "lojas", businessId));
-      setBusinesses(businesses.filter(business => business.id !== businessId)); // Remove o negócio da lista localmente
+      if (businessToDelete) {
+        await deleteDoc(doc(db, "lojas", businessToDelete));
+        setBusinesses(businesses.filter(business => business.id !== businessToDelete)); // Remove o negócio da lista
+        setBusinessToDelete(null); // Reseta a variável após exclusão
+        setIsDeleting(false); // Fecha o modal
+      }
     } catch (err) {
       setError("Erro ao excluir o negócio. Por favor, tente novamente.");
       console.error("Erro ao excluir o negócio:", err);
     }
+  };
+
+  const handleConfirmDelete = (businessId) => {
+    setBusinessToDelete(businessId);
+    setIsDeleting(true);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleting(false);
+    setBusinessToDelete(null);
+  };
+
+  const handleVerifyCnpj = (businessId) => {
+    setShowingCnpj(prev => ({
+      ...prev,
+      [businessId]: !prev[businessId]
+    }));
   };
 
   if (loading) {
@@ -158,19 +192,19 @@ const AdminNegocios = () => {
   }
 
   return (
-    
+    <div className="my-businesses-container">
+      <div className="header-section">
+        <h1>Todas as Lojas</h1>
+      </div>
 
       <div className="businesses-grid">
         {businesses.length === 0 ? (
           <div className="no-businesses">
             <p>Não há negócios cadastrados.</p>
-            <Link to="/register-business" className="register-link">
-              <FiPlus /> Cadastre seu primeiro negócio
-            </Link>
           </div>
         ) : (
           businesses.map((business) => (
-            <div key={business.id} className="business-card">
+            <div key={business.id} className={`business-card ${showingCnpj[business.id] ? 'showing-cnpj' : ''}`}>
               <div className="business-image">
                 {business.imagens?.[0] ? (
                   <img 
@@ -209,9 +243,15 @@ const AdminNegocios = () => {
                   </button>
                   <button
                     className="delete-button"
-                    onClick={() => handleDelete(business.id)}
+                    onClick={() => handleConfirmDelete(business.id)}
                   >
                     <FiX /> Excluir
+                  </button>
+                  <button
+                    className="verify-cnpj-button"
+                    onClick={() => handleVerifyCnpj(business.id)}
+                  >
+                    Verificar CNPJ
                   </button>
                 </div>
               </div>
@@ -219,7 +259,20 @@ const AdminNegocios = () => {
           ))
         )}
       </div>
-    
+
+      {/* Modal de confirmação */}
+      {isDeleting && (
+        <div className="delete-confirmation-modal">
+          <div className="modal-content">
+            <h2>Tem certeza que deseja excluir este negócio?</h2>
+            <div className="modal-actions">
+              <button onClick={handleDelete}>Sim, excluir</button>
+              <button onClick={handleCancelDelete}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
