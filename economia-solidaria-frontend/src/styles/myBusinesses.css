@@ -351,3 +351,29 @@ body {
   background-color: #9c7a1f; /* Cor dourada ainda mais escura para o clique */
   transform: scale(1); /* Retorna ao tamanho normal quando pressionado */
 }
+/* Estilo para quando o usuário não tiver negócios cadastrados */
+.no-businesses {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.no-businesses p {
+  margin-bottom: 10px;
+}
+.register-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #4CAF50;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.register-link:hover {
+  color: #45a049;
+}
+
+.register-link svg {
+  margin-right: 5px;
+}
