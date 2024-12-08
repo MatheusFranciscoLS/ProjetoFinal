@@ -42,6 +42,7 @@ body {
   padding: 2rem;
   background-color: var(--background-light);
   min-height: calc(100vh - 60px);
+  
 }
 
 /* Cabeçalho */
@@ -50,6 +51,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 2rem;
 }
 
 .header-section h1 {
@@ -57,6 +59,7 @@ body {
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.025em;
+  margin-right: auto;
 }
 
 .add-business-button {
@@ -72,6 +75,7 @@ body {
   text-decoration: none;
   transition: var(--transition);
   box-shadow: var(--shadow-sm);
+  margin-left: 2rem;
 }
 
 .add-business-button:hover {
@@ -86,7 +90,63 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
+  min-height: 50vh;
 }
+
+/* Mensagem de nenhum negócio */
+.no-businesses {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem;
+  background: var(--background-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin: auto;
+  max-width: 600px;
+}
+
+.no-businesses p {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.register-link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--primary-color);
+  color: var(--background-white);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.register-link:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+.header-section {
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
+  height: 20vh; /* Altura suficiente para criar espaço visual */
+  text-align: center; /* Garante centralização do texto */
+  background-color: #f9f9f9; /* Exemplo de cor de fundo opcional */
+  border-bottom: 1px solid #ddd; /* Exemplo de borda separadora */
+}
+
+.header-section h1 {
+  margin: 0; /* Remove margens padrão */
+  font-size: 2rem; /* Ajuste o tamanho conforme necessário */
+  color: #333; /* Cor personalizada */
+}
+
 
 /* Card de negócio */
 .business-card {
@@ -315,32 +375,4 @@ body {
 .cta-section a:active {
   background-color: #9c7a1f; /* Cor dourada ainda mais escura para o clique */
   transform: scale(1); /* Retorna ao tamanho normal quando pressionado */
-}
-
-/* Estilo para quando o usuário não tiver negócios cadastrados */
-.no-businesses {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #555;
-}
-
-.no-businesses p {
-  margin-bottom: 10px;
-}
-
-.register-link {
-  display: inline-flex;
-  align-items: center;
-  font-size: 1rem;
-  color: #4CAF50;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.register-link:hover {
-  color: #45a049;
-}
-
-.register-link svg {
-  margin-right: 5px;
 }
