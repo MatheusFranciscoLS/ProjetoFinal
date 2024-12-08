@@ -198,7 +198,7 @@ const AdminNegocios = () => {
   return (
     <div className="my-businesses-container">
       <div className="header-section">
-        <h1>Todas as Lojas</h1>
+        <h1>Gerenciamento de Negócios</h1>
       </div>
 
       <div className="businesses-grid">
