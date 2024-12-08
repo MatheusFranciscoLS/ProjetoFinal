@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   collection,
   addDoc,
@@ -110,7 +110,9 @@ const RegisterBusiness = () => {
 
           if ((!businessSnapshot.empty || !pendingBusinessSnapshot.empty) && userData.plano !== "Premium") {
             setError(
-              "Você já possui um negócio registrado ou pendente. Atualize para o plano Premium para registrar outro."
+              <span>
+                Você já possui um negócio registrado ou pendente. <Link to="/plans-details" style={{ color: '#3498db', textDecoration: 'underline' }}>Atualize para o plano Premium</Link> para registrar outro.
+              </span>
             );
             setIsEligible(false);
           } else {
@@ -845,9 +847,9 @@ const RegisterBusiness = () => {
             />
             <label htmlFor="terms">
               Aceito os{" "}
-              <a href="/terms" target="_blank" rel="noopener noreferrer">
+              <Link to="/terms" target="_blank" rel="noopener noreferrer">
                 <strong>termos e condições</strong>
-              </a>
+              </Link>
             </label>
           </div>
         </section>

@@ -267,44 +267,82 @@
   cursor: not-allowed;
 }
 
-/* Mensagem de erro */
-.error-message {
-  background-color: #fff3f3;
-  color: #e74c3c;
-  padding: 1rem;
-  border-radius: 4px;
-  border-left: 4px solid #e74c3c;
-  margin-top: 1rem;
-}
-
 /* Container da mensagem de erro */
 .error-message-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f9f9f9;
+  background-color: #fff5f5;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
 /* Estilo da mensagem de erro */
 .error-message {
   text-align: center;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  padding: 2rem;
+  border: 2px solid #ff4d4d;
+  border-radius: 12px;
   background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 16px rgba(255, 77, 77, 0.2);
+  max-width: 500px;
+  width: 90%;
+  animation: slideIn 0.5s ease-out;
 }
 
 /* Título da mensagem de erro */
 .error-message h2 {
-  margin-bottom: 10px;
-  color: #333;
+  margin-bottom: 1rem;
+  color: #ff4d4d;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 /* Conteúdo da mensagem de erro */
 .error-message p {
-  color: #666;
+  color: #333;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Media query para telas menores */
+@media (max-width: 480px) {
+  .error-message {
+    padding: 1.5rem;
+    width: 95%;
+  }
+  
+  .error-message h2 {
+    font-size: 1.5rem;
+  }
+  
+  .error-message p {
+    font-size: 1rem;
+  }
 }
 
 /* Carregamento do CEP */
