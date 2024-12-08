@@ -88,6 +88,54 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
+/* Mídias Sociais */
+.social-links {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.social-link {
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--background-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.social-link:hover {
+  color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.social-link:active {
+  transform: translateY(0);
+}
+
+/* Cores específicas para cada rede social no hover */
+.social-link:hover .fa-facebook {
+  color: #1877f2;
+}
+
+.social-link:hover .fa-instagram {
+  color: #e4405f;
+}
+
+.social-link:hover .fa-whatsapp {
+  color: #25d366;
+}
+
+.social-link:hover .fa-linkedin {
+  color: #0077b5;
+}
+
 @media (max-width: 768px) {
   .footer {
     padding: 2rem 1rem 1rem;

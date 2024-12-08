@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/footer.css";
-import { FaHome, FaInfoCircle, FaEnvelope, FaFileAlt } from "react-icons/fa";
+import { FaHome, FaInfoCircle, FaEnvelope, FaFileAlt, FaFacebook, FaInstagram, FaWhatsapp, FaLinkedin } from "react-icons/fa";
 
 const Footer = ({ className }) => {
   const currentYear = new Date().getFullYear();
@@ -40,6 +40,24 @@ const Footer = ({ className }) => {
           <div className="footer-contact">
             <p>Limeira, São Paulo</p>
             <p>Email: contato@economiasolidaria.com.br</p>
+          </div>
+        </div>
+
+        <div className="footer-section">
+          <h3>Mídias Sociais</h3>
+          <div className="social-links">
+            <a href="https://facebook.com/economiasolidaria" target="_blank" rel="noopener noreferrer" className="social-link">
+              <FaFacebook />
+            </a>
+            <a href="https://instagram.com/economiasolidaria" target="_blank" rel="noopener noreferrer" className="social-link">
+              <FaInstagram />
+            </a>
+            <a href="https://wa.me/5519999214155" target="_blank" rel="noopener noreferrer" className="social-link">
+              <FaWhatsapp />
+            </a>
+            <a href="https://linkedin.com/economiasolidaria" target="_blank" rel="noopener noreferrer" className="social-link">
+              <FaLinkedin />
+            </a>
           </div>
         </div>
       </div>
