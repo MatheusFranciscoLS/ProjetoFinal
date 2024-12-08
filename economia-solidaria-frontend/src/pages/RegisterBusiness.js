@@ -98,11 +98,19 @@ const RegisterBusiness = () => {
           );
           const businessSnapshot = await getDocs(businessQuery);
 
-          console.log("Usuário já possui negócio:", !businessSnapshot.empty);
+          // Verifica se o usuário já possui um negócio pendente
+          const pendingBusinessQuery = query(
+            collection(db, "negocios_pendentes"),
+            where("userId", "==", user.uid)
+          );
+          const pendingBusinessSnapshot = await getDocs(pendingBusinessQuery);
 
-          if (!businessSnapshot.empty && userData.plano !== "Premium") {
+          console.log("Usuário já possui negócio:", !businessSnapshot.empty);
+          console.log("Usuário já possui negócio pendente:", !pendingBusinessSnapshot.empty);
+
+          if ((!businessSnapshot.empty || !pendingBusinessSnapshot.empty) && userData.plano !== "Premium") {
             setError(
-              "Você já possui um negócio registrado. Atualize para o plano Premium para registrar outro."
+              "Você já possui um negócio registrado ou pendente. Atualize para o plano Premium para registrar outro."
             );
             setIsEligible(false);
           } else {
