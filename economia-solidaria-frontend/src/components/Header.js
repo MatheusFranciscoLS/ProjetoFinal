@@ -101,8 +101,13 @@ const Header = () => {
           {user && (
             <>
               <NavLink to="/register-business" icon={FaPlus}>Cadastrar Loja</NavLink>
-              <NavLink to="/meus-negocios" icon={FaBriefcase}>Meus Negócios</NavLink>
-              <NavLink to="/perfil" icon={FaUserCircle}>Perfil</NavLink> {/* Novo link para "Perfil" */}
+              {user && !isAdmin && (
+  <NavLink to="/meus-negocios" icon={FaBriefcase}>Meus Negócios</NavLink> // Only for non-admin users
+)}
+
+              {user && !isAdmin && (
+  <NavLink to="/perfil" icon={FaUserCircle}>Perfil</NavLink> // Show only if user is not an admin
+)}
             </>
           )}
 
