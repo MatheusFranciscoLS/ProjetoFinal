@@ -40,7 +40,7 @@ const LojaCard = ({ loja, isPremium = false }) => {
 
 // Componente de card com imagem e nome embaixo
 const SimpleLojaCard = ({ loja }) => (
-  <div className="simple-loja-card">
+  <Link to={`/loja/${loja.id}`} className="simple-loja-card">
     <div className="card-image">
       <img 
         src={loja.imagens?.[0] || '/placeholder-image.jpg'} 
@@ -53,7 +53,7 @@ const SimpleLojaCard = ({ loja }) => (
     <div className="card-name">
       <h3>{loja.nome}</h3>
     </div>
-  </div>
+  </Link>
 );
 
 const SkeletonCard = () => (
