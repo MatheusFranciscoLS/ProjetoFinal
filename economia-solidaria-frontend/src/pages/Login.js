@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 import { FiMail, FiLock, FiAlertCircle } from "react-icons/fi";
+import { Google } from "@mui/icons-material";
 import "../styles/auth.css";
 
 const Login = () => {
@@ -70,6 +72,64 @@ const Login = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      const provider = new GoogleAuthProvider();
+      const resultado = await signInWithPopup(auth, provider);
+      const usuario = resultado.user;
+
+      // Verifica se o usuário existe no Firestore
+      const usuarioDocRef = doc(db, 'users', usuario.uid);
+      const usuarioDoc = await getDoc(usuarioDocRef);
+
+      if (!usuarioDoc.exists()) {
+        // Criar documento inicial do usuário com dados do Google
+        await setDoc(usuarioDocRef, {
+          name: usuario.displayName || "Não informado",
+          email: usuario.email,
+          phone: "Não informado",
+          address: "Não informado",
+          currentPlan: "Não especificado",
+          tipo: "comum",
+          createdAt: new Date().toISOString(),
+          role: "user",
+          photoURL: usuario.photoURL || "",
+          lastLogin: new Date().toISOString()
+        });
+        // Redireciona para completar o cadastro
+        navigate('/cadastro');
+      } else {
+        // Verifica se todos os campos obrigatórios estão preenchidos
+        const dadosUsuario = usuarioDoc.data();
+        const camposObrigatorios = ['name', 'email', 'phone', 'address'];
+        const temCamposNaoInformados = camposObrigatorios.some(campo => 
+          !dadosUsuario[campo] || 
+          dadosUsuario[campo] === "Não informado" || 
+          dadosUsuario[campo] === "Não especificado"
+        );
+
+        // Atualiza o lastLogin
+        await setDoc(usuarioDocRef, {
+          lastLogin: new Date().toISOString()
+        }, { merge: true });
+
+        if (temCamposNaoInformados) {
+          // Dados incompletos, redireciona para completar o cadastro
+          navigate('/cadastro');
+        } else {
+          // Usuário completo, redireciona para página inicial
+          navigate('/');
+        }
+      }
+    } catch (err) {
+      setError("Erro ao fazer login com Google: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-content">
@@ -130,6 +190,17 @@ const Login = () => {
           <button type="submit" className="auth-button" disabled={loading}>
             {loading ? "Entrando..." : "Entrar"}
           </button>
+
+          <div className="google-login">
+            <button
+              onClick={handleGoogleLogin}
+              className="btn-google-register"
+              disabled={loading}
+            >
+              <Google />
+              {loading ? "Conectando..." : "Entrar com Google"}
+            </button>
+          </div>
 
           <p className="auth-link">
             Não tem uma conta? <Link to="/register">Registre-se</Link>
