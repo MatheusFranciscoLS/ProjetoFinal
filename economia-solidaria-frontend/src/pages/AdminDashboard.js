@@ -10,7 +10,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import axios from 'axios'; // Importa axios para fazer requisições HTTP
+import axios from "axios"; // Importa axios para fazer requisições HTTP
 import "../styles/AdminDashboard.css";
 
 const AdminDashboard = () => {
@@ -26,13 +26,13 @@ const AdminDashboard = () => {
   // Função para formatar o CNPJ
   const formatCNPJ = (cnpj) => {
     // Remove qualquer caractere não numérico
-    const cleanCNPJ = cnpj.replace(/[^\d]+/g, '');
+    const cleanCNPJ = cnpj.replace(/[^\d]+/g, "");
 
     // Verifica se o CNPJ tem 14 caracteres (tamanho válido)
     if (cleanCNPJ.length === 14) {
       return cleanCNPJ.replace(
         /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
-        '$1.$2.$3/$4-$5'
+        "$1.$2.$3/$4-$5"
       );
     }
 
@@ -81,24 +81,28 @@ const AdminDashboard = () => {
 
         // Buscar o plano do usuário
         const userDoc = await getDoc(doc(db, "users", businessData.userId));
-        const userPlan = userDoc.exists() ? userDoc.data().plano || "gratuito" : "gratuito";
+        const userPlan = userDoc.exists()
+          ? userDoc.data().plano || "gratuito"
+          : "gratuito";
 
         // Atualiza o status do negócio e adiciona o plano
         await setDoc(businessRef, {
           ...businessData,
           status: approved ? "aprovado" : "negado",
-          plano: userPlan // Adiciona o plano do usuário
+          plano: userPlan, // Adiciona o plano do usuário
         });
 
         if (approved) {
           const newBusinessRef = doc(db, "lojas", businessId);
           // Garantir que o plano do usuário seja corretamente atribuído
-          const userData = userDoc.exists() ? userDoc.data() : { plano: "gratuito" };
+          const userData = userDoc.exists()
+            ? userDoc.data()
+            : { plano: "gratuito" };
           await setDoc(newBusinessRef, {
             ...businessData,
             status: "aprovado",
             plano: userData.plano || "gratuito",
-            userId: businessData.userId // Garantir que o userId seja mantido
+            userId: businessData.userId, // Garantir que o userId seja mantido
           });
           await deleteDoc(businessRef);
           setFeedbackMessage("Negócio aprovado e movido para 'lojas'.");
@@ -131,13 +135,13 @@ const AdminDashboard = () => {
   // Função para verificar CNPJ
   const verifyCNPJ = async (cnpj, businessId) => {
     if (!cnpj) {
-      console.error('CNPJ não informado');
+      console.error("CNPJ não informado");
       return;
     }
 
-    const cleanCNPJ = cnpj.replace(/[^\d]+/g, '');
+    const cleanCNPJ = cnpj.replace(/[^\d]+/g, "");
     if (cleanCNPJ.length !== 14) {
-      console.error('CNPJ inválido');
+      console.error("CNPJ inválido");
       return;
     }
 
@@ -146,21 +150,21 @@ const AdminDashboard = () => {
       const response = await axios.get(
         `http://127.0.0.1:8000/api/cnpj/${cleanCNPJ}`
       );
-      console.log('Resposta da API:', response.data);
+      console.log("Resposta da API:", response.data);
 
       // Atualiza o estado apenas para o negócio específico
-      setBusinesses(prevBusinesses =>
-        prevBusinesses.map(business =>
+      setBusinesses((prevBusinesses) =>
+        prevBusinesses.map((business) =>
           business.id === businessId
             ? { ...business, cnpjInfo: response.data }
             : business
         )
       );
     } catch (error) {
-      console.error('Erro ao verificar CNPJ:', error);
+      console.error("Erro ao verificar CNPJ:", error);
       // Limpa as informações do CNPJ em caso de erro
-      setBusinesses(prevBusinesses =>
-        prevBusinesses.map(business =>
+      setBusinesses((prevBusinesses) =>
+        prevBusinesses.map((business) =>
           business.id === businessId
             ? { ...business, cnpjInfo: null }
             : business
@@ -173,11 +177,9 @@ const AdminDashboard = () => {
 
   // Função para limpar informações do CNPJ
   const clearCnpjInfo = (businessId) => {
-    setBusinesses(prevBusinesses =>
-      prevBusinesses.map(business =>
-        business.id === businessId
-          ? { ...business, cnpjInfo: null }
-          : business
+    setBusinesses((prevBusinesses) =>
+      prevBusinesses.map((business) =>
+        business.id === businessId ? { ...business, cnpjInfo: null } : business
       )
     );
   };
@@ -405,55 +407,77 @@ const AdminDashboard = () => {
                 <strong>Categoria:</strong> {selectedBusiness.categoria}
               </p>
               <p>
-                <strong>Endereço:</strong> {selectedBusiness.endereco}
+                <strong>Endereço:</strong>{" "}
+                {selectedBusiness.endereco
+                  ? `${selectedBusiness.endereco.rua}, ${selectedBusiness.endereco.numero} - ${selectedBusiness.endereco.bairro}, ${selectedBusiness.endereco.cidade}/${selectedBusiness.endereco.estado}`
+                  : "Não informado"}
               </p>
               <p>
-                <strong>Telefone:</strong> {selectedBusiness.telefoneFixo}
+                <strong>Telefone Fixo:</strong>{" "}
+                {selectedBusiness.telefone || "Não informado"}
               </p>
               <p>
-                <strong>Celular:</strong> {selectedBusiness.telefoneCelular}
+                <strong>Celular:</strong>{" "}
+                {selectedBusiness.celular || "Não informado"}
               </p>
               <p>
                 <strong>E-mail:</strong> {selectedBusiness.email}
               </p>
-              <p>
+
+              {/* Horário de Funcionamento */}
+              <div>
                 <strong>Horário de Funcionamento:</strong>
-                {selectedBusiness?.horarioDeFuncionamento ? (
-                  <>
-                    {/* Horário de Funcionamento de Segunda a Sexta */}
+                {selectedBusiness.horarioDeFuncionamento ? (
+                  <div>
                     <p>
                       <strong>Segunda a Sexta:</strong>{" "}
-                      {selectedBusiness.horarioDeFuncionamento.segundaAsexta
-                        ?.open || "Não disponível"}{" "}
+                      {selectedBusiness.horarioDeFuncionamento.weekdays?.open ||
+                        "Não disponível"}{" "}
                       -{" "}
-                      {selectedBusiness.horarioDeFuncionamento.segundaAsexta
+                      {selectedBusiness.horarioDeFuncionamento.weekdays
                         ?.close || "Não disponível"}
                     </p>
-
-                    {/* Horário de Funcionamento de Sábado */}
                     <p>
                       <strong>Sábado:</strong>{" "}
-                      {selectedBusiness.horarioDeFuncionamento.sabado?.open ||
-                        "Não disponível"}{" "}
-                      -{" "}
-                      {selectedBusiness.horarioDeFuncionamento.sabado?.close ||
-                        "Não disponível"}
+                      {selectedBusiness.horarioDeFuncionamento.saturday?.closed
+                        ? "Fechado"
+                        : `${
+                            selectedBusiness.horarioDeFuncionamento.saturday
+                              ?.open || "Não disponível"
+                          } - 
+                           ${
+                             selectedBusiness.horarioDeFuncionamento.saturday
+                               ?.close || "Não disponível"
+                           }`}
                     </p>
-
-                    {/* Horário de Funcionamento de Domingo */}
                     <p>
                       <strong>Domingo:</strong>{" "}
-                      {selectedBusiness.horarioDeFuncionamento.domingo?.open ||
-                        "Não disponível"}{" "}
-                      -{" "}
-                      {selectedBusiness.horarioDeFuncionamento.domingo?.close ||
-                        "Não disponível"}
+                      {selectedBusiness.horarioDeFuncionamento.sunday?.closed
+                        ? "Fechado"
+                        : `${
+                            selectedBusiness.horarioDeFuncionamento.sunday
+                              ?.open || "Não disponível"
+                          } - 
+                           ${
+                             selectedBusiness.horarioDeFuncionamento.sunday
+                               ?.close || "Não disponível"
+                           }`}
                     </p>
-                  </>
+                    {selectedBusiness.horarioDeFuncionamento.lunch?.enabled && (
+                      <p>
+                        <strong>Horário de Almoço:</strong>{" "}
+                        {selectedBusiness.horarioDeFuncionamento.lunch.start ||
+                          "Não disponível"}{" "}
+                        -{" "}
+                        {selectedBusiness.horarioDeFuncionamento.lunch.end ||
+                          "Não disponível"}
+                      </p>
+                    )}
+                  </div>
                 ) : (
-                  "Não disponível"
+                  <p>Não informado</p>
                 )}
-              </p>
+              </div>
 
               {/* Botões de ação */}
               {/* Botão de Verificar CNPJ */}
