@@ -98,8 +98,8 @@ const Login = () => {
           photoURL: usuario.photoURL || "",
           lastLogin: new Date().toISOString()
         });
-        // Redireciona para completar o cadastro
-        navigate('/cadastro');
+        // Redireciona para home
+        navigate('/');
       } else {
         // Verifica se todos os campos obrigatórios estão preenchidos
         const dadosUsuario = usuarioDoc.data();
