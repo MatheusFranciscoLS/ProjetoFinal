@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 import { FiMail, FiLock, FiAlertCircle } from "react-icons/fi";
 import "../styles/auth.css";
 import { Google } from "@mui/icons-material";
@@ -70,7 +71,18 @@ const Login = () => {
     setLoading(true);
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log("Usuário autenticado:", result.user);
+      const user = result.user;
+
+      // Criar ou atualizar o documento do usuário no Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        lastLogin: new Date().toISOString()
+      }, { merge: true });
+
+      console.log("Usuário autenticado:", user);
       navigate("/home");
     } catch (err) {
       console.error("Erro no login com Google:", err);
@@ -143,7 +155,7 @@ const Login = () => {
         <div className="google-login">
           <button
             onClick={handleGoogleLogin}
-            className="btn-google"
+            className="btn-google-register"
             disabled={loading}
           >
             <Google />
