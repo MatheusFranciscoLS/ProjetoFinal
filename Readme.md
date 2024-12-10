@@ -26,7 +26,7 @@ O app será uma plataforma de conexão entre pequenos negócios e consumidores l
 - **Busca e Filtros**: Buscar negócios por nome, categoria.
 - **Sistema de Avaliação**: Permitir que clientes avaliem produtos, serviços ou negócios com estrelas e comentários. Exibir avaliações em perfis e páginas de produtos.
 - **Exibição de Destaques**: Mostrar promoções e negócios em destaque na página inicial.
-- **Geolocalização**: Exibir um mapa interativo para localizar negócios.
+- **Geolocalização**: Redirecione os usuários para o Google Maps para localizar negócios de forma interativa.
 - **Sistema de Contato**: Formulário para dúvidas ou sugestões. Links para redes sociais integrados no perfil da plataforma.
 
 ### Requisitos Não Funcionais
