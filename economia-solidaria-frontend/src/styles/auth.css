@@ -279,6 +279,55 @@
 }
 
 /* Estilos do botão Google */
+.google-login {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.btn-google-register {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background-color: #ffffff;
+  color: #3c4043;
+  border: 1px solid #dadce0;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-google-register svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #4285f4;
+}
+
+.btn-google-register:hover {
+  background-color: #f8f9fa;
+  box-shadow: var(--shadow-md);
+  border-color: #d2e3fc;
+}
+
+.btn-google-register:active {
+  background-color: #f1f3f4;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-google-register:disabled {
+  background-color: #f1f3f4;
+  color: #80868b;
+  cursor: not-allowed;
+  border-color: #dadce0;
+  box-shadow: none;
+}
+
+/* Estilos do botão Google para registro */
 .btn-google {
   display: flex;
   align-items: center;
@@ -349,41 +398,6 @@
 .google-login-button:disabled {
   background-color: #B0BEC5; /* Cor cinza quando desabilitado */
   cursor: not-allowed;
-}
-
-/* Estilos do botão Google para registro */
-.btn-google-register {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  width: 100%;
-  max-width: 280px;
-  margin: 0.75rem auto;
-  padding: 0.75rem 1.5rem;
-  background-color: #4285f4;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-.btn-google-register:hover {
-  background-color: #fff;
-  color: #757575;
-  border: 1px solid #dadce0;
-  box-shadow: 0 1px 2px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-}
-
-.btn-google-register:active {
-  background-color: #f1f3f4;
-}
-
-.btn-google-register svg {
-  font-size: 1.25rem;
 }
 
 @media (max-width: 640px) {

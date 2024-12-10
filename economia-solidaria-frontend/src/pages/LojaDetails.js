@@ -142,7 +142,7 @@ const LojaDetails = () => {
       </p>
 
       {/* Redes Sociais */}
-      {loja.plano !== "Gratuito" && loja.redesSociais && (
+      {loja.plano?.toLowerCase() !== "gratuito" && loja.redesSociais && (
         Object.values(loja.redesSociais).some((value) => value) && (
           <div className="social-media-section">
             <h3>Redes Sociais</h3>
@@ -208,12 +208,20 @@ const LojaDetails = () => {
       </div>
 
       {/* Telefones e Email */}
-      <p>
-        <strong>Telefone:</strong> {loja.telefoneFixo}
-      </p>
-      <p>
-        <strong>Celular:</strong> {loja.telefoneCelular}
-      </p>
+      {loja.plano?.toLowerCase() !== "gratuito" && (
+        <>
+          {loja.telefone && (
+            <p>
+              <strong>Telefone:</strong> {loja.telefone}
+            </p>
+          )}
+          {loja.Celular && (
+            <p>
+              <strong>Celular:</strong> {loja.Celular}
+            </p>
+          )}
+        </>
+      )}
       <p>
         <strong>Email:</strong> {loja.email}
       </p>
