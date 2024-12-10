@@ -371,6 +371,17 @@
   height: 1.5rem;
 }
 
+.google-icon {
+  font-size: 1.5em;
+  font-weight: bold;
+  background: linear-gradient(45deg, #4285F4, #34A853, #FBBC05, #EA4335);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  margin-right: 8px;
+}
+
 /* Divisor */
 .divider {
   display: flex;

@@ -275,6 +275,11 @@ const RegisterBusiness = () => {
         telefone: formData.contact.telefone,
         email: formData.business.email,
         horarioDeFuncionamento: formData.hours,
+        social: {
+          whatsapp: formData.social.whatsapp,
+          instagram: formData.social.instagram,
+          facebook: formData.social.facebook,
+        },
         imagens: base64Images,
         comprovante: formData.media.cnDoc?.name,
         userId: user.uid,

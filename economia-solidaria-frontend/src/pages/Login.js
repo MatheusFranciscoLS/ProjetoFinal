@@ -117,7 +117,7 @@ const Login = () => {
 
         if (temCamposNaoInformados) {
           // Dados incompletos, redireciona para completar o cadastro
-          navigate('/cadastro');
+          navigate('/');
         } else {
           // Usuário completo, redireciona para página inicial
           navigate('/');
