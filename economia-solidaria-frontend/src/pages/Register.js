@@ -168,54 +168,27 @@ const Register = () => {
 
     setLoading(true);
     try {
-      // Criar usuário no Firebase Auth
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        formData.email,
-        formData.password
-      );
-
-      // Criar documento do usuário no Firestore
-      await setDoc(doc(db, "users", userCredential.user.uid), {
+      // Criar documento do usuário no Firestore após completar o formulário
+      const usuarioDocRef = doc(db, "users", auth.currentUser.uid);
+      await setDoc(usuarioDocRef, {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
         cellphone: formData.cellphone,
-        tipo:"comum",
+        tipo: "comum",
         createdAt: new Date().toISOString(),
         role: "user"
       });
 
-      setSuccess("Conta criada com sucesso! Redirecionando...");
-      
-      // Aguarda 1.5 segundos antes de redirecionar
+      setSuccess("Cadastro completo! Redirecionando...");
       setTimeout(() => {
         navigate("/business-question", { 
           state: { message: "Registro concluído! Responda algumas perguntas para continuar." }
         });
       }, 1500);
-
     } catch (err) {
-      console.error("Erro no registro:", err);
-      switch (err.code) {
-        case "auth/email-already-in-use":
-          setError("Este email já está em uso. Tente fazer login.");
-          document.getElementById("email").focus();
-          break;
-        case "auth/invalid-email":
-          setError("Email inválido. Verifique o formato do email.");
-          document.getElementById("email").focus();
-          break;
-        case "auth/operation-not-allowed":
-          setError("O registro está temporariamente desabilitado.");
-          break;
-        case "auth/weak-password":
-          setError("A senha é muito fraca. Use pelo menos 6 caracteres.");
-          document.getElementById("password").focus();
-          break;
-        default:
-          setError("Erro ao criar conta. Por favor, tente novamente.");
-      }
+      console.error("Erro ao registrar usuário:", err);
+      setError("Erro ao registrar. Por favor, tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -250,19 +223,7 @@ const Register = () => {
       const usuarioDoc = await getDoc(usuarioDocRef);
 
       if (!usuarioDoc.exists()) {
-        // Criar documento inicial do usuário com dados do Google
-        await setDoc(usuarioDocRef, {
-          name: usuario.displayName || "",
-          email: usuario.email,
-          phone: "",
-          cellphone: "",
-          tipo: "comum",
-          createdAt: new Date().toISOString(),
-          role: "user",
-          photoURL: usuario.photoURL || "",
-          lastLogin: new Date().toISOString()
-        });
-        
+        // Não criar documento ainda, aguardar submissão do formulário
         setSuccess("Conta Google vinculada! Por favor, complete seu cadastro.");
       } else {
         const dadosUsuario = usuarioDoc.data();
