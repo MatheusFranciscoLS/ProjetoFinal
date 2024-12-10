@@ -79,31 +79,34 @@ const Register = () => {
       return false;
     }
 
-    // Validação do telefone
-    const phoneDigits = formData.phone.replace(/\D/g, "");
-    if (phoneDigits.length > 0 && phoneDigits.length !== 10) {
-      setError("Por favor, insira um número de telefone válido.");
-      showFeedback("phone", "O número de telefone deve conter 10 dígitos.");
-      document.getElementById("phone").focus();
-      return false;
-    }
-    if (phoneDigits.length === 0) {
-      showFeedback("phone", "O número de telefone não pode estar em branco.");
-      document.getElementById("phone").focus();
+    // Validação da confirmação de senha
+    if (formData.password !== formData.confirmPassword) {
+      setError("As senhas não coincidem.");
+      document.getElementById("confirmPassword").focus();
       return false;
     }
 
-    // Validação do celular
+    // Validação de telefone ou celular
+    const phoneDigits = formData.phone.replace(/\D/g, "");
     const cellphoneDigits = formData.cellphone.replace(/\D/g, "");
-    if (cellphoneDigits.length > 0 && cellphoneDigits.length !== 11) {
-      setError("Por favor, insira um número de celular válido.");
+    if ((phoneDigits.length === 0 && cellphoneDigits.length === 0) ||
+        (phoneDigits.length !== 10 && cellphoneDigits.length !== 11)) {
+      setError("Por favor, insira um número de telefone ou celular válido.");
+      showFeedback("phone", "O número de telefone deve conter 10 dígitos.");
       showFeedback("cellphone", "O número de celular deve conter 11 dígitos.");
-      document.getElementById("cellphone").focus();
+      if (phoneDigits.length === 0) {
+        document.getElementById("phone").focus();
+      } else {
+        document.getElementById("cellphone").focus();
+      }
       return false;
     }
-    if (cellphoneDigits.length === 0) {
-      showFeedback("cellphone", "O número de celular não pode estar em branco.");
-      document.getElementById("cellphone").focus();
+
+    // Validação de aceitação dos termos
+    if (!formData.acceptTerms) {
+      setError("Você deve aceitar os termos e condições para continuar.");
+      showFeedback("acceptTerms", "Aceitação dos termos é obrigatória.");
+      document.getElementById("acceptTerms").focus();
       return false;
     }
 
@@ -120,17 +123,34 @@ const Register = () => {
       document.getElementById("email").classList.remove("valid-input");
     }
 
-    if (phoneDigits && phoneDigits.length === 10) {
+    if (phoneDigits.length === 10 || cellphoneDigits.length === 11) {
       document.getElementById("phone").classList.add("valid-input");
-    } else {
-      document.getElementById("phone").classList.remove("valid-input");
-    }
-
-    if (cellphoneDigits && cellphoneDigits.length === 11) {
       document.getElementById("cellphone").classList.add("valid-input");
     } else {
+      document.getElementById("phone").classList.remove("valid-input");
       document.getElementById("cellphone").classList.remove("valid-input");
     }
+
+    if (formData.password.length >= 6) {
+      document.getElementById("password").classList.add("valid-input");
+    } else {
+      document.getElementById("password").classList.remove("valid-input");
+    }
+
+    if (formData.confirmPassword && formData.password === formData.confirmPassword) {
+      document.getElementById("confirmPassword").classList.add("valid-input");
+    } else {
+      document.getElementById("confirmPassword").classList.remove("valid-input");
+    }
+
+    if (formData.acceptTerms) {
+      document.getElementById("acceptTerms").classList.add("valid-input");
+    } else {
+      document.getElementById("acceptTerms").classList.remove("valid-input");
+    }
+
+    showFeedback("password", formData.password.length >= 6 ? "Senha válida." : "A senha deve ter pelo menos 6 caracteres.");
+    showFeedback("confirmPassword", formData.password === formData.confirmPassword ? "Senhas coincidem." : "As senhas não coincidem.");
 
     return true;
   };
@@ -159,6 +179,7 @@ const Register = () => {
         email: formData.email,
         phone: formData.phone,
         cellphone: formData.cellphone,
+        tipo:"comum",
         createdAt: new Date().toISOString(),
         role: "user"
       });
@@ -323,6 +344,7 @@ const Register = () => {
                 required
                 disabled={loading}
               />
+              <p id="confirmPassword-feedback"></p>
             </div>
           </div>
 
@@ -340,6 +362,7 @@ const Register = () => {
                 Li e aceito os <Link to="/terms" target="_blank">termos de uso</Link>
               </span>
             </label>
+            <p id="acceptTerms-feedback"></p>
           </div>
 
           {error && (
