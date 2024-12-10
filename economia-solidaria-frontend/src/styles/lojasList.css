@@ -18,12 +18,12 @@
     text-decoration: none;
     color: #333;
     width: 100%;
-    max-width: 300px; /* Limita a largura máxima dos cards */
+    max-width: 280px; /* Slightly reduce max-width for compactness */
     display: flex;
-    flex-direction: column; /* Garante alinhamento vertical do conteúdo */
-    height: 100%; /* Garante que todos os cards tenham a mesma altura */
-    min-height: 380px; /* Define uma altura mínima para os cards */
-    margin: 10px; /* Adiciona espaço entre os cards */
+    flex-direction: column;
+    height: auto; /* Adjust height to content */
+    min-height: 320px; /* Reduce min-height for less whitespace */
+    margin: 10px;
   }
   
   /* Modificação na imagem para garantir que ela seja responsiva */
@@ -43,12 +43,12 @@
   
   /* Informações do card */
   .loja-info {
-    padding: 20px;
+    padding: 12px; /* Reduce padding to decrease whitespace */
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    justify-content: space-between; /* Garante que a descrição sempre fique na parte inferior */
+    gap: 4px; /* Reduce gap between elements */
+    justify-content: space-between;
   }
   
   /* Garantir que todos os títulos tenham o mesmo estilo */
@@ -173,11 +173,11 @@
   }
   
   .loja-info {
-    padding: 20px;
+    padding: 12px; /* Reduce padding to decrease whitespace */
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px; /* Reduce gap between elements */
   }
   
   .loja-info h3 {
