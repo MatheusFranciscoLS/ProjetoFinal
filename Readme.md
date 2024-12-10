@@ -19,16 +19,14 @@ O app será uma plataforma de conexão entre pequenos negócios e consumidores l
 - **Perfil do Negócio**: Página personalizada com informações do negócio. Exibição de produtos/serviços cadastrados. Mapa interativo mostrando a localização.
 - **Sistema de Avaliação**: Avaliações por estrelas e comentários dos clientes. Filtros para visualizar avaliações.
 - **Página Institucional (Sobre)**: Explica o conceito de economia solidária e os benefícios da plataforma.
-- **Notícias e Dicas**: Histórias de sucesso de empreendedores locais. Publicação de dicas de gestão e marketing para pequenos negócios.
 - **Contato**: Formulário para dúvidas ou sugestões. Links para redes sociais do projeto.
 
 ### Requisitos Funcionais
 - **Cadastro de Negócios**: Permitir que empreendedores criem perfis com informações como descrição, localização e horário de funcionamento. Upload de imagens para personalizar o perfil.
-- **Busca e Filtros**: Buscar negócios por nome, categoria ou localização. Filtrar por faixa de preço, distância ou avaliação.
+- **Busca e Filtros**: Buscar negócios por nome, categoria.
 - **Sistema de Avaliação**: Permitir que clientes avaliem produtos, serviços ou negócios com estrelas e comentários. Exibir avaliações em perfis e páginas de produtos.
 - **Exibição de Destaques**: Mostrar promoções e negócios em destaque na página inicial.
 - **Geolocalização**: Exibir um mapa interativo para localizar negócios.
-- **Histórias e Dicas**: Publicar histórias de sucesso e dicas úteis para empreendedores.
 - **Sistema de Contato**: Formulário para dúvidas ou sugestões. Links para redes sociais integrados no perfil da plataforma.
 
 ### Requisitos Não Funcionais
@@ -39,6 +37,81 @@ O app será uma plataforma de conexão entre pequenos negócios e consumidores l
 - **Compatibilidade**: Ser acessível em navegadores modernos e dispositivos móveis via React Native.
 - **Manutenibilidade**: O código deve seguir padrões claros e ser facilmente compreendido por novos desenvolvedores.
 - **Localização**: Suporte para exibir conteúdo baseado na localização do usuário.
+
+## Tecnologias Utilizadas
+
+### Front-End (React)
+- **Framework Principal**: 
+  - `react` v18.3.1 - Biblioteca JavaScript para construção de interfaces
+  - `react-dom` v18.3.1 - Renderização para ambiente web
+- **UI/Design**:
+  - `@mui/material` e `@mui/icons-material` - Framework de UI Material Design
+  - `@emotion/react` e `@emotion/styled` - Estilização com CSS-in-JS
+  - `react-icons` - Biblioteca de ícones
+  - `@fortawesome/fontawesome` - Ícones FontAwesome
+  - `framer-motion` - Animações fluidas
+  - `react-loading-skeleton` - Esqueletos de carregamento
+  - `react-slick` e `slick-carousel` - Carrosséis e sliders
+- **Formulários e Inputs**:
+  - `react-input-mask` - Máscaras para inputs
+  - `react-select` - Campos de seleção avançados
+  - `react-time-picker` - Seletor de horário
+  - `cpf-cnpj-validator` - Validação de documentos brasileiros
+- **Roteamento e Navegação**:
+  - `react-router-dom` v6.28.0 - Gerenciamento de rotas
+- **Integração com Backend**:
+  - `axios` - Cliente HTTP para requisições
+  - `firebase` v10.14.1 - SDK do Firebase
+  - `react-firebase-hooks` - Hooks para integração com Firebase
+- **Mapas e Geolocalização**:
+  - `@react-google-maps/api` - Integração com Google Maps
+
+### Back-End
+- **Firebase**:
+  - Firestore para armazenamento de dados
+  - Authentication para gerenciamento de usuários
+  - Storage para armazenamento de arquivos
+
+### Estrutura do Projeto
+```
+src/
+├── assets/         # Recursos estáticos (imagens, fontes)
+├── components/     # Componentes reutilizáveis
+├── hooks/         # Hooks personalizados
+├── pages/         # Páginas da aplicação
+├── services/      # Serviços e integrações
+├── styles/        # Arquivos de estilo
+└── utils/         # Funções utilitárias
+```
+
+### Funcionalidades Implementadas
+- **Autenticação de Usuários**:
+  - Login com email/senha
+  - Registro de novos usuários
+  - Recuperação de senha
+  - Perfis de administrador e usuário comum
+- **Gerenciamento de Negócios**:
+  - Cadastro com validação de campos
+  - Upload de imagens
+  - Edição de informações
+  - Geolocalização com Google Maps
+  - Categorização de negócios
+- **Painel Administrativo**:
+  - Dashboard com estatísticas
+  - Gestão de usuários
+  - Aprovação/Rejeição de cadastros
+  - Monitoramento de atividades
+- **Interface do Usuário**:
+  - Design responsivo
+  - Temas claro/escuro
+  - Animações e transições suaves
+  - Loading states e feedback visual
+  - Carrosséis de imagens
+- **Busca e Filtros**:
+  - Busca por nome ou categoria
+  - Filtros avançados
+  - Ordenação de resultados
+  - Paginação de listas
 
 ## Escopo do Projeto
 
@@ -53,7 +126,7 @@ Desenvolver uma plataforma digital que conecte pequenos negócios e serviços lo
 
 ## Bibliotecas e Pacotes Necessários
 
-### Front-End (React Native)
+### Front-End (React)
 - **Gerenciamento de Navegação**: 
   - `react-navigation`
   - `@react-navigation/native-stack`
@@ -112,7 +185,7 @@ Desenvolver uma plataforma digital que conecte pequenos negócios e serviços lo
 - **Emuladores**: Android/iOS ou dispositivos físicos para testes
 
 ### Equipes e Conhecimentos Necessários
-- **Desenvolvedor Front-End**: Especializado em React Native.
+- **Desenvolvedor Front-End**: Especializado em React.
 - **Desenvolvedor Back-End**: Com experiência em Laravel e APIs.
 - **Especialista em APIs**: Integração com serviços externos.
 - **Designer UX/UI**: Para criar interfaces intuitivas.
