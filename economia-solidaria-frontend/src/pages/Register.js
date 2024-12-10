@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { FiUser, FiMail, FiLock, FiPhone, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
@@ -231,32 +231,84 @@ const Register = () => {
   };
 
   const handleGoogleSignIn = async () => {
-    const auth = getAuth();
-    const provider = new GoogleAuthProvider();
-
+    setError("");
+    setLoading(true);
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+      const provider = new GoogleAuthProvider();
+      const resultado = await signInWithPopup(auth, provider);
+      const usuario = resultado.user;
 
-      // Salvar dados do usuário no Firestore
-      await setDoc(doc(db, 'users', user.uid), {
-        uid: user.uid,
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-      });
+      // Preenche o formulário com os dados do Google
+      setFormData(prev => ({
+        ...prev,
+        name: usuario.displayName || "",
+        email: usuario.email || "",
+      }));
 
-      console.log('Usuário registrado com sucesso:', user);
-    } catch (error) {
-      console.error('Erro ao fazer login com o Google:', error);
+      // Verifica se o usuário já existe no Firestore
+      const usuarioDocRef = doc(db, "users", usuario.uid);
+      const usuarioDoc = await getDoc(usuarioDocRef);
+
+      if (!usuarioDoc.exists()) {
+        // Criar documento inicial do usuário com dados do Google
+        await setDoc(usuarioDocRef, {
+          name: usuario.displayName || "",
+          email: usuario.email,
+          phone: "",
+          cellphone: "",
+          tipo: "comum",
+          createdAt: new Date().toISOString(),
+          role: "user",
+          photoURL: usuario.photoURL || "",
+          lastLogin: new Date().toISOString()
+        });
+        
+        setSuccess("Conta Google vinculada! Por favor, complete seu cadastro.");
+      } else {
+        const dadosUsuario = usuarioDoc.data();
+        // Preenche o formulário com dados existentes
+        setFormData(prev => ({
+          ...prev,
+          name: dadosUsuario.name || usuario.displayName || "",
+          email: dadosUsuario.email || usuario.email || "",
+          phone: dadosUsuario.phone || "",
+          cellphone: dadosUsuario.cellphone || "",
+        }));
+        
+        setSuccess("Conta Google encontrada! Verifique e complete seus dados.");
+      }
+    } catch (err) {
+      setError("Erro ao entrar com Google: " + err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-content">
-        <h2>Criar Conta</h2>
+        <h2>Cadastro</h2>
         
+        <button
+          onClick={handleGoogleSignIn}
+          className="btn-google-register"
+          disabled={loading}
+        >
+          <Google />
+          {loading ? "Conectando..." : "Continuar com Google"}
+        </button>
+
+        <div className="divider">
+          <span>ou</span>
+        </div>
+
+        {success && (
+          <div className="success-message">
+            <FiCheckCircle />
+            {success}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label htmlFor="name">Nome Completo</label>
@@ -396,13 +448,6 @@ const Register = () => {
             </p>
           )}
 
-          {success && (
-            <p className="success-message">
-              <FiCheckCircle />
-              {success}
-            </p>
-          )}
-          
           <button 
             type="submit" 
             className="auth-button" 
@@ -411,14 +456,6 @@ const Register = () => {
             {loading ? "Criando conta..." : "Criar conta"}
           </button>
 
-          <button
-            onClick={handleGoogleSignIn}
-            className="btn-google-register"
-            disabled={loading}
-          >
-            <Google />
-            {loading ? "Conectando..." : "Entrar com Google"}
-          </button>
           <p className="auth-link">
             Já tem uma conta? <Link to="/login">Faça login</Link>
           </p>
