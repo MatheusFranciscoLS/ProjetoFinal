@@ -215,9 +215,9 @@ const LojaDetails = () => {
               <strong>Telefone:</strong> {loja.telefone}
             </p>
           )}
-          {loja.Celular && (
+          {loja.cellphone && (
             <p>
-              <strong>Celular:</strong> {loja.Celular}
+              <strong>Celular:</strong> {loja.cellphone}
             </p>
           )}
         </>
