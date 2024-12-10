@@ -73,7 +73,7 @@ const Profile = () => {
       {error && <p className="error">{error}</p>}
       <div className="profile-info">
         <div className="profile-field">
-          <strong>Nome:</strong> {userData.nome || user.email}
+          <strong>Nome:</strong> {userData.name || user.name}
         </div>
         <div className="profile-field">
           <strong>Email:</strong> {user.email}
