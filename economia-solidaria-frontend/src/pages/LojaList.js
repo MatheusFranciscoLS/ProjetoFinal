@@ -61,10 +61,12 @@ const LojasList = () => {
     return lojas
       .filter((loja) => {
         const nomeFiltrado = loja.nome?.toLowerCase().includes(filtroNome.toLowerCase());
-        const categoriaFiltrada = filtroCategoria
+        const categoriaFiltrada = loja.categoria?.toLowerCase().includes(filtroNome.toLowerCase());
+        const servicoFiltrado = loja.servicos?.some(servico => servico.toLowerCase().includes(filtroNome.toLowerCase()));
+        const categoriaFiltradaSelect = filtroCategoria
           ? loja.categoria?.toLowerCase().includes(filtroCategoria.toLowerCase())
           : true;
-        return nomeFiltrado && categoriaFiltrada;
+        return (nomeFiltrado || categoriaFiltrada || servicoFiltrado) && categoriaFiltradaSelect;
       })
       .sort((a, b) => {
         // Definir prioridade dos planos (Premium > Essencial > Gratuito)
@@ -146,14 +148,14 @@ const LojasList = () => {
 
       <div className="filters">
         <div className="search-container">
-          <FiSearch className="search-icon" />
           <input
             type="text"
-            placeholder="Pesquisar por nome"
+            className="search-input"
+            placeholder="Pesquisar por nome de empresa ou serviço"
             value={filtroNome}
             onChange={(e) => setFiltroNome(e.target.value)}
-            className="filter-input"
           />
+          <FiSearch className="search-icon" />
         </div>
         <select
           value={filtroCategoria}

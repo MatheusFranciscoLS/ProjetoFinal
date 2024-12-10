@@ -14,6 +14,7 @@ const Register = () => {
     name: "",
     email: "",
     phone: "",
+    cellphone: "",
     password: "",
     confirmPassword: "",
     acceptTerms: false
@@ -39,15 +40,26 @@ const Register = () => {
   };
 
   const validateForm = () => {
+    // Adicionar mensagens de feedback ao usuário
+    const showFeedback = (field, message) => {
+      const feedbackElement = document.getElementById(`${field}-feedback`);
+      if (feedbackElement) {
+        feedbackElement.innerText = message;
+        feedbackElement.style.color = message.includes("válido") ? 'green' : 'red';
+      }
+    };
+
     // Validação do nome
     if (!formData.name) {
       setError("Por favor, insira seu nome completo");
+      showFeedback("name", "Nome é obrigatório.");
       document.getElementById("name").focus();
       return false;
     }
 
     if (formData.name.length < 3) {
       setError("O nome deve ter pelo menos 3 caracteres");
+      showFeedback("name", "O nome deve ter pelo menos 3 caracteres.");
       document.getElementById("name").focus();
       return false;
     }
@@ -56,37 +68,91 @@ const Register = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email || !emailRegex.test(formData.email)) {
       setError("Por favor, insira um email válido");
+      showFeedback("email", "Email inválido.");
       document.getElementById("email").focus();
-      return false;
-    }
-
-    // Validação do telefone
-    const phoneDigits = formData.phone.replace(/\D/g, "");
-    if (phoneDigits.length !== 11) {
-      setError("Por favor, insira um número de telefone válido");
-      document.getElementById("phone").focus();
       return false;
     }
 
     // Validação da senha
     if (formData.password.length < 6) {
       setError("A senha deve ter pelo menos 6 caracteres");
+      showFeedback("password", "A senha deve ter pelo menos 6 caracteres.");
       document.getElementById("password").focus();
       return false;
     }
 
+    // Validação da confirmação de senha
     if (formData.password !== formData.confirmPassword) {
-      setError("As senhas não coincidem");
+      setError("As senhas não coincidem.");
       document.getElementById("confirmPassword").focus();
       return false;
     }
 
-    // Validação dos termos
+    // Validação de telefone ou celular
+    const phoneDigits = formData.phone.replace(/\D/g, "");
+    const cellphoneDigits = formData.cellphone.replace(/\D/g, "");
+    if ((phoneDigits.length === 0 && cellphoneDigits.length === 0) ||
+        (phoneDigits.length !== 10 && cellphoneDigits.length !== 11)) {
+      setError("Por favor, insira um número de telefone ou celular válido.");
+      showFeedback("phone", "O número de telefone deve conter 10 dígitos.");
+      showFeedback("cellphone", "O número de celular deve conter 11 dígitos.");
+      if (phoneDigits.length === 0) {
+        document.getElementById("phone").focus();
+      } else {
+        document.getElementById("cellphone").focus();
+      }
+      return false;
+    }
+
+    // Validação de aceitação dos termos
     if (!formData.acceptTerms) {
-      setError("Você precisa aceitar os termos de uso");
+      setError("Você deve aceitar os termos e condições para continuar.");
+      showFeedback("acceptTerms", "Aceitação dos termos é obrigatória.");
       document.getElementById("acceptTerms").focus();
       return false;
     }
+
+    // Feedback visual para campos preenchidos corretamente
+    if (formData.name) {
+      document.getElementById("name").classList.add("valid-input");
+    } else {
+      document.getElementById("name").classList.remove("valid-input");
+    }
+
+    if (formData.email && emailRegex.test(formData.email)) {
+      document.getElementById("email").classList.add("valid-input");
+    } else {
+      document.getElementById("email").classList.remove("valid-input");
+    }
+
+    if (phoneDigits.length === 10 || cellphoneDigits.length === 11) {
+      document.getElementById("phone").classList.add("valid-input");
+      document.getElementById("cellphone").classList.add("valid-input");
+    } else {
+      document.getElementById("phone").classList.remove("valid-input");
+      document.getElementById("cellphone").classList.remove("valid-input");
+    }
+
+    if (formData.password.length >= 6) {
+      document.getElementById("password").classList.add("valid-input");
+    } else {
+      document.getElementById("password").classList.remove("valid-input");
+    }
+
+    if (formData.confirmPassword && formData.password === formData.confirmPassword) {
+      document.getElementById("confirmPassword").classList.add("valid-input");
+    } else {
+      document.getElementById("confirmPassword").classList.remove("valid-input");
+    }
+
+    if (formData.acceptTerms) {
+      document.getElementById("acceptTerms").classList.add("valid-input");
+    } else {
+      document.getElementById("acceptTerms").classList.remove("valid-input");
+    }
+
+    showFeedback("password", formData.password.length >= 6 ? "Senha válida." : "A senha deve ter pelo menos 6 caracteres.");
+    showFeedback("confirmPassword", formData.password === formData.confirmPassword ? "Senhas coincidem." : "As senhas não coincidem.");
 
     return true;
   };
@@ -114,6 +180,8 @@ const Register = () => {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
+        cellphone: formData.cellphone,
+        tipo:"comum",
         createdAt: new Date().toISOString(),
         role: "user"
       });
@@ -206,6 +274,7 @@ const Register = () => {
                 required
                 disabled={loading}
               />
+              <p id="name-feedback"></p>
             </div>
           </div>
 
@@ -225,27 +294,42 @@ const Register = () => {
                 required
                 disabled={loading}
               />
+              <p id="email-feedback"></p>
             </div>
           </div>
 
           <div className="form-group">
             <label htmlFor="phone">Telefone</label>
-            <div className="input-with-icon">
-              <FiPhone className="input-icon" />
-              <InputMask
-                mask="(99) 99999-9999"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                onKeyPress={handleKeyPress}
-                placeholder="(XX) XXXXX-XXXX"
-                className="masked-input"
-                autoComplete="tel"
-                required
-                disabled={loading}
-              />
-            </div>
+            <InputMask
+              mask="(99) 9999-9999"
+              maskChar={null}
+              type="text"
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="(XX) XXXX-XXXX"
+              disabled={loading}
+            />
+            <p id="phone-feedback"></p>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="cellphone">Celular</label>
+            <InputMask
+              mask="(99) 99999-9999"
+              maskChar={null}
+              type="text"
+              id="cellphone"
+              name="cellphone"
+              value={formData.cellphone}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="(XX) XXXXX-XXXX"
+              disabled={loading}
+            />
+            <p id="cellphone-feedback"></p>
           </div>
 
           <div className="form-group">
@@ -264,6 +348,7 @@ const Register = () => {
                 required
                 disabled={loading}
               />
+              <p id="password-feedback"></p>
             </div>
           </div>
 
@@ -283,6 +368,7 @@ const Register = () => {
                 required
                 disabled={loading}
               />
+              <p id="confirmPassword-feedback"></p>
             </div>
           </div>
 
@@ -300,6 +386,7 @@ const Register = () => {
                 Li e aceito os <Link to="/terms" target="_blank">termos de uso</Link>
               </span>
             </label>
+            <p id="acceptTerms-feedback"></p>
           </div>
 
           {error && (
