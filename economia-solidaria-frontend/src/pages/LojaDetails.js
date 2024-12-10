@@ -142,32 +142,32 @@ const LojaDetails = () => {
       </p>
 
       {/* Redes Sociais */}
-      {loja.plano?.toLowerCase() !== "gratuito" && loja.redesSociais && (
-        Object.values(loja.redesSociais).some((value) => value) && (
+      {loja.plano?.toLowerCase() !== "gratuito" && loja.social && (
+        Object.values(loja.social).some((value) => value) && (
           <div className="social-media-section">
             <h3>Redes Sociais</h3>
             <div className="social-links">
-              {loja.redesSociais.instagram && (
+              {loja.social.instagram && (
                 <a
-                  href={loja.redesSociais.instagram}
+                  href={loja.social.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <FaInstagram size={30} />
                 </a>
               )}
-              {loja.redesSociais.facebook && (
+              {loja.social.facebook && (
                 <a
-                  href={loja.redesSociais.facebook}
+                  href={loja.social.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <FaFacebook size={30} />
                 </a>
               )}
-              {loja.redesSociais.whatsapp && (
+              {loja.social.whatsapp && (
                 <a
-                  href={`https://wa.me/${loja.redesSociais.whatsapp.replace(/\D/g, "")}`}
+                  href={`https://wa.me/${loja.social.whatsapp.replace(/\D/g, "")}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
