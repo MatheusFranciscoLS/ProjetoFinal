@@ -3,9 +3,11 @@ import { useNavigate, Link } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { FiUser, FiMail, FiLock, FiPhone, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
 import InputMask from "react-input-mask";
 import "../styles/auth.css";
+import { Google } from "@mui/icons-material";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -160,6 +162,28 @@ const Register = () => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Salvar dados do usuário no Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      });
+
+      console.log('Usuário registrado com sucesso:', user);
+    } catch (error) {
+      console.error('Erro ao fazer login com o Google:', error);
+    }
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-content">
@@ -300,6 +324,14 @@ const Register = () => {
             {loading ? "Criando conta..." : "Criar conta"}
           </button>
 
+          <button
+            onClick={handleGoogleSignIn}
+            className="btn-google-register"
+            disabled={loading}
+          >
+            <Google />
+            {loading ? "Conectando..." : "Entrar com Google"}
+          </button>
           <p className="auth-link">
             Já tem uma conta? <Link to="/login">Faça login</Link>
           </p>

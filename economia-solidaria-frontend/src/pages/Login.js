@@ -1,35 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom"; 
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../firebase";
 import { FiMail, FiLock, FiAlertCircle } from "react-icons/fi";
 import "../styles/auth.css";
+import { Google } from "@mui/icons-material";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: ""
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const message = location.state?.message;
+  const provider = new GoogleAuthProvider();
 
   useEffect(() => {
-    // Limpa a mensagem de erro quando o componente é montado
     setError("");
-    // Foca no campo de email quando o componente carrega
     const emailInput = document.getElementById("email");
     if (emailInput) emailInput.focus();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value.trim()
-    }));
+    setFormData(prev => ({ ...prev, [name]: value.trim() }));
     setError("");
   };
 
@@ -39,69 +33,50 @@ const Login = () => {
       document.getElementById("email").focus();
       return false;
     }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError("Por favor, insira um email válido");
       document.getElementById("email").focus();
       return false;
     }
-
     if (!formData.password) {
       setError("Por favor, insira sua senha");
       document.getElementById("password").focus();
       return false;
     }
-
     return true;
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
-    
-    if (!validateForm()) {
-      return;
-    }
-
+    if (!validateForm()) return;
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, formData.email, formData.password);
-      const redirectUrl = sessionStorage.getItem('redirectUrl') || '/home';
-      sessionStorage.removeItem('redirectUrl');
+      const redirectUrl = sessionStorage.getItem("redirectUrl") || "/home";
+      sessionStorage.removeItem("redirectUrl");
       navigate(redirectUrl);
     } catch (err) {
-      console.error('Erro no login:', err);
-      switch (err.code) {
-        case 'auth/invalid-email':
-          setError("Email inválido");
-          document.getElementById("email").focus();
-          break;
-        case 'auth/user-disabled':
-          setError("Esta conta foi desativada. Entre em contato com o suporte.");
-          break;
-        case 'auth/user-not-found':
-          setError("Usuário não encontrado. Verifique seu email ou registre-se.");
-          document.getElementById("email").focus();
-          break;
-        case 'auth/wrong-password':
-          setError("Senha incorreta. Tente novamente.");
-          document.getElementById("password").focus();
-          break;
-        case 'auth/too-many-requests':
-          setError("Muitas tentativas de login. Por favor, tente novamente mais tarde.");
-          break;
-        default:
-          setError("Erro ao fazer login. Por favor, tente novamente ou entre em contato com o suporte.");
-      }
+      console.error("Erro no login:", err);
+      setError("Erro ao fazer login. Por favor, tente novamente.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleLogin(e);
+  const handleGoogleLogin = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      console.log("Usuário autenticado:", result.user);
+      navigate("/home");
+    } catch (err) {
+      console.error("Erro no login com Google:", err);
+      setError("Erro ao fazer login com Google. Por favor, tente novamente.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -115,7 +90,7 @@ const Login = () => {
             {message}
           </div>
         )}
-        
+
         <form onSubmit={handleLogin} className="auth-form">
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -127,7 +102,6 @@ const Login = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                onKeyPress={handleKeyPress}
                 placeholder="Seu email"
                 autoComplete="email"
                 required
@@ -146,7 +120,6 @@ const Login = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                onKeyPress={handleKeyPress}
                 placeholder="Sua senha"
                 autoComplete="current-password"
                 required
@@ -161,19 +134,27 @@ const Login = () => {
               {error}
             </p>
           )}
-          
-          <button 
-            type="submit" 
-            className="auth-button" 
-            disabled={loading}
-          >
+
+          <button type="submit" className="auth-button" disabled={loading}>
             {loading ? "Entrando..." : "Entrar"}
           </button>
-
-          <p className="auth-link">
-            Não tem uma conta? <Link to="/register">Registre-se</Link>
-          </p>
         </form>
+
+        <div className="google-login">
+          <button
+            onClick={handleGoogleLogin}
+            className="btn-google"
+            disabled={loading}
+          >
+            <Google />
+            {loading ? "Conectando..." : "Entrar com Google"}
+          </button>
+
+        </div>
+
+        <p className="auth-link">
+          Não tem uma conta? <Link to="/register">Registre-se</Link>
+        </p>
       </div>
     </div>
   );

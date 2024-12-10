@@ -278,6 +278,114 @@
   text-decoration: underline;
 }
 
+/* Estilos do botão Google */
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+  padding: 0.75rem 1.5rem;
+  background-color: #fff;
+  color: #757575;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-google:hover {
+  background-color: #f8f9fa;
+  border-color: #dadce0;
+  box-shadow: 0 1px 2px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+}
+
+.btn-google:active {
+  background-color: #f1f3f4;
+}
+
+.btn-google svg {
+  font-size: 1.25rem;
+}
+
+.google-login-button {
+  background-color: #4285F4; /* Cor do Google */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.google-login-button:hover {
+  background-color: #4285F4; /* Cor do Google ao passar o mouse */
+  color: white;
+}
+
+.google-login-button:hover .google-icon {
+  color: #DB4437; /* Vermelho do Google */
+}
+
+.google-login-button:hover .google-icon:nth-child(2) {
+  color: #F4B400; /* Amarelo do Google */
+}
+
+.google-login-button:hover .google-icon:nth-child(3) {
+  color: #0F9D58; /* Verde do Google */
+}
+
+.google-login-button:hover .google-icon:nth-child(4) {
+  color: #4285F4; /* Azul do Google */
+}
+
+.google-login-button:disabled {
+  background-color: #B0BEC5; /* Cor cinza quando desabilitado */
+  cursor: not-allowed;
+}
+
+/* Estilos do botão Google para registro */
+.btn-google-register {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 280px;
+  margin: 0.75rem auto;
+  padding: 0.75rem 1.5rem;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-google-register:hover {
+  background-color: #fff;
+  color: #757575;
+  border: 1px solid #dadce0;
+  box-shadow: 0 1px 2px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+}
+
+.btn-google-register:active {
+  background-color: #f1f3f4;
+}
+
+.btn-google-register svg {
+  font-size: 1.25rem;
+}
+
 @media (max-width: 640px) {
   .auth-content {
     padding: 2rem;
