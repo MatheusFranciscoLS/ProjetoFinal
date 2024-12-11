@@ -20,7 +20,7 @@ const checkIfCNPJExists = async (cnpjValue) => {
 // Validação de imagens
 export const validateImageFile = (file) => {
   const maxSize = 5 * 1024 * 1024; // 5MB
-  const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+  const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
   if (!allowedTypes.includes(file.type)) {
     return {
