@@ -6,10 +6,17 @@ import "../styles/home.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
-import { FaInstagram, FaFacebook, FaWhatsapp, FaStore, FaHandshake, FaStar, FaUsers, FaMapMarkedAlt } from 'react-icons/fa';
+import {
+  FaStore,
+  FaHandshake,
+  FaStar,
+  FaUsers,
+  FaInfoCircle,
+  FaBook,
+} from "react-icons/fa";
 import { motion } from "framer-motion";
-import { BsArrowRight } from 'react-icons/bs';
 import { FiTrendingUp, FiUsers, FiShoppingBag } from 'react-icons/fi';
+import { FaHandHoldingHeart, FaChartLine, FaQuoteLeft, FaShieldAlt, FaQuestion } from 'react-icons/fa';
 
 // Componente para o cartão de cada loja
 const LojaCard = ({ loja, isPremium = false }) => {
@@ -38,112 +45,11 @@ const LojaCard = ({ loja, isPremium = false }) => {
   );
 };
 
-// Componente de card com imagem e nome embaixo
-const SimpleLojaCard = ({ loja }) => (
-  <Link to={`/loja/${loja.id}`} className="simple-loja-card">
-    <div className="card-image">
-      <img 
-        src={loja.imagens?.[0] || '/placeholder-image.jpg'} 
-        alt={loja.nome}
-        onError={(e) => {
-          e.target.src = '/placeholder-image.jpg';
-        }}
-      />
-    </div>
-    <div className="card-name">
-      <h3>{loja.nome}</h3>
-    </div>
-  </Link>
-);
-
-const SkeletonCard = () => (
-  <div className="loja-card skeleton">
-    <div className="skeleton-image"></div>
-    <div className="skeleton-content">
-      <div className="skeleton-title"></div>
-      <div className="skeleton-text"></div>
-      <div className="skeleton-text"></div>
-    </div>
-  </div>
-);
-
-const PremiumCard = ({ loja }) => (
-  <Link to={`/loja/${loja.id}`} className="loja-card premium-card">
-    <motion.div
-      whileHover={{ y: -5 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <div className="loja-image-container">
-        <img
-          src={loja.imagens?.[0] || "/placeholder-image.jpg"}
-          alt={loja.nome}
-          onError={(e) => {
-            e.target.src = "/placeholder-image.jpg";
-          }}
-        />
-      </div>
-      <div className="loja-info">
-        <h3>{loja.nome}</h3>
-        {loja.categoria && <span className="categoria-tag">{loja.categoria}</span>}
-      </div>
-    </motion.div>
-  </Link>
-);
-
-const EssentialCard = ({ loja }) => (
-  <Link to={`/loja/${loja.id}`} className="loja-card essential-card">
-    <motion.div
-      whileHover={{ y: -5 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <div className="loja-image-container">
-        <img
-          src={loja.imagens?.[0] || "/placeholder-image.jpg"}
-          alt={loja.nome}
-          onError={(e) => {
-            e.target.src = "/placeholder-image.jpg";
-          }}
-        />
-      </div>
-      <div className="loja-info">
-        <h3>{loja.nome}</h3>
-        {loja.categoria && <span className="categoria-tag">{loja.categoria}</span>}
-      </div>
-    </motion.div>
-  </Link>
-);
-
-const StatItem = ({ icon: Icon, title, value, description }) => (
-  <motion.div
-    className="stat-item"
-    whileHover={{ y: -5, scale: 1.02 }}
-    transition={{ type: "spring", stiffness: 300 }}
-  >
-    <Icon size={40} className="stat-icon" />
-    <div className="stat-info">
-      <h3>{value}</h3>
-      <h4>{title}</h4>
-      <p>{description}</p>
-    </div>
-  </motion.div>
-);
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.6 }
-};
-
-const staggerChildren = {
-  animate: {
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
 };
 
 const Home = () => {
@@ -152,7 +58,7 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [lojasEssentialDisplay, setLojasEssentialDisplay] = useState([]);
 
-  // Configurações do carrossel
+  // Configurações do carrossel com melhorias de acessibilidade
   const carouselSettings = {
     dots: true,
     infinite: true,
@@ -162,6 +68,7 @@ const Home = () => {
     autoplay: true,
     autoplaySpeed: 3000,
     pauseOnHover: true,
+    accessibility: true,
     responsive: [
       {
         breakpoint: 1200,
@@ -202,11 +109,7 @@ const Home = () => {
                 });
                 lojaData.plano = userData.plano || "gratuito";
               }
-            } else {
-              lojaData.plano = "gratuito";
             }
-          } else {
-            lojaData.plano = "gratuito";
           }
           
           return lojaData;
@@ -223,11 +126,7 @@ const Home = () => {
         const prioridadeA = prioridadePlano[a.plano?.toLowerCase() || "gratuito"];
         const prioridadeB = prioridadePlano[b.plano?.toLowerCase() || "gratuito"];
 
-        if (prioridadeA !== prioridadeB) {
-          return prioridadeA - prioridadeB;
-        }
-
-        return a.nome?.localeCompare(b.nome || "");
+        return prioridadeA - prioridadeB;
       });
 
       setLojas(lojasOrdenadas);
@@ -250,49 +149,22 @@ const Home = () => {
 
   useEffect(() => {
     const lojasEssential = lojas.filter(loja => loja.plano?.toLowerCase() === "essencial");
-    
-    // Função para embaralhar array
-    const shuffleArray = (array) => {
-      const shuffled = [...array];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      return shuffled;
-    };
-
-    // Atualiza os cards a cada 5 segundos
     const updateDisplayedCards = () => {
-      const shuffledLojas = shuffleArray(lojasEssential);
-      // Alterado para mostrar no máximo 3 lojas
+      const shuffledLojas = [...lojasEssential].sort(() => 0.5 - Math.random());
       const displayCount = Math.min(3, shuffledLojas.length);
       setLojasEssentialDisplay(shuffledLojas.slice(0, displayCount));
     };
 
-    // Primeira atualização
     updateDisplayedCards();
-
-    // Configura o intervalo apenas se houver mais de 3 lojas
-    let interval;
-    if (lojasEssential.length > 3) {
-      interval = setInterval(updateDisplayedCards, 5000);
-    }
-
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
+    const interval = lojasEssential.length > 3 ? setInterval(updateDisplayedCards, 5000) : null;
+    return () => interval && clearInterval(interval);
   }, [lojas]);
 
   if (loading) {
     return (
       <div className="loading-container">
-        <div className="loading-grid">
-          {[1, 2, 3, 4].map((i) => (
-            <SkeletonCard key={i} />
-          ))}
-        </div>
+        <div className="loading-spinner"></div>
+        <p>Carregando...</p>
       </div>
     );
   }
@@ -337,122 +209,407 @@ const Home = () => {
             Conectando empreendedores e consumidores conscientes para um futuro mais sustentável
           </motion.p>
           <motion.div
-            className="hero-cta"
+            className="hero-buttons"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <Link to="/register-business" className="cta-button">
+            <Link to="/register-business" className="cta-button primary">
+              <FaHandshake className="button-icon" />
               Cadastre seu Negócio
-              <BsArrowRight className="icon-right" />
             </Link>
-            <Link to="/lojas" className="cta-button explore">
+            <Link to="/lojas" className="cta-button secondary">
+              <FaStore className="button-icon" />
               Explorar Lojas
-              <BsArrowRight className="icon-right" />
             </Link>
-            <Link to="/sobre" className="cta-button saiba-mais">
+            <Link to="/sobre" className="cta-button tertiary">
+              <FaInfoCircle className="button-icon" />
               Saiba Mais
-              <BsArrowRight className="icon-right" />
             </Link>
+          </motion.div>
+        </div>
+        <div className="hero-pattern"></div>
+      </motion.section>
+
+      <motion.section 
+        className="stats-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              delayChildren: 0.3,
+              staggerChildren: 0.2
+            }
+          }
+        }}
+      >
+        <div className="section-header">
+          <h2>Impacto na Comunidade</h2>
+          <p>Juntos estamos construindo uma economia mais justa e solidária</p>
+        </div>
+        <div className="stats-grid">
+          <motion.div
+            className="stat-item"
+            variants={fadeInUp}
+          >
+            <div className="stat-icon">
+              <FiTrendingUp />
+            </div>
+            <div className="stat-info">
+              <h3>+{Math.max(500, lojas.length * 3)}</h3>
+              <h4>Impacto Social</h4>
+              <p>Clientes beneficiados</p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="stat-item"
+            variants={fadeInUp}
+          >
+            <div className="stat-icon">
+              <FiShoppingBag />
+            </div>
+            <div className="stat-info">
+              <h3>+{Math.max(50, lojas.length * 2)}</h3>
+              <h4>Empreendedores</h4>
+              <p>Negócios fortalecidos</p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="stat-item"
+            variants={fadeInUp}
+          >
+            <div className="stat-icon">
+              <FiUsers />
+            </div>
+            <div className="stat-info">
+              <h3>+{Math.max(20, Math.floor(lojas.length / 2))}</h3>
+              <h4>Comunidades</h4>
+              <p>Regiões atendidas</p>
+            </div>
           </motion.div>
         </div>
       </motion.section>
 
-      <div className="container">
-        <section className="stats-section">
-          <div className="stats-grid">
-            <StatItem
-              icon={FiTrendingUp}
-              value={`+${Math.max(500, lojas.length * 3)}`}
-              title="Impacto Social"
-              description="Clientes beneficiados"
-            />
-            <StatItem
-              icon={FiShoppingBag}
-              value={`+${Math.max(50, lojas.length * 2)}`}
-              title="Empreendedores"
-              description="Negócios fortalecidos"
-            />
-            <StatItem
-              icon={FiUsers}
-              value={`+${Math.max(20, Math.floor(lojas.length / 2))}`}
-              title="Comunidades"
-              description="Regiões atendidas"
-            />
-          </div>
-        </section>
-
-        <motion.section
-          className="premium-section"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="section-title">Destaques Premium</h2>
-          <p className="section-subtitle">
-            Conheça os empreendimentos em destaque da nossa rede
-          </p>
-          
-          <div className="premium-carousel">
-            <Slider {...carouselSettings}>
-              {lojasPremium.map((loja) => (
-                <PremiumCard key={loja.id} loja={loja} />
-              ))}
-            </Slider>
-          </div>
-        </motion.section>
-
-        <motion.section
-          className="essential-section"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="section-title">Parceiros Essenciais</h2>
-          <p className="section-subtitle">
-            Descubra mais negócios de qualidade em nossa comunidade
-          </p>
-          
-          <div className="essential-grid">
-            {lojasEssentialDisplay.map((loja) => (
-              <EssentialCard key={loja.id} loja={loja} />
+      <motion.section
+        className="premium-section"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="section-header">
+          <h2>Destaques Premium</h2>
+          <p>Conheça os empreendimentos em destaque da nossa rede</p>
+        </div>
+        
+        <div className="premium-carousel">
+          <Slider {...carouselSettings}>
+            {lojasPremium.map((loja, index) => (
+              <motion.div
+                key={loja.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="card-wrapper"
+              >
+                <Link to={`/loja/${loja.id}`} className="premium-card">
+                  <div className="card-image">
+                    <img 
+                      src={loja.imagens?.[0] || '/placeholder-image.jpg'} 
+                      alt={loja.nome}
+                      onError={(e) => {
+                        e.target.src = '/placeholder-image.jpg';
+                      }}
+                    />
+                    <div className="premium-badge">
+                      <FaStar /> Premium
+                    </div>
+                  </div>
+                  <div className="card-content">
+                    <h3>{loja.nome}</h3>
+                    {loja.categoria && (
+                      <span className="categoria-tag">{loja.categoria}</span>
+                    )}
+                    <p className="card-description">{loja.descricao}</p>
+                  </div>
+                </Link>
+              </motion.div>
             ))}
-          </div>
-        </motion.section>
+          </Slider>
+        </div>
+      </motion.section>
 
-        <section className="cta-section">
-          <div className="cta-content">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              Faça Parte da Nossa Rede
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              Cadastre seu negócio e faça parte desta comunidade que cresce a cada dia
-            </motion.p>
+      <motion.section
+        className="essential-section"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="section-header">
+          <h2>Parceiros Essenciais</h2>
+          <p>Descubra mais negócios de qualidade em nossa comunidade</p>
+        </div>
+        
+        <div className="essential-grid">
+          {lojasEssentialDisplay.map((loja, index) => (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
+              key={loja.id}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.2 }}
+              className="card-wrapper"
             >
-              <Link to="/register-business" className="cta-button">
-                Começar Agora
-                <BsArrowRight className="icon-right" />
+              <Link to={`/loja/${loja.id}`} className="essential-card">
+                <div className="card-image">
+                  <img 
+                    src={loja.imagens?.[0] || '/placeholder-image.jpg'} 
+                    alt={loja.nome}
+                    onError={(e) => {
+                      e.target.src = '/placeholder-image.jpg';
+                    }}
+                  />
+                  <div className="essential-badge">
+                    <FaHandshake /> Essencial
+                  </div>
+                </div>
+                <div className="card-content">
+                  <h3>{loja.nome}</h3>
+                  {loja.categoria && (
+                    <span className="categoria-tag">{loja.categoria}</span>
+                  )}
+                  <p className="card-description">{loja.descricao}</p>
+                </div>
               </Link>
             </motion.div>
-          </div>
-        </section>
-      </div>
+          ))}
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="features-section"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <div className="section-header">
+          <h2>Por que participar?</h2>
+          <p>Descubra os benefícios de fazer parte da nossa rede</p>
+        </div>
+        <div className="features-grid">
+          <motion.div 
+            className="feature-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="feature-icon">
+              <FaHandHoldingHeart />
+            </div>
+            <h3>Impacto Social</h3>
+            <p>Fortaleça a economia local e contribua para o desenvolvimento da comunidade</p>
+          </motion.div>
+
+          <motion.div 
+            className="feature-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <div className="feature-icon">
+              <FaUsers />
+            </div>
+            <h3>Networking</h3>
+            <p>Conecte-se com outros empreendedores e expanda sua rede de contatos</p>
+          </motion.div>
+
+          <motion.div 
+            className="feature-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+          >
+            <div className="feature-icon">
+              <FaChartLine />
+            </div>
+            <h3>Crescimento</h3>
+            <p>Alcance mais clientes e desenvolva seu negócio de forma sustentável</p>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="testimonials-section"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <div className="section-header">
+          <h2>O que dizem nossos parceiros</h2>
+          <p>Histórias de sucesso da nossa comunidade</p>
+        </div>
+        <div className="testimonials-grid">
+          <motion.div 
+            className="testimonial-card"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+          >
+            <div className="testimonial-content">
+              <FaQuoteLeft className="quote-icon" />
+              <p>"A plataforma me ajudou a conectar com outros empreendedores e expandir meu negócio de forma significativa."</p>
+            </div>
+            <div className="testimonial-author">
+              <img src="/avatar1.jpg" alt="Maria Silva" onError={(e) => e.target.src = 'https://via.placeholder.com/50'} />
+              <div>
+                <h4>Maria Silva</h4>
+                <p>Artesã</p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            className="testimonial-card"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <div className="testimonial-content">
+              <FaQuoteLeft className="quote-icon" />
+              <p>"Graças à Economia Solidária, consegui aumentar minha visibilidade e fazer parte de uma rede de apoio incrível."</p>
+            </div>
+            <div className="testimonial-author">
+              <img src="/avatar2.jpg" alt="João Santos" onError={(e) => e.target.src = 'https://via.placeholder.com/50'} />
+              <div>
+                <h4>João Santos</h4>
+                <p>Produtor Local</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="faq-section"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <div className="section-header">
+          <h2>Perguntas Frequentes</h2>
+          <p>Tire suas dúvidas sobre nossa plataforma</p>
+        </div>
+        <div className="faq-grid">
+          <motion.div 
+            className="faq-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h3><FaQuestion className="faq-icon" /> Como posso cadastrar meu negócio?</h3>
+            <p>O cadastro é simples e gratuito. Basta clicar no botão "Cadastre seu Negócio" e seguir as instruções.</p>
+          </motion.div>
+
+          <motion.div 
+            className="faq-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <h3><FaStar className="faq-icon" /> Quais são os benefícios do plano Premium?</h3>
+            <p>O plano Premium oferece maior visibilidade, destaque nas buscas e ferramentas exclusivas para crescimento.</p>
+          </motion.div>
+
+          <motion.div 
+            className="faq-card"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+          >
+            <h3><FaShieldAlt className="faq-icon" /> Como garantem a segurança dos dados?</h3>
+            <p>Utilizamos tecnologias avançadas de criptografia e seguimos rigorosos padrões de segurança.</p>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="partners-section"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <div className="section-header">
+          <h2>Nossos Parceiros</h2>
+          <p>Instituições que apoiam nossa iniciativa</p>
+        </div>
+        <div className="partners-grid">
+          <motion.div 
+            className="partner-card"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+          >
+            <img src="/senai-logo.png" alt="SENAI" onError={(e) => e.target.src = 'https://via.placeholder.com/150'} />
+          </motion.div>
+          <motion.div 
+            className="partner-card"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <img src="/prefeitura-logo.png" alt="Prefeitura de Limeira" onError={(e) => e.target.src = 'https://via.placeholder.com/150'} />
+          </motion.div>
+        </div>
+      </motion.section>
+
+      <motion.section 
+        className="cta-section"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="cta-content">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Faça Parte da Nossa Rede
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            Cadastre seu negócio e faça parte desta comunidade que cresce a cada dia
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            className="cta-buttons"
+          >
+            <Link to="/register-business" className="cta-button primary">
+              Começar Agora
+            </Link>
+          </motion.div>
+        </div>
+      </motion.section>
     </div>
   );
 };
