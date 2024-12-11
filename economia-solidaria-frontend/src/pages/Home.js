@@ -37,11 +37,11 @@ const LojaCard = ({ loja, isPremium = false }) => {
           </div>
         )}
       </div>
-      <div className="card-content">
+      <div className="card-content" style={{ height: '150px', overflow: 'hidden' }}>
         <div>
           <h3>{nome}</h3>
           {categoria && <span className="categoria-tag">{categoria}</span>}
-          <p className="card-description">{descricao}</p>
+          <p className="card-description" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{descricao}</p>
         </div>
         <div className="card-footer">
           <button className="ver-mais-btn">
@@ -351,12 +351,12 @@ const Home = () => {
                     <FaHandshake /> Essencial
                   </div>
                 </div>
-                <div className="card-content">
+                <div className="card-content" style={{ height: '150px', overflow: 'hidden' }}>
                   <h3>{loja.nome}</h3>
                   {loja.categoria && (
                     <span className="categoria-tag">{loja.categoria}</span>
                   )}
-                  <p className="card-description">{loja.descricao}</p>
+                  <p className="card-description" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{loja.descricao}</p>
                 </div>
               </Link>
             </motion.div>
@@ -532,7 +532,12 @@ const Home = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
           >
-            <img src="/senai-logo.png" alt="SENAI" onError={(e) => e.target.src = 'https://via.placeholder.com/150'} />
+            <img 
+              src={require("../assets/senai.jpeg")}
+              alt="SENAI"
+              style={{ width: '150px', height: 'auto' }}
+              onError={(e) => e.target.src = 'https://via.placeholder.com/150'}
+            />
           </motion.div>
           <motion.div 
             className="partner-card"
@@ -541,7 +546,12 @@ const Home = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <img src="/prefeitura-logo.png" alt="Prefeitura de Limeira" onError={(e) => e.target.src = 'https://via.placeholder.com/150'} />
+            <img 
+              src={require("../assets/prefeitura_limeira.png")}
+              alt="Prefeitura de Limeira"
+              style={{ width: '150px', height: 'auto' }}
+              onError={(e) => e.target.src = 'https://via.placeholder.com/150'}
+            />
           </motion.div>
         </div>
       </motion.section>

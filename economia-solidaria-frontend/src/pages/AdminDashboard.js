@@ -417,7 +417,7 @@ const AdminDashboard = () => {
               </p>
               <p>
                 <strong>Celular:</strong>{" "}
-                {selectedBusiness.celular || "Não informado"}
+                {selectedBusiness.cellphone || "Não informado"}
               </p>
               <p>
                 <strong>E-mail:</strong> {selectedBusiness.email}
