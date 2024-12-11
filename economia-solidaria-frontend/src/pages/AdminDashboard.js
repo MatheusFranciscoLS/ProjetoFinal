@@ -71,7 +71,7 @@ const AdminDashboard = () => {
 
   // Função para aprovar ou negar um negócio
   const handleApproval = async (businessId, approved) => {
-    setIsProcessing(businessId); // Marca o botão como "em processamento"
+    setIsProcessing(businessId);
     try {
       const businessRef = doc(db, "negocios_pendentes", businessId);
       const businessSnapshot = await getDoc(businessRef);
@@ -85,39 +85,38 @@ const AdminDashboard = () => {
           ? userDoc.data().plano || "gratuito"
           : "gratuito";
 
-        // Atualiza o status do negócio e adiciona o plano
-        await setDoc(businessRef, {
-          ...businessData,
-          status: approved ? "aprovado" : "negado",
-          plano: userPlan, // Adiciona o plano do usuário
-        });
-
         if (approved) {
+          // Se aprovado, move para a coleção de lojas com status aprovado
           const newBusinessRef = doc(db, "lojas", businessId);
-          // Garantir que o plano do usuário seja corretamente atribuído
-          const userData = userDoc.exists()
-            ? userDoc.data()
-            : { plano: "gratuito" };
           await setDoc(newBusinessRef, {
             ...businessData,
-            plano: userData.plano,
+            status: "aprovado",
+            plano: userPlan,
+            dataAprovacao: new Date().toISOString()
           });
-        } else {
-          // Remove o negócio da coleção se for negado
+          
+          // Remove da coleção de pendentes após mover para lojas
           await deleteDoc(businessRef);
+        } else {
+          // Se negado, apenas atualiza o status e mantém em pendentes
+          await setDoc(businessRef, {
+            ...businessData,
+            status: "negado",
+            dataNegacao: new Date().toISOString()
+          });
         }
 
         setFeedbackMessage(
           approved
             ? "Negócio aprovado com sucesso!"
-            : "Negócio negado e removido com sucesso!"
+            : "Negócio negado com sucesso!"
         );
         setFeedbackClass(approved ? "feedback-approve" : "feedback-deny");
         setIsFeedbackVisible(true);
         setBusinesses((prev) => prev.filter((b) => b.id !== businessId));
       } else {
         setFeedbackMessage("Negócio não encontrado!");
-        setFeedbackClass("feedback-deny"); // Classe para erro (vermelho)
+        setFeedbackClass("feedback-deny");
         setIsFeedbackVisible(true);
         console.error("Negócio não encontrado!");
       }
