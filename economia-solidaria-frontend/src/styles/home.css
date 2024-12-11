@@ -698,6 +698,107 @@ transition: all;
   color: #666;
 }
 
+/* Partners Section Styles */
+.partners-section {
+  padding: 4rem 2rem;
+  background-color: #f8f9fa;
+}
+
+.partners-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 2rem auto;
+}
+
+.partner-logo {
+  width: 180px;
+  height: 120px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  filter: grayscale(100%);
+}
+
+.partner-logo:hover {
+  filter: grayscale(0%);
+  transform: scale(1.1);
+}
+
+.partner-item {
+  text-align: center;
+}
+
+.partner-name {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .partners-container {
+    gap: 2rem;
+  }
+  
+  .partner-logo {
+    width: 140px;
+    height: 100px;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .partners-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .partner-card {
+    padding: 1.5rem;
+  }
+  
+  .partner-logo {
+    width: 150px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-buttons,
+  .cta-buttons {
+    flex-direction: column;
+  }
+
+  .cta-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stat-item {
+    padding: 1.5rem;
+  }
+
+  .stat-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+
+  .stat-info h3 {
+    font-size: 2rem;
+  }
+
+  .section-header {
+    margin-bottom: 2rem;
+  }
+}
+
 /* Loading State */
 .loading-container {
   min-height: 60vh;
@@ -783,83 +884,5 @@ transition: all;
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.1rem;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .cta-button {
-    width: 100%;
-  }
-
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .essential-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .section-header h2 {
-    font-size: 2rem;
-  }
-
-  .section-header p {
-    font-size: 1.1rem;
-  }
-
-  .cta-content h2 {
-    font-size: 2.25rem;
-  }
-
-  .cta-content p {
-    font-size: 1.1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-title {
-    font-size: 2rem;
-  }
-
-  .hero-buttons,
-  .cta-buttons {
-    flex-direction: column;
-  }
-
-  .cta-button {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .stat-item {
-    padding: 1.5rem;
-  }
-
-  .stat-icon {
-    width: 60px;
-    height: 60px;
-    font-size: 2rem;
-  }
-
-  .stat-info h3 {
-    font-size: 2rem;
-  }
-
-  .section-header {
-    margin-bottom: 2rem;
   }
 }
