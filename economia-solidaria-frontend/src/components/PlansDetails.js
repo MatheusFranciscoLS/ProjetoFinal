@@ -97,23 +97,19 @@ const PlansDetails = () => {
 
   return (
     <div className="plans-details-container">
-      <h2>Detalhes dos Planos</h2>
+      <h2 className="title">Detalhes dos Planos</h2>
 
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
+      {error && <p className="error-message">{error}</p>}
+      {success && <p className="success-message">{success}</p>}
 
       <div className="plans-cards">
         {plans.map((plan, index) => (
           <div
             key={index}
-            className={`pack_card ${
-              currentPlan === plan.name ? "active-plan" : ""
-            }`} // Adiciona uma classe CSS para destacar o plano ativo
+            className={`pack_card ${currentPlan === plan.name ? "active-plan" : ""}`}
           >
             <div className="banner">
-              {plan.name === "Premium" && (
-                <span className="banner_tag">Mais popular</span>
-              )}
+              {plan.name === "Premium" && <span className="banner_tag">Mais popular</span>}
             </div>
             <div className="pack_name">{plan.name}</div>
             <p className="description">{plan.description}</p>
@@ -144,7 +140,7 @@ const PlansDetails = () => {
           </div>
         ))}
       </div>
-      {/* Nota em letras miúdas */}
+
       <div className="premium-note">
         <p>
           * O plano <strong>Premium</strong> aplica o valor mensal por cada CNPJ

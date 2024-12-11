@@ -1,157 +1,167 @@
 .plans-details-container {
-  padding: 20px;
+  padding: 30px;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to bottom, #ffffff, #f0f0f5);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   text-align: center;
 }
 
 .plans-cards {
   display: flex;
-  gap: 20px;
+  gap: 30px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .premium-note {
-  margin-top: 10px;
-  font-size: 0.85rem;
-  /* Letras menores */
-  color: rgba(0, 0, 0, 1);
-  /* Cor semitransparente */
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #555;
   text-align: center;
-  line-height: 1.4;
+  line-height: 1.6;
 }
 
 .pack_card {
   position: relative;
   display: flex;
   flex-direction: column;
-  border-radius: 0.5rem;
-  border: 2px solid rgb(99 102 241);
-  padding: 1.5rem 1rem 1rem 1rem;
-  margin-top: 1rem;
-  background-color: #fff;
-  max-width: 300px;
+  border-radius: 10px;
+  border: 2px solid #6366f1;
+  padding: 20px 15px;
+  margin-top: 20px;
+  background: #ffffff;
+  max-width: 320px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pack_card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 .banner {
   position: absolute;
-  left: 0px;
-  right: 0px;
-  top: -2rem;
+  left: 0;
+  right: 0;
+  top: -25px;
   display: flex;
   justify-content: center;
 }
 
 .banner_tag {
   display: flex;
-  height: 1.5rem;
+  height: 1.75rem;
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-  background-color: rgb(99 102 241);
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
+  background-color: #6366f1;
+  padding: 0.3rem 1rem;
+  font-size: 0.8rem;
   line-height: 1rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #fff;
+  color: #ffffff;
 }
 
 .pack_name {
-  margin-bottom: 0.5rem;
+  margin-bottom: 10px;
   text-align: center;
-  font-size: 1.5rem;
-  line-height: 2rem;
+  font-size: 1.8rem;
+  line-height: 2.2rem;
   font-weight: 700;
-  color: rgb(31 41 55);
+  color: #1f2937;
 }
 
 .description {
-  margin: 0 auto 2rem auto;
+  margin: 0 auto 20px auto;
   text-align: center;
-  color: rgb(107 114 128);
+  color: #6b7280;
+  font-size: 1rem;
 }
 
 .bottom {
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 20px;
 }
 
 .price_container {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 0.25rem;
+  gap: 5px;
 }
 
 .devise {
   align-self: flex-start;
-  color: rgb(75 85 99);
+  color: #4b5563;
 }
 
 .price {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
+  font-size: 2.5rem;
+  line-height: 3rem;
   font-weight: 700;
-  color: rgb(31 41 55);
+  color: #1f2937;
 }
 
 .date {
-  color: rgb(107 114 128);
+  color: #6b7280;
 }
 
 .btn {
   display: block;
-  border-radius: 0.5rem;
-  background-color: rgb(99 102 241);
-  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  background-color: #6366f1;
+  padding: 12px 30px;
   text-align: center;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: #fff;
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+  transition: all 0.3s ease;
 }
 
 .btn:hover {
-  background-color: rgb(79 70 229);
+  background-color: #4f46e5;
+  box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3);
 }
 
 .btn:active {
-  background-color: rgb(67 56 202);
+  background-color: #4338ca;
 }
 
 .back-button {
-  margin-top: 20px;
-  background-color: #4caf50;
+  margin-top: 30px;
+  background-color: #34d399;
   color: white;
   border: none;
-  padding: 12px 25px;
+  padding: 10px 20px; /* Diminuído para reduzir largura */
   cursor: pointer;
   font-size: 1rem;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .back-button:hover {
-  background-color: #45a049;
+  background-color: #22c55e;
+  transform: scale(1.05);
 }
 
 @media (max-width: 768px) {
   .plans-cards {
     flex-direction: column;
     align-items: center;
+  }
+
+  .pack_card {
+    max-width: 100%;
   }
 }
