@@ -100,22 +100,21 @@ const AdminDashboard = () => {
             : { plano: "gratuito" };
           await setDoc(newBusinessRef, {
             ...businessData,
-            status: "aprovado",
-            plano: userData.plano || "gratuito",
-            userId: businessData.userId, // Garantir que o userId seja mantido
+            plano: userData.plano,
           });
-          await deleteDoc(businessRef);
-          setFeedbackMessage("Negócio aprovado e movido para 'lojas'.");
-          setFeedbackClass("feedback-approve"); // Classe para aprovação (verde)
         } else {
-          setFeedbackMessage("Negócio negado.");
-          setFeedbackClass("feedback-deny"); // Classe para negação (vermelho)
+          // Remove o negócio da coleção se for negado
+          await deleteDoc(businessRef);
         }
 
-        setIsFeedbackVisible(true); // Exibe o feedback
-        setBusinesses(
-          businesses.filter((business) => business.id !== businessId)
+        setFeedbackMessage(
+          approved
+            ? "Negócio aprovado com sucesso!"
+            : "Negócio negado e removido com sucesso!"
         );
+        setFeedbackClass(approved ? "feedback-approve" : "feedback-deny");
+        setIsFeedbackVisible(true);
+        setBusinesses((prev) => prev.filter((b) => b.id !== businessId));
       } else {
         setFeedbackMessage("Negócio não encontrado!");
         setFeedbackClass("feedback-deny"); // Classe para erro (vermelho)
@@ -123,12 +122,12 @@ const AdminDashboard = () => {
         console.error("Negócio não encontrado!");
       }
     } catch (err) {
-      setFeedbackMessage("Erro ao atualizar status do negócio: " + err.message);
-      setFeedbackClass("feedback-deny"); // Classe para erro (vermelho)
+      setFeedbackMessage("Erro ao atualizar negócio: " + err.message);
+      setFeedbackClass("feedback-deny");
       setIsFeedbackVisible(true);
-      console.error("Erro ao atualizar status do negócio:", err);
+      console.error("Erro ao atualizar negócio:", err);
     } finally {
-      setIsProcessing(null); // Finaliza o processamento
+      setIsProcessing(null);
     }
   };
 
