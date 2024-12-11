@@ -263,7 +263,7 @@ const Home = () => {
               <FiTrendingUp />
             </div>
             <div className="stat-info">
-              <h3>+{Math.max(500, lojas.length * 3)}</h3>
+              <h3>+{Math.max(800, lojas.length * 3)}</h3>
               <h4>Impacto Social</h4>
               <p>Clientes beneficiados</p>
             </div>
@@ -277,7 +277,7 @@ const Home = () => {
               <FiShoppingBag />
             </div>
             <div className="stat-info">
-              <h3>+{Math.max(50, lojas.length * 2)}</h3>
+              <h3>+{Math.max(100, lojas.length * 2)}</h3>
               <h4>Empreendedores</h4>
               <p>Negócios fortalecidos</p>
             </div>
@@ -291,7 +291,7 @@ const Home = () => {
               <FiUsers />
             </div>
             <div className="stat-info">
-              <h3>+{Math.max(20, Math.floor(lojas.length / 2))}</h3>
+              <h3>+{Math.max(30, Math.floor(lojas.length / 2))}</h3>
               <h4>Comunidades</h4>
               <p>Regiões atendidas</p>
             </div>
