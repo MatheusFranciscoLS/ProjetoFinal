@@ -346,8 +346,12 @@ const Home = () => {
               Cadastre seu Negócio
               <BsArrowRight className="icon-right" />
             </Link>
-            <Link to="/lojas" className="cta-button">
+            <Link to="/lojas" className="cta-button explore">
               Explorar Lojas
+              <BsArrowRight className="icon-right" />
+            </Link>
+            <Link to="/sobre" className="cta-button saiba-mais">
+              Saiba Mais
               <BsArrowRight className="icon-right" />
             </Link>
           </motion.div>
