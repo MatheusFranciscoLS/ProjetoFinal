@@ -315,7 +315,7 @@ body {
   margin: 0 auto;
   padding: 0 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
   align-items: stretch;
 }
@@ -323,28 +323,29 @@ body {
 .card-wrapper {
   height: 100%;
   display: flex;
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 .premium-card {
   width: 100%;
   height: 100%;
-  min-height: 500px;
+  min-height: 480px;
+  max-height: 480px;
+  display: flex;
+  flex-direction: column;
   border-radius: 1.5rem;
   overflow: hidden;
   background: white;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   border: 3px solid var(--primary-color);
   transition: all 0.4s ease;
-  display: flex;
-  flex-direction: column;
   text-decoration: none !important;
   cursor: pointer;
 }
 
 .card-image {
   width: 100%;
-  height: 280px;
+  height: 300px;
   position: relative;
   overflow: hidden;
 }
@@ -356,35 +357,25 @@ body {
   transition: transform 0.5s ease;
 }
 
-.premium-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-}
-
-.premium-card:hover .card-image img {
-  transform: scale(1.1);
-}
-
 .card-content {
   flex: 1;
-  padding: 2rem;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 0.5rem;
   background: white;
 }
 
 .card-content h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1.25rem;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.4;
-}
-
-.card-content a {
-  text-decoration: none;
-  color: inherit;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .categoria-tag {
@@ -402,10 +393,14 @@ body {
 
 .card-description {
   color: var(--text-secondary);
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 0.9rem;
+  line-height: 1.4;
   margin-bottom: 1.5rem;
   flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .premium-badge {
