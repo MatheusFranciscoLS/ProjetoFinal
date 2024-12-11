@@ -352,9 +352,11 @@ body {
 
 .essential-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-lg);
   padding: 0 var(--spacing-lg);
+  justify-items: center;
+  align-items: start;
 }
 
 /* CTA Section Enhancement */
