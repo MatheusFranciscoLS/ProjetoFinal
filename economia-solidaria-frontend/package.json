@@ -17,6 +17,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.8",
+    "browser-image-compression": "^2.0.2",
     "cors": "^2.8.5",
     "cpf-cnpj-validator": "^1.0.3",
     "economia-solidaria-frontend": "file:",
