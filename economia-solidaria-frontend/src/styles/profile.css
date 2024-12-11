@@ -1,228 +1,201 @@
-/* Tema Claro */
-.light-theme {
-  --bg-color: #f9f9f9;
-  --text-color: #333;
-  --card-bg-color: #fff;
-  --button-bg-color: #4CAF50;
-  --button-hover-bg-color: #45a049;
-  --error-color: #f44336;
-}
-
-/* Tema Escuro */
-.dark-theme {
-  --bg-color: #1a1a1a;
-  --text-color: #e2e8f0;
-  --card-bg-color: #242424;
-  --button-bg-color: #4CAF50;
-  --button-hover-bg-color: #45a049;
-  --error-color: #dc3545;
+/* Variáveis de cores e gradientes */
+:root {
+  --gradient-primary: linear-gradient(45deg, #2193b0, #6dd5ed);
+  --gradient-hover: linear-gradient(45deg, #1c7a94, #59b3c7);
+  --shadow-soft: 0 5px 15px rgba(0, 0, 0, 0.1);
+  --shadow-strong: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 /* Estilos gerais */
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: Arial, sans-serif;
-  font-size: 15px; /* Fonte ligeiramente menor */
-  line-height: 1.5; /* Ajuste no espaçamento entre linhas */
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Container principal do perfil */
 .profile-container {
-  min-height: calc(100vh - 60px);
-  padding: 2rem;
-  max-width: 800px;
-  margin: 0 auto;
-  background-color: var(--card-bg-color);
-  border-radius: 8px; /* Cantos um pouco mais afiados */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Menos profundidade */
-  width: 100%;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
 }
 
-/* Título do perfil */
+/* Cabeçalho do perfil */
 .profile-title {
-  font-size: 2rem; /* Título reduzido */
-  font-weight: bold;
-  margin-bottom: 20px;
+  font-size: 2.5em;
+  color: #2193b0;
   text-align: center;
-  color: var(--text-color);
+  margin-bottom: 40px;
+  font-weight: 700;
+  position: relative;
 }
 
-/* Seção de informações do perfil */
+.profile-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
+}
+
+/* Informações do perfil */
 .profile-info {
-  margin-bottom: 20px;
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 15px;
+  margin: 20px 0;
 }
 
-/* Cada campo do perfil */
 .profile-field {
-  margin: 8px 0;
-  font-size: 1.2rem; /* Texto um pouco menor */
-  font-weight: 400; /* Peso da fonte mais leve */
-}
-
-/* Seção das opções de plano */
-.plan-options {
   display: flex;
-  justify-content: space-between;
-  gap: 20px; /* Menos espaçamento */
-  flex-wrap: wrap;
+  align-items: center;
+  padding: 15px 20px;
+  margin: 10px 0;
+  background: white;
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-/* Cada opção de plano */
-.plan-option {
-  flex: 1 1 calc(33.33% - 20px);
-  padding: 12px; /* Padding um pouco menor */
-  border: 1px solid #ddd;
-  border-radius: 8px; /* Cantos mais suaves */
-  text-align: center;
-  background-color: var(--card-bg-color);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Sombras mais suaves */
-  transition: transform 0.3s ease;
+.profile-field:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-soft);
 }
 
-.plan-option:hover {
-  transform: translateY(-3px); /* Efeito de hover mais sutil */
+.profile-field strong {
+  min-width: 120px;
+  color: #2193b0;
+  font-weight: 600;
+  font-size: 1.1em;
 }
 
-.plan-option h4 {
-  margin-bottom: 12px;
-  font-size: 1.3rem; /* Fonte reduzida */
-  color: var(--text-color);
-}
-
-/* Botão de upgrade */
+/* Botões estilizados */
+.info-button,
 .upgrade-button {
-  padding: 10px 15px; /* Menor padding */
-  background-color: var(--button-bg-color);
-  color: var(--text-color);
+  background: var(--gradient-primary);
+  color: white;
   border: none;
-  border-radius: 6px;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 1.1em;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 1rem; /* Fonte ligeiramente menor */
-  transition: background-color 0.3s ease;
-}
-
-.upgrade-button:hover {
-  background-color: var(--button-hover-bg-color);
-}
-
-/* Botão de alternância de tema */
-.theme-toggle-button {
-  padding: 8px 14px; /* Padding mais compacto */
-  margin: 15px 0;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  font-size: 1rem; /* Tamanho reduzido */
-  color: var(--text-color);
-}
-
-/* Estilo para o botão 'Saiba Mais sobre os Planos' */
-.info-button {
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   display: inline-block;
-  padding: 10px 20px;
-  margin-top: 20px;
-  font-size: 1rem;
-  color: #ffffff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 5px;
   text-align: center;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
+  margin: 10px 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
 }
 
-.info-button:hover {
-  background-color: #0056b3;
+.info-button:hover,
+.upgrade-button:hover {
+  background: var(--gradient-hover);
+  box-shadow: var(--shadow-strong);
+  transform: translateY(-2px);
 }
 
-[data-theme='dark'] .profile-container {
-  background-color: var(--dark-bg);
-  color: var(--dark-text);
+.info-button::after,
+.upgrade-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+  opacity: 0;
 }
 
-[data-theme='dark'] .profile-card {
-  background: var(--dark-card-bg);
-  box-shadow: 0 4px 12px var(--dark-shadow);
-  border: 1px solid var(--dark-border);
-}
-
-[data-theme='dark'] .info-group label {
-  color: var(--dark-text);
-}
-
-[data-theme='dark'] .info-group input,
-[data-theme='dark'] .info-group textarea {
-  background: var(--dark-input-bg);
-  border-color: var(--dark-border);
-  color: var(--dark-text);
-}
-
-[data-theme='dark'] .info-group input:focus,
-[data-theme='dark'] .info-group textarea:focus {
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
-}
-
-[data-theme='dark'] .save-button,
-[data-theme='dark'] .delete-button {
-  opacity: 0.9;
-}
-
-[data-theme='dark'] .save-button:hover,
-[data-theme='dark'] .delete-button:hover {
+.info-button:hover::after,
+.upgrade-button:hover::after {
   opacity: 1;
+  transform: rotate(45deg) translate(-50%, -50%);
 }
 
-[data-theme='dark'] .theme-toggle {
-  background: var(--dark-card-bg);
-  border-color: var(--dark-border);
-  box-shadow: 0 2px 8px var(--dark-shadow);
+/* Loading skeleton */
+.skeleton-profile {
+  padding: 20px;
 }
 
-[data-theme='dark'] .theme-toggle:hover {
-  box-shadow: 0 4px 12px var(--dark-shadow);
+.skeleton-header,
+.skeleton-item {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 8px;
+  margin: 10px 0;
 }
 
-[data-theme='dark'] .loading-spinner {
-  border-color: var(--dark-border);
-  border-top-color: var(--primary);
+.skeleton-header {
+  height: 40px;
+  width: 60%;
+  margin: 20px auto;
 }
 
-[data-theme='dark'] .error-message {
-  color: #ff6b6b;
+.skeleton-item {
+  height: 30px;
 }
 
-[data-theme='dark'] .success-message {
-  color: #69db7c;
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Mensagens de feedback */
+.error {
+  background: #ffe5e5;
+  color: #ff3333;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 10px 0;
+  text-align: center;
 }
 
 /* Responsividade */
-
-/* Para telas pequenas */
 @media (max-width: 768px) {
+  .profile-container {
+    margin: 20px;
+    padding: 20px;
+  }
+
   .profile-title {
-    font-size: 1.8rem; /* Título menor */
+    font-size: 2em;
   }
 
-  .plan-options {
+  .profile-field {
     flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
   }
 
-  .plan-option {
-    flex: 1 1 100%;
-    margin-bottom: 15px;
+  .profile-field strong {
+    margin-bottom: 5px;
   }
 
-  .upgrade-button,
-  .cancel-button {
+  .info-button,
+  .upgrade-button {
     width: 100%;
-    font-size: 1.1rem; /* Fonte ajustada */
-    padding: 10px 18px; /* Padding menor */
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    margin: 10px;
+    padding: 15px;
   }
 
-  .premium-message {
-    font-size: 0.9rem; /* Fonte reduzida */
+  .profile-title {
+    font-size: 1.8em;
+  }
+
+  .profile-field {
+    padding: 12px 15px;
   }
 }
