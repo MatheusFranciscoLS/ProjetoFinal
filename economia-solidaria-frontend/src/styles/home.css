@@ -139,6 +139,12 @@ body {
   animation: fadeInUp 1s ease-out 0.4s backwards;
 }
 
+.ver-mais-btn:hover{
+  background: #1a73e8;
+opacity: 0.5;
+transition: all;
+}
+
 /* CTA Buttons */
 .cta-button {
   display: inline-flex;
