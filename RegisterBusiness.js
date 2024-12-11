@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, addDoc } from 'firebase/firestore';
-import { db } from './firebase-config';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from './firebase-config';
 import './RegisterBusiness.css';
+
+const MAX_DOC_SIZE = 1048576; // 1MB em bytes
+const MAX_IMAGE_SIZE = 300 * 1024; // 300KB em bytes
 
 const RegisterBusiness = () => {
   const navigate = useNavigate();
@@ -14,7 +18,8 @@ const RegisterBusiness = () => {
     email: '',
     description: '',
     status: 'pendente',
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    images: []
   });
 
   const [error, setError] = useState('');
@@ -28,12 +33,63 @@ const RegisterBusiness = () => {
     }));
   };
 
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    
+    if (files.length > 3) {
+      setError('⚠️ Máximo de 3 imagens permitido');
+      e.target.value = '';
+      return;
+    }
+
+    for (const file of files) {
+      if (file.size > MAX_IMAGE_SIZE) {
+        setError(`⚠️ A imagem ${file.name} excede o limite de 300KB. Por favor, use uma imagem de tamanho menor.`);
+        e.target.value = '';
+        return;
+      }
+    }
+
+    setLoading(true);
+    try {
+      const uploadPromises = files.map(async (file) => {
+        const storageRef = ref(storage, `business-images/${Date.now()}-${file.name}`);
+        await uploadBytes(storageRef, file);
+        return getDownloadURL(storageRef);
+      });
+
+      const imageUrls = await Promise.all(uploadPromises);
+      
+      setFormData(prevState => ({
+        ...prevState,
+        images: [...prevState.images, ...imageUrls].slice(-3)
+      }));
+
+      setError('');
+    } catch (err) {
+      setError('Erro ao fazer upload das imagens. Tente novamente.');
+      console.error('Erro no upload:', err);
+    } finally {
+      setLoading(false);
+      e.target.value = '';
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
+      const docSize = new TextEncoder().encode(JSON.stringify(formData)).length;
+      console.log('Tamanho do documento:', docSize);
+      
+      if (docSize > MAX_DOC_SIZE) {
+        setError('⚠️ Limite de tamanho do documento ultrapassado! Por favor, use imagens de tamanho menor.');
+        setLoading(false);
+        return;
+      }
+
       await addDoc(collection(db, "negocios_pendentes"), formData);
       navigate('/dashboard');
     } catch (err) {
@@ -47,7 +103,15 @@ const RegisterBusiness = () => {
   return (
     <div className="register-business-container">
       <h2>Registrar Novo Negócio</h2>
-      {error && <div className="error-message">{error}</div>}
+      {error && <div className="error-message" style={{ 
+        backgroundColor: error.includes('⚠️') ? '#fff3cd' : '#f8d7da',
+        color: error.includes('⚠️') ? '#856404' : '#721c24',
+        padding: '1rem',
+        borderRadius: '4px',
+        marginBottom: '1rem'
+      }}>
+        {error}
+      </div>}
       
       <form onSubmit={handleSubmit} className="register-form">
         <div className="form-group">
@@ -121,12 +185,28 @@ const RegisterBusiness = () => {
           />
         </div>
 
-        <button 
-          type="submit" 
-          className="submit-button"
-          disabled={loading}
-        >
-          {loading ? 'Registrando...' : 'Registrar Negócio'}
+        <div className="form-group">
+          <label htmlFor="images">
+            Imagens do Negócio (máx. 3 imagens, 300KB cada)
+          </label>
+          <input
+            type="file"
+            id="images"
+            name="images"
+            onChange={handleImageUpload}
+            multiple
+            accept="image/*"
+            disabled={loading}
+          />
+          {formData.images.length > 0 && (
+            <div className="uploaded-images-count">
+              {formData.images.length} imagem(ns) carregada(s)
+            </div>
+          )}
+        </div>
+
+        <button type="submit" disabled={loading}>
+          {loading ? 'Processando...' : 'Registrar Negócio'}
         </button>
       </form>
     </div>
