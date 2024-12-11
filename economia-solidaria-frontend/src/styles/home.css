@@ -357,6 +357,7 @@ body {
   padding: 0 var(--spacing-lg);
   justify-items: center;
   align-items: start;
+  justify-content: center;
 }
 
 /* CTA Section Enhancement */
