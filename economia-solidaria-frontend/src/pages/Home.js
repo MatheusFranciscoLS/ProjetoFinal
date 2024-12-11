@@ -188,7 +188,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <motion.section 
+      <motion.section
         className="hero-section"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -209,7 +209,8 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Conectando empreendedores e consumidores conscientes para um futuro mais sustentável
+            Conectando empreendedores e consumidores conscientes para um futuro
+            mais sustentável
           </motion.p>
           <motion.div
             className="hero-buttons"
@@ -234,7 +235,7 @@ const Home = () => {
         <div className="hero-pattern"></div>
       </motion.section>
 
-      <motion.section 
+      <motion.section
         className="stats-section"
         initial="hidden"
         whileInView="visible"
@@ -245,9 +246,9 @@ const Home = () => {
             opacity: 1,
             transition: {
               delayChildren: 0.3,
-              staggerChildren: 0.2
-            }
-          }
+              staggerChildren: 0.2,
+            },
+          },
         }}
       >
         <div className="section-header">
@@ -255,10 +256,7 @@ const Home = () => {
           <p>Juntos estamos construindo uma economia mais justa e solidária</p>
         </div>
         <div className="stats-grid">
-          <motion.div
-            className="stat-item"
-            variants={fadeInUp}
-          >
+          <motion.div className="stat-item" variants={fadeInUp}>
             <div className="stat-icon">
               <FiTrendingUp />
             </div>
@@ -269,10 +267,7 @@ const Home = () => {
             </div>
           </motion.div>
 
-          <motion.div
-            className="stat-item"
-            variants={fadeInUp}
-          >
+          <motion.div className="stat-item" variants={fadeInUp}>
             <div className="stat-icon">
               <FiShoppingBag />
             </div>
@@ -283,10 +278,7 @@ const Home = () => {
             </div>
           </motion.div>
 
-          <motion.div
-            className="stat-item"
-            variants={fadeInUp}
-          >
+          <motion.div className="stat-item" variants={fadeInUp}>
             <div className="stat-icon">
               <FiUsers />
             </div>
@@ -328,7 +320,7 @@ const Home = () => {
           <h2>Parceiros Essenciais</h2>
           <p>Descubra mais negócios de qualidade em nossa comunidade</p>
         </div>
-        
+
         <div className="essential-grid">
           {lojasEssentialDisplay.map((loja, index) => (
             <motion.div
@@ -340,23 +332,35 @@ const Home = () => {
             >
               <Link to={`/loja/${loja.id}`} className="essential-card">
                 <div className="card-image">
-                  <img 
-                    src={loja.imagens?.[0] || '/placeholder-image.jpg'} 
+                  <img
+                    src={loja.imagens?.[0] || "/placeholder-image.jpg"}
                     alt={loja.nome}
                     onError={(e) => {
-                      e.target.src = '/placeholder-image.jpg';
+                      e.target.src = "/placeholder-image.jpg";
                     }}
                   />
                   <div className="essential-badge">
                     <FaHandshake /> Essencial
                   </div>
                 </div>
-                <div className="card-content" style={{ height: '150px', overflow: 'hidden' }}>
+                <div
+                  className="card-content"
+                  style={{ height: "150px", overflow: "hidden" }}
+                >
                   <h3>{loja.nome}</h3>
                   {loja.categoria && (
                     <span className="categoria-tag">{loja.categoria}</span>
                   )}
-                  <p className="card-description" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{loja.descricao}</p>
+                  <p
+                    className="card-description"
+                    style={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {loja.descricao}
+                  </p>
                 </div>
               </Link>
             </motion.div>
@@ -375,7 +379,7 @@ const Home = () => {
           <p>Descubra os benefícios de fazer parte da nossa rede</p>
         </div>
         <div className="features-grid">
-          <motion.div 
+          <motion.div
             className="feature-card"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -385,10 +389,13 @@ const Home = () => {
               <FaHandHoldingHeart />
             </div>
             <h3>Impacto Social</h3>
-            <p>Fortaleça a economia local e contribua para o desenvolvimento da comunidade</p>
+            <p>
+              Fortaleça a economia local e contribua para o desenvolvimento da
+              comunidade
+            </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="feature-card"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -399,10 +406,13 @@ const Home = () => {
               <FaUsers />
             </div>
             <h3>Networking</h3>
-            <p>Conecte-se com outros empreendedores e expanda sua rede de contatos</p>
+            <p>
+              Conecte-se com outros empreendedores e expanda sua rede de
+              contatos
+            </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="feature-card"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -413,7 +423,10 @@ const Home = () => {
               <FaChartLine />
             </div>
             <h3>Crescimento</h3>
-            <p>Alcance mais clientes e desenvolva seu negócio de forma sustentável</p>
+            <p>
+              Alcance mais clientes e desenvolva seu negócio de forma
+              sustentável
+            </p>
           </motion.div>
         </div>
       </motion.section>
@@ -429,7 +442,7 @@ const Home = () => {
           <p>Histórias de sucesso da nossa comunidade</p>
         </div>
         <div className="testimonials-grid">
-          <motion.div 
+          <motion.div
             className="testimonial-card"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -437,10 +450,19 @@ const Home = () => {
           >
             <div className="testimonial-content">
               <FaQuoteLeft className="quote-icon" />
-              <p>"A plataforma me ajudou a conectar com outros empreendedores e expandir meu negócio de forma significativa."</p>
+              <p>
+                "A plataforma me ajudou a conectar com outros empreendedores e
+                expandir meu negócio de forma significativa."
+              </p>
             </div>
             <div className="testimonial-author">
-              <img src="/avatar1.jpg" alt="Maria Silva" onError={(e) => e.target.src = 'https://via.placeholder.com/50'} />
+              <img
+                src="/avatar1.jpg"
+                alt="Maria Silva"
+                onError={(e) =>
+                  (e.target.src = "https://via.placeholder.com/50")
+                }
+              />
               <div>
                 <h4>Maria Silva</h4>
                 <p>Artesã</p>
@@ -448,7 +470,7 @@ const Home = () => {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="testimonial-card"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -457,10 +479,19 @@ const Home = () => {
           >
             <div className="testimonial-content">
               <FaQuoteLeft className="quote-icon" />
-              <p>"Graças à Economia Solidária, consegui aumentar minha visibilidade e fazer parte de uma rede de apoio incrível."</p>
+              <p>
+                "Graças à Economia Solidária, consegui aumentar minha
+                visibilidade e fazer parte de uma rede de apoio incrível."
+              </p>
             </div>
             <div className="testimonial-author">
-              <img src="/avatar2.jpg" alt="João Santos" onError={(e) => e.target.src = 'https://via.placeholder.com/50'} />
+              <img
+                src="/avatar2.jpg"
+                alt="João Santos"
+                onError={(e) =>
+                  (e.target.src = "https://via.placeholder.com/50")
+                }
+              />
               <div>
                 <h4>João Santos</h4>
                 <p>Produtor Local</p>
@@ -481,82 +512,100 @@ const Home = () => {
           <p>Tire suas dúvidas sobre nossa plataforma</p>
         </div>
         <div className="faq-grid">
-          <motion.div 
+          <motion.div
             className="faq-card"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h3><FaQuestion className="faq-icon" /> Como posso cadastrar meu negócio?</h3>
-            <p>O cadastro é simples e gratuito. Basta clicar no botão "Cadastre seu Negócio" e seguir as instruções.</p>
+            <h3>
+              <FaQuestion className="faq-icon" /> Como posso cadastrar meu
+              negócio?
+            </h3>
+            <p>
+              O cadastro é simples e gratuito. Basta clicar no botão "Cadastre
+              seu Negócio" e seguir as instruções.
+            </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="faq-card"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <h3><FaStar className="faq-icon" /> Quais são os benefícios do plano Premium?</h3>
-            <p>O plano Premium oferece maior visibilidade, destaque nas buscas e ferramentas exclusivas para crescimento.</p>
+            <h3>
+              <FaStar className="faq-icon" /> Quais são os benefícios do plano
+              Premium?
+            </h3>
+            <p>
+              O plano Premium oferece maior visibilidade, destaque nas buscas e
+              ferramentas exclusivas para crescimento.
+            </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="faq-card"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
           >
-            <h3><FaShieldAlt className="faq-icon" /> Como garantem a segurança dos dados?</h3>
-            <p>Utilizamos tecnologias avançadas de criptografia e seguimos rigorosos padrões de segurança.</p>
+            <h3>
+              <FaShieldAlt className="faq-icon" /> Como garantem a segurança dos
+              dados?
+            </h3>
+            <p>
+              Utilizamos tecnologias avançadas de criptografia e seguimos
+              rigorosos padrões de segurança.
+            </p>
           </motion.div>
         </div>
       </motion.section>
+
+      <section className="partners-section">
+        <div className="section-header">
+          <h2>Nossos Parceiros Institucionais</h2>
+          <p>Instituições que apoiam e fortalecem nossa iniciativa</p>
+        </div>
+        <div className="partners-container">
+          <div className="partner-item">
+            <img 
+              src={require("../assets/senai.jpeg")} 
+              alt="SENAI" 
+              className="partner-logo"
+            />
+            <div className="partner-name">SENAI</div>
+          </div>
+          <div className="partner-item">
+            <img 
+              src={require("../assets/sesi.jpg")} 
+              alt="SESI" 
+              className="partner-logo"
+            />
+            <div className="partner-name">SESI</div>
+          </div>
+          <div className="partner-item">
+            <img 
+              src={require("../assets/prefeitura_limeira.png")} 
+              alt="Prefeitura de Limeira" 
+              className="partner-logo"
+            />
+            <div className="partner-name">Prefeitura de Limeira</div>
+          </div>
+          <div className="partner-item">
+            <img 
+              src={require("../assets/govsp.jpg")} 
+              alt="Governo de SP" 
+              className="partner-logo"
+            />
+            <div className="partner-name">Governo de SP</div>
+          </div>
+        </div>
+      </section>
 
       <motion.section
-        className="partners-section"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        <div className="section-header">
-          <h2>Nossos Parceiros</h2>
-          <p>Instituições que apoiam nossa iniciativa</p>
-        </div>
-        <div className="partners-grid">
-          <motion.div 
-            className="partner-card"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-          >
-            <img 
-              src={require("../assets/senai.jpeg")}
-              alt="SENAI"
-              style={{ width: '150px', height: 'auto' }}
-              onError={(e) => e.target.src = 'https://via.placeholder.com/150'}
-            />
-          </motion.div>
-          <motion.div 
-            className="partner-card"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            <img 
-              src={require("../assets/prefeitura_limeira.png")}
-              alt="Prefeitura de Limeira"
-              style={{ width: '150px', height: 'auto' }}
-              onError={(e) => e.target.src = 'https://via.placeholder.com/150'}
-            />
-          </motion.div>
-        </div>
-      </motion.section>
-
-      <motion.section 
         className="cta-section"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -577,7 +626,8 @@ const Home = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            Cadastre seu negócio e faça parte desta comunidade que cresce a cada dia
+            Cadastre seu negócio e faça parte desta comunidade que cresce a cada
+            dia
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
