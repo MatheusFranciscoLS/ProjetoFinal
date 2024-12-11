@@ -67,6 +67,69 @@ const SkeletonCard = () => (
   </div>
 );
 
+const PremiumCard = ({ loja }) => (
+  <motion.div
+    className="loja-card premium-card"
+    whileHover={{ y: -5 }}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+  >
+    <div className="loja-image-container">
+      <img
+        src={loja.imagens?.[0] || "/placeholder-image.jpg"}
+        alt={loja.nome}
+        onError={(e) => {
+          e.target.src = "/placeholder-image.jpg";
+        }}
+      />
+    </div>
+    <div className="loja-info">
+      <h3>{loja.nome}</h3>
+      {loja.categoria && <span className="categoria-tag">{loja.categoria}</span>}
+    </div>
+  </motion.div>
+);
+
+const EssentialCard = ({ loja }) => (
+  <motion.div
+    className="loja-card essential-card"
+    whileHover={{ y: -5 }}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+  >
+    <div className="loja-image-container">
+      <img
+        src={loja.imagens?.[0] || "/placeholder-image.jpg"}
+        alt={loja.nome}
+        onError={(e) => {
+          e.target.src = "/placeholder-image.jpg";
+        }}
+      />
+    </div>
+    <div className="loja-info">
+      <h3>{loja.nome}</h3>
+      {loja.categoria && <span className="categoria-tag">{loja.categoria}</span>}
+    </div>
+  </motion.div>
+);
+
+const StatItem = ({ icon: Icon, title, value, description }) => (
+  <motion.div
+    className="stat-item"
+    whileHover={{ y: -5, scale: 1.02 }}
+    transition={{ type: "spring", stiffness: 300 }}
+  >
+    <Icon size={40} className="stat-icon" />
+    <div className="stat-info">
+      <h3>{value}</h3>
+      <h4>{title}</h4>
+      <p>{description}</p>
+    </div>
+  </motion.div>
+);
+
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
@@ -91,16 +154,32 @@ const Home = () => {
   const carouselSettings = {
     dots: true,
     infinite: true,
-    speed: 800,
-    slidesToShow: 1,
+    speed: 500,
+    slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 5000,
+    autoplaySpeed: 3000,
     pauseOnHover: true,
-    fade: true,
-    cssEase: 'cubic-bezier(0.4, 0, 0.2, 1)',
-    prevArrow: <button className="slick-prev"><FaArrowRight className="prev-icon" /></button>,
-    nextArrow: <button className="slick-next"><FaArrowRight className="next-icon" /></button>,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
   };
 
   const fetchLojas = async () => {
@@ -183,17 +262,17 @@ const Home = () => {
     // Atualiza os cards a cada 5 segundos
     const updateDisplayedCards = () => {
       const shuffledLojas = shuffleArray(lojasEssential);
-      // Alterado para mostrar no máximo 2 lojas
-      const displayCount = Math.min(2, shuffledLojas.length);
+      // Alterado para mostrar no máximo 3 lojas
+      const displayCount = Math.min(3, shuffledLojas.length);
       setLojasEssentialDisplay(shuffledLojas.slice(0, displayCount));
     };
 
     // Primeira atualização
     updateDisplayedCards();
 
-    // Configura o intervalo apenas se houver mais de 2 lojas
+    // Configura o intervalo apenas se houver mais de 3 lojas
     let interval;
-    if (lojasEssential.length > 2) {
+    if (lojasEssential.length > 3) {
       interval = setInterval(updateDisplayedCards, 5000);
     }
 
@@ -208,11 +287,9 @@ const Home = () => {
     return (
       <div className="loading-container">
         <div className="loading-grid">
-          <SkeletonCard />
-          <SkeletonCard />
-          <SkeletonCard />
-          <SkeletonCard />
-          <SkeletonCard />
+          {[1, 2, 3, 4].map((i) => (
+            <SkeletonCard key={i} />
+          ))}
         </div>
       </div>
     );
@@ -234,7 +311,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <motion.section
+      <motion.section 
         className="hero-section"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -243,27 +320,25 @@ const Home = () => {
         <div className="hero-content">
           <motion.h1
             className="hero-title"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Economia Solidária
+            Economia Solidária em Limeira
           </motion.h1>
           <motion.p
             className="hero-subtitle"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-            transition={{ delay: 0.2 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Conectando negócios sociais e fortalecendo nossa comunidade
+            Conectando empreendedores e consumidores conscientes para um futuro mais sustentável
           </motion.p>
           <motion.div
             className="hero-cta"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-            transition={{ delay: 0.4 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
           >
             <Link to="/register-business" className="cta-button">
               Cadastre seu Negócio
@@ -277,115 +352,99 @@ const Home = () => {
         </div>
       </motion.section>
 
-      <motion.section
-        className="stats-section"
-        variants={staggerChildren}
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true }}
-      >
-        <motion.div className="stat-item" variants={fadeInUp}>
-          <FiTrendingUp className="stat-icon" />
-          <div className="stat-info">
-            <h3>+{Math.max(500, lojas.length * 3)}</h3>
-            <p>Clientes Impactados</p>
+      <div className="container">
+        <section className="stats-section">
+          <div className="stats-grid">
+            <StatItem
+              icon={FiTrendingUp}
+              value={`+${Math.max(500, lojas.length * 3)}`}
+              title="Impacto Social"
+              description="Clientes beneficiados"
+            />
+            <StatItem
+              icon={FiShoppingBag}
+              value={`+${Math.max(50, lojas.length * 2)}`}
+              title="Empreendedores"
+              description="Negócios fortalecidos"
+            />
+            <StatItem
+              icon={FiUsers}
+              value={`+${Math.max(20, Math.floor(lojas.length / 2))}`}
+              title="Comunidades"
+              description="Regiões atendidas"
+            />
           </div>
-        </motion.div>
+        </section>
 
-        <motion.div className="stat-item" variants={fadeInUp}>
-          <FiShoppingBag className="stat-icon" />
-          <div className="stat-info">
-            <h3>+{Math.max(50, lojas.length * 2)}</h3>
-            <p>Empreendedores Locais</p>
-          </div>
-        </motion.div>
-
-        <motion.div className="stat-item" variants={fadeInUp}>
-          <FiUsers className="stat-icon" />
-          <div className="stat-info">
-            <h3>+{Math.max(20, Math.floor(lojas.length / 2))}</h3>
-            <p>Comunidades Atendidas</p>
-          </div>
-        </motion.div>
-      </motion.section>
-
-      <section className="premium-section">
-        <motion.div
+        <motion.section
+          className="premium-section"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="section-title">Destaques</h2>
+          <h2 className="section-title">Destaques Premium</h2>
           <p className="section-subtitle">
-            Conheça nossos parceiros em destaque
+            Conheça os empreendimentos em destaque da nossa rede
           </p>
-        </motion.div>
+          
+          <div className="premium-carousel">
+            <Slider {...carouselSettings}>
+              {lojasPremium.map((loja) => (
+                <PremiumCard key={loja.id} loja={loja} />
+              ))}
+            </Slider>
+          </div>
+        </motion.section>
 
-        <div className="premium-carousel">
-          <Slider
-            {...{
-              ...carouselSettings,
-              slidesToShow: 4, // Aumentado para 4 slides já que os cards estão menores
-              slidesToScroll: 1,
-              infinite: true,
-              speed: 500,
-              autoplay: true,
-              autoplaySpeed: 3000,
-              responsive: [
-                {
-                  breakpoint: 1200,
-                  settings: {
-                    slidesToShow: 3,
-                  },
-                },
-                {
-                  breakpoint: 768,
-                  settings: {
-                    slidesToShow: 2,
-                  },
-                },
-                {
-                  breakpoint: 480,
-                  settings: {
-                    slidesToShow: 1,
-                  },
-                },
-              ],
-            }}
-          >
-            {lojasPremium.map((loja) => (
-              <motion.div
-                key={loja.id}
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <LojaCard loja={loja} isPremium={true} />
-              </motion.div>
+        <motion.section
+          className="essential-section"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="section-title">Parceiros Essenciais</h2>
+          <p className="section-subtitle">
+            Descubra mais negócios de qualidade em nossa comunidade
+          </p>
+          
+          <div className="essential-grid">
+            {lojasEssentialDisplay.map((loja) => (
+              <EssentialCard key={loja.id} loja={loja} />
             ))}
-          </Slider>
-        </div>
-      </section>
-
-      <section className="essential-section">
-        <div className="section-header">
-          <h2>Parceiros Essenciais</h2>
-          <p>Descubra mais negócios de qualidade em nossa rede</p>
-        </div>
-        <div className="essential-grid">
-          {lojasEssentialDisplay.map((loja) => (
-            <SimpleLojaCard key={loja.id} loja={loja} />
-          ))}
-        </div>
-      </section>
+          </div>
+        </motion.section>
+      </div>
 
       <section className="cta-section">
         <div className="cta-content">
-          <h2>Faça Parte da Nossa Rede</h2>
-          <p>Cadastre seu negócio e alcance mais clientes</p>
-          <Link to="/register-business" className="cta-button">
-            Cadastrar Negócio
-          </Link>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Faça Parte da Nossa Rede
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            Cadastre seu negócio e faça parte desta comunidade que cresce a cada dia
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+          >
+            <Link to="/register-business" className="cta-button">
+              Começar Agora
+              <BsArrowRight className="icon-right" />
+            </Link>
+          </motion.div>
         </div>
       </section>
     </div>
