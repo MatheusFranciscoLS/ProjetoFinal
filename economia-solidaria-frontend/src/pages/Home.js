@@ -6,7 +6,7 @@ import "../styles/home.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
-import { FaStar, FaStore, FaHandshake, FaSearch, FaArrowRight } from 'react-icons/fa';
+import { FaInstagram, FaFacebook, FaWhatsapp, FaStore, FaHandshake, FaStar, FaUsers, FaMapMarkedAlt } from 'react-icons/fa';
 import { motion } from "framer-motion";
 import { BsArrowRight } from 'react-icons/bs';
 import { FiTrendingUp, FiUsers, FiShoppingBag } from 'react-icons/fi';
@@ -68,51 +68,53 @@ const SkeletonCard = () => (
 );
 
 const PremiumCard = ({ loja }) => (
-  <motion.div
-    className="loja-card premium-card"
-    whileHover={{ y: -5 }}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3 }}
-  >
-    <div className="loja-image-container">
-      <img
-        src={loja.imagens?.[0] || "/placeholder-image.jpg"}
-        alt={loja.nome}
-        onError={(e) => {
-          e.target.src = "/placeholder-image.jpg";
-        }}
-      />
-    </div>
-    <div className="loja-info">
-      <h3>{loja.nome}</h3>
-      {loja.categoria && <span className="categoria-tag">{loja.categoria}</span>}
-    </div>
-  </motion.div>
+  <Link to={`/loja/${loja.id}`} className="loja-card premium-card">
+    <motion.div
+      whileHover={{ y: -5 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <div className="loja-image-container">
+        <img
+          src={loja.imagens?.[0] || "/placeholder-image.jpg"}
+          alt={loja.nome}
+          onError={(e) => {
+            e.target.src = "/placeholder-image.jpg";
+          }}
+        />
+      </div>
+      <div className="loja-info">
+        <h3>{loja.nome}</h3>
+        {loja.categoria && <span className="categoria-tag">{loja.categoria}</span>}
+      </div>
+    </motion.div>
+  </Link>
 );
 
 const EssentialCard = ({ loja }) => (
-  <motion.div
-    className="loja-card essential-card"
-    whileHover={{ y: -5 }}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3 }}
-  >
-    <div className="loja-image-container">
-      <img
-        src={loja.imagens?.[0] || "/placeholder-image.jpg"}
-        alt={loja.nome}
-        onError={(e) => {
-          e.target.src = "/placeholder-image.jpg";
-        }}
-      />
-    </div>
-    <div className="loja-info">
-      <h3>{loja.nome}</h3>
-      {loja.categoria && <span className="categoria-tag">{loja.categoria}</span>}
-    </div>
-  </motion.div>
+  <Link to={`/loja/${loja.id}`} className="loja-card essential-card">
+    <motion.div
+      whileHover={{ y: -5 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <div className="loja-image-container">
+        <img
+          src={loja.imagens?.[0] || "/placeholder-image.jpg"}
+          alt={loja.nome}
+          onError={(e) => {
+            e.target.src = "/placeholder-image.jpg";
+          }}
+        />
+      </div>
+      <div className="loja-info">
+        <h3>{loja.nome}</h3>
+        {loja.categoria && <span className="categoria-tag">{loja.categoria}</span>}
+      </div>
+    </motion.div>
+  </Link>
 );
 
 const StatItem = ({ icon: Icon, title, value, description }) => (
@@ -415,38 +417,38 @@ const Home = () => {
             ))}
           </div>
         </motion.section>
-      </div>
 
-      <section className="cta-section">
-        <div className="cta-content">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            Faça Parte da Nossa Rede
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            Cadastre seu negócio e faça parte desta comunidade que cresce a cada dia
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
-          >
-            <Link to="/register-business" className="cta-button">
-              Começar Agora
-              <BsArrowRight className="icon-right" />
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+        <section className="cta-section">
+          <div className="cta-content">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Faça Parte da Nossa Rede
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              Cadastre seu negócio e faça parte desta comunidade que cresce a cada dia
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+            >
+              <Link to="/register-business" className="cta-button">
+                Começar Agora
+                <BsArrowRight className="icon-right" />
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+      </div>
     </div>
   );
 };
