@@ -16,7 +16,7 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { FiTrendingUp, FiUsers, FiShoppingBag } from 'react-icons/fi';
-import { FaHandHoldingHeart, FaChartLine, FaQuoteLeft, FaShieldAlt, FaQuestion } from 'react-icons/fa';
+import { FaHandHoldingHeart, FaChartLine, FaQuoteLeft, FaShieldAlt, FaQuestion, FaArrowRight } from 'react-icons/fa';
 
 // Componente para o cartão de cada loja
 const LojaCard = ({ loja, isPremium = false }) => {
@@ -25,11 +25,11 @@ const LojaCard = ({ loja, isPremium = false }) => {
   
   return (
     <Link to={`/loja/${id}`} className={cardClassName}>
-      <div className="loja-image-container">
+      <div className="card-image">
         <img
           src={imagens?.[0] || "default-image.jpg"}
           alt={nome}
-          className="loja-img"
+          className="card-img"
         />
         {isPremium && (
           <div className="premium-badge">
@@ -37,14 +37,21 @@ const LojaCard = ({ loja, isPremium = false }) => {
           </div>
         )}
       </div>
-      <div className="loja-info">
-        <h3>{nome}</h3>
-        {categoria && <span className="categoria-tag">{categoria}</span>}
+      <div className="card-content">
+        <div>
+          <h3>{nome}</h3>
+          {categoria && <span className="categoria-tag">{categoria}</span>}
+          <p className="card-description">{descricao}</p>
+        </div>
+        <div className="card-footer">
+          <button className="ver-mais-btn">
+            Ver mais <FaArrowRight />
+          </button>
+        </div>
       </div>
     </Link>
   );
 };
-
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -61,31 +68,27 @@ const Home = () => {
   // Configurações do carrossel com melhorias de acessibilidade
   const carouselSettings = {
     dots: true,
-    infinite: true,
+    infinite: false,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
+    autoplay: false,
     pauseOnHover: true,
     accessibility: true,
+    arrows: true,
     responsive: [
       {
         breakpoint: 1200,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 2,
+          slidesToScroll: 1,
         },
       },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
           slidesToShow: 1,
+          slidesToScroll: 1,
         },
       },
     ],
@@ -296,54 +299,23 @@ const Home = () => {
         </div>
       </motion.section>
 
-      <motion.section
-        className="premium-section"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="section-header">
-          <h2>Destaques Premium</h2>
-          <p>Conheça os empreendimentos em destaque da nossa rede</p>
-        </div>
-        
-        <div className="premium-carousel">
-          <Slider {...carouselSettings}>
-            {lojasPremium.map((loja, index) => (
-              <motion.div
-                key={loja.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="card-wrapper"
-              >
-                <Link to={`/loja/${loja.id}`} className="premium-card">
-                  <div className="card-image">
-                    <img 
-                      src={loja.imagens?.[0] || '/placeholder-image.jpg'} 
-                      alt={loja.nome}
-                      onError={(e) => {
-                        e.target.src = '/placeholder-image.jpg';
-                      }}
-                    />
-                    <div className="premium-badge">
-                      <FaStar /> Premium
-                    </div>
-                  </div>
-                  <div className="card-content">
-                    <h3>{loja.nome}</h3>
-                    {loja.categoria && (
-                      <span className="categoria-tag">{loja.categoria}</span>
-                    )}
-                    <p className="card-description">{loja.descricao}</p>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </Slider>
-        </div>
-      </motion.section>
+      {lojasPremium.length > 0 && (
+        <section className="premium-section">
+          <div className="section-header">
+            <h2>Empreendimentos Premium</h2>
+            <p>Conheça nossos parceiros em destaque</p>
+          </div>
+          <div className="premium-carousel-container">
+            <Slider {...carouselSettings}>
+              {lojasPremium.map((loja) => (
+                <div key={loja.id} className="card-wrapper">
+                  <LojaCard loja={loja} isPremium={true} />
+                </div>
+              ))}
+            </Slider>
+          </div>
+        </section>
+      )}
 
       <motion.section
         className="essential-section"
