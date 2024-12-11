@@ -14,6 +14,7 @@ import { getAuth } from "firebase/auth";
 import InputMask from "react-input-mask";
 import { FaInstagram, FaFacebook, FaWhatsapp } from "react-icons/fa";
 import { validateForm, validateImageFile } from "../components/validation";
+import imageCompression from "browser-image-compression"; // Importa a biblioteca de compressão
 import "../styles/registerbusiness.css";
 
 const RegisterBusiness = () => {
@@ -106,12 +107,25 @@ const RegisterBusiness = () => {
           const pendingBusinessSnapshot = await getDocs(pendingBusinessQuery);
 
           console.log("Usuário já possui negócio:", !businessSnapshot.empty);
-          console.log("Usuário já possui negócio pendente:", !pendingBusinessSnapshot.empty);
+          console.log(
+            "Usuário já possui negócio pendente:",
+            !pendingBusinessSnapshot.empty
+          );
 
-          if ((!businessSnapshot.empty || !pendingBusinessSnapshot.empty) && userData.plano !== "Premium") {
+          if (
+            (!businessSnapshot.empty || !pendingBusinessSnapshot.empty) &&
+            userData.plano !== "Premium"
+          ) {
             setError(
               <span>
-                Você já possui um negócio registrado ou pendente. <Link to="/plans-details" style={{ color: '#3498db', textDecoration: 'underline' }}>Atualize para o plano Premium</Link> para registrar outro.
+                Você já possui um negócio registrado ou pendente.{" "}
+                <Link
+                  to="/plans-details"
+                  style={{ color: "#3498db", textDecoration: "underline" }}
+                >
+                  Atualize para o plano Premium
+                </Link>{" "}
+                para registrar outro.
               </span>
             );
             setIsEligible(false);
@@ -171,34 +185,58 @@ const RegisterBusiness = () => {
     updateFormField("social", platform, value);
   };
 
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    const currentImages = formData.media.images;
-
-    if (files.length + currentImages.length > 6) {
-      setError("Você pode enviar no máximo 6 imagens");
-      return;
-    }
-
-    const invalidImages = files.filter(
-      (file) => !validateImageFile(file).isValid
-    );
-    if (invalidImages.length > 0) {
-      setError(
-        "Uma ou mais imagens são inválidas. Use apenas JPG, PNG ou GIF com tamanho máximo de 5MB."
-      );
-      return;
-    }
-
-    updateFormField("media", "images", [...currentImages, ...files]);
-    setError("");
+  // Função para converter arquivos para base64
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
   };
+
+const handleImageUpload = async (e) => {
+  const files = Array.from(e.target.files);
+  const currentImages = formData.media.images;
+
+  if (files.length + currentImages.length > 6) {
+    setError("Você pode enviar no máximo 6 imagens");
+    return;
+  }
+
+  const invalidImages = files.filter(
+    (file) => !validateImageFile(file).isValid
+  );
+  if (invalidImages.length > 0) {
+    setError("Uma ou mais imagens são inválidas.");
+    return;
+  }
+
+  try {
+    // Compress images before converting to base64
+    const compressedImages = await Promise.all(
+      files.map((file) =>
+        imageCompression(file, { maxSizeMB: 0.1, maxWidthOrHeight: 800 })
+      )
+    );
+
+    // Convert compressed images to base64
+    const base64Images = await Promise.all(
+      compressedImages.map(convertToBase64)
+    );
+
+    updateFormField("media", "images", [...currentImages, ...base64Images]);
+    setError(""); // Clear error if images are valid
+  } catch (error) {
+    console.error("Erro ao processar imagens:", error);
+    setError("Erro ao processar as imagens. Tente novamente.");
+  }
+};
 
   const removeImage = (index) => {
     const updatedImages = formData.media.images.filter((_, i) => i !== index);
     updateFormField("media", "images", updatedImages);
   };
-
   // CEP auto-complete
   const buscarCep = async (cepValue) => {
     const cepLimpo = cepValue.replace(/\D/g, "");
@@ -238,14 +276,6 @@ const RegisterBusiness = () => {
       setLoadingCep(false);
     }
   };
-
-  const convertToBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -288,7 +318,10 @@ const RegisterBusiness = () => {
       };
 
       console.log("Submitting business data:", businessData);
-      const docRef = await addDoc(collection(db, "negocios_pendentes"), businessData);
+      const docRef = await addDoc(
+        collection(db, "negocios_pendentes"),
+        businessData
+      );
       console.log("Document written with ID:", docRef.id);
 
       alert("Cadastro enviado, aguardando aprovação do admin!");
@@ -806,7 +839,7 @@ const RegisterBusiness = () => {
                 {formData.media.images.map((image, index) => (
                   <div key={index} className="image-wrapper">
                     <img
-                      src={URL.createObjectURL(image)}
+                      src={image} // Use the base64 string directly
                       alt={`preview ${index}`}
                       className="image-item"
                     />

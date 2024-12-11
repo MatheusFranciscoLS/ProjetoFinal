@@ -315,14 +315,16 @@ const EditBusiness = () => {
         {/* Informações do Negócio */}
         <section className="form-section">
           <h2>Informações do Negócio</h2>
-          
+
           <div className="form-group">
             <label htmlFor="businessName">Nome do Negócio*</label>
             <input
               type="text"
               id="businessName"
               value={formData.business.name}
-              onChange={(e) => updateFormField("business", "name", e.target.value)}
+              onChange={(e) =>
+                updateFormField("business", "name", e.target.value)
+              }
               required
             />
           </div>
@@ -333,7 +335,9 @@ const EditBusiness = () => {
               mask="99.999.999/9999-99"
               id="businessCNPJ"
               value={formData.business.cnpj}
-              onChange={(e) => updateFormField("business", "cnpj", e.target.value)}
+              onChange={(e) =>
+                updateFormField("business", "cnpj", e.target.value)
+              }
               required
             />
           </div>
@@ -343,7 +347,9 @@ const EditBusiness = () => {
             <textarea
               id="businessDescription"
               value={formData.business.description}
-              onChange={(e) => updateFormField("business", "description", e.target.value)}
+              onChange={(e) =>
+                updateFormField("business", "description", e.target.value)
+              }
               required
             />
           </div>
@@ -353,7 +359,9 @@ const EditBusiness = () => {
             <select
               id="businessCategory"
               value={formData.business.category}
-              onChange={(e) => updateFormField("business", "category", e.target.value)}
+              onChange={(e) =>
+                updateFormField("business", "category", e.target.value)
+              }
               required
             >
               <option value="">Selecione a Categoria</option>
@@ -375,7 +383,9 @@ const EditBusiness = () => {
               type="email"
               id="businessEmail"
               value={formData.business.email}
-              onChange={(e) => updateFormField("business", "email", e.target.value)}
+              onChange={(e) =>
+                updateFormField("business", "email", e.target.value)
+              }
               required
             />
           </div>
@@ -384,14 +394,16 @@ const EditBusiness = () => {
         {/* Contato */}
         <section className="form-section">
           <h2>Informações de Contato</h2>
-          
+
           <div className="form-group">
             <label htmlFor="telefone">Telefone Fixo</label>
             <InputMask
               mask="(99) 9999-9999"
               id="telefone"
               value={formData.contact.telefone}
-              onChange={(e) => updateFormField("contact", "telefone", e.target.value)}
+              onChange={(e) =>
+                updateFormField("contact", "telefone", e.target.value)
+              }
             />
           </div>
 
@@ -401,7 +413,9 @@ const EditBusiness = () => {
               mask="(99) 99999-9999"
               id="cellphone"
               value={formData.contact.cellphone}
-              onChange={(e) => updateFormField("contact", "cellphone", e.target.value)}
+              onChange={(e) =>
+                updateFormField("contact", "cellphone", e.target.value)
+              }
             />
           </div>
         </section>
@@ -409,7 +423,7 @@ const EditBusiness = () => {
         {/* Endereço */}
         <section className="form-section">
           <h2>Endereço</h2>
-          
+
           <div className="form-group">
             <label htmlFor="cep">CEP*</label>
             <InputMask
@@ -434,7 +448,9 @@ const EditBusiness = () => {
               type="text"
               id="logradouro"
               value={formData.address.logradouro}
-              onChange={(e) => updateFormField("address", "logradouro", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "logradouro", e.target.value)
+              }
               required
             />
           </div>
@@ -445,7 +461,9 @@ const EditBusiness = () => {
               type="text"
               id="numero"
               value={formData.address.numero}
-              onChange={(e) => updateFormField("address", "numero", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "numero", e.target.value)
+              }
               required
             />
           </div>
@@ -456,7 +474,9 @@ const EditBusiness = () => {
               type="text"
               id="complemento"
               value={formData.address.complemento}
-              onChange={(e) => updateFormField("address", "complemento", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "complemento", e.target.value)
+              }
             />
           </div>
 
@@ -466,7 +486,9 @@ const EditBusiness = () => {
               type="text"
               id="bairro"
               value={formData.address.bairro}
-              onChange={(e) => updateFormField("address", "bairro", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "bairro", e.target.value)
+              }
               required
             />
           </div>
@@ -477,7 +499,9 @@ const EditBusiness = () => {
               type="text"
               id="cidade"
               value={formData.address.cidade}
-              onChange={(e) => updateFormField("address", "cidade", e.target.value)}
+              onChange={(e) =>
+                updateFormField("address", "cidade", e.target.value)
+              }
               required
             />
           </div>
@@ -497,20 +521,30 @@ const EditBusiness = () => {
         {/* Horário de Funcionamento */}
         <section className="form-section">
           <h2>Horário de Funcionamento</h2>
-          
+
           <div className="form-group">
             <h3>Dias de Semana</h3>
             <div className="hours-input">
               <input
                 type="time"
                 value={formData.hours.weekdays.open}
-                onChange={(e) => updateFormField("hours", "weekdays", { ...formData.hours.weekdays, open: e.target.value })}
+                onChange={(e) =>
+                  updateFormField("hours", "weekdays", {
+                    ...formData.hours.weekdays,
+                    open: e.target.value,
+                  })
+                }
               />
               <span>às</span>
               <input
                 type="time"
                 value={formData.hours.weekdays.close}
-                onChange={(e) => updateFormField("hours", "weekdays", { ...formData.hours.weekdays, close: e.target.value })}
+                onChange={(e) =>
+                  updateFormField("hours", "weekdays", {
+                    ...formData.hours.weekdays,
+                    close: e.target.value,
+                  })
+                }
               />
             </div>
           </div>
@@ -522,7 +556,12 @@ const EditBusiness = () => {
                 <input
                   type="checkbox"
                   checked={formData.hours.saturday.closed}
-                  onChange={(e) => updateFormField("hours", "saturday", { ...formData.hours.saturday, closed: e.target.checked })}
+                  onChange={(e) =>
+                    updateFormField("hours", "saturday", {
+                      ...formData.hours.saturday,
+                      closed: e.target.checked,
+                    })
+                  }
                 />
                 Fechado
               </label>
@@ -532,13 +571,23 @@ const EditBusiness = () => {
                 <input
                   type="time"
                   value={formData.hours.saturday.open}
-                  onChange={(e) => updateFormField("hours", "saturday", { ...formData.hours.saturday, open: e.target.value })}
+                  onChange={(e) =>
+                    updateFormField("hours", "saturday", {
+                      ...formData.hours.saturday,
+                      open: e.target.value,
+                    })
+                  }
                 />
                 <span>às</span>
                 <input
                   type="time"
                   value={formData.hours.saturday.close}
-                  onChange={(e) => updateFormField("hours", "saturday", { ...formData.hours.saturday, close: e.target.value })}
+                  onChange={(e) =>
+                    updateFormField("hours", "saturday", {
+                      ...formData.hours.saturday,
+                      close: e.target.value,
+                    })
+                  }
                 />
               </div>
             )}
@@ -551,7 +600,12 @@ const EditBusiness = () => {
                 <input
                   type="checkbox"
                   checked={formData.hours.sunday.closed}
-                  onChange={(e) => updateFormField("hours", "sunday", { ...formData.hours.sunday, closed: e.target.checked })}
+                  onChange={(e) =>
+                    updateFormField("hours", "sunday", {
+                      ...formData.hours.sunday,
+                      closed: e.target.checked,
+                    })
+                  }
                 />
                 Fechado
               </label>
@@ -561,13 +615,23 @@ const EditBusiness = () => {
                 <input
                   type="time"
                   value={formData.hours.sunday.open}
-                  onChange={(e) => updateFormField("hours", "sunday", { ...formData.hours.sunday, open: e.target.value })}
+                  onChange={(e) =>
+                    updateFormField("hours", "sunday", {
+                      ...formData.hours.sunday,
+                      open: e.target.value,
+                    })
+                  }
                 />
                 <span>às</span>
                 <input
                   type="time"
                   value={formData.hours.sunday.close}
-                  onChange={(e) => updateFormField("hours", "sunday", { ...formData.hours.sunday, close: e.target.value })}
+                  onChange={(e) =>
+                    updateFormField("hours", "sunday", {
+                      ...formData.hours.sunday,
+                      close: e.target.value,
+                    })
+                  }
                 />
               </div>
             )}
@@ -580,7 +644,12 @@ const EditBusiness = () => {
                 <input
                   type="checkbox"
                   checked={formData.hours.lunch.enabled}
-                  onChange={(e) => updateFormField("hours", "lunch", { ...formData.hours.lunch, enabled: e.target.checked })}
+                  onChange={(e) =>
+                    updateFormField("hours", "lunch", {
+                      ...formData.hours.lunch,
+                      enabled: e.target.checked,
+                    })
+                  }
                 />
                 Fecha para almoço
               </label>
@@ -590,13 +659,23 @@ const EditBusiness = () => {
                 <input
                   type="time"
                   value={formData.hours.lunch.start}
-                  onChange={(e) => updateFormField("hours", "lunch", { ...formData.hours.lunch, start: e.target.value })}
+                  onChange={(e) =>
+                    updateFormField("hours", "lunch", {
+                      ...formData.hours.lunch,
+                      start: e.target.value,
+                    })
+                  }
                 />
                 <span>às</span>
                 <input
                   type="time"
                   value={formData.hours.lunch.end}
-                  onChange={(e) => updateFormField("hours", "lunch", { ...formData.hours.lunch, end: e.target.value })}
+                  onChange={(e) =>
+                    updateFormField("hours", "lunch", {
+                      ...formData.hours.lunch,
+                      end: e.target.value,
+                    })
+                  }
                 />
               </div>
             )}
@@ -606,14 +685,16 @@ const EditBusiness = () => {
         {/* Redes Sociais */}
         <section className="form-section">
           <h2>Redes Sociais</h2>
-          
+
           <div className="form-group">
             <label htmlFor="instagram">Instagram</label>
             <input
               type="text"
               id="instagram"
               value={formData.social.instagram}
-              onChange={(e) => updateFormField("social", "instagram", e.target.value)}
+              onChange={(e) =>
+                updateFormField("social", "instagram", e.target.value)
+              }
               placeholder="@seu.instagram"
             />
           </div>
@@ -624,7 +705,9 @@ const EditBusiness = () => {
               type="text"
               id="facebook"
               value={formData.social.facebook}
-              onChange={(e) => updateFormField("social", "facebook", e.target.value)}
+              onChange={(e) =>
+                updateFormField("social", "facebook", e.target.value)
+              }
               placeholder="facebook.com/sua.pagina"
             />
           </div>
@@ -632,11 +715,13 @@ const EditBusiness = () => {
           <div className="form-group">
             <label htmlFor="whatsapp">WhatsApp</label>
             <InputMask
-              mask="(99) 99999-9999"
+            type="text"
               id="whatsapp"
               value={formData.social.whatsapp}
-              onChange={(e) => updateFormField("social", "whatsapp", e.target.value)}
-              placeholder="(00) 00000-0000"
+              onChange={(e) =>
+                updateFormField("social", "whatsapp", e.target.value)
+              }
+              placeholder="api.whatsapp/ ou wa.me/"
             />
           </div>
         </section>
@@ -645,7 +730,11 @@ const EditBusiness = () => {
           <button type="submit" className="submit-button" disabled={loading}>
             {loading ? "Salvando..." : "Salvar Alterações"}
           </button>
-          <button type="button" className="cancel-button" onClick={() => navigate(-1)}>
+          <button
+            type="button"
+            className="cancel-button"
+            onClick={() => navigate(-1)}
+          >
             Cancelar
           </button>
         </div>
