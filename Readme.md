@@ -22,6 +22,12 @@ Uma plataforma digital desenvolvida para conectar pequenos negócios e serviços
 - **Busca & Descoberta:** Filtros dinâmicos e paginação para consumidores encontrarem serviços.
 - **Interface Responsiva:** Design system implementado com Material UI.
 
+## 📸 Tela inicial
+
+<p align="center">
+  <img src="docs/home.webp" alt="Página inicial do Economia Solidária em Limeira, com acesso a lojas, cadastro e login" width="100%">
+</p>
+
 ## 🛠️ Stack Utilizada
 
 - **Front-end:** React 18, React Router DOM, Material UI (MUI), Framer Motion, Axios.
