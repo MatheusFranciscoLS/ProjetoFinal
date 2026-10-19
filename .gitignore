@@ -1,0 +1,5 @@
+# Segredos e arquivos locais
+.env
+.env.*
+!.env.example
+node_modules/
